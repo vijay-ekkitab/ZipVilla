@@ -1,14 +1,14 @@
 <?php
-    $this->title = "Delete album";
+    $this->title = "Delete Property";
     $this->headTitle($this->title);
 ?>
 <p>Are you sure that you want to delete
-'<?php echo $this->escape($this->album['title']); ?>' by
-'<?php echo $this->escape($this->album['artist']); ?>'?
+'<?php echo $this->escape($this->listing->type);?>' located in
+'<?php echo $this->escape($this->listing->address['state']); ?>'?
 </p>
 <form action="<?php echo $this->url(array('action'=>'delete')); ?>" method="post">
 <div>
-    <input type="hidden" name="id" value="<?php echo $this->album['id']; ?>" />
+    <input type="hidden" name="id" value="<?php echo $this->listing->id; ?>" />
     <input type="submit" name="del" value="Yes" />
     <input type="submit" name="del" value="No" />
 </div>

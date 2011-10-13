@@ -18,6 +18,7 @@
       </controllersDirectory>
       <formsDirectory>
         <formFile formName="Album"/>
+        <formFile formName="Listing"/>
       </formsDirectory>
       <layoutsDirectory enabled="false"/>
       <modelsDirectory>

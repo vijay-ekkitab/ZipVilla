@@ -10,8 +10,12 @@ include_once("ZipVilla/Helper/TypeManager.php");
 include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Exception.php");
 
-class ZipVilla_Helper_ListingsManager {
+class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abstract {
 
+	public function __construct()
+    { 
+    }
+	
 	/*********************************************************************
      * Public Functions
      *********************************************************************/
@@ -51,10 +55,28 @@ class ZipVilla_Helper_ListingsManager {
 	}
 
 	/**
-	 * Updates the given record from the Listings DB. 
+	 * Updates the given record in the Listings DB. 
      */
-	public function update() {
-        throwZVException('Function update in ListingsManager is not implemented yet.');
+	public function update($id, $vals) {
+		
+		$apObj = $this->queryById($id);
+		if ($apObj == null) {
+			throwZVException('Cannot update object that does not exist.');
+		}
+		$tm = new TypeManager();
+		$typeName = $apObj->type;
+		if ($typeName == null) {
+			throwZVException('Internal Error. Type for existing object could not be determined.');
+		}
+		$tp = $tm->getType($typeName);
+		if($tp == null) { // Exception. Should not be so.
+            throwZVException('Internal Error. Type for existing object not registered with TypeManager');
+		} else {
+			$doc = $tp->updateObject($apObj->getDoc(), $vals);
+			$apObj->setDoc($doc); 
+            $apObj->save();
+		}
+        return $apObj;
 	}
 
 	/**

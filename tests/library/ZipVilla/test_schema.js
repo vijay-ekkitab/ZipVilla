@@ -142,5 +142,5 @@ for each (t in tps) {
 }
 print("inserted vacation listing type definitions...");
 //db.types.find();
-db.listings.remove();
+//db.listings.remove();
 print("Done!!!");

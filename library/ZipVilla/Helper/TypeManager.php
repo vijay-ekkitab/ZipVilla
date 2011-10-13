@@ -264,7 +264,7 @@ class Type {
     /**
      * create an object - copying the values from the map provided
      */
-	function makeObject($values) {
+	public function makeObject($values) {
 		$tm = new TypeManager();
 		$obj = array();
 		$obj[TYPE] = $this->getName();
@@ -290,6 +290,32 @@ class Type {
 		} else {
 			return $obj;
 		}
+	}
+	
+	/**
+     * update a listing object - with the values from the map provided
+     */
+	public function updateObject($obj, $map) {
+		
+		$tm = new TypeManager();
+		$hattrs = $this->getHierachicalAttributes();
+		foreach($hattrs as  $attr) {
+			$aname = $attr->getName();
+			$tval = null;
+			if($attr->isType()) {
+				$rtype = $tm->getType($aname);
+				if ($obj[$aname] == null) {
+					$obj[$aname] = array();
+				}
+				$obj[$aname] = $rtype->updateObject($obj[$aname], $map);				
+			} else {
+				$tval = array_key_exists($aname,$map) ? $map[$aname] : null;
+			    if($tval != null) {
+			    	$obj[$aname] = $attr->convertValues($tval);
+			    }
+			}
+		}
+		return $obj;
 	}
 
 	public function attributeIndexable($attr) {
@@ -320,7 +346,7 @@ class Type {
 	 * If index-only attributes are sought, only attributes 
 	 * where KEYWORD or FACET are set are included
      */
-	function flatten($obj,$indexableOnly=false) {
+	public function flatten($obj,$indexableOnly=false) {
 
         if ($obj instanceof Application_Model_Listings) {
             $obj = $obj->getDoc();

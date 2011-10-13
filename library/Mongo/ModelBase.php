@@ -134,7 +134,7 @@ class Mongo_ModelBase {
     ************************************************************************************/
   
     /*
-     * Get the document. Use with care...
+     * Get the document. 
      */
     public function getDoc() {
         $doc = $this->document;
@@ -142,6 +142,13 @@ class Mongo_ModelBase {
         return $doc;
     } 
 
+    /*
+     * Set the document. 
+     */
+    public function setDoc($doc) {
+        $this->document = $doc;
+        unset($this->document['_id']);
+    } 
     /**
      * Delete the object
      */

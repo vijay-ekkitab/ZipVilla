@@ -1,8 +1,6 @@
 <?php
-
 class IndexController extends Zend_Controller_Action
 {
-
     public function init()
     {
         /* Initialize action controller here */
@@ -10,24 +8,23 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $albums = new Application_Model_DbTable_Albums();
-        $this->view->albums = $albums->fetchAll();
-        $this->view->secret = $this->_helper->listingManager->checkout();
+        $this->view->listings = $this->_helper->listingsManager->query();
     }
 
     public function addAction()
     {
-        $form = new Application_Form_Album();
+    	
+        $form = new Application_Form_Listing();
         $form->submit->setLabel('Add');
         $this->view->form = $form;
 
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             if ($form->isValid($formData)) {
-                $artist = $form->getValue('artist');
-                $title = $form->getValue('title');
-                $albums = new Application_Model_DbTable_Albums();
-                $albums->addAlbum($artist, $title);
+                $type = $form->getValue('type');
+                $vals = array();
+                $vals['state'] = $form->getValue('state');
+                $this->_helper->listingsManager->insert($type, $vals);
                 $this->_helper->redirector('index');
             } else {
                 $form->populate($formData);
@@ -37,17 +34,17 @@ class IndexController extends Zend_Controller_Action
 
     public function editAction()
     {
-        $form = new Application_Form_Album();
+        $form = new Application_Form_Listing();
         $form->submit->setLabel('Save');
         $this->view->form = $form;
         if ($this->getRequest()->isPost()) {
                 $formData = $this->getRequest()->getPost();
                 if ($form->isValid($formData)) {
-                        $id = (int)$form->getValue('id');
-                        $artist = $form->getValue('artist');
-                        $title = $form->getValue('title');
-                        $albums = new Application_Model_DbTable_Albums();
-                        $albums->updateAlbum($id, $artist, $title);
+                        $id = $form->getValue('id');
+                        $vals = array();
+                        $vals['type'] = $form->getValue('type');
+                        $vals['state'] = $form->getValue('state');
+                        $this->_helper->listingsManager->update($id, $vals);
                         $this->_helper->redirector('index');
                 } else {
                         $form->populate($formData);
@@ -55,8 +52,12 @@ class IndexController extends Zend_Controller_Action
         } else {
                 $id = $this->_getParam('id', 0);
                 if ($id > 0) {
-                    $albums = new Application_Model_DbTable_Albums();
-                    $form->populate($albums->getAlbum($id));
+                    $listing = $this->_helper->listingsManager->queryById($id);
+                    $vals = array();
+                    $vals['type'] = $listing->type;
+                    $vals['state'] = $listing->address['state'];
+                    $vals['id'] = $id;
+                    $form->populate($vals);
                 }
         }
     }
@@ -67,14 +68,12 @@ class IndexController extends Zend_Controller_Action
             $del = $this->getRequest()->getPost('del');
             if ($del == 'Yes') {
                 $id = $this->getRequest()->getPost('id');
-                $albums = new Application_Model_DbTable_Albums();
-                $albums->deleteAlbum($id);
+                $this->_helper->listingsManager->delete($id);
             }
             $this->_helper->redirector('index');
         } else {
             $id = $this->_getParam('id', 0);
-            $albums = new Application_Model_DbTable_Albums();
-            $this->view->album = $albums->getAlbum($id);
+            $this->view->listing = $this->_helper->listingsManager->queryById($id);
         }
     }
 

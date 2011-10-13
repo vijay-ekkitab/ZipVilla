@@ -13,7 +13,9 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         shell_exec("/usr/bin/mongo " . $seed_script);
     }
 
-    function testInsert() {
+    function testInsertAndUpdate() {
+		$lm = new ZipVilla_Helper_ListingsManager();
+		$res = $lm->query();
         $tname = "hotel";
 	    $vals = array();
 	    $vals['size'] = "15 acres"; 
@@ -47,8 +49,14 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("hotel", $res->type, "Wrong 'Type' for inserted object."); 
         $this->assertEquals("Goa", $res->address['state'], "Wrong 'State' for inserted object."); 
         $this->assertEquals($description, $res->description, "Wrong 'Description' for inserted object."); 
-        $doc = $res->getDoc();
-        //echo json_encode($doc) . "\n";
+
+        $vals = array();
+        $vals['state'] = "Kerala";
+
+        $res = $lm->update($res->id, $vals);
+        $this->assertNotNull($res, "Update returned null."); 
+        $this->assertEquals("Kerala", $res->address['state'], "Update did not correctly update the object."); 
+
     }
 
     function testQueryAndDelete() {
