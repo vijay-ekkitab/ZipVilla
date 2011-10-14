@@ -53,56 +53,56 @@ tps =
 attrs = [
 	{
 	    name     : "price" ,
-	    dataType : "numeric", 
-        valueType: "range" , 
+	    datatype : "numeric", 
+        valuetype: "range" , 
 	    keyword  : "false" , 
 	    facet    : "false"
 	},
 	{
 	    name     : "amenities",
-	    valueType: "multi-valued",	
+	    valuetype: "multi-valued",	
 	    keyword  : "true",
 	    facet    : "true"
 	},
 	{
 	    name     : "activities",
-	    valueType: "multi-valued",	
+	    valuetype: "multi-valued",	
 	    keyword  : "true",
 	    facet    : "true"
 	},
 	{
 	    name     : "images",
-	    valueType: "multi-valued",	
+	    valuetype: "multi-valued",	
 	    keyword  : "true",
 	    facet    : "true"
 	},
 	{
 	    name     : "aptType",
-	    valueType: "multi-valued",	
+	    valuetype: "multi-valued",	
 	    keyword  : "true",
 	    facet    : "true"
 	},
 	{
 	    name     : "lat",
-	    dataType : "numeric", 
+	    datatype : "numeric", 
 	    keyword  : "false",
         facet    : "false" 
 	},
 	{
 	    name     : "long",
-	    dataType : "numeric", 
+	    datatype : "numeric", 
 	    keyword  : "false",
         facet    : "false" 
 	}, 
 	{
 	    name     : "rate",
-	    dataType : "numeric", 
+	    datatype : "numeric", 
 	    keyword  : "false",
         facet    : "false" 
 	},
 	{
 	    name     : "rateType",
-	    dataType : "string", 
+	    datatype : "string", 
 	    keyword  : "false",
         facet    : "false" 
 	}, 
@@ -118,7 +118,7 @@ attrs = [
 	},
 	{
 	    name     : "maxGuests",
-	    dataType : "numeric",
+	    datatype : "numeric",
 	    keyword  : "false",
         facet    : "false" 
 	}
@@ -142,5 +142,5 @@ for each (t in tps) {
 }
 print("inserted vacation listing type definitions...");
 //db.types.find();
-//db.listings.remove();
+db.listings.remove();
 print("Done!!!");

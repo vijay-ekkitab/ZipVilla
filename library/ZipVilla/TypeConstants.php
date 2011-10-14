@@ -13,12 +13,16 @@ const  DISPLAY_NAME =  "displayName" ;
 const  SCOPE        =  "::" ;
 const  POINTS       =  "_" ;
 const  NAME         =  "name" ;
-const  DATA_TYPE    =  "dataType" ;
-const  VALUE_TYPE   =  "valueType" ;
+const  DATA_TYPE    =  "datatype" ;
+const  VALUE_TYPE   =  "valuetype" ;
 const  KEYWORD      =  "keyword" ;
 const  FACET        =  "facet" ;
 const  IS_TYPE      =  "isType" ;
 const  PARENT       =  "parent" ;
+const  FLOAT        =  "float";
+const  INTEGER      =  "integer";
+const  MULTI_VALUED =  "multi-valued";
+const  BOOLEAN      =  "boolean";
 
 #some more consts
 const  TITLE        =  "title" ;

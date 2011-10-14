@@ -51,7 +51,7 @@ class TypeManager {
 				DATA_TYPE   => "string",
 				VALUE_TYPE  => "simple",
 				KEYWORD	    => "true",
-				FACET	    => "true"
+				FACET	    => "false"
 			);
 			$en = array_key_exists($name,static::$attrs) ? static::$attrs[$name] : null;
 			if($en != null) {
@@ -131,25 +131,32 @@ class Attribute {
 	}
 
 	public function isMultiValued() {
-		return array_key_exists(VALUE_TYPE,$this->map) && ($this->map[VALUE_TYPE] == 'multi-valued');
+		return array_key_exists(VALUE_TYPE,$this->map) && ($this->map[VALUE_TYPE] == MULTI_VALUED);
 	}
 
-	public function isNumeric() {
-		return array_key_exists(DATA_TYPE,$this->map) && ($this->map[DATA_TYPE] == 'numeric');
+	public function isFloat() {
+		return array_key_exists(DATA_TYPE,$this->map) && ($this->map[DATA_TYPE] == FLOAT);
+	}
+	
+	public function isInteger() {
+		return array_key_exists(DATA_TYPE,$this->map) && ($this->map[DATA_TYPE] == INTEGER);
 	}
 
 	public function isBoolean() {
-		return array_key_exists(DATA_TYPE,$this->map) && ($this->map[DATA_TYPE] == 'boolean');
+		return array_key_exists(DATA_TYPE,$this->map) && ($this->map[DATA_TYPE] == BOOLEAN);
 	}
 
 	public function convertValue($val) {
-		if($this->isNumeric()) {
+		if($this->isFloat()) {
 			return floatval($val);
-		} else if($this->isBoolean()) {
-			return (bool)$val;
-		} else {
-			return $val;
 		}
+		elseif($this->isInteger()) {
+			return intval($val);
+		}
+		elseif($this->isBoolean()) {
+			return (bool)$val;
+		} 
+		return $val;
 	}
 
 	public function convertValues($valStr) {
