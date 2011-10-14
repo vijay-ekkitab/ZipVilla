@@ -5,6 +5,15 @@ class IndexController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     }
+    
+	public function preDispatch()
+    {
+        if (!Zend_Auth::getInstance()->hasIdentity()) {
+            // Only logged in users have access to the Home Page;
+            // Direct all other users to the Login Page.
+            $this->_helper->redirector('index', 'login');
+        } 
+    }
 
     public function indexAction()
     {
