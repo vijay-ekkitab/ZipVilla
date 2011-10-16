@@ -6,17 +6,18 @@
  *
  *****************************************************************************/
 
-include_once("ZipVilla/Helper/TypeManager.php");
+include_once("TypeManager.php");
 include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Exception.php");
 
-class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abstract {
+class ZipVilla_Helper_ListingsManager {
 
-	public function __construct()
+    public function __construct()
     { 
+	
     }
 	
-	/*********************************************************************
+    /*********************************************************************
      * Public Functions
      *********************************************************************/
 

@@ -1,6 +1,7 @@
 <?php
 include_once("ZipVilla/Helper/ListingsManager.php");
 include_once("ZipVilla/Helper/IndexManager.php");
+include_once("ZipVilla/Helper/SearchManager.php");
 include_once("ZipVilla/Utils.php");
 
 class IndexManagerTest extends PHPUnit_Framework_TestCase
@@ -12,6 +13,9 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		parent::setUp();
 		$seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/test_schema.js";
 		shell_exec("/usr/bin/mongo " . $seed_script);
+		//clear all the indexed document from solr
+		$im = new IndexManager();
+		$res = $im->delete();
 	}
 
 	function _insertListing() {
@@ -60,7 +64,16 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$im = new IndexManager();
 		$res = $im->indexById($id);
 		$this->assertTrue($res->success());
-		//TODO:once search manager is complete must search and check the result
+		$sm = new SearchManager();
+		$q = array("address_city"=>'Mapusa');
+		$fds = array('address_city','id','title');
+		$docs = $sm->search($q,$fds);
+		$this->assertTrue($docs != null);
+		//print_r($docs);
+		$this->assertTrue(count($docs) == 1);
+		$d = $docs[0];
+		$t = $d['title'];
+		$this->assertEquals("The Beach Home",$t[0],"Wrong search fired. fields not matching");
 	}
 	function _insertListing1() {
 		$lm = new ZipVilla_Helper_ListingsManager();
@@ -110,7 +123,16 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$im = new IndexManager();
 		$res = $im->index($res);
 		$this->assertTrue($res->success());
-		//TODO:once search manager is complete must search and check the result 
+		$sm = new SearchManager();
+		$q = array('address_state'=>'Kerala');
+		$fds = array('address_state','address_city','id','title');
+		$docs = $sm->search($q,$fds);
+		$this->assertTrue($docs != null);
+		$this->assertTrue(count($docs) == 1);
+		//print_r($docs);
+		$d = $docs[0];
+		$t = $d['title'];
+		$this->assertEquals("Dhanvantari Mahal",$t[0],"Wrong search fired. fields not matching");
 	}
 }		
 ?>
