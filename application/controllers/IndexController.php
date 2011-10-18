@@ -9,6 +9,8 @@ class IndexController extends Zend_Controller_Action
 	public function preDispatch()
     {
         if (!Zend_Auth::getInstance()->hasIdentity()) {
+        	// Save the requested Uri
+        	$this->_helper->lastDecline->saveRequestUri();
             // Only logged in users have access to the Home Page;
             // Direct all other users to the Login Page.
             $this->_helper->redirector('index', 'login');

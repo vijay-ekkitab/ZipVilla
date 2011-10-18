@@ -63,8 +63,10 @@ class LoginController extends Zend_Controller_Action
         if ($request->isPost()) {
             if ($form->isValid($request->getPost())) {
             if ($this->_process($form->getValues())) {
-                    // We're authenticated! Redirect to the home page
-                    $this->_helper->redirector('index', 'index');
+                    // We're authenticated! Redirect to the last declined or home page.
+                    $this->_helper->lastDecline();
+                    return;
+                    //$this->_helper->redirector('index', 'index');
                 }
             }
             else {
