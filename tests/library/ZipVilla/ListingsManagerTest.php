@@ -33,7 +33,7 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
 	    $vals['neighbourhood'] = "near church";
 	    $vals['lat'] = 55.6;
 	    $vals['long'] = 65.8;
-	    $vals['amenities'] = array('health club','sauna');
+	    $vals['amenities'] = array('health club','sauna', 'internet');
 	    $vals['title'] = "The Beach Home"; 
         $description = "very nice  place near fort";
 	    $vals['description'] = $description;
@@ -48,8 +48,10 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
 	    $res = $lm->insert($tname,$vals);
         $this->assertEquals("hotel", $res->type, "Wrong 'Type' for inserted object."); 
         $this->assertEquals("Goa", $res->address['state'], "Wrong 'State' for inserted object."); 
-        $this->assertEquals($description, $res->description, "Wrong 'Description' for inserted object."); 
-
+        $this->assertEquals($description, $res->description, "Wrong 'Description' for inserted object.");
+		$this->assertTrue(in_array("health club", $res->amenities), "Item not found in amenities list in inserted object."); 
+        $this->assertFalse(in_array("television", $res->amenities), "Wrong item found in amenities list in inserted object.");
+        $this->assertFalse(in_array("internet", $res->amenities), "Wrong item found in amenities list in inserted object.");
         $vals = array();
         $vals['state'] = "Kerala";
 
