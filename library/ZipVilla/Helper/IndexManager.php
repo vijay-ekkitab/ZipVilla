@@ -10,13 +10,18 @@ class IndexManager {
 	public function __construct() {
 		$this->init();
 	}
-	private $options = null;
+	private static $options = null;
 	private function init()
 	{
-		$this->options = array (
-			SOLR_HOST_NAME => 'localhost',
-			SOLR_PORT => 8983
-		);
+		if (self::$options == null) {
+			$config_file = APPLICATION_PATH . "/configs/application.ini";
+    		$config = new Zend_Config_Ini($config_file, APPLICATION_ENV);
+    	
+			self::$options = array (
+				SOLR_HOST_NAME => $config->solr->server,
+				SOLR_PORT => $config->solr->port
+			);
+		}
 	}
 	private function buildSolrInputDocument($map) {
 		$doc = new SolrInputDocument();
@@ -34,7 +39,7 @@ class IndexManager {
 	}
 	private function _indexDocument($obj) {
 		$doc = $this->buildSolrInputDocument($obj);
-		$client = new SolrClient($this->options);
+		$client = new SolrClient(self::$options);
 		$updateResponse = $client->addDocument($doc);
 		//TODO: log error if not successful
 		//it is always a auto commit
@@ -60,7 +65,7 @@ class IndexManager {
 		}		
 	}
 	public function delete($q="*:*") {
-		$client = new SolrClient($this->options);
+		$client = new SolrClient(self::$options);
 		$updateResponse = $client->deleteByQuery($q); /* remove all documents */
 		//print_r($updateResponse->getResponse());
 		$client->commit();

@@ -10,7 +10,7 @@ include_once("TypeManager.php");
 include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Exception.php");
 
-class ZipVilla_Helper_ListingsManager {
+class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abstract {
 
     public function __construct()
     { 

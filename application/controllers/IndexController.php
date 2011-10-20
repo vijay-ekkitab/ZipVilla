@@ -9,6 +9,8 @@ class IndexController extends Zend_Controller_Action
 	public function preDispatch()
     {
         if (!Zend_Auth::getInstance()->hasIdentity()) {
+        	// Save the requested Uri
+        	$this->_helper->lastDecline->saveRequestUri();
             // Only logged in users have access to the Home Page;
             // Direct all other users to the Login Page.
             $this->_helper->redirector('index', 'login');
@@ -30,10 +32,11 @@ class IndexController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             $formData = $this->getRequest()->getPost();
             if ($form->isValid($formData)) {
-                $type = $form->getValue('type');
-                $vals = array();
-                $vals['state'] = $form->getValue('state');
-                $this->_helper->listingsManager->insert($type, $vals);
+                //$type = $form->getValue('type');
+                //$vals = array();
+                //$vals['state'] = $form->getValue('state');
+                $vals = $form->getValues();
+                $this->_helper->listingsManager->insert($vals['type'], $vals);
                 $this->_helper->redirector('index');
             } else {
                 $form->populate($formData);
@@ -50,9 +53,10 @@ class IndexController extends Zend_Controller_Action
                 $formData = $this->getRequest()->getPost();
                 if ($form->isValid($formData)) {
                         $id = $form->getValue('id');
-                        $vals = array();
-                        $vals['type'] = $form->getValue('type');
-                        $vals['state'] = $form->getValue('state');
+                        $vals = $form->getValues();
+                        //$vals = array();
+                        //$vals['type'] = $form->getValue('type');
+                        //$vals['state'] = $form->getValue('state');
                         $this->_helper->listingsManager->update($id, $vals);
                         $this->_helper->redirector('index');
                 } else {
@@ -64,7 +68,12 @@ class IndexController extends Zend_Controller_Action
                     $listing = $this->_helper->listingsManager->queryById($id);
                     $vals = array();
                     $vals['type'] = $listing->type;
+                    $vals['street_name'] = $listing->address['street_name'];
+                    $vals['city'] = $listing->address['city'];
                     $vals['state'] = $listing->address['state'];
+                    $vals['bedrooms'] = $listing->bedrooms;
+                    $vals['guests'] = $listing->guests;
+                    $vals['entertainment_options'] = $listing->entertainment_options;
                     $vals['id'] = $id;
                     $form->populate($vals);
                 }

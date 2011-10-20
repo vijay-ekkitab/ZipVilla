@@ -5,6 +5,7 @@ const  LISTINGS_DB    =  "vr" ;
 const  LISTINGS       =  "listings" ;
 const  TYPES          =  "types" ;
 const  ATTRIBUTES     =  "attributes" ;
+const  ENUMERATIONS   =  "enumerations";
 
 #consts for attribute and type definitions
 const  ID           =  "id" ;
@@ -22,6 +23,7 @@ const  PARENT       =  "parent" ;
 const  FLOAT        =  "float";
 const  INTEGER      =  "integer";
 const  MULTI_VALUED =  "multi-valued";
+const  ENUMERATED   =  "enumerated";
 const  BOOLEAN      =  "boolean";
 
 #some more consts

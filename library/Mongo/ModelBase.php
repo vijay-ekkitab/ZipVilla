@@ -6,9 +6,9 @@ class Mongo_ModelBase {
     public static $_collection = null;
     public static $_collectionName = null;
     
-    const DB_SERVER = 'localhost';
-    const DB_NAME = 'vr';
-    const DB_PORT = '27017';
+    //const DB_SERVER = 'localhost';
+    //const DB_NAME = 'vr';
+    //const DB_PORT = '27017';
     
     protected $id = null;
     protected $document = null;
@@ -187,11 +187,14 @@ class Mongo_ModelBase {
      * Connect to mongo...
      */
     protected static function connect(){
+    	$config_file = APPLICATION_PATH . "/configs/application.ini";
+    	$config = new Zend_Config_Ini($config_file, APPLICATION_ENV);
+    
         $mongoDns = sprintf('mongodb://%s:%s',
-                self::DB_SERVER, self::DB_PORT
+                $config->mongodb->server, $config->mongodb->port
             );
         $connection = new Mongo($mongoDns,array("persist" => "x"));
-        self::$_mongo = $connection->selectDB(self::DB_NAME);
+        self::$_mongo = $connection->selectDB($config->mongodb->dbname);
     }
 
     protected static function initCollection() {

@@ -60,7 +60,7 @@ attrs = [
 	},
 	{
 	    name     : "amenities",
-	    valuetype: "multi-valued",	
+	    valuetype: "enumerated",	
 	    keyword  : "true",
 	    facet    : "true"
 	},
@@ -124,6 +124,10 @@ attrs = [
 	}
 ];
 
+enums = [
+    { "amenities" : ["Television", "Telephone", "Wifi", "Laundry", "Health Club", "Sauna"] }
+]
+
 print("creating the database vr.. standing for vacation rental..");
 conn = new Mongo();
 db = conn.getDB("vr");
@@ -141,6 +145,13 @@ for each (t in tps) {
 	db.types.save(t);
 }
 print("inserted vacation listing type definitions...");
+db.enumerations.remove();
+print("Inserting attribute enumeration type definitions...");
+for each (t in enums) {
+	db.enumerations.save(t);
+}
+print("inserted attribute enumeration type definitions...");
+
 //db.types.find();
 db.listings.remove();
 print("Done!!!");

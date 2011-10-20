@@ -113,11 +113,43 @@ class TypeManager {
 class Attribute {
 
 	private  $map;
+	private  static $enums = null;
 
 	public function __construct($amap) {
 		$this->map = $amap;
+		$this->initEnumerations();
 	}
 
+	private function initEnumerations() {
+		if (self::$enums == null) {
+			$enumsArray = Application_Model_Enumerations::find();
+			if (count($enumsArray) != 1) {
+				throwZVException("Initialization of Attribute enumerations failed.");
+			}
+			self::$enums = $enumsArray[0];
+		}
+	}
+	
+	private function isValidEnum($value) {
+		$name = $this->getName();
+		$validvalues = self::$enums->$name;
+		if ($validvalues == null) {
+			return FALSE;
+		}
+		foreach($validvalues as $validvalue) {
+			if (strcasecmp($value, $validvalue) == 0) {
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+	
+	public static function getAllEnumerations() {
+		$doc = self::$enums->getDoc();
+		unset($doc['_id']);
+		return $doc;
+	}
+	
 	public function getName() {
 		return $this->map[NAME];
 	}
@@ -132,6 +164,10 @@ class Attribute {
 
 	public function isMultiValued() {
 		return array_key_exists(VALUE_TYPE,$this->map) && ($this->map[VALUE_TYPE] == MULTI_VALUED);
+	}
+	
+	public function isEnumerated() {
+		return array_key_exists(VALUE_TYPE,$this->map) && ($this->map[VALUE_TYPE] == ENUMERATED);
 	}
 
 	public function isFloat() {
@@ -155,7 +191,15 @@ class Attribute {
 		}
 		elseif($this->isBoolean()) {
 			return (bool)$val;
-		} 
+		}
+		elseif($this->isEnumerated()) {
+			if ($this->isValidEnum($val)) {
+				return $val;
+			}
+			else {
+				return null;
+			}
+		}
 		return $val;
 	}
 
@@ -163,7 +207,7 @@ class Attribute {
 		if($valStr == null) {
 			return null;
 		}
-		if($this->isMultiValued()) {
+		elseif($this->isMultiValued() || $this->isEnumerated()) {
             if (is_array($valStr)) {
                 $vals_array = $valStr;
             }
@@ -173,11 +217,16 @@ class Attribute {
             else {
                 throwZVException("Invalid type of argument supplied to convertValues"); 
             }
+            $vals = array();
             for ($i=0; $i<count($vals_array); $i++) {
-				$vals[] = $this->convertValue($vals_array[$i]);
+				$value = $this->convertValue($vals_array[$i]);
+				if ($value != null) {
+					$vals[] = $value;
+				}
 			}
 			return $vals;
-		} else {
+		}
+		else {
 			$convVal = $this->convertValue($valStr); 
 			return $convVal;
 		}

@@ -62,14 +62,17 @@ class LoginController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             if ($form->isValid($request->getPost())) {
-            if ($this->_process($form->getValues())) {
-                    // We're authenticated! Redirect to the home page
-                    $this->_helper->redirector('index', 'index');
+            	if ($this->_process($form->getValues())) {
+                    // We're authenticated! Redirect to the last declined or home page.
+                    $this->_helper->lastDecline();
+                    return;
+                    //$this->_helper->redirector('index', 'index');
                 }
+            	else {
+            		$form->setDescription('Username or password is not correct.');
+            	}
             }
-            else {
-            	$form->setDescription('Username or Password is not correct.');
-            }
+            
         }
         $this->view->form = $form;
     }

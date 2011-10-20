@@ -61,6 +61,7 @@ tps =
                       "latitude",
                       "longtitude"
                      ]
+    },
 
 	{ 	
 		name 	   : "owner", 
@@ -160,13 +161,13 @@ attrs = [
 	    name     : "images",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "false"
+	    facet    : "true"
 	},
 	{
 	    name     : "video",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "false"
+	    facet    : "true"
 	},
 	{
 	    name     : "latitude",
@@ -220,3 +221,23 @@ attrs = [
 	}
 ];
 
+print("[1] creating database 'vr'.");
+conn = new Mongo();
+db = conn.getDB("vr");
+
+print("[2] emptying db of existing type, attribute and listing data.");
+db.listings.remove();
+db.types.remove();
+db.attributes.remove();
+
+print("[3] adding attributes.");
+for each (attr in attrs) {
+	db.attributes.save(attr);	
+}
+
+print("[4] adding type definitions.");
+for each (t in tps) {
+	db.types.save(t);
+}
+
+print("[5] database initialized.");
