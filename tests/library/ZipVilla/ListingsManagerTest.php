@@ -107,5 +107,13 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("this is", $x, "GetValue did not return the right value."); 
     }
 
+    function testEnums() {
+		$lm = new ZipVilla_Helper_ListingsManager();
+		$res = $lm->getEnumOptions("amenities");
+        $this->assertNotNull($res, "getEnumOptions returned null for valid name."); 
+        $this->assertEquals(6, count($res), "getEnumOptions returned wrong number of valid options."); 
+		$res = $lm->getEnumOptions("doesnotexist");
+        $this->assertNull($res, "getEnumOptions returned valid for for incorrect name."); 
+    }
 }
 ?>
