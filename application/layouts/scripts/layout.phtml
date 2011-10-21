@@ -17,6 +17,11 @@
 				<?php echo $this->loggedInAs(); ?> 
 			</div>
 		</div>
+		<div id="header2"> 
+    		<div id="register-link">
+				<?php echo $this->registerLink(); ?> 
+			</div>
+		</div>
         <div id="content">
             <h1><?php echo $this->escape($this->title); ?></h1>
             <?php echo $this->layout()->content; ?>
