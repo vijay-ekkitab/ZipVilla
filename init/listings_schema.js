@@ -221,6 +221,10 @@ attrs = [
 	}
 ];
 
+enums = [
+         { "entertainment_options" : ["Television", "Radio"] }
+     ]
+
 print("[1] creating database 'vr'.");
 conn = new Mongo();
 db = conn.getDB("vr");
@@ -229,6 +233,7 @@ print("[2] emptying db of existing type, attribute and listing data.");
 db.listings.remove();
 db.types.remove();
 db.attributes.remove();
+db.enumerations.remove();
 
 print("[3] adding attributes.");
 for each (attr in attrs) {
@@ -240,4 +245,10 @@ for each (t in tps) {
 	db.types.save(t);
 }
 
-print("[5] database initialized.");
+print("[5] adding attribute enumeration type definitions...");
+for each (t in enums) {
+	db.enumerations.save(t);
+}
+
+
+print("[6] database initialized.");
