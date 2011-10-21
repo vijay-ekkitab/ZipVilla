@@ -14,6 +14,8 @@ include_once("ZipVilla/Utils.php");
 include_once("Attributes.php");
 include_once("Types.php");
 include_once("Listings.php");
+include_once("Enumerations.php");
+include_once("Zend/Config/Ini.php");
 
 $prop1 = array();
 $prop1['owner_id'] = 100;
