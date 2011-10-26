@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+ <head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+  <title>ZipVilla - Bed and Breakfast</title> 
+  <style type="text/css"> html, 
+   body { margin: 0px; padding: 0px; border: 0px; } 
+   #container { width: 870px; margin: 0 0 0 20px; /* top right bottom left */ padding: 0; background-color: #fff; } 
+   #container h1 { margin: 0; padding: 0; width: 100%; height: 100px; float: left; border-bottom: #c00 solid 3px; } 
+   #container #whereTo { width: 500px; float: left; } 
+   #container #colSearch{ width: 350px; float: right; margin: 0; padding: 0; } 
+   #colSearch #colSearchIcon{ width: 45px; float: left; } 
+   #colSearch #colSearchText { width: 295px; float: right; } 
+
+   #container #footer2 { float: left; width: 870px; border-top: #c00 solid 2px; } 
+   #container #footer3 { float: left; width: 870px; border-top: #c00 solid 3px; } 
+
+   #container #propertyListing { width: 500px; float: left; } 
+   #container #propertyMap { width: 350px; height: 500; float: right; margin: 0; padding: 0; } 
+
+
+  </style> 
+ </head> 
+
+ <body>
+   <div id="container"> 
+      <h1>ZipVilla</h1>
+      <div id="whereTo"> 
+        <p>
+  	  <input type="text" name="city_frm" id="city_frm_id" size="50" maxlength="50"/> 
+        </p> 
+      </div> 
+      <div id="colSearch"> 
+        <div id="colSearchIcon">
+	  <p> 
+            <img src="search_world_icon.jpg" width="45" height="35"
+            alt="image 1" />
+	  </p>	  
+        </div>
+        <div id="colSearchText"> 
+          <p>
+	     <input type="button" value="Search" onclick="dispContent();">
+	  </p>
+        </div> 
+      </div>
+
+     <div id="footer2"> 
+     </div> 
+
+     <div id="propertyListing"> 
+     </div>
+     <div id="propertyMap"> 
+     </div>
+     <div id="footer3"> 
+       <p>Copyright © 2011 - 2011 ZipVilla</p> 
+     </div> 
+   </div> 
+  
+
+   <script type="text/javascript" src="jquery.js"> </script>
+   <script type="text/javascript" src="mapMarker.js"> </script>
+   <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?sensor=false">
+   </script>
+
+   <script type="text/javascript">
+
+	function dispContent()
+	{
+
+	  var villaLatLngs=new Array();
+
+	  var enCity = document.getElementById("city_frm_id");
+	  var vlCity = enCity.value;
+	  var myURL = "QueryMongoPropList.php"+"?city="+vlCity+"&callback=?";
+
+	  // alert("vlCity :" + vlCity + " value :" + enCity + "myURL :" + myURL);
+
+	  var vCtr = 0;
+
+	  $(document).ready(function(){
+	    $.getJSON(myURL,function(data){
+	     $.each(data,function(i,villa){
+		villaLatLngs[vCtr++]=new Array (villa.name, villa.lat, villa.lng, villa.city);
+
+	    	// alert( "villaLatLngs" + villaLatLngs[(vCtr-1)]);
+
+		$("#propertyListing").append(
+			'<div class="villas">'+
+				'<h3>'+villa.name+'</h3>'+
+				'   '+villa.type+
+				'   '+villa.city+
+			'</div><div class="clear"></div>'
+		);
+	     });
+	       $(document).ready(function(){
+	         mapMarker( villaLatLngs, 12, 0, 0, "propertyMap");
+	       });
+	    });
+	  })
+  	}
+
+// End of File - Copyright (c) ZipVilla, 2011 - 2011.
+// Author SYLVESTER THOMAS
+//
+
+   </script>
+
+  </body>
+ </html>
+
