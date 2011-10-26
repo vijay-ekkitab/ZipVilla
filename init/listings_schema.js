@@ -111,7 +111,7 @@ attrs = [
 	},
 	{
 	    name     : "entertainment_options",
-	    valuetype: "multi-valued",	
+	    valuetype: "enumerated",	
 	    keyword  : "false",
 	    facet    : "true"
 	},

@@ -132,6 +132,17 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 		$fres[TYPE] = $type;
 		return $fres;
 	}
+	
+	public function getEnumOptions($name) {
+		$enums = Application_Model_Enumerations::findAll();
+		foreach ($enums as $enum) {
+			$doc = $enum->getDoc();
+			if (array_key_exists($name, $doc)) {
+				return $doc[$name];
+			}
+		}		
+		return null;
+	}
 
 }
 ?>

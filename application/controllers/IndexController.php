@@ -48,7 +48,7 @@ class IndexController extends Zend_Controller_Action
 
     public function editAction()
     {
-        $form = new Application_Form_Listing();
+        $form = new Application_Form_Listing(array("listingsManager" => $this->_helper->listingsManager));
         $form->submit->setLabel('Save');
         $this->view->form = $form;
         if ($this->getRequest()->isPost()) {

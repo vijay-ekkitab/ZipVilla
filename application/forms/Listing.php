@@ -2,6 +2,11 @@
 
 class Application_Form_Listing extends Zend_Form
 {
+	private $lm = null;
+	
+	public function setListingsManager($lm) {
+		$this->lm = $lm;
+	}
 
     public function init()
     {
@@ -55,7 +60,15 @@ class Application_Form_Listing extends Zend_Form
         $et = new Zend_Form_Element_MultiCheckbox('entertainment_options');
         $et->setLabel('Entertainment Options')
               ->setRequired(true);
-        $et->addMultiOption("LCD Television", "LCD Television");
+        if ($this->lm != null) {
+        	$options = $this->lm->getEnumOptions("entertainment_options");
+        	if ($options != null) {
+        		foreach ($options as $option) {
+        			$et->addMultiOption($option, $option);
+        		}		
+        	}
+        }
+        
               
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('id', 'submitbutton');
