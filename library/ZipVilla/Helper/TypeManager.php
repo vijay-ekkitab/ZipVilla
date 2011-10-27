@@ -193,12 +193,13 @@ class Attribute {
 			return (bool)$val;
 		}
 		elseif($this->isEnumerated()) {
-			if ($this->isValidEnum($val)) {
-				return $val;
+			$result = array();
+			foreach($val as $k => $v) {
+				if ($this->isValidEnum($k)) {
+					$result[$k] = $v;
+				}
 			}
-			else {
-				return null;
-			}
+			return $result;
 		}
 		return $val;
 	}
@@ -217,13 +218,15 @@ class Attribute {
             else {
                 throwZVException("Invalid type of argument supplied to convertValues"); 
             }
-            $vals = array();
-            for ($i=0; $i<count($vals_array); $i++) {
-				$value = $this->convertValue($vals_array[$i]);
-				if ($value != null) {
-					$vals[] = $value;
-				}
-			}
+            $vals = $this->convertValue($vals_array);
+            //$vals = array();
+            //for ($i=0; $i<count($vals_array); $i++) {
+            //foreach ($vals_array as $key => $value)
+			//	$value = $this->convertValue($vals_array[$i]);
+			//	if ($value != null) {
+			//		$vals[] = $value;
+			//	}
+			//}
 			return $vals;
 		}
 		else {

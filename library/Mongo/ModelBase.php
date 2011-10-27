@@ -187,8 +187,10 @@ class Mongo_ModelBase {
      * Connect to mongo...
      */
     protected static function connect(){
-    	$config_file = APPLICATION_PATH . "/configs/application.ini";
-    	$config = new Zend_Config_Ini($config_file, APPLICATION_ENV);
+    	//$config_file = APPLICATION_PATH . "/configs/application.ini";
+    	//$config = new Zend_Config_Ini($config_file, APPLICATION_ENV);
+    	
+    	$config = Zend_Registry::get('config'); 
     
         $mongoDns = sprintf('mongodb://%s:%s',
                 $config->mongodb->server, $config->mongodb->port

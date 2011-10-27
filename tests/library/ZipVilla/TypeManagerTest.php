@@ -8,7 +8,6 @@ class TypeManagerTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
     	if (!self::$setup_completed) {
-    		echo ">>>>  Setup Running.\n";
         	$this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
         	parent::setUp();
         	$seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/test_schema.js";

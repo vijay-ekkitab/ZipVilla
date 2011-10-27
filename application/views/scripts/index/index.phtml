@@ -26,7 +26,7 @@
         <td><?php echo $this->escape($listing->bedrooms);?></td>
         <td><?php echo $this->escape($listing->guests);?></td>
         <?php $eoptions = $listing->entertainment_options;?>
-        <td><?php if ($eoptions != null) { echo $this->escape(implode(",", $eoptions)); } else echo ""; ?></td>
+        <td><?php if ($eoptions != null) { foreach ($eoptions as $k => $v) { echo "$k -&gt; \"$v\" <br/>"; } }?></td>
         
         <td> 
             <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$listing->id));?>">Edit</a>

@@ -27,7 +27,7 @@ class IndexController extends Zend_Controller_Action
     public function addAction()
     {
     	
-        $form = new Application_Form_Listing();
+        $form = new Application_Form_Listing(array("listingsManager" => $this->_helper->listingsManager));
         $form->submit->setLabel('Add');
         $this->view->form = $form;
 
@@ -75,7 +75,7 @@ class IndexController extends Zend_Controller_Action
                     $vals['state'] = $listing->address['state'];
                     $vals['bedrooms'] = $listing->bedrooms;
                     $vals['guests'] = $listing->guests;
-                    $vals['entertainment_options'] = $listing->entertainment_options;
+                    $vals['entertainment_options'] = array_keys($listing->entertainment_options);
                     $vals['id'] = $id;
                     $form->populate($vals);
                 }

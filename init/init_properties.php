@@ -30,7 +30,8 @@ $prop1['coordinates'] = array();
 $prop1['bedrooms'] = 2;
 $prop1['baths'] = 2;
 $prop1['guests'] = 4;
-$prop1['entertainment_options'] = array("LCD Television");
+$prop1['entertainment_options'] = array("Television" => "32 inch LCD screen.", 
+										"Radio" => "Satellite Radio Receiver for 24 hour music");
 $prop1['kitchen_amenities'] = array("Dinnerware");
 $prop1['bedroom_amenities'] = array("Queen Bed");
 $prop1['outdoor_activities'] = array("swimming");

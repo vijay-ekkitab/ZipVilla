@@ -128,11 +128,10 @@ enums = [
     { "amenities" : ["Television", "Telephone", "Wifi", "Laundry", "Health Club", "Sauna"] }
 ]
 
-print("creating the database vr.. standing for vacation rental..");
+print("creating the database test.. standing for vacation rental..");
 conn = new Mongo();
-db = conn.getDB("vr");
+db = conn.getDB("test");
 //db.dropDatabase();
-//db = conn.getDB("vr");
 print("Inserting meta information about attributes...");
 db.attributes.remove();
 for each (attr in attrs) {

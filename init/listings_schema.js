@@ -10,6 +10,7 @@ tps =
 			            "bedrooms",
 			            "baths",
                         "guests",
+                        "onsite_services",
                         "entertainment_options",
                         "kitchen_amenities",
                         "bedroom_amenities",
@@ -111,6 +112,12 @@ attrs = [
 	},
 	{
 	    name     : "entertainment_options",
+	    valuetype: "enumerated",	
+	    keyword  : "false",
+	    facet    : "true"
+	},
+	{
+	    name     : "onsite_services",
 	    valuetype: "enumerated",	
 	    keyword  : "false",
 	    facet    : "true"
@@ -222,14 +229,15 @@ attrs = [
 ];
 
 enums = [
-         { "entertainment_options" : ["Television", "Radio"] }
+         { "entertainment_options" : ["Television", "Radio"],
+           "onsite_services" : ["Laundry", "Cook", "Cleaning", "Concierge"] }
      ]
 
 print("[1] creating database 'vr'.");
 conn = new Mongo();
 db = conn.getDB("vr");
 
-print("[2] emptying db of existing type, attribute and listing data.");
+print("[2] emptying db of existing type, attribute, enumeration and listing data.");
 db.listings.remove();
 db.types.remove();
 db.attributes.remove();
