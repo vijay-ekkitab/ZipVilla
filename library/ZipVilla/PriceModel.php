@@ -19,11 +19,48 @@ class PriceModel {
         }
         return (($end->sec - $start->sec) / 86400);
     }
+    
+    private static function sort_on_time($a, $b) {
+    	if ($a['from']->sec < $b['from']->sec) {
+        	return -1;
+    	}
+    	elseif ($a['from']->sec > $b['from']->sec) {
+        	return 1;
+    	}
+    	return 0;
+	}
+
+	private function print_array($a) {
+    	foreach($a as $z) {
+        	echo "   From: ".date('d-M-Y',$z['from']->sec)."  To: ".date('d-M-Y',$z['to']->sec)."\n";
+    	}
+	}
+
+	private function filter_specials($specials, $start, $end) {
+    	$result = array();
+    	foreach($specials as $special) {
+        	if (!(($special['from']->sec >= $end->sec) ||
+            	  ($special['to']->sec <= $start->sec))) {
+           		$result[] = $special;
+        	}
+    	}
+    	usort($result, 'static::sort_on_time');
+    	return $result;
+	}
+	
+	private function get_price_slab($start, $end, $rate) {
+    	$result = array();
+    	$result['from'] = $start;
+    	$result['to'] = $end;
+    	$result['days'] = $this->get_interval($start, $end);
+    	$result['rate'] = $rate;
+    	return $result;
+	}
+	
 
     public function get_rate_structure($start, $end) {
 
         $results = array();
-
 
         if (($this->special_rates == null) ||
             ($start == null) ||
@@ -31,121 +68,39 @@ class PriceModel {
             if ($this->standard_rate == null) {
                 return($results);
             }
-            $result = array();
-            $result['from'] = $start;
-            $result['to'] = $end;
-            $days = $this->get_interval($start, $end);
-            $result['days'] = $days;
-            $result['rate'] = $this->standard_rate;
-            $results[] = $result;
+            $results[] = $this->get_price_slab($start, $end, $this->standard_rate);
             return($results);
         }
 
         if ($start->sec >= $end->sec) {
             return($results);
         }
+        $specials = $this->filter_specials($this->special_rates, $start, $end);
+        
+	    foreach($specials as $special) {
+        	if ($special['from']->sec > $start->sec) {
+             	$results[] = $this->get_price_slab($start, $special['from'], $this->standard_rate);
+             	$start = $special['from'];
+        	}
+        	if ($special['to']->sec < $end->sec) {
+             	$results[] = $this->get_price_slab($start, $special['to'], $special['rate']);
+             	$start = $special['to'];
+        	}
+        	elseif ($special['to']->sec >= $end->sec) {
+             	$results[] = $this->get_price_slab($start, $end, $special['rate']);
+             	$start = $end;
+        	}
+        	if ($start->sec >= $end->sec) {
+           		break;
+        	}
+    	}
 
-        $ranges = array();
-        $range = array();
-        $range['start'] = $start;
-        $range['end'] = $end;
-        $ranges[] = $range;
+    	if ($start->sec < $end->sec) {
+        	$results[] = $this->get_price_slab($start, $end, $this->standard_rate);
+    	}
 
-        while (count($ranges) > 0) {
-
-            $nextranges = array();
-   
-            foreach ($ranges as $range) {
-
-                $start = $range['start'];
-                $end = $range['end'];
-                $processed = FALSE;
-
-                foreach($this->special_rates as $special) {
-           
-                    if ($start->sec < $special['from']->sec) {
-                        if ($end->sec > $special['from']->sec) {
-                            if ($end->sec > $special['to']->sec) {
-                                $days = $this->get_interval($special['from'], $special['to']);
-                                $result = array();
-                                $result['from'] = $special['from'];
-                                $result['to'] = $special['to'];
-                                $result['days'] = $days;
-                                $result['rate'] = $special['rate'];
-                                $results[] = $result;
-                                $range = array();
-                                $range['start'] = $start;
-                                $range['end'] = $special['from'];
-                                $nextranges[] = $range;
-                                $range = array();
-                                $range['start'] = $special['to'];
-                                $range['end'] = $end;
-                                $nextranges[] = $range;
-                                $processed = TRUE;
-                                break;
-                            }
-                            else {
-                                $days = $this->get_interval($special['from'], $end);
-                                $result = array();
-                                $result['from'] = $special['from'];
-                                $result['to'] = $end;
-                                $result['days'] = $days;
-                                $result['rate'] = $special['rate'];
-                                $results[] = $result;
-                                $range = array();
-                                $range['start'] = $start;
-                                $range['end'] = $special['from'];
-                                $nextranges[] = $range;
-                                $processed = TRUE;
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        if ($start->sec < $special['to']->sec) {
-                            if ($end->sec > $special['to']->sec) {
-                                $days = $this->get_interval($start, $special['to']);
-                                $result = array();
-                                $result['from'] = $start;
-                                $result['to'] = $special['to'];
-                                $result['days'] = $days;
-                                $result['rate'] = $special['rate'];
-                                $results[] = $result;
-                                $range = array();
-                                $range['start'] = $special['to'];
-                                $range['end'] = $end;
-                                $nextranges[] = $range;
-                                $processed = TRUE;
-                                break;
-                            }
-                            else {
-                                $days = $this->get_interval($start, $end);
-                                $result = array();
-                                $result['from'] = $start;
-                                $result['to'] = $end;
-                                $result['days'] = $days;
-                                $result['rate'] = $special['rate'];
-                                $results[] = $result;
-                                $processed = TRUE;
-                                break;
-                            }
-                        }
-                    }
-   
-                } 
-                if (!$processed) {
-                    $days = $this->get_interval($start, $end);
-                    $result = array();
-                    $result['from'] = $start;
-                    $result['to'] = $end;
-                    $result['days'] = $days;
-                    $result['rate'] = $this->standard_rate;
-                    $results[] = $result;
-                }
-            }
-            $ranges = $nextranges;
-        }
-        return($results);
+    	return($results);
+        
     }
 
     public function get_average_rate($start, $end, $quiet_mode = TRUE) {
