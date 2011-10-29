@@ -67,8 +67,9 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$sm = new SearchManager();
 		$q = array("address_city"=>'Mapusa');
 		$fds = array('address_city','id','title');
-		$docs = $sm->search($q,$fds);
-		$this->assertTrue($docs != null);
+		$results = $sm->search($q,$fds);
+		$this->assertTrue($results != null);
+		$docs = $results['docs'];
 		//print_r($docs);
 		$this->assertTrue(count($docs) == 1);
 		$d = $docs[0];
@@ -126,8 +127,9 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$sm = new SearchManager();
 		$q = array('address_state'=>'Kerala');
 		$fds = array('address_state','address_city','id','title');
-		$docs = $sm->search($q,$fds);
-		$this->assertTrue($docs != null);
+		$results = $sm->search($q,$fds);
+		$this->assertTrue($results != null);
+		$docs = $results['docs'];
 		$this->assertTrue(count($docs) == 1);
 		//print_r($docs);
 		$d = $docs[0];

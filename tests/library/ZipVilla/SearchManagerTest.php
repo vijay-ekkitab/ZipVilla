@@ -114,13 +114,21 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$q = array("address_state"=>'Goa');
 		$fds = array('address_city','id','title');
 		$ffds = array('address_city','amenities');
-		$docs = $sm->search($q,$fds,$ffds);
-		$this->assertTrue($docs != null);
+		$results = $sm->search($q,$fds,$ffds);
+		$this->assertTrue($results != null);
+		$docs = $results['docs'];
 		//print_r($docs);
-		$this->assertTrue(count($docs) == 1);
+		$this->assertTrue(count($docs) == 2);
 		$d = $docs[0];
 		$t = $d['title'];
-		$this->assertEquals(2,count($t),"Wrong number of results");
+		$this->assertEquals(1,count($t),"Wrong number of results");
+		$facets = $results['facets'];
+		//print_r($facets);
+		$af = $facets['amenities'];
+		$sc = $af['sauna'];
+		$this->assertEquals(2,$sc,"Wrong sauna count. expected 2.");
+		$hc = $af['health club'];
+		$this->assertEquals(1,$hc,"Wrong healtch club. expected 2.");
 	}
 }		
 ?>
