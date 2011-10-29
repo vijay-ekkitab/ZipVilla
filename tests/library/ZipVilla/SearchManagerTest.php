@@ -18,7 +18,7 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$res = $im->delete();
 	}
 
-	function _insertListing() {
+	function _insertListing1() {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->query();
 		$tname = "hotel";
@@ -38,7 +38,7 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$vals['neighbourhood'] = "near church";
 		$vals['lat'] = 55.6;
 		$vals['long'] = 65.8;
-		$vals['amenities'] = array('health club','sauna');
+		$vals['amenities'] = array('massage','sauna');
 		$vals['title'] = "The Beach Home"; 
 		$description = "very nice  place near fort";
 		$vals['description'] = $description;
@@ -59,82 +59,76 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		return $res->id;
 		
 	}
-	public function testIndexById() {
-		$id = $this->_insertListing();
-		$im = new IndexManager();
-		$res = $im->indexById($id);
-		$this->assertTrue($res->success());
-		$sm = new SearchManager();
-		$q = array("address__city"=>'Mapusa');
-		$fds = array('address__city','id','title');
-		$results = $sm->search($q,$fds);
-		$this->assertTrue($results != null);
-		$docs = $results['docs'];
-		//print_r($docs);
-		$this->assertTrue(count($docs) == 1);
-		$d = $docs[0];
-		$t = $d['title'];
-		$this->assertEquals("The Beach Home",$t[0],"Wrong search fired. fields not matching");
-	}
-	function _insertListing1() {
+	function _insertListing2() {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->query();
 		$tname = "resort";
 		$vals = array();
-		$vals['size'] = "25 acres"; 
-		$vals['activities'] = array('bonfire', 'nature walk','trekking');
-		$vals['specalities'] = array('oil therapy');
-		$vals['userId'] = "owner_5656";
-		$vals['streetNumber'] = "700-D";
-		$vals['street'] = "Waynad Road";
-		$vals['line1'] = "Thomas Church";
-		$vals['line2'] = "Ayurveda resort";
-		$vals['city'] = "Thrissur";
-		$vals['state'] = "Kerala";
+		$vals['activities'] = array('bonfire', 'swimming');
+		$vals['specalities'] = array('goan food');
+		$vals['userId'] = "owner_5668";
+		$vals['streetNumber'] = "456-D";
+		$vals['street'] = "Calungute Road";
+		$vals['line1'] = "North Gao";
+		$vals['line2'] = "Beach resort";
+		$vals['city'] = "Calungute";
+		$vals['state'] = "Goa";
 		$vals['country'] = "India";
-		$vals['pincode'] = "5656789";
-		$vals['neighbourhood'] = "near lake";
-		$vals['lat'] = 65.6;
-		$vals['long'] = 85.8;
-		$vals['amenities'] = array('massage','sauna','astrology');
-		$vals['title'] = "Dhanvantari Mahal"; 
-		$description = "very nice  place to relax and heal";
+		$vals['pincode'] = "5676719";
+		$vals['neighbourhood'] = "near church";
+		$vals['lat'] = 45.6;
+		$vals['long'] = 75.8;
+		$vals['amenities'] = array('health club','sauna');
+		$vals['title'] = "The Beach Home"; 
+		$description = "right by the beach";
 		$vals['description'] = $description;
-		$vals['images'] = array('content/a1.jpg','content/a2.jpg');
-		$vals['thumbnail'] = 'content/t1.jpg';
-		$vals['url'] = 'http://ayush.com';
+		$vals['images'] = array('content/one11.jpg','content/two11.jpg');
+		$vals['thumbnail'] = 'content/thumb11.jpg';
+		$vals['url'] = 'http://mycompany1.com';
 		$vals['rate'] = 8600;
-		$vals['rateType'] = "suite";
+		$vals['rateType'] = "suite offer";
 		$vals['maxGuests'] = 6;
 
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->insert($tname,$vals);
 
 		$this->assertEquals("resort", $res->type, "Wrong 'Type' for inserted object."); 
-		$this->assertEquals("Kerala", $res->address['state'], "Wrong 'State' for inserted object."); 
+		$this->assertEquals("Goa", $res->address['state'], "Wrong 'State' for inserted object."); 
 		$this->assertEquals($description, $res->description, "Wrong 'Description' for inserted object.");
 		$this->assertTrue($res->id != null);
 		return $res->id;
 		
 	}
-	public function testIndexByObject() {
-	 	$id = $this->_insertListing1();
-		$lm = new ZipVilla_Helper_ListingsManager();
-		$res = $lm->queryById($id);
+	public function _createData() {
 		$im = new IndexManager();
-		$res = $im->index($res);
+		$id = $this->_insertListing1();
+		$res = $im->indexById($id);
 		$this->assertTrue($res->success());
+		$id = $this->_insertListing2();
+		$res = $im->indexById($id);
+		$this->assertTrue($res->success());			
+	}
+	public function testSearchFacets() {
+		$this->_createData();
 		$sm = new SearchManager();
-		$q = array('address__state'=>'Kerala');
-		$fds = array('address__state','address_city','id','title');
-		$results = $sm->search($q,$fds);
+		$q = array("address_state"=>'Goa');
+		$fds = array('address_city','id','title');
+		$ffds = array('address_city','amenities');
+		$results = $sm->search($q,$fds,$ffds);
 		$this->assertTrue($results != null);
 		$docs = $results['docs'];
-		$this->assertTrue(count($docs) == 1);
 		//print_r($docs);
+		$this->assertTrue(count($docs) == 2);
 		$d = $docs[0];
 		$t = $d['title'];
-		$this->assertEquals("Dhanvantari Mahal",$t[0],"Wrong search fired. fields not matching");
+		$this->assertEquals(1,count($t),"Wrong number of results");
+		$facets = $results['facets'];
+		//print_r($facets);
+		$af = $facets['amenities'];
+		$sc = $af['sauna'];
+		$this->assertEquals(2,$sc,"Wrong sauna count. expected 2.");
+		$hc = $af['health club'];
+		$this->assertEquals(1,$hc,"Wrong healtch club. expected 1.");
 	}
 }		
 ?>
