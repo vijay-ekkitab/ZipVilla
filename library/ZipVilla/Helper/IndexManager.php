@@ -50,6 +50,7 @@ class IndexManager {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->queryById($mid,true,true);
 		if($res != null) {
+			//print_r($res);
 			return $this->_indexDocument($res);
 		} else {
 			return null;

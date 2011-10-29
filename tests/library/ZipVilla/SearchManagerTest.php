@@ -128,7 +128,7 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$sc = $af['sauna'];
 		$this->assertEquals(2,$sc,"Wrong sauna count. expected 2.");
 		$hc = $af['health club'];
-		$this->assertEquals(1,$hc,"Wrong healtch club. expected 2.");
+		$this->assertEquals(1,$hc,"Wrong healtch club. expected 1.");
 	}
 }		
 ?>
