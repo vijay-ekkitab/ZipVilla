@@ -14,8 +14,6 @@ set_include_path(implode(PATH_SEPARATOR, array(
     get_include_path(),
 )));
 
-echo "Path->   ". get_include_path() . "\n";
-
 require_once 'Zend/Loader/Autoloader.php';
 Zend_Loader_Autoloader::getInstance();
 Zend_Controller_Action_HelperBroker::addPrefix('ZipVilla_Helper');

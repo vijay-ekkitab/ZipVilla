@@ -33,7 +33,8 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
 	    $vals['neighbourhood'] = "near church";
 	    $vals['lat'] = 55.6;
 	    $vals['long'] = 65.8;
-	    $vals['amenities'] = array('health club','sauna');
+	    $vals['amenities'] = array('health club' => 'This is a fantastic club',
+                                   'sauna' => 'hot water', 'internet' => '');
 	    $vals['title'] = "The Beach Home"; 
         $description = "very nice  place near fort";
 	    $vals['description'] = $description;
@@ -48,8 +49,12 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
 	    $res = $lm->insert($tname,$vals);
         $this->assertEquals("hotel", $res->type, "Wrong 'Type' for inserted object."); 
         $this->assertEquals("Goa", $res->address['state'], "Wrong 'State' for inserted object."); 
-        $this->assertEquals($description, $res->description, "Wrong 'Description' for inserted object."); 
-
+        $this->assertEquals($description, $res->description, "Wrong 'Description' for inserted object.");
+		$this->assertTrue(in_array("health club", array_keys($res->amenities)), "Item not found in amenities list in inserted object."); 
+        $this->assertFalse(in_array("television", array_keys($res->amenities)), "Wrong item found in amenities list in inserted object.");
+        $this->assertFalse(in_array("internet", array_keys($res->amenities)), "Wrong item found in amenities list in inserted object.");
+        $this->assertEquals("hot water", $res->amenities['sauna'], "Amenities item has wrong description."); 
+        
         $vals = array();
         $vals['state'] = "Kerala";
 
@@ -105,5 +110,13 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("this is", $x, "GetValue did not return the right value."); 
     }
 
+    function testEnums() {
+		$lm = new ZipVilla_Helper_ListingsManager();
+		$res = $lm->getEnumOptions("amenities");
+        $this->assertNotNull($res, "getEnumOptions returned null for valid name."); 
+        $this->assertEquals(6, count($res), "getEnumOptions returned wrong number of valid options."); 
+		$res = $lm->getEnumOptions("doesnotexist");
+        $this->assertNull($res, "getEnumOptions returned valid for for incorrect name."); 
+    }
 }
 ?>

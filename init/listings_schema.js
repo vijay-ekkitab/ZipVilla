@@ -10,6 +10,7 @@ tps =
 			            "bedrooms",
 			            "baths",
                         "guests",
+                        "onsite_services",
                         "entertainment_options",
                         "kitchen_amenities",
                         "bedroom_amenities",
@@ -61,6 +62,7 @@ tps =
                       "latitude",
                       "longtitude"
                      ]
+    },
 
 	{ 	
 		name 	   : "owner", 
@@ -110,7 +112,13 @@ attrs = [
 	},
 	{
 	    name     : "entertainment_options",
-	    valuetype: "multi-valued",	
+	    valuetype: "enumerated",	
+	    keyword  : "false",
+	    facet    : "true"
+	},
+	{
+	    name     : "onsite_services",
+	    valuetype: "enumerated",	
 	    keyword  : "false",
 	    facet    : "true"
 	},
@@ -160,13 +168,13 @@ attrs = [
 	    name     : "images",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "false"
+	    facet    : "true"
 	},
 	{
 	    name     : "video",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "false"
+	    facet    : "true"
 	},
 	{
 	    name     : "latitude",
@@ -220,3 +228,35 @@ attrs = [
 	}
 ];
 
+enums = [
+         { "entertainment_options" : ["Television", "Radio"],
+           "onsite_services" : ["Laundry", "Cook", "Cleaning", "Concierge"] }
+     ]
+
+print("[1] creating database 'vr'.");
+conn = new Mongo();
+db = conn.getDB("vr");
+
+print("[2] emptying db of existing type, attribute, enumeration and listing data.");
+db.listings.remove();
+db.types.remove();
+db.attributes.remove();
+db.enumerations.remove();
+
+print("[3] adding attributes.");
+for each (attr in attrs) {
+	db.attributes.save(attr);	
+}
+
+print("[4] adding type definitions.");
+for each (t in tps) {
+	db.types.save(t);
+}
+
+print("[5] adding attribute enumeration type definitions...");
+for each (t in enums) {
+	db.enumerations.save(t);
+}
+
+
+print("[6] database initialized.");

@@ -2,8 +2,9 @@
 
 class LoginController extends Zend_Controller_Action
 {
-	
-	protected function _getAuthAdapter() {
+
+    protected function _getAuthAdapter()
+    {
         
         $dbAdapter = Zend_Db_Table::getDefaultAdapter();
         $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
@@ -16,8 +17,8 @@ class LoginController extends Zend_Controller_Action
         
         return $authAdapter;
     }
-	
-	protected function _process($values)
+
+    protected function _process($values)
     {
         // Get our authentication adapter and check credentials
         $adapter = $this->_getAuthAdapter();
@@ -38,9 +39,10 @@ class LoginController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     }
-    
-	public function preDispatch()
+
+    public function preDispatch()
     {
+    	/*
         if (Zend_Auth::getInstance()->hasIdentity()) {
             // If the user is logged in, we don't want to show the login form;
             // however, the logout action should still be available
@@ -54,6 +56,8 @@ class LoginController extends Zend_Controller_Action
                 $this->_helper->redirector('index');
             }
         }
+        */
+        
     }
 
     public function indexAction()
@@ -62,25 +66,45 @@ class LoginController extends Zend_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             if ($form->isValid($request->getPost())) {
-            if ($this->_process($form->getValues())) {
-                    // We're authenticated! Redirect to the home page
-                    $this->_helper->redirector('index', 'index');
+            	if ($this->_process($form->getValues())) {
+                    // We're authenticated! Redirect to the last declined or home page.
+                    $this->_helper->lastDecline();
+                    return;
+                    //$this->_helper->redirector('index', 'index');
                 }
+            	else {
+            		$form->setDescription('Username or password is not correct.');
+            	}
             }
-            else {
-            	$form->setDescription('Username or Password is not correct.');
-            }
+            
         }
         $this->view->form = $form;
     }
-    
+
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
         $this->_helper->redirector('index'); // back to home page
     }
-    
-	
+
+    public function registerAction()
+    {
+        $form = new Application_Form_Register();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            if ($form->isValid($request->getPost())) {
+            	$users = new Application_Model_DbTable_Users();
+            	$values = $form->getValues();
+            	$users->addUser($values);
+            	$this->_helper->redirector('index', 'index');
+            }
+            
+        }
+        $this->view->form = $form;
+    }
+
 
 }
+
+
 

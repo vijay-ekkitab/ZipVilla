@@ -3,13 +3,17 @@ include_once("ZipVilla/Helper/TypeManager.php");
 
 class TypeManagerTest extends PHPUnit_Framework_TestCase
 {
+	static $setup_completed = FALSE;
 
     public function setUp()
     {
-        $this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
-        parent::setUp();
-        $seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/test_schema.js";
-        shell_exec("/usr/bin/mongo " . $seed_script);
+    	if (!self::$setup_completed) {
+        	$this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+        	parent::setUp();
+        	$seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/test_schema.js";
+        	shell_exec("/usr/bin/mongo " . $seed_script);
+        	self::$setup_completed = TRUE;
+    	}
     }
 
     public function testGetTypeNames()
@@ -107,6 +111,13 @@ class TypeManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("Anjuna", $obj['address']['neighbourhood'], "Neighbourhood is changed in created object.");
         $this->assertEquals("Goa", $obj['address']['state'], "State is changed in created object.");
         $this->assertEquals("10 acres", $obj['size'], "Size is changed in created object.");
+	}
+	
+	public function testEnumerations() {
+		echo "\n";
+		$enums = Attribute::getAllEnumerations();
+		$this->assertEquals(1, count($enums), "More than one enumeration was found.");
+		$this->assertTrue(array_key_exists("amenities", $enums), "Amenities does not exist in Attribute enumerations.");
 	}
 }
 ?>

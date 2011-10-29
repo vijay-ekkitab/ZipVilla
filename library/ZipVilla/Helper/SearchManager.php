@@ -10,14 +10,21 @@ class SearchManager {
 	public function __construct() {
 		$this->init();
 	}
-	private $options = null;
+	private static $options = null;
+	
 	private function init()
 	{
-		$this->options = array (
-			SOLR_HOST_NAME => 'localhost',
-			SOLR_PORT => 8983
-		);
+		if (self::$options == null) {
+			$config_file = APPLICATION_PATH . "/configs/application.ini";
+    		$config = new Zend_Config_Ini($config_file, APPLICATION_ENV);
+    	
+			self::$options = array (
+				SOLR_HOST_NAME => $config->solr->server,
+				SOLR_PORT => $config->solr->port
+			);
+		}
 	}
+	
 	private function buildQuery($q) {
 		$qstr = "";
 		if($q != null) {
@@ -39,7 +46,7 @@ class SearchManager {
 	 * @return - an array of SolrDocuments which can be accessed as simple PHP objects
 	 ***********************************************************************************/
 	public function search($q,$fds=null,$start=0,$count=50) {
-		$client = new SolrClient($this->options);
+		$client = new SolrClient(self::$options);
 		$query = new SolrQuery();
 		$qstr = $this->buildQuery($q);
 		$query->setQuery($qstr);

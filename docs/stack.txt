@@ -1,0 +1,6 @@
+Ubuntu - 11.04
+Apache - 2.2
+Mysql  - 5.1 (or higher)
+PHP    - 5.3.5
+Solr   - 3.4.0  (This is the version we should be using)
+Zend   - 1.11.5 (This is the version that is in our repository)

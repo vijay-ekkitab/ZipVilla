@@ -9,13 +9,25 @@
 <table>
     <tr>
         <th>Type</th>
+        <th>Street</th>
+        <th>City</th>
         <th>State</th>
+        <th>Bedrooms</th>
+        <th>Max Guests</th>
+        <th>Entertainment</th>
         <th>&nbsp;</th>
     </tr>
 <?php foreach($this->listings as $listing) : ?>
     <tr>
         <td><?php echo $this->escape($listing->type);?></td>
+        <td><?php echo $this->escape($listing->address['street_name']);?></td> 
+        <td><?php echo $this->escape($listing->address['city']);?></td>
         <td><?php echo $this->escape($listing->address['state']);?></td>
+        <td><?php echo $this->escape($listing->bedrooms);?></td>
+        <td><?php echo $this->escape($listing->guests);?></td>
+        <?php $eoptions = $listing->entertainment_options;?>
+        <td><?php if ($eoptions != null) { foreach ($eoptions as $k => $v) { echo "$k -&gt; \"$v\" <br/>"; } }?></td>
+        
         <td> 
             <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$listing->id));?>">Edit</a>
             <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'delete', 'id'=>$listing->id));?>">Delete</a>
