@@ -261,6 +261,13 @@ class Type {
 	public function getName() {
 		return $this->map[NAME];
 	}
+	
+	public function isList() {
+		if (isset($this->map[REPEATS])) {
+			return ($this->map[REPEATS] == "true" ? TRUE : FALSE);
+		}
+		return false; 
+	}
 
 	/**********************************************************************
      * IMPORTANT
@@ -324,6 +331,9 @@ class Type {
      * create an object - copying the values from the map provided
      */
 	public function makeObject($values) {
+		if (!is_array($values)) {
+			return null;
+		}
 		$tm = new TypeManager();
 		$obj = array();
 		$obj[TYPE] = $this->getName();
@@ -331,17 +341,37 @@ class Type {
 		foreach($hattrs as  $attr) {
 			$aname = $attr->getName();
 			$tval = null;
-			if($attr->isType()) {
+		    $tval = array_key_exists($aname,$values) ? $values[$aname] : null;
+			if($tval != null) {
+				if ($attr->isType()) {
+					$rtype = $tm->getType($aname);
+					if ($rtype->isList()) {
+						$subObj = array();
+						foreach($tval as $value) {
+							$z = $rtype->makeObject($value);
+							if ($z != null) {
+								$subObj[] = $z;
+							}
+						}
+						$obj[$aname] = $subObj;
+					}
+					else {
+						$z = $rtype->makeObject($tval);
+						if ($z != null) {
+							$obj[$aname] = $z;
+						}
+					}
+				}
+				else { 
+				    $obj[$aname] = $attr->convertValues($tval);
+				}
+			}
+			elseif($attr->isType()) {
 				$rtype = $tm->getType($aname);
 				$tval = $rtype->makeObject($values);				
                 if ($tval != null) {
 				    $obj[$aname] = $tval;
                 }
-			} else {
-				$tval = array_key_exists($aname,$values) ? $values[$aname] : null;
-			    if($tval != null) {
-				    $obj[$aname] = $attr->convertValues($tval);
-			    }
 			}
 		}
 		if(count($obj) == 1) {
@@ -363,7 +393,7 @@ class Type {
 			$tval = null;
 			if($attr->isType()) {
 				$rtype = $tm->getType($aname);
-				if ($obj[$aname] == null) {
+				if (!isset($obj[$aname])) {
 					$obj[$aname] = array();
 				}
 				$obj[$aname] = $rtype->updateObject($obj[$aname], $map);				

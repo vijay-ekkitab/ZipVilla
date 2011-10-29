@@ -104,7 +104,7 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
 
     function testGetValue() {
 	    $val = array('a'=>array('b'=>10) , 'c' => "this is");
-	    $x = getValue($val,'a_b');
+	    $x = getValue($val,'a__b');
         $this->assertEquals(10, $x, "GetValue did not return the right value."); 
 	    $x = getValue($val,'c');
         $this->assertEquals("this is", $x, "GetValue did not return the right value."); 

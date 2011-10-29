@@ -2,9 +2,6 @@
 include_once("ListingsManager.php");
 include_once("ZipVilla/Utils.php");
 
-const SOLR_HOST_NAME = "hostname";
-const SOLR_PORT = "port";
-
 class SearchManager {
 
 	public function __construct() {
@@ -15,12 +12,11 @@ class SearchManager {
 	private function init()
 	{
 		if (self::$options == null) {
-			$config_file = APPLICATION_PATH . "/configs/application.ini";
-    		$config = new Zend_Config_Ini($config_file, APPLICATION_ENV);
+			$config = Zend_Registry::get('config'); 
     	
 			self::$options = array (
-				SOLR_HOST_NAME => $config->solr->server,
-				SOLR_PORT => $config->solr->port
+				"hostname" => $config->solr->server,
+				"port" => $config->solr->port
 			);
 		}
 	}

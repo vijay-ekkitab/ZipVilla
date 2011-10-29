@@ -12,7 +12,7 @@ const  ID           =  "id" ;
 const  TYPE         =  "type" ;
 const  DISPLAY_NAME =  "displayName" ;
 const  SCOPE        =  "::" ;
-const  POINTS       =  "_" ;
+const  POINTS       =  "__" ;
 const  NAME         =  "name" ;
 const  DATA_TYPE    =  "datatype" ;
 const  VALUE_TYPE   =  "valuetype" ;
@@ -25,6 +25,7 @@ const  INTEGER      =  "integer";
 const  MULTI_VALUED =  "multi-valued";
 const  ENUMERATED   =  "enumerated";
 const  BOOLEAN      =  "boolean";
+const  REPEATS      =  "repeats";
 
 #some more consts
 const  TITLE        =  "title" ;

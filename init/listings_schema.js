@@ -20,9 +20,10 @@ tps =
                         "suitability",
                         "nearby",
                         // price details
-                        "daily_rate",
-                        "weekly_rate",
-                        "monthly_rate",
+                        "rate",
+                        "special_rate",
+                        // availability
+                        "booked",
                         // collateral
 			            "title",
 			            "description",
@@ -67,7 +68,31 @@ tps =
 	{ 	
 		name 	   : "owner", 
 		attributes : ["owner_id"]
+	},
+	
+	{
+		name       : "rate",
+		attributes : ["daily", "weekly", "monthly"]
+	},
+	
+	{
+		name       : "period",
+		attributes : ["from", "to"]
+	},
+	
+	{
+		name       : "special_rate",
+		attributes : ["period", "rate"],
+		repeats    : "true"
+	},
+	
+	{
+		name       : "booked",
+		attributes : ["period"],
+		repeats    : "true"
 	}
+	
+	
 ];
 
 // an attribute is by default a 'string', 'single-valued', is a keyword that can be searched and is not faceted in search results.
@@ -223,6 +248,18 @@ attrs = [
 	{
 	    name     : "maxGuests",
 	    datatype : "integer",
+	    keyword  : "false",
+        facet    : "false" 
+	},
+	{
+	    name     : "from",
+	    datatype : "date",
+	    keyword  : "false",
+        facet    : "false" 
+	},
+	{
+	    name     : "to",
+	    datatype : "date",
 	    keyword  : "false",
         facet    : "false" 
 	}

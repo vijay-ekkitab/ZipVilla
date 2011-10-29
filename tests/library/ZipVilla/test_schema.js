@@ -11,9 +11,11 @@ tps =
 			"images",
 			"thumbnail",
 			"url",
-			"rate",
 			"rateType",
-			"maxGuests"
+			"maxGuests",
+			"rate",
+			"special_rate",
+			"booked"
 		] 
 	},
 	{ 
@@ -45,6 +47,24 @@ tps =
 		name 	   : "owner", 
 		attributes : ["userId"],
 		embedded   : "false"
+	},
+	{
+		name       : "rate",
+		attributes : ["daily", "weekly", "monthly"]
+	},
+	{
+		name       : "period",
+		attributes : ["from", "to"]
+	},
+	{
+		name       : "special_rate",
+		attributes : ["period", "rate"],
+		repeats    : "true"
+	},
+	{
+		name       : "booked",
+		attributes : ["period"],
+		repeats    : "true"
 	}
 ];
 
@@ -95,12 +115,6 @@ attrs = [
         facet    : "false" 
 	}, 
 	{
-	    name     : "rate",
-	    datatype : "numeric", 
-	    keyword  : "false",
-        facet    : "false" 
-	},
-	{
 	    name     : "rateType",
 	    datatype : "string", 
 	    keyword  : "false",
@@ -119,6 +133,18 @@ attrs = [
 	{
 	    name     : "maxGuests",
 	    datatype : "numeric",
+	    keyword  : "false",
+        facet    : "false" 
+	},
+	{
+	    name     : "from",
+	    datatype : "date",
+	    keyword  : "false",
+        facet    : "false" 
+	},
+	{
+	    name     : "to",
+	    datatype : "date",
 	    keyword  : "false",
         facet    : "false" 
 	}

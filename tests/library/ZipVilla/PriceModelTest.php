@@ -36,12 +36,11 @@ class PriceModelTest extends PHPUnit_Framework_TestCase
 	public function testPricesIndividualListing() 
 	{
 		
-		//$homes = $this->collection->find(array('city'=> 'Goa'));
 		$home = $this->collection->findOne(array('city' => 'Goa'));
 		$start = new MongoDate(strtotime('2011-12-1'));
 		$end   = new MongoDate(strtotime('2011-12-15'));
 		
-		$standard_rate = $home['standard_rate'];
+		$standard_rate = $home['rate'];
 		$special_rates = $home['special_rate'];
 		$pmodel = new PriceModel($special_rates, $standard_rate);
 		$rate_slabs = $pmodel->get_rate_structure($start, $end);
