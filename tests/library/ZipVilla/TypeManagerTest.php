@@ -165,13 +165,29 @@ class TypeManagerTest extends PHPUnit_Framework_TestCase
         $fobj = $tp->flatten($obj, TRUE);
         $this->assertEquals(6, count($fobj), "Flattened object has different number of elements.");
         
-	}
+	} 
 	
 	public function testEnumerations() {
 		echo "\n";
 		$enums = Attribute::getAllEnumerations();
 		$this->assertEquals(1, count($enums), "More than one enumeration was found.");
 		$this->assertTrue(array_key_exists("amenities", $enums), "Amenities does not exist in Attribute enumerations.");
+		$tname = "accommodation";
+		$accom = array();
+	    $accom['city'] = "Bangalore";
+	    $accom['amenities'] = array('health club' => 'This is a fantastic club',
+                                   'sauna' => 'hot water');
+	    $tm = new TypeManager();
+	    $tp = $tm->getType($tname);
+	    $this->assertNotNull($tp, "GetType for $tname failed.");
+	    $obj = $tp->makeObject($accom);
+	    $fobj = $tp->flatten($obj, TRUE);
+	    $this->assertEquals(2, count($fobj), "Flattened object contains different number of map elements.");
+	    $this->assertTrue(array_key_exists('address__city', $fobj), "Flattened object does not contain expected key.");
+	    $this->assertTrue(array_key_exists('amenities', $fobj), "Flattened object does not contain expected key.");
+	    $this->assertEquals(2, count($fobj['amenities']), "Flattened object contains different number of enumerations.");
+	    //echo json_encode($fobj) . "\n";
+		
 	}
 	
 	

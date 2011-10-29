@@ -80,8 +80,8 @@ attrs = [
 	},
 	{
 	    name     : "amenities",
-	    //valuetype: "enumerated",
-	    valuetype: "multi-valued",	
+	    valuetype: "enumerated",
+	    //valuetype: "multi-valued",	
 	    keyword  : "true",
 	    facet    : "true"
 	},

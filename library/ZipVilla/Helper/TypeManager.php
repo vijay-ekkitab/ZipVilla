@@ -145,6 +145,9 @@ class Attribute {
 	}
 	
 	public static function getAllEnumerations() {
+		if (self::$enums == null) {
+			new Attribute(array()); //To initialize the enum array, in case it has not yet been.
+		}
 		$doc = self::$enums->getDoc();
 		unset($doc['_id']);
 		return $doc;
@@ -180,6 +183,13 @@ class Attribute {
 
 	public function isBoolean() {
 		return array_key_exists(DATA_TYPE,$this->map) && ($this->map[DATA_TYPE] == BOOLEAN);
+	}
+	
+	public function getIndexInfo($val) {
+		if ($this->isEnumerated() && is_array($val)) {
+			return array_keys($val);
+		}
+		return $val;
 	}
 
 	public function convertValue($val) {
@@ -447,7 +457,7 @@ class Type {
 			if($val != null) {
 				$bool = $this->attributeIndexable($name);
 				if($bool ||!$indexableOnly) {
-					$map[$name] = $val;
+					$map[$name] = $attr->getIndexInfo($val);
 				}
 			}
 		}

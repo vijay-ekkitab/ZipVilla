@@ -4,7 +4,7 @@ include_once("ZipVilla/Helper/IndexManager.php");
 include_once("ZipVilla/Helper/SearchManager.php");
 include_once("ZipVilla/Utils.php");
 
-class IndexManagerTest extends PHPUnit_Framework_TestCase
+class SearchManagerTest extends PHPUnit_Framework_TestCase
 {
 
 	public function setUp()
@@ -38,7 +38,7 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$vals['neighbourhood'] = "near church";
 		$vals['lat'] = 55.6;
 		$vals['long'] = 65.8;
-		$vals['amenities'] = array('massage','sauna');
+		$vals['amenities'] = array('wifi'=> '','sauna'=> '');
 		$vals['title'] = "The Beach Home"; 
 		$description = "very nice  place near fort";
 		$vals['description'] = $description;
@@ -78,7 +78,7 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$vals['neighbourhood'] = "near church";
 		$vals['lat'] = 45.6;
 		$vals['long'] = 75.8;
-		$vals['amenities'] = array('health club','sauna');
+		$vals['amenities'] = array('health club'=> '','sauna' => '');
 		$vals['title'] = "The Beach Home"; 
 		$description = "right by the beach";
 		$vals['description'] = $description;
@@ -111,9 +111,9 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 	public function testSearchFacets() {
 		$this->_createData();
 		$sm = new SearchManager();
-		$q = array("address_state"=>'Goa');
-		$fds = array('address_city','id','title');
-		$ffds = array('address_city','amenities');
+		$q = array("address__state"=>'Goa');
+		$fds = array('address__city','id','title');
+		$ffds = array('address__city','amenities');
 		$results = $sm->search($q,$fds,$ffds);
 		$this->assertTrue($results != null);
 		$docs = $results['docs'];
