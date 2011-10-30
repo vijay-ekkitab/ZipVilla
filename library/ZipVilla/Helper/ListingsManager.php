@@ -9,6 +9,7 @@
 include_once("TypeManager.php");
 include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Exception.php");
+include_once("ZipVilla/PriceModel.php");
 
 class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abstract {
 
@@ -142,6 +143,21 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 			}
 		}		
 		return null;
+	}
+	
+	public function getAverageRate($id, $from, $to, $quiet=TRUE) {
+		if ($id != null) {
+			$listing = $this->queryById($id);
+			$std_rate = $listing->rate;
+			$special_rates = $listing->special_rate;
+			$pmodel = new PriceModel($special_rates, $std_rate);
+			return $pmodel->get_average_rate($from, $to, $quiet);
+		}
+		return -1;
+	}
+	
+	public function isAvailable($id, $from, $to) {
+		return FALSE;
 	}
 
 }
