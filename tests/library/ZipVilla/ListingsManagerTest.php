@@ -118,5 +118,73 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
 		$res = $lm->getEnumOptions("doesnotexist");
         $this->assertNull($res, "getEnumOptions returned valid for for incorrect name."); 
     }
+    
+    function testPriceModel() {
+		
+        $tname = "hotel";
+	    $vals = array();
+	    $vals['size'] = "15 acres"; 
+	    $vals['activities'] = array('bonfire', 'nature walk','trekking');
+	    $vals['specalities'] = array('house wines');
+	    $vals['userId'] = "owner_5678";
+	    $vals['streetNumber'] = "456-D";
+	    $vals['street'] = "Calungute Road";
+	    $vals['line1'] = "North Gao";
+	    $vals['line2'] = "Beach resort";
+	    $vals['city'] = "Mapusa";
+	    $vals['state'] = "Goa";
+	    $vals['country'] = "India";
+	    $vals['pincode'] = "5676799";
+	    $vals['neighbourhood'] = "near church";
+	    $vals['lat'] = 55.6;
+	    $vals['long'] = 65.8;
+	    $vals['amenities'] = array('health club' => 'This is a fantastic club',
+                                   'sauna' => 'hot water', 'internet' => '');
+	    $vals['title'] = "The Beach Home"; 
+        $description = "very nice  place near fort";
+	    $vals['description'] = $description;
+	    $vals['images'] = array('content/one1.jpg','content/two1.jpg');
+	    $vals['thumbnail'] = 'content/thumb1.jpg';
+	    $vals['url'] = 'http://mycompany.com';
+	    $vals['maxGuests'] = 6;
+	    
+        $rate = array();
+        $rate['daily'] = 100;
+        $rate['weekly'] = 600;
+        $rate['monthly'] = 2000;
+        
+        $vals['rate'] = $rate;
+        
+        $sp = array();
+	    
+        $sp = array();
+        $sp1 = array();
+        $sp1['daily'] = 150;
+        $sp1['weekly'] = 900;
+        $sp1['monthly'] = 3000;
+        $sp1['from'] = new MongoDate(strtotime('2011-12-1'));
+        $sp1['to'] = new MongoDate(strtotime('2011-12-15'));
+        $sp[] = $sp1;
+        
+        $sp1 = array();
+        $sp1['daily'] = 200;
+        $sp1['weekly'] = 1200;
+        $sp1['monthly'] = 5000;
+        $sp1['from'] = new MongoDate(strtotime('2011-12-25'));
+        $sp1['to'] = new MongoDate(strtotime('2012-1-4'));
+        $sp[] = $sp1;
+        
+        $vals['special_rate'] = $sp;
+        
+	    $lm = new ZipVilla_Helper_ListingsManager();
+	    $res = $lm->insert($tname,$vals);
+	    
+	    $id = $objId = $res->id;
+	    $from = new MongoDate(strtotime('2011-12-1'));
+        $to = new MongoDate(strtotime('2011-12-31'));
+        $rate = $lm->getAverageRate($id, $from, $to);
+        
+        $this->assertEquals(130, $rate, "Wrong calculated average rate."); 
+    }
 }
 ?>
