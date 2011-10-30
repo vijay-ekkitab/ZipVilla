@@ -400,22 +400,42 @@ class Type {
 		$hattrs = $this->getHierachicalAttributes();
 		foreach($hattrs as  $attr) {
 			$aname = $attr->getName();
-			$tval = null;
-			if($attr->isType()) {
-				$rtype = $tm->getType($aname);
-				if (!isset($obj[$aname])) {
-					$obj[$aname] = array();
-				}
-				$obj[$aname] = $rtype->updateObject($obj[$aname], $map);				
-			} else {
-				$tval = array_key_exists($aname,$map) ? $map[$aname] : null;
-			    if($tval != null) {
-			    	$obj[$aname] = $attr->convertValues($tval);
-			    }
+  			$tval = array_key_exists($aname,$map) ? $map[$aname] : null;
+  			if($tval != null) {
+      			if ($attr->isType()) {
+           			$rtype = $tm->getType($aname);
+           			if ($rtype->isList()) {
+               			$subObj = array();
+               			foreach($tval as $value) {
+                   			$z = $rtype->makeObject($value);
+                   			if ($z != null) {
+                       			$subObj[] = $z;
+                   			}
+                		}
+                		$obj[$aname] = $subObj;
+           			}
+           			else {
+                		$z = $rtype->updateObject($tval, $map);
+                		if ($z != null) {
+                    		$obj[$aname] = $z;
+                		}
+           			}
+      			}
+      			else {          
+	           		$obj[$aname] = $attr->convertValues($tval);
+	      		}
+  			}
+  			elseif($attr->isType()) {
+      			$rtype = $tm->getType($aname);
+                $tval = isset($obj[$aname]) ? $obj[$aname] : array();
+                $tval = $rtype->updateObject($tval, $map);       
+      			if ($tval != null) {
+          			$obj[$aname] = $tval;
+  				}
 			}
 		}
 		return $obj;
-	}
+	} 
 
 	public function attributeIndexable($attr) {
     

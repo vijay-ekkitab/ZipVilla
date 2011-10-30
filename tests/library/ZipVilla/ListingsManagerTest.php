@@ -12,7 +12,7 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         $seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/test_schema.js";
         shell_exec("/usr/bin/mongo " . $seed_script);
     }
-
+    
     function testInsertAndUpdate() {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->query();
@@ -185,6 +185,37 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         $rate = $lm->getAverageRate($id, $from, $to);
         
         $this->assertEquals(130, $rate, "Wrong calculated average rate."); 
+        
+        $vals = array();
+        $rate = array();
+        $rate['daily'] = 80;
+        $rate['weekly'] = 480;
+        $rate['monthly'] = 1600;
+        $vals['rate'] = $rate;
+        $sp = array();
+        $sp1 = array();
+        $sp1['daily'] = 200;
+        $sp1['weekly'] = 1200;
+        $sp1['monthly'] = 5000;
+        $sp1['from'] = new MongoDate(strtotime('2011-12-20'));
+        $sp1['to'] = new MongoDate(strtotime('2012-1-05'));
+        $sp[] = $sp1;
+        
+        $sp1 = array();
+        $sp1['daily'] = 300;
+        $sp1['weekly'] = 1800;
+        $sp1['monthly'] = 7500;
+        $sp1['from'] = new MongoDate(strtotime('2011-11-01'));
+        $sp1['to'] = new MongoDate(strtotime('2011-11-05'));
+        $sp[] = $sp1;
+        
+        $vals['special_rate'] = $sp;
+        $res = $lm->update($res->id, $vals);
+        //echo json_encode($res->getDoc()) . "\n";
+        $from = new MongoDate(strtotime('2011-10-31'));
+        $to = new MongoDate(strtotime('2011-11-03'));
+        $rate = $lm->getAverageRate($res->id, $from, $to);
+        $this->assertEquals(227, $rate, "Wrong calculated average rate.");
     }
 }
 ?>
