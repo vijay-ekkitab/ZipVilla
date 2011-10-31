@@ -74,14 +74,14 @@ attrs = [
 	{
 	    name     : "price" ,
 	    datatype : "numeric", 
-        valuetype: "range" , 
+	    valuetype: "range" , 
 	    keyword  : "false" , 
 	    facet    : "false"
 	},
 	{
 	    name     : "amenities",
-	    valuetype: "enumerated",
-	    //valuetype: "multi-valued",	
+	    //valuetype: "enumerated",
+	    valuetype: "multi-valued",	
 	    keyword  : "true",
 	    facet    : "true"
 	},
@@ -107,13 +107,13 @@ attrs = [
 	    name     : "lat",
 	    datatype : "numeric", 
 	    keyword  : "false",
-        facet    : "false" 
+            facet    : "false" 
 	},
 	{
 	    name     : "long",
 	    datatype : "numeric", 
 	    keyword  : "false",
-        facet    : "false" 
+            facet    : "false" 
 	}, 
 	{
 	    name     : "rateType",
@@ -129,7 +129,7 @@ attrs = [
 	{
 	    name     : "userId",
 	    keyword  : "false",
-        facet    : "false" 
+            facet    : "false" 
 	},
 	{
 	    name     : "maxGuests",
@@ -148,7 +148,25 @@ attrs = [
 	    datatype : "date",
 	    keyword  : "false",
         facet    : "false" 
-	}
+	},
+	{
+	    name     : "daily",
+	    datatype : "float",
+	    keyword  : "false",
+            facet    : "false" 
+	},
+	{
+	    name     : "weekly",
+	    datatype : "float",
+	    keyword  : "false",
+            facet    : "false" 
+	},
+	{
+	    name     : "monthly",
+	    datatype : "float",
+	    keyword  : "false",
+            facet    : "false" 
+	},
 ];
 
 enums = [

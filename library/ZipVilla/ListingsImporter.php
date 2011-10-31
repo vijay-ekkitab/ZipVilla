@@ -23,7 +23,7 @@ class ListingsImporter {
 				for ($i=0; $i < $fcount; $i++) {
             				$obj[$header[$i]] = $buffer[$i];
         			}
-				$res = $lm->insert($obj['type'],$obj);
+				$res = $lm->insert($obj['type'],$obj,true);
 				//TODO check on res that it is really inserted
 				//print_r($res);
 			}
