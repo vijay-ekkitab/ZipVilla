@@ -9,24 +9,18 @@ class PriceModelTest extends PHPUnit_Framework_TestCase
 	
 	static $setup_completed = FALSE;
 	
-	public function __construct() {
-		parent::__construct();
-		$config_file = APPLICATION_PATH . "/configs/application.ini";
-    	$config = new Zend_Config_Ini($config_file, APPLICATION_ENV);
-    
-        $mongoDns = sprintf('mongodb://%s:%s',
-                $config->mongodb->server, $config->mongodb->port
-            );
-        $this->conn = new Mongo($mongoDns,array("persist" => "x"));
-        $this->db   = $this->conn->selectDB($config->mongodb->dbname);
-        $this->collection = $this->db->homes;
-	}
-	
 	public function setUp()
 	{
 		if (!self::$setup_completed) {
 			$this->bootstrap = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
 			parent::setUp();
+			$config = Zend_Registry::get('config'); 
+			$mongoDns = sprintf('mongodb://%s:%s',
+                $config->mongodb->server, $config->mongodb->port
+            );
+        	$this->conn = new Mongo($mongoDns,array("persist" => "x"));
+        	$this->db   = $this->conn->selectDB($config->mongodb->dbname);
+        	$this->collection = $this->db->homes;
 			$seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/price_test_schema.js";
 			shell_exec("/usr/bin/mongo " . $seed_script);
 			self::$setup_completed = TRUE;

@@ -48,7 +48,7 @@ class PriceModel {
     	return $result;
 	}
 	
-	private function get_price_slab($start, $end, $rate) {
+	private function add_rate_slab($start, $end, $rate) {
     	$result = array();
     	$result['from'] = $start;
     	$result['to'] = $end;
@@ -68,7 +68,7 @@ class PriceModel {
             if ($this->standard_rate == null) {
                 return($results);
             }
-            $results[] = $this->get_price_slab($start, $end, $this->standard_rate);
+            $results[] = $this->add_rate_slab($start, $end, $this->standard_rate);
             return($results);
         }
 
@@ -83,15 +83,15 @@ class PriceModel {
 	    	$to   = $special['period']['to'];
 	    	
         	if ($from->sec > $start->sec) {
-             	$results[] = $this->get_price_slab($start, $from, $this->standard_rate);
+             	$results[] = $this->add_rate_slab($start, $from, $this->standard_rate);
              	$start = $from;
         	}
         	if ($to->sec < $end->sec) {
-             	$results[] = $this->get_price_slab($start, $to, $special['rate']);
+             	$results[] = $this->add_rate_slab($start, $to, $special['rate']);
              	$start = $to;
         	}
         	elseif ($to->sec >= $end->sec) {
-             	$results[] = $this->get_price_slab($start, $end, $special['rate']);
+             	$results[] = $this->add_rate_slab($start, $end, $special['rate']);
              	$start = $end;
         	}
         	if ($start->sec >= $end->sec) {
@@ -100,7 +100,7 @@ class PriceModel {
     	}
 
     	if ($start->sec < $end->sec) {
-        	$results[] = $this->get_price_slab($start, $end, $this->standard_rate);
+        	$results[] = $this->add_rate_slab($start, $end, $this->standard_rate);
     	}
 
     	return($results);

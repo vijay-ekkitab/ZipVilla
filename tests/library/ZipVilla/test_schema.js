@@ -80,8 +80,7 @@ attrs = [
 	},
 	{
 	    name     : "amenities",
-	    //valuetype: "enumerated",
-	    valuetype: "multi-valued",	
+	    valuetype: "enumerated",
 	    keyword  : "true",
 	    facet    : "true"
 	},
@@ -153,19 +152,19 @@ attrs = [
 	    name     : "daily",
 	    datatype : "float",
 	    keyword  : "false",
-            facet    : "false" 
+            facet    : "true" 
 	},
 	{
 	    name     : "weekly",
 	    datatype : "float",
 	    keyword  : "false",
-            facet    : "false" 
+            facet    : "true" 
 	},
 	{
 	    name     : "monthly",
 	    datatype : "float",
 	    keyword  : "false",
-            facet    : "false" 
+            facet    : "true" 
 	},
 ];
 

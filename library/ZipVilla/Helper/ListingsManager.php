@@ -10,6 +10,7 @@ include_once("TypeManager.php");
 include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Exception.php");
 include_once("ZipVilla/PriceModel.php");
+include_once("ZipVilla/Availability.php");
 
 class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abstract {
 
@@ -148,17 +149,38 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 	public function getAverageRate($id, $from, $to, $quiet=TRUE) {
 		if ($id != null) {
 			$listing = $this->queryById($id);
-			$std_rate = $listing->rate;
-			$special_rates = $listing->special_rate;
-			$pmodel = new PriceModel($special_rates, $std_rate);
-			return $pmodel->get_average_rate($from, $to, $quiet);
+			if ($listing != null) {
+				$std_rate = $listing->rate;
+				$special_rates = $listing->special_rate;
+				$pmodel = new PriceModel($special_rates, $std_rate);
+				return $pmodel->get_average_rate($from, $to, $quiet);
+			}
 		}
 		return -1;
 	}
 	
 	public function isAvailable($id, $from, $to) {
+		if ($id != null) {
+			$listing = $this->queryById($id);
+			if ($listing != null) {
+				$bookings = $listing->booked;
+				$av = new Availability();
+				return $av->is_available($bookings, $from, $to);
+			}
+		}
 		return FALSE;
 	}
 
+	public function getBookingCalendar($id, $from, $days, $quiet=TRUE) {
+		if (($id != null) && ($from != null) && ($days > 0)){
+			$listing = $this->queryById($id);
+			if ($listing != null) {
+				$bookings = $listing->booked;
+				$av = new Availability();
+				return $av->get_booked_dates($bookings, $from, $days, $quiet);
+			}
+		}
+		return array();
+	}
 }
 ?>

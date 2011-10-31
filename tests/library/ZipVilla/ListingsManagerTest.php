@@ -217,5 +217,89 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         $rate = $lm->getAverageRate($res->id, $from, $to);
         $this->assertEquals(227, $rate, "Wrong calculated average rate.");
     }
+    
+	function testAvailability() {
+		
+        $tname = "hotel";
+	    $vals = array();
+	    $vals['size'] = "15 acres"; 
+	    $vals['activities'] = array('bonfire', 'nature walk','trekking');
+	    $vals['specalities'] = array('house wines');
+	    $vals['userId'] = "owner_5678";
+	    $vals['streetNumber'] = "456-D";
+	    $vals['street'] = "Calungute Road";
+	    $vals['line1'] = "North Gao";
+	    $vals['line2'] = "Beach resort";
+	    $vals['city'] = "Mapusa";
+	    $vals['state'] = "Goa";
+	    $vals['country'] = "India";
+	    $vals['pincode'] = "5676799";
+	    $vals['neighbourhood'] = "near church";
+	    $vals['lat'] = 55.6;
+	    $vals['long'] = 65.8;
+	    $vals['amenities'] = array('health club' => 'This is a fantastic club',
+                                   'sauna' => 'hot water', 'internet' => '');
+	    $vals['title'] = "The Beach Home"; 
+        $description = "very nice  place near fort";
+	    $vals['description'] = $description;
+	    $vals['images'] = array('content/one1.jpg','content/two1.jpg');
+	    $vals['thumbnail'] = 'content/thumb1.jpg';
+	    $vals['url'] = 'http://mycompany.com';
+	    $vals['maxGuests'] = 6;
+	    
+	    $bookings = array();
+        $booking = array();
+        $booking['from'] = new MongoDate(strtotime('2011-12-1'));
+        $booking['to'] = new MongoDate(strtotime('2011-12-5'));
+        $bookings[] = $booking;
+        $booking = array();
+        $booking['from'] = new MongoDate(strtotime('2011-12-10'));
+        $booking['to'] = new MongoDate(strtotime('2011-12-15'));
+        $bookings[] = $booking;
+        
+        $vals['booked'] = $bookings;
+	    $lm = new ZipVilla_Helper_ListingsManager();
+	    $res = $lm->insert($tname,$vals);
+	    
+	    $id = $objId = $res->id;
+	    $from = new MongoDate(strtotime('2011-12-1'));
+        $to = new MongoDate(strtotime('2011-12-10'));
+        $available = $lm->isAvailable($id, $from, $to);
+        
+        $this->assertFalse($available, "Not available accommodation returned as available."); 
+        
+        $from = new MongoDate(strtotime('2011-12-6'));
+        $to = new MongoDate(strtotime('2011-12-9'));
+        $available = $lm->isAvailable($id, $from, $to);
+        
+        $this->assertTrue($available, "Available accommodation returned as unavailable.");
+        
+        $from = new MongoDate(strtotime('2011-12-1'));
+        $calendar = $lm->getBookingCalendar($id, $from, 30, FALSE);
+        
+        $this->assertEquals(2, count($calendar), "Returned booking calendar is not correct.");
+        
+        $vals = array();
+        $bookings = array();
+        $booking = array();
+        $booking['from'] = new MongoDate(strtotime('2011-12-6'));
+        $booking['to'] = new MongoDate(strtotime('2011-12-8'));
+        $bookings[] = $booking;
+        $vals['booked'] = $bookings;
+        
+        $res = $lm->update($res->id, $vals);
+        
+        $from = new MongoDate(strtotime('2011-12-6'));
+        $to = new MongoDate(strtotime('2011-12-9'));
+        $available = $lm->isAvailable($id, $from, $to);
+        
+        $this->assertFalse($available, "Unavailable accommodation returned as available, after listing update.");
+        
+        $from = new MongoDate(strtotime('2011-12-1'));
+        $calendar = $lm->getBookingCalendar($id, $from, 30, FALSE);
+        
+        $this->assertEquals(1, count($calendar), "Returned booking calendar is not correct, after listing update.");
+        
+    }
 }
 ?>
