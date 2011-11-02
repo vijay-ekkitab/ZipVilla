@@ -150,26 +150,26 @@ attrs = [
 	},
 	{
 	    name     : "daily",
-	    datatype : "float",
+	    datatype : "integer",
 	    keyword  : "false",
             facet    : "true" 
 	},
 	{
 	    name     : "weekly",
-	    datatype : "float",
+	    datatype : "integer",
 	    keyword  : "false",
             facet    : "true" 
 	},
 	{
 	    name     : "monthly",
-	    datatype : "float",
+	    datatype : "integer",
 	    keyword  : "false",
             facet    : "true" 
 	},
 ];
 
 enums = [
-    { "amenities" : ["Television", "Telephone", "Wifi", "Laundry", "Health Club", "Sauna"] }
+    { "amenities" : ["Television", "Telephone", "Wifi", "Laundry", "Health Club", "Sauna", "Swimming Pool"] }
 ]
 
 print("creating the database test.. standing for vacation rental..");
