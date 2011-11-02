@@ -75,6 +75,8 @@ class IndexController extends Zend_Controller_Action
                     $vals['state'] = $listing->address['state'];
                     $vals['bedrooms'] = $listing->bedrooms;
                     $vals['guests'] = $listing->guests;
+                    $vals['lat'] = $listing->lat;
+                    $vals['lng'] = $listing->lng;
                     $vals['entertainment_options'] = array_keys($listing->entertainment_options);
                     $vals['id'] = $id;
                     $form->populate($vals);
