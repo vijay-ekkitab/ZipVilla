@@ -1,38 +1,85 @@
 <?php
-    $this->title = "Accomodations";
-    $this->headTitle($this->title);
+$this->title = "Accomodations";
+$this->headTitle($this->title);
 ?>
-<p><a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'add'));?>">Add new accomodation</a></p>
-<?php if ($this->listings == null) { ?>
-<p>There are no accomodations to show.</p>
-<?php } else {?>
+	<p>
+		<a
+			href="<?php echo $this->url(array('controller'=>'index', 'action'=>'add'));?>">Add
+			new accomodation</a>
+	</p>
+	
+ <?php if ($this->listings == null) { ?>
+	<p>There are no accomodations to show.</p>
+ <?php } else {?>
 <table>
-    <tr>
-        <th>Type</th>
-        <th>Street</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Bedrooms</th>
-        <th>Max Guests</th>
-        <th>Entertainment</th>
-        <th>&nbsp;</th>
-    </tr>
-<?php foreach($this->listings as $listing) : ?>
-    <tr>
-        <td><?php echo $this->escape($listing->type);?></td>
-        <td><?php echo $this->escape($listing->address['street_name']);?></td> 
-        <td><?php echo $this->escape($listing->address['city']);?></td>
-        <td><?php echo $this->escape($listing->address['state']);?></td>
-        <td><?php echo $this->escape($listing->bedrooms);?></td>
-        <td><?php echo $this->escape($listing->guests);?></td>
+	<tr>
+		<th>Type</th>
+		<th>Street</th>
+		<th>City</th>
+		<th>State</th>
+		<th>Bedrooms</th>
+		<th>Max Guests</th>
+		<th>Entertainment</th>
+		<th>&nbsp;</th>
+	</tr>
+
+  <?php foreach($this->listings as $listing) : ?>
+		<tr>
+			<td><?php echo $this->escape($listing->type);?></td>
+			<td><?php echo $this->escape($listing->address['street_name']);?></td>
+			<td><?php echo $this->escape($listing->address['city']);?></td>
+			<td><?php echo $this->escape($listing->address['state']);?></td>
+			<td><?php echo $this->escape($listing->bedrooms);?></td>
+			<td><?php echo $this->escape($listing->guests);?></td>
+
         <?php $eoptions = $listing->entertainment_options;?>
-        <td><?php if ($eoptions != null) { foreach ($eoptions as $k => $v) { echo "$k -&gt; \"$v\" <br/>"; } }?></td>
-        
-        <td> 
-            <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$listing->id));?>">Edit</a>
-            <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'delete', 'id'=>$listing->id));?>">Delete</a>
-        </td>
-    </tr>
-<?php endforeach; ?>
-</table>
+        	<td><?php if ($eoptions != null) { foreach ($eoptions as $k => $v) { echo "$k -&gt; \"$v\" <br/>"; } }?></td>
+        	<td> 
+            	<a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$listing->id));?>">Edit</a>
+            	<a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'delete', 'id'=>$listing->id));?>">Delete</a>
+        	</td>
+		</tr>
+  <?php endforeach; ?>
+  
+		<script type="text/javascript">
+  		var villaLatLngs = new Array();
+  		<?php $iCtr = 0; ?>
+  	
+	
+  	<?php 	foreach($this->listings as $listing) : ?>
+ 		  villaLatLngs[<?php echo $iCtr++ ?>] = new Array(
+				"<?php echo $this->escape($listing->address['street_name']);?>",
+				"<?php echo $this->escape($listing->lat);?>",
+				"<?php echo $this->escape($listing->lng);?>",
+				"<?php echo $this->escape($listing->address['city']);?>");
+		<?php 
+ 		  //echo $villaLatLngs["street"];
+			echo $this->escape($listing->lat);
+			echo $this->escape($listing->lng);
+		endforeach;
+		?>
+		
+		$("#zvMapInfo").append(
+				'<div class="villas">'+
+					'   '+villaLatLngs[0][0]+
+					'   '+villaLatLngs[0][1]+
+					'   '+villaLatLngs[0][2]+
+				'</div><div class="clear"></div>'
+			);
+		
+	 </script>
+	  
+	<script type="text/javascript" src="/js/jquery-min-164.js"> </script>
+	<script type="text/javascript"
+		src="http://maps.googleapis.com/maps/api/js?sensor=false">
+   </script>
+
+	<script type="text/javascript">
+
+	  $(document).ready(function(){
+	    mapMarker( villaLatLngs, 12, 0, 0, "zvMapInfo");
+	  });
+	</script>
+  		
+ </table>
 <?php }?>
