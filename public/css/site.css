@@ -1,6 +1,7 @@
 body,html {
     margin: 0 5px;
     font-family: Verdana,sans-serif;
+	  width: 1200;
 }
 h1 {
     font-size: 1.4em;
@@ -18,7 +19,7 @@ td, th {
 }
 /* style form */
 form dt {
-    width: 100px;
+    width: 200px;
     display: block;
     float: left;
     clear: left;
@@ -29,4 +30,67 @@ form dd {
 }
 form #submitbutton {
     margin-left: 100px;
+}
+
+#zvContainer {
+    background-color: #FFFFFF;
+    margin: 0 0 0 20px;
+    padding: 0;
+    width: 1200px;
+}
+#zvContainer #zvHeader {
+    float: left;
+    width: 1200px;
+    height: 70px;
+}
+
+#zvContainer h1 {
+    border-bottom: 3px solid #CC0000;
+    float: left;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+#zvContainer #whereTo {
+    float: left;
+    width: 800px;
+    height: 200
+}
+#zvContainer #colSearch {
+    float: right;
+    margin: 0;
+    padding: 0;
+    width: 350px;
+}
+#colSearch #colSearchIcon {
+    float: left;
+    width: 50px;
+}
+#colSearch #colSearchText {
+    float: right;
+    width: 300px;
+}
+#zvContainer #zvSeperator {
+    border-top: 2px solid #CC0000;
+    float: left;
+    width: 1200px;
+}
+#zvContainer #content {
+	  margin: 0;
+    padding: 0;
+    float: left;
+    width: 800px;
+}
+#zvContainer #zvMapInfo {
+    float: right;
+    margin: 0;
+    padding: 0;
+    width: 400px;
+    height: 325px
+}
+#zvContainer #zvFooter {
+    float: left;
+    width: 1200px;
+    height: 70px;
 }
