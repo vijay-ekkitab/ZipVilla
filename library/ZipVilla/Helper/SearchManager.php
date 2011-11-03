@@ -2,14 +2,14 @@
 include_once("ListingsManager.php");
 include_once("ZipVilla/Utils.php");
 
-class SearchManager {
+class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstract {
 
 	public function __construct() {
 		$this->init();
 	}
 	private static $options = null;
 	
-	private function init()
+	public function init()
 	{
 		if (self::$options == null) {
 			$config = Zend_Registry::get('config'); 

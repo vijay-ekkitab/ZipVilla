@@ -44,7 +44,7 @@ class ListingsImporter {
                 }
                 $subs = split(',',$matches[2]);
                 for ($i=0; $i<count($subs);$i++) {
-                    $sub_array[] = $subs[$i];
+                    $sub_array[] = trim($subs[$i]);
                 }
                 $header[$name] = $sub_array;
             }
@@ -61,7 +61,7 @@ class ListingsImporter {
             $obj = array();
             $i = 0;
             if (count($buffer) != count($headernames)) {
-                echo "Incorrect number of entries for listing in line number: $lineno. Ignoring listing.\n";
+                echo "[Line $lineno][Warning] Incorrect number of fields. Ignoring this line.\n";
             }
             else 
             for ($i=0; $i<count($headernames); $i++) {
@@ -83,7 +83,7 @@ class ListingsImporter {
                         }
                     }
                     else 
-                        echo "Warning: Did not find input for attribute $attrname for listing in line $lineno.\n";
+                        echo "[Line $lineno][Warning] Did not find input for attribute '$attrname'.\n";
                 }
                 else {
                     $obj[$attrname] = $content;
@@ -94,7 +94,7 @@ class ListingsImporter {
                     $res = $lm->insert($obj['type'],$obj);
                 }
                 catch(Exception $e) {
-                    echo "Failed to insert listing in line number: $lineno\n";
+                    echo "[Line $lineno][Error] Failed to insert listing. ".$e->getMessage()."\n";
                 }
             }
         }

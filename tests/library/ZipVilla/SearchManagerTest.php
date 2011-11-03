@@ -14,7 +14,7 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 		$seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/test_schema.js";
 		shell_exec("/usr/bin/mongo " . $seed_script);
 		//clear all the indexed document from solr
-		$im = new IndexManager();
+		$im = new ZipVilla_Helper_IndexManager();
 		$res = $im->delete();
 	}
 
@@ -100,7 +100,7 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 		
 	}
 	public function _createData() {
-		$im = new IndexManager();
+		$im = new ZipVilla_Helper_IndexManager();
 		$id = $this->_insertListing1();
 		$res = $im->indexById($id);
 		$this->assertTrue($res->success());
@@ -110,7 +110,7 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 	}
 	public function testSearchFacets() {
 		$this->_createData();
-		$sm = new SearchManager();
+		$sm = new ZipVilla_Helper_SearchManager();
 		$q = array("address__state"=>'Goa');
 		$fds = array('address__city','id','title');
 		$ffds = array('address__city','amenities');
@@ -125,10 +125,10 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 		$facets = $results['facets'];
 		//print_r($facets);
 		$af = $facets['amenities'];
-		$sc = $af['sauna'];
+		$sc = $af['Sauna'];
 		$this->assertEquals(2,$sc,"Wrong sauna count. expected 2.");
-		$hc = $af['health club'];
-		$this->assertEquals(1,$hc,"Wrong healtch club. expected 1.");
+		$hc = $af['Health Club'];
+		$this->assertEquals(1,$hc,"Wrong health club. expected 1.");
 	}
 }		
 ?>

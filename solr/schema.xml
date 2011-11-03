@@ -45,7 +45,7 @@
     that avoids logging every request
 -->
 
-<schema name="example" version="1.2">
+<schema name="zipvilla" version="1.2">
   <!-- attribute "name" is the name of this schema and is only used for display purposes.
        Applications should change this to reflect the nature of the search collection.
        version="1.2" is Solr's version number for the schema syntax and semantics.  It should
@@ -427,58 +427,39 @@
    -->
 
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
-   <field name="sku" type="textTight" indexed="true" stored="true" omitNorms="true"/>
-   <field name="name" type="textgen" indexed="true" stored="true"/>
-   <field name="alphaNameSort" type="alphaOnlySort" indexed="true" stored="false"/>
-   <field name="manu" type="textgen" indexed="true" stored="true" omitNorms="true"/>
-   <field name="cat" type="text_ws" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-   <field name="features" type="text" indexed="true" stored="true" multiValued="true"/>
-   <field name="includes" type="text" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true" />
+   <field name="type" type="string" indexed="false" stored="true" omitNorms="true"/>
+   <field name="owner_id" type="integer" indexed="false" stored="true"/>
 
-   <field name="weight" type="float" indexed="true" stored="true"/>
-   <field name="price"  type="float" indexed="true" stored="true"/>
-   <field name="popularity" type="int" indexed="true" stored="true" />
-   <field name="inStock" type="boolean" indexed="true" stored="true" />
+   <field name="address__street_name" type="string" indexed="false" stored="true"/>
+   <field name="address__location" type="string" indexed="false" stored="true"/>
 
+   <field name="address__city" type="string" indexed="true" stored="true"/>
+   <field name="address__state" type="string" indexed="true" stored="true"/>
+   <field name="address__country" type="string" indexed="true" stored="true"/>
+   <field name="address__zipcode" type="string" indexed="true" stored="true"/>
 
-   <!-- Common metadata fields, named specifically to match up with
-     SolrCell metadata when parsing rich documents such as Word, PDF.
-     Some fields are multiValued only because Tika currently may return
-     multiple values for them.
-   -->
-   <field name="title" type="text" indexed="true" stored="true" multiValued="true"/>
-   <field name="subject" type="text" indexed="true" stored="true"/>
+   <field name="bedrooms" type="integer" indexed="true" stored="true"/>
+   <field name="baths" type="integer" indexed="true" stored="true"/>
+   <field name="guests" type="integer" indexed="true" stored="true"/>
+
+   <field name="onsite_services" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="amenities" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="suitability" type="string" indexed="true" stored="true" multiValued="true"/>
+
+   <field name="rate__daily" type="integer" indexed="true" stored="true"/>
+   <field name="rate__weekly" type="integer" indexed="true" stored="true"/>
+   <field name="rate__monthly" type="integer" indexed="true" stored="true"/>
+
+   <field name="title" type="text" indexed="true" stored="true"/>
    <field name="description" type="text" indexed="true" stored="true"/>
-   <field name="comments" type="text" indexed="true" stored="true"/>
-   <field name="author" type="textgen" indexed="true" stored="true"/>
-   <field name="keywords" type="textgen" indexed="true" stored="true"/>
-   <field name="category" type="textgen" indexed="true" stored="true"/>
-   <field name="content_type" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="last_modified" type="date" indexed="true" stored="true"/>
-   <field name="links" type="string" indexed="true" stored="true" multiValued="true"/>
 
-
-   <!-- catchall field, containing all other searchable text fields (implemented
-        via copyField further on in this schema  -->
-   <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
+   <!-- copyFields -->
+   <field name="address" type="string" indexed="true" stored="false"/>
+   <field name="city_state" type="string" indexed="true" stored="false"/>
 
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
    <field name="text_rev" type="text_rev" indexed="true" stored="false" multiValued="true"/>
-
-   <!-- non-tokenized version of manufacturer to make it easier to sort or group
-        results by manufacturer.  copied from "manu" via copyField -->
-   <field name="manu_exact" type="string" indexed="true" stored="false"/>
-
-   <field name="payloads" type="payloads" indexed="true" stored="true"/>
-
-   <!-- Uncommenting the following will create a "timestamp" field using
-        a default value of "NOW" to indicate when each document was indexed.
-     -->
-   <!--
-   <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
-     -->
-   
 
    <!-- Dynamic field definitions.  If a field name is not found, dynamicFields
         will be used if the name matches any of the patterns.
@@ -515,7 +496,6 @@
         alternately, change the type="ignored" to some other type e.g. "text" if you want 
         unknown fields indexed and/or stored by default --> 
    <!--dynamicField name="*" type="ignored" multiValued="true" /-->
-   <dynamicField name="*" type="string" multiValued="true" />
    
  </fields>
 
@@ -534,13 +514,12 @@
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster searching.  -->
 
-   <copyField source="cat" dest="text"/>
-   <copyField source="name" dest="text"/>
-   <copyField source="manu" dest="text"/>
-   <copyField source="features" dest="text"/>
-   <copyField source="includes" dest="text"/>
-   <copyField source="manu" dest="manu_exact"/>
-	
+   <copyField source="address__*" dest="address"/>
+
+   <copyField source="address__city" dest="city_state"/>
+   <copyField source="address__state" dest="city_state"/>
+
+
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 
 	  destination field is to use the dynamic field syntax. 

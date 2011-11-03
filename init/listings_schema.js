@@ -4,21 +4,18 @@ tps =
 		name       :    "home",
 		attributes : [  
                         // ownership and location 
-			            "owner",
+			            "owner_id",
 			            "address",
                         // physical characteristics
 			            "bedrooms",
 			            "baths",
                         "guests",
                         "onsite_services",
-                        "entertainment_options",
-                        "kitchen_amenities",
-                        "bedroom_amenities",
-                        "outdoor_activities",
-                        "location_and_view",
-                        "communications_equipment",
+                        "amenities",
+                        "activities",
+                        "neighbourhood",
                         "suitability",
-                        "nearby",
+                        "specific",
                         // price details
                         "rate",
                         "special_rate",
@@ -48,7 +45,6 @@ tps =
                       "street_number",
                       "street_name", 
                       "location", 
-                      "full_address",
 		              "city", 
                       "state", 
                       "country",
@@ -65,12 +61,7 @@ tps =
                      ]
     },
 
-	{ 	
-		name 	   : "owner", 
-		attributes : ["owner_id"]
-	},
-	
-	{
+    {
 		name       : "rate",
 		attributes : ["daily", "weekly", "monthly"]
 	},
@@ -100,19 +91,19 @@ tps =
 
 attrs = [
 	{
-	    name     : "daily_rate",
+	    name     : "daily",
+	    datatype : "integer", 
+	    keyword  : "false", 
+	    facet    : "true"
+	},
+	{
+	    name     : "weekly",
 	    datatype : "float", 
 	    keyword  : "false", 
 	    facet    : "true"
 	},
 	{
-	    name     : "weekly_rate",
-	    datatype : "float", 
-	    keyword  : "false", 
-	    facet    : "true"
-	},
-	{
-	    name     : "monthly_rate",
+	    name     : "monthly",
 	    datatype : "float", 
 	    keyword  : "false", 
 	    facet    : "true"
@@ -136,70 +127,46 @@ attrs = [
 	    facet    : "true"
 	},
 	{
-	    name     : "entertainment_options",
-	    valuetype: "enumerated",	
-	    keyword  : "false",
-	    facet    : "true"
-	},
-	{
 	    name     : "onsite_services",
 	    valuetype: "enumerated",	
 	    keyword  : "false",
 	    facet    : "true"
 	},
 	{
-	    name     : "kitchen_amenities",
-	    valuetype: "multi-valued",	
+	    name     : "amenities",
+	    valuetype: "enumerated",	
 	    keyword  : "false",
 	    facet    : "true"
 	},
 	{
-	    name     : "bedroom_amenities",
-	    valuetype: "multi-valued",	
-	    keyword  : "false",
-	    facet    : "true"
-	},
-	{
-	    name     : "outdoor_activities",
-	    valuetype: "multi-valued",	
-	    keyword  : "false",
-	    facet    : "true"
-	},
-	{
-	    name     : "location_and_view",
+	    name     : "activities",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
 	    facet    : "false"
 	},
 	{
-	    name     : "communications_equipment",
+	    name     : "neighbourhood",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "true"
+	    facet    : "false"
 	},
 	{
 	    name     : "suitability",
-	    valuetype: "multi-valued",	
+	    valuetype: "enumerated",
 	    keyword  : "false",
 	    facet    : "true"
-	},
-	{
-	    name     : "nearby",
-	    valuetype: "multi-valued",	
-	    keyword  : "false",
-	    facet    : "false"
 	},
 	{
 	    name     : "images",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "true"
+	    facet    : "false"
 	},
 	{
 	    name     : "video",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "true"
+	    facet    : "false"
 	},
 	{
 	    name     : "latitude",
@@ -221,12 +188,12 @@ attrs = [
 	{
 	    name     : "city",
 	    keyword  : "true",
-        facet    : "true" 
+        facet    : "false" 
 	}, 
 	{
 	    name     : "state",
 	    keyword  : "true",
-        facet    : "true" 
+        facet    : "false" 
 	}, 
 	{
 	    name     : "zipcode",
@@ -234,21 +201,9 @@ attrs = [
         facet    : "true" 
 	}, 
 	{
-	    name     : "longtitude",
-	    datatype : "float", 
-	    keyword  : "false",
-        facet    : "false" 
-	}, 
-	{
 	    name     : "owner_id",
 	    datatype : "integer", 
-	    keyword  : "false",
-        facet    : "false" 
-	},
-	{
-	    name     : "maxGuests",
-	    datatype : "integer",
-	    keyword  : "false",
+	    keyword  : "true",
         facet    : "false" 
 	},
 	{
@@ -262,12 +217,25 @@ attrs = [
 	    datatype : "date",
 	    keyword  : "false",
         facet    : "false" 
+	},
+	{
+	    name     : "specific",
+	    keyword  : "false",
+        facet    : "false" 
 	}
 ];
 
 enums = [
-         { "entertainment_options" : ["Television", "Radio"],
-           "onsite_services" : ["Laundry", "Cook", "Cleaning", "Concierge"] }
+         { 
+           "amenities"		: ["Television", "Cable or Satellite TV", "Internet", 
+                       		   "Wifi", "Air Conditioning", "Hot Water", "Swimming Pool",
+                       		   "Kitchen", "Parking", "Washer Dryer", "Gym"],
+                       		   
+           "onsite_services": ["Laundry", "Cook", "Cleaning", "Concierge"],
+           
+           "suitability"    : ["Handicap Access", "Pets Allowed"]
+                               
+         }
      ]
 
 print("[1] creating database 'vr'.");
