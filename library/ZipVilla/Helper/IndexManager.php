@@ -1,6 +1,8 @@
 <?php
+include_once("ZipVilla/TypeConstants.php");
 include_once("ListingsManager.php");
 include_once("ZipVilla/Utils.php");
+
 
 class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstract {
 
@@ -53,6 +55,45 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 			return null;
 		}
 	}
+	public function indexAll() {
+	    $lm = new ZipVilla_Helper_ListingsManager();
+        $cursor = $lm->getCursor();
+        $count = 0;
+        foreach($cursor as $mongodoc) {
+            $doc = new Application_Model_Listings($mongodoc);
+            if ($doc != null) {
+                $fdoc = $lm->flatten($doc,true);
+                $result = $this->_indexDocument($fdoc);
+                if ($result->success()) {
+                    $doc->indexed = TRUE;
+                    $doc->save();
+                    $count++;
+                }
+            }
+        }
+        return $count;
+	}
+	
+	public function updateIndex() {
+	    $lm = new ZipVilla_Helper_ListingsManager();
+	    $q = array(INDEXED => FALSE);
+        $cursor = $lm->getCursor($q);
+        $count = 0;
+        foreach($cursor as $mongodoc) {
+            $doc = new Application_Model_Listings($mongodoc);
+            if ($doc != null) {
+                $fdoc = $lm->flatten($doc,true);
+                $result = $this->_indexDocument($fdoc);
+                if ($result->success()) {
+                    $doc->indexed = TRUE;
+                    $doc->save();
+                    $count++;
+                }
+            }
+        }
+        return $count;
+	}
+	
 	public function index($mobj) {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$flatObj = $lm->flatten($mobj,true);

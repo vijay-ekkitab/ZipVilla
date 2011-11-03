@@ -136,5 +136,33 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$t = $d['title'];
 		$this->assertEquals("Dhanvantari Mahal",$t[0],"Wrong search fired. fields not matching");
 	}
+	
+    public function testIndexAll() {
+        $this->_insertListing();
+        $this->_insertListing1();
+        $lm = new ZipVilla_Helper_ListingsManager();
+        $objs = $lm->query(array(INDEXED => FALSE));
+        $this->assertEquals(2, count($objs), "Number of documents with INDEX=FALSE, did not match what was expected.");
+        $im = new ZipVilla_Helper_IndexManager();
+        $indexed = $im->indexAll();
+        $this->assertEquals(2, $indexed, "Number of indexed documents did not match what was expected.");
+        $objs = $lm->query(array(INDEXED => FALSE));
+        $this->assertNull($objs, "Number of documents with INDEX=TRUE, did not match what was expected.");
+    }
+	
+    public function testUpdateIndex() {
+        $this->_insertListing();
+        $this->_insertListing1();
+        $lm = new ZipVilla_Helper_ListingsManager();
+        $objs = $lm->query(array(INDEXED => FALSE));
+        $this->assertEquals(2, count($objs), "Number of documents with INDEX=FALSE, did not match what was expected.");
+        $im = new ZipVilla_Helper_IndexManager();
+        $im = new ZipVilla_Helper_IndexManager();
+        $indexed = $im->updateIndex();
+        $this->assertEquals(2, $indexed, "Number of indexed documents did not match what was expected.");
+        $objs = $lm->query(array(INDEXED => TRUE));
+        $this->assertEquals(2, count($objs), "Number of documents with INDEX=TRUE, did not match what was expected.");
+    }
+	
 }		
 ?>

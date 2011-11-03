@@ -293,7 +293,7 @@ class Mongo_ModelBase {
      * @param array $conditionalArray
      * @param array $fieldsArray
      */
-    protected static function getCursor($conditionalArray = null, $fieldsArray = null, $one=false){
+    public static function getCursor($conditionalArray = null, $fieldsArray = null, $one=false){
         static::init();
         if($conditionalArray == null) $conditionalArray = array();
         if($fieldsArray == null) $fieldsArray = array();

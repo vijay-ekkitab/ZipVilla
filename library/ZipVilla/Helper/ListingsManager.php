@@ -117,6 +117,15 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 		}
 	}
 
+    /**
+     * Returns a database cursor for the query.  
+     * @param integer $q the query map.
+     & @return cursor for the query. 
+     */
+    public function getCursor($q=null) {
+        return Application_Model_Listings::getCursor($q);
+    }
+    
 	/**
      * Flattens an object.
      * @param integer $obj the object.
