@@ -138,7 +138,7 @@ class Attribute {
         }
         foreach($validvalues as $validvalue) {
             if (strcasecmp($value, $validvalue) == 0) {
-                return TRUE;
+                return $validvalue;
             }
         }
         return FALSE;
@@ -209,7 +209,7 @@ class Attribute {
         elseif($this->isEnumerated()) {
             $result = array();
             foreach($val as $k => $v) {
-                if ($this->isValidEnum($k)) {
+                if ($k = $this->isValidEnum($k)) {
                     $result[$k] = $v;
                 }
             }

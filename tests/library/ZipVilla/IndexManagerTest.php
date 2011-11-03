@@ -14,7 +14,7 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$seed_script = APPLICATION_PATH . "/../tests/library/ZipVilla/test_schema.js";
 		shell_exec("/usr/bin/mongo " . $seed_script);
 		//clear all the indexed document from solr
-		$im = new IndexManager();
+		$im = new ZipVilla_Helper_IndexManager();
 		$res = $im->delete();
 	}
 
@@ -61,10 +61,10 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 	}
 	public function testIndexById() {
 		$id = $this->_insertListing();
-		$im = new IndexManager();
+		$im = new ZipVilla_Helper_IndexManager();
 		$res = $im->indexById($id);
 		$this->assertTrue($res->success());
-		$sm = new SearchManager();
+		$sm = new ZipVilla_Helper_SearchManager();
 		$q = array("address__city"=>'Mapusa');
 		$fds = array('address__city','id','title');
 		$results = $sm->search($q,$fds);
@@ -121,10 +121,10 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 	 	$id = $this->_insertListing1();
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->queryById($id);
-		$im = new IndexManager();
+		$im = new ZipVilla_Helper_IndexManager();
 		$res = $im->index($res);
 		$this->assertTrue($res->success());
-		$sm = new SearchManager();
+		$sm = new ZipVilla_Helper_SearchManager();
 		$q = array('address__state'=>'Kerala');
 		$fds = array('address__state','address_city','id','title');
 		$results = $sm->search($q,$fds);
