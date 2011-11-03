@@ -42,39 +42,42 @@ $this->headTitle($this->title);
   <?php endforeach; ?>
   
 	<script type="text/javascript">
-  	var villaLatLngs = new Array();
-  <?php $iCtr = 0; ?>
-  	
+		var villaLatLngs = new Array();
+		<?php 
+			$iCtr = 0;
+			$cLat;
+			$cLng;
+		?>
 	
-  	<?php 	foreach($this->listings as $listing) : ?>
- 		  villaLatLngs[<?php echo $iCtr++ ?>] = new Array(
+		<?php 	foreach($this->listings as $listing) : ?>
+			villaLatLngs[<?php echo $iCtr++ ?>] = new Array(
 				"<?php echo $this->escape($listing->address['street_name']);?>",
-				"<?php echo $this->escape($listing->lat);?>",
-				"<?php echo $this->escape($listing->lng);?>",
+				"<?php echo $this->escape($listing->lat);?>", "<?php echo $this->escape($listing->lng);?>",
 				"<?php echo $this->escape($listing->address['city']);?>");
+				<?php if( $this->escape($listing->lat) > 0 )
+					$cLat = $this->escape($listing->lat);
+					$cLng = $this->escape($listing->lng);
+				?>
 		<?php	endforeach;	?>
 		
-	 </script>
+		var myMapOptions = {
+			zoom: 12,
+			center: latlng,
+			scale: 2,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+	</script>
 	  
 	<script type="text/javascript" src="/js/jquery-min-164.js"> </script>
 	<script type="text/javascript" src="/js/mapMarker.js"> </script>
 	<script type="text/javascript"
 		src="http://maps.googleapis.com/maps/api/js?sensor=false">
-   </script>
+	</script>
 
 	<script type="text/javascript">
-	
-	$("#zvMapInfo").append(
-			'<div class="villas">'+
-				'   '+villaLatLngs[0][0]+
-				'   '+villaLatLngs[0][1]+
-				'   '+villaLatLngs[0][2]+
-			'</div><div class="clear"></div>'
-		);
-
-	  $(document).ready(function(){
-	    mapMarker( villaLatLngs, 12, 0, 0, "zvMapInfo");
-	  });
+		$(document).ready(function(){
+			mapMarker( villaLatLngs, <?php echo $cLat ?>, <?php echo $cLng ?>, "zvMapInfo");
+		});
 	</script>
   		
  </table>
