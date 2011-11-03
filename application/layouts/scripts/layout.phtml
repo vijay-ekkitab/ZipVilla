@@ -11,7 +11,12 @@
         <?php echo $this->headTitle(); ?>
         <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/site.css'); ?>
     </head>
+    
     <body>
+      <div id="zvContainer">
+        <div id="zvHeader">
+          <img src = "/images/zipvilla_logo.jpg" alt="ZipVilla header"></img>
+        </div>
     	<div id="header"> 
     		<div id="logged-in-as">
 				<?php echo $this->loggedInAs(); ?> 
@@ -22,9 +27,16 @@
 				<?php echo $this->registerLink(); ?> 
 			</div>
 		</div>
-        <div id="content">
-            <h1><?php echo $this->escape($this->title); ?></h1>
-            <?php echo $this->layout()->content; ?>
+        	<div id="content">
+            	<h1><?php echo $this->escape($this->title); ?></h1>
+            	<?php echo $this->layout()->content; ?>
+        	</div>
+        	<div id="zvMapInfo">
+        	   Google Map Window Placeholder
+        	</div>
+        <div id="zvFooter">
+        	<img src="/images/zipvilla_footer.jpg" alt="ZipVilla footer"></img>
         </div>
+      </div>
     </body>
 </html>
