@@ -41,9 +41,9 @@ $this->headTitle($this->title);
 		</tr>
   <?php endforeach; ?>
   
-		<script type="text/javascript">
-  		var villaLatLngs = new Array();
-  		<?php $iCtr = 0; ?>
+	<script type="text/javascript">
+  	var villaLatLngs = new Array();
+  <?php $iCtr = 0; ?>
   	
 	
   	<?php 	foreach($this->listings as $listing) : ?>
@@ -52,29 +52,25 @@ $this->headTitle($this->title);
 				"<?php echo $this->escape($listing->lat);?>",
 				"<?php echo $this->escape($listing->lng);?>",
 				"<?php echo $this->escape($listing->address['city']);?>");
-		<?php 
- 		  //echo $villaLatLngs["street"];
-			echo $this->escape($listing->lat);
-			echo $this->escape($listing->lng);
-		endforeach;
-		?>
-		
-		$("#zvMapInfo").append(
-				'<div class="villas">'+
-					'   '+villaLatLngs[0][0]+
-					'   '+villaLatLngs[0][1]+
-					'   '+villaLatLngs[0][2]+
-				'</div><div class="clear"></div>'
-			);
+		<?php	endforeach;	?>
 		
 	 </script>
 	  
 	<script type="text/javascript" src="/js/jquery-min-164.js"> </script>
+	<script type="text/javascript" src="/js/mapMarker.js"> </script>
 	<script type="text/javascript"
 		src="http://maps.googleapis.com/maps/api/js?sensor=false">
    </script>
 
 	<script type="text/javascript">
+	
+	$("#zvMapInfo").append(
+			'<div class="villas">'+
+				'   '+villaLatLngs[0][0]+
+				'   '+villaLatLngs[0][1]+
+				'   '+villaLatLngs[0][2]+
+			'</div><div class="clear"></div>'
+		);
 
 	  $(document).ready(function(){
 	    mapMarker( villaLatLngs, 12, 0, 0, "zvMapInfo");
