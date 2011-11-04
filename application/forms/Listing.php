@@ -57,21 +57,21 @@ class Application_Form_Listing extends Zend_Form
               ->addFilter('Int')
               ->addValidator('NotEmpty');
         
-        $lat = new Zend_Form_Element_Text('lat');
+        $lat = new Zend_Form_Element_Text('latitude');
         $lat->setLabel('Latitude')
         ->setRequired(false)
         ->addFilter('StripTags')
         ->addFilter('StringTrim');
         //->addValidator('NotEmpty');
 
-        $lng = new Zend_Form_Element_Text('lng');
+        $lng = new Zend_Form_Element_Text('longitude');
         $lng->setLabel('Longitude')
         ->setRequired(false)
         ->addFilter('StripTags')
         ->addFilter('StringTrim');
         //->addValidator('NotEmpty');
         
-        
+        /*
         $et = new Zend_Form_Element_MultiCheckbox('entertainment_options');
         $et->setLabel('Entertainment Options')
               ->setRequired(true);
@@ -83,11 +83,12 @@ class Application_Form_Listing extends Zend_Form
         		}		
         	}
         }
+        */
         
               
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setAttrib('id', 'submitbutton');
-        $this->addElements(array($id, $type, $street, $city, $state, $rooms, $guests, $lat, $lng, $et, $submit));
+        $this->addElements(array($id, $type, $street, $city, $state, $rooms, $guests, $lat, $lng, /*$et,*/ $submit));
     }    
 
 }

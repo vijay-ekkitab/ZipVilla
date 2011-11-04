@@ -19,7 +19,7 @@ $this->headTitle($this->title);
 		<th>State</th>
 		<th>Bedrooms</th>
 		<th>Max Guests</th>
-		<th>Entertainment</th>
+		<th>Amenities</th>
 		<th>&nbsp;</th>
 	</tr>
 
@@ -32,7 +32,7 @@ $this->headTitle($this->title);
 			<td><?php echo $this->escape($listing->bedrooms);?></td>
 			<td><?php echo $this->escape($listing->guests);?></td>
 
-        <?php $eoptions = $listing->entertainment_options;?>
+        <?php $eoptions = $listing->amenities;?>
         	<td><?php if ($eoptions != null) { foreach ($eoptions as $k => $v) { echo "$k -&gt; \"$v\" <br/>"; } }?></td>
         	<td> 
             	<a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$listing->id));?>">Edit</a>

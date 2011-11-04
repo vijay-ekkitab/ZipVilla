@@ -57,7 +57,7 @@ tps =
         name       : "coordinates",
         attributes : [
                       "latitude",
-                      "longtitude"
+                      "longitude"
                      ]
     },
 
@@ -175,7 +175,7 @@ attrs = [
         facet    : "false" 
 	},
 	{
-	    name     : "longtitude",
+	    name     : "longitude",
 	    datatype : "float", 
 	    keyword  : "false",
         facet    : "false" 
