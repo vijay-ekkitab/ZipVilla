@@ -15,7 +15,7 @@ tps =
                         "activities",
                         "neighbourhood",
                         "suitability",
-                        "specific",
+                        "house_rules",
                         // price details
                         "rate",
                         "special_rate",
@@ -24,6 +24,7 @@ tps =
                         // collateral
 			            "title",
 			            "description",
+			            "rating",
 			            "images",
 			            "video"
 		            ] 
@@ -219,9 +220,15 @@ attrs = [
         facet    : "false" 
 	},
 	{
-	    name     : "specific",
+	    name     : "house_rules",
 	    keyword  : "false",
         facet    : "false" 
+	},
+	{
+	    name     : "rating",
+	    datatype : "integer",
+	    keyword  : "false",
+        facet    : "true" 
 	}
 ];
 

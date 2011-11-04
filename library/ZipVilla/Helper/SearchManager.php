@@ -4,35 +4,43 @@ include_once("ZipVilla/Utils.php");
 
 class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstract {
 
-	public function __construct() {
-		$this->init();
-	}
-	private static $options = null;
+    private $facet_fields;
+    private $std_fields;
+    
+    public function __construct($facet_fields, $std_fields) {
+        $this->init();
+        $this->facet_fields = ($facet_fields == null) ? array() : $facet_fields;
+        $this->std_fields = ($std_fields == null) ? array() : $std_fields;
+        if (!in_array("id", $this->std_fields))
+            $this->std_fields[] = "id";
+    }
+    private static $options = null;
 	
-	public function init()
-	{
-		if (self::$options == null) {
-			$config = Zend_Registry::get('config'); 
-    	
-			self::$options = array (
-				"hostname" => $config->solr->server,
-				"port" => $config->solr->port
-			);
-		}
-	}
+    public function init()
+    {
+        if (self::$options == null) {
+            $config = Zend_Registry::get('config'); 
+
+            self::$options = array ("hostname" => $config->solr->server,
+                                    "port" => $config->solr->port);
+        }
+    }
 	
-		private function buildQuery($q) {
-		$qstr = "";
-		if($q != null) {
-			$i = 0;
-			foreach ($q as $fd => $val) {
-				if($i > 0) { $qstr = $qstr . "+OR+"; }
-				$qstr = $qstr . $fd . ":" . $val;
-				$i++;
-			}
-		}
-		return $qstr;
-	}
+    private function buildQuery($q) {
+        $qstr = "";
+        if($q != null) {
+            $i = 0;
+            foreach ($q as $fd => $val) {
+                if($i > 0) { $qstr = $qstr . " AND "; }
+                $qstr = $qstr . $fd . ":" . $val;
+                $i++;
+            }
+        }
+        return $qstr;
+    }
+	
+	
+	
 	/***********************************************************************************
  	 * perform solr search. if q = { a1 : v1 , a2 : v2} - it fires a search a1:v1 OR a2:v2 etc
 	 * returns null if nothing is found - otherwise an array objects with key specified in $fds 
@@ -42,43 +50,50 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
 	 * @param $ffds - list of fields to return
 	 * @return - an array of SolrDocuments which can be accessed as simple PHP objects
 	 ***********************************************************************************/
-	public function search($q,$fds=null,$ffds=null,$start=0,$count=50) {
-		$client = new SolrClient(self::$options);
-		$query = new SolrQuery();
-		$qstr = $this->buildQuery($q);
-		$query->setQuery($qstr);
-		$query->setStart($start);
-		$query->setRows($count);
-		if($fds == null) {
-			$fds = array("id");
-		} else if(!array_key_exists("id",$fds)){
-			$fds[] = "id";
-		}
-		foreach($fds as $fd) {
-			$query->addField($fd);
-		}
-		if(($ffds != null)&&(count($ffds) > 0)) {
-			$query->setFacet(true);
-			foreach($ffds as $ffd) {
-				$query->addFacetField($ffd);	
-			}
-		}
-		$qr = $client->query($query);
-		if(!$qr->success()) {
-			//TODO; log error here
-			return null;
-		} else {
-			$resp = $qr->getResponse();
-			//print_r($resp);
-			$docs = $resp['response']['docs'];
-			$facets = null;
-			if(($ffds != null)&&(count($ffds) > 0)) {
-				//print_r($resp);
-				$facets = $resp['facet_counts']['facet_fields'];
-				//print_r($facets);
-			}
-			return array('docs'=> $docs , 'facets' => $facets); 
-		}
-	}
+    public function search($q, $include_facets=TRUE, $start=0, $count=50) {
+        $client = new SolrClient(self::$options);
+        $query = new SolrQuery();
+        
+        if ($q == null) {
+            return array ('docs' => array(), 'facets' => array());
+        }
+        
+        $qstr = $this->buildQuery($q);
+        
+        $query->setQuery($qstr);
+        $query->setStart($start);
+        $query->setRows($count);
+        
+        foreach($this->std_fields as $field) {
+            $query->addField($field);
+        }
+        
+        if ($include_facets) {
+            $facets = $this->facet_fields;
+            $query_fields = array_keys($q);
+            foreach ($facets as $i => $facet) {
+                if (in_array($facet, $query_fields)) {
+                    unset($facets[$i]);
+                }
+            }
+            if (count($facets) > 0) { 
+                $query->setFacet(true);
+                foreach($facets as $facet) {
+                    $query->addFacetField($facet);    
+                }
+            }
+        }
+        
+        $qr = $client->query($query);
+        
+        if(!$qr->success())
+            return array ('docs' => array(), 'facets' => array());
+        
+        $resp = $qr->getResponse();
+        $docs = $resp->response->docs;
+        $facets = isset($resp->facet_counts->facet_fields) ? $resp->facet_counts->facet_fields : array();
+        return array('docs'=> $docs , 'facets' => $facets); 
+    }
+	
 }
 ?>

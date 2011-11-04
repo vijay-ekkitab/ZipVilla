@@ -64,17 +64,17 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$im = new ZipVilla_Helper_IndexManager();
 		$res = $im->indexById($id);
 		$this->assertTrue($res->success());
-		$sm = new ZipVilla_Helper_SearchManager();
+		$sm = new ZipVilla_Helper_SearchManager(array(), array('address__city', 'title'));
 		$q = array("address__city"=>'Mapusa');
-		$fds = array('address__city','id','title');
-		$results = $sm->search($q,$fds);
+		//$fds = array('address__city','id','title');
+		$results = $sm->search($q);
 		$this->assertTrue($results != null);
 		$docs = $results['docs'];
 		//print_r($docs);
 		$this->assertTrue(count($docs) == 1);
 		$d = $docs[0];
 		$t = $d['title'];
-		$this->assertEquals("The Beach Home",$t[0],"Wrong search fired. fields not matching");
+		$this->assertEquals("The Beach Home",$t,"Wrong search fired. fields not matching");
 	}
 	function _insertListing1() {
 		$lm = new ZipVilla_Helper_ListingsManager();
@@ -124,17 +124,17 @@ class IndexManagerTest extends PHPUnit_Framework_TestCase
 		$im = new ZipVilla_Helper_IndexManager();
 		$res = $im->index($res);
 		$this->assertTrue($res->success());
-		$sm = new ZipVilla_Helper_SearchManager();
+		$sm = new ZipVilla_Helper_SearchManager(array(), array('address__state', 'address__city', 'title'));
 		$q = array('address__state'=>'Kerala');
-		$fds = array('address__state','address_city','id','title');
-		$results = $sm->search($q,$fds);
+		//$fds = array('address__state','address_city','id','title');
+		$results = $sm->search($q);
 		$this->assertTrue($results != null);
 		$docs = $results['docs'];
 		$this->assertTrue(count($docs) == 1);
 		//print_r($docs);
 		$d = $docs[0];
 		$t = $d['title'];
-		$this->assertEquals("Dhanvantari Mahal",$t[0],"Wrong search fired. fields not matching");
+		$this->assertEquals("Dhanvantari Mahal",$t,"Wrong search fired. fields not matching");
 	}
 	
     public function testIndexAll() {

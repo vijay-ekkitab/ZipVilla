@@ -110,11 +110,13 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 	}
 	public function testSearchFacets() {
 		$this->_createData();
-		$sm = new ZipVilla_Helper_SearchManager();
-		$q = array("address__state"=>'Goa');
-		$fds = array('address__city','id','title');
-		$ffds = array('address__city','amenities');
-		$results = $sm->search($q,$fds,$ffds);
+		$sm = new ZipVilla_Helper_SearchManager(array('amenities'), array('address__city', 'title'));
+		$q = array('address__state'=>'Goa',
+		           'address__country' => 'India');
+		//$fds = array('address__city','id','title');
+		//$ffds = array('address__city','amenities');
+		//$results = $sm->search($q,$fds,$ffds);
+		$results = $sm->search($q);
 		$this->assertTrue($results != null);
 		$docs = $results['docs'];
 		//print_r($docs);
@@ -129,6 +131,15 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(2,$sc,"Wrong sauna count. expected 2.");
 		$hc = $af['Health Club'];
 		$this->assertEquals(1,$hc,"Wrong health club. expected 1.");
+		$q['amenities'] = 'Wifi';
+		
+		$results = $sm->search($q);
+        $this->assertTrue($results != null);
+        $docs = $results['docs'];
+        $this->assertEquals(1, count($docs), "Wrong number of documents returned when searched with facet.");
+        
+        $this->assertEquals(0, count($results['facets']), "Facets returned when not expected.");
+		
 	}
 }		
 ?>

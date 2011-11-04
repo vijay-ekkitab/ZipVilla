@@ -427,8 +427,8 @@
    -->
 
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
-   <field name="type" type="string" indexed="false" stored="true" omitNorms="true"/>
-   <field name="owner_id" type="integer" indexed="false" stored="true"/>
+   <field name="type" type="string" indexed="false" stored="true"/>
+   <field name="owner_id" type="int" indexed="false" stored="true"/>
 
    <field name="address__street_name" type="string" indexed="false" stored="true"/>
    <field name="address__location" type="string" indexed="false" stored="true"/>
@@ -438,24 +438,25 @@
    <field name="address__country" type="string" indexed="true" stored="true"/>
    <field name="address__zipcode" type="string" indexed="true" stored="true"/>
 
-   <field name="bedrooms" type="integer" indexed="true" stored="true"/>
-   <field name="baths" type="integer" indexed="true" stored="true"/>
-   <field name="guests" type="integer" indexed="true" stored="true"/>
+   <field name="bedrooms" type="int" indexed="true" stored="true"/>
+   <field name="baths" type="int" indexed="true" stored="true"/>
+   <field name="guests" type="int" indexed="true" stored="true"/>
 
    <field name="onsite_services" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="amenities" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="suitability" type="string" indexed="true" stored="true" multiValued="true"/>
 
-   <field name="rate__daily" type="integer" indexed="true" stored="true"/>
-   <field name="rate__weekly" type="integer" indexed="true" stored="true"/>
-   <field name="rate__monthly" type="integer" indexed="true" stored="true"/>
+   <field name="rate__daily" type="int" indexed="true" stored="true"/>
+   <field name="rate__weekly" type="int" indexed="true" stored="true"/>
+   <field name="rate__monthly" type="int" indexed="true" stored="true"/>
 
    <field name="title" type="text" indexed="true" stored="true"/>
    <field name="description" type="text" indexed="true" stored="true"/>
+   <field name="rating" type="int" indexed="true" stored="true" default="0"/>
 
    <!-- copyFields -->
-   <field name="address" type="string" indexed="true" stored="false"/>
-   <field name="city_state" type="string" indexed="true" stored="false"/>
+   <field name="address" type="string" indexed="true" stored="false" multiValued="true"/>
+   <field name="city_state" type="string" indexed="true" stored="false" multiValued="true"/>
 
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
@@ -495,7 +496,7 @@
         field name or dynamic field, rather than reporting them as an error. 
         alternately, change the type="ignored" to some other type e.g. "text" if you want 
         unknown fields indexed and/or stored by default --> 
-   <!--dynamicField name="*" type="ignored" multiValued="true" /-->
+   <dynamicField name="*" type="string" multiValued="true" />
    
  </fields>
 
@@ -505,7 +506,7 @@
  <uniqueKey>id</uniqueKey>
 
  <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>text</defaultSearchField>
+ <defaultSearchField>city_state</defaultSearchField>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="OR"/>
