@@ -54,11 +54,11 @@ form #submitbutton {
 }
 #zvContainer #whereTo {
     float: left;
-    width: 800px;
+    width: 500px;
     height: 200
 }
 #zvContainer #colSearch {
-    float: right;
+    float: left;
     margin: 0;
     padding: 0;
     width: 350px;
@@ -86,8 +86,8 @@ form #submitbutton {
     float: left;
     margin: 0;
     padding: 0;
-    width: 300px;
-    height: 325px
+    width: 250px;
+    height: 250px
 }
 #zvContainer #zvFooter {
     float: left;
