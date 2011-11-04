@@ -52,11 +52,12 @@ $this->headTitle($this->title);
 		<?php 	foreach($this->listings as $listing) : ?>
 			villaLatLngs[<?php echo $iCtr++ ?>] = new Array(
 				"<?php echo $this->escape($listing->address['street_name']);?>",
-				"<?php echo $this->escape($listing->lat);?>", "<?php echo $this->escape($listing->lng);?>",
+				"<?php echo $this->escape($listing->address['coordinates']['latitude']);?>", 
+				"<?php echo $this->escape($listing->address['coordinates']['longitude']);?>",
 				"<?php echo $this->escape($listing->address['city']);?>");
-				<?php if( $this->escape($listing->lat) > 0 )
-					$cLat = $this->escape($listing->lat);
-					$cLng = $this->escape($listing->lng);
+				<?php if( $this->escape($listing->address['coordinates']['latitude']) > 0 )
+					$cLat = $this->escape($listing->address['coordinates']['latitude']);
+					$cLng = $this->escape($listing->address['coordinates']['longitude']);
 				?>
 		<?php	endforeach;	?>
 		
