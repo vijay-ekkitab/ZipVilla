@@ -110,7 +110,7 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 	}
 	public function testSearchFacets() {
 		$this->_createData();
-		$sm = new ZipVilla_Helper_SearchManager(array('amenities'), array('address__city', 'title'));
+		$sm = new ZipVilla_Helper_SearchManager(array('amenities'), array('address__city', 'title', 'amenities'));
 		$q = array('address__state'=>'Goa',
 		           'address__country' => 'India');
 		//$fds = array('address__city','id','title');

@@ -6,8 +6,9 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
 
     private $facet_fields;
     private $std_fields;
+    private $sort_field = null;
     
-    public function __construct($facet_fields, $std_fields) {
+    public function __construct($facet_fields = null, $std_fields = null) {
         $this->init();
         $this->facet_fields = ($facet_fields == null) ? array() : $facet_fields;
         $this->std_fields = ($std_fields == null) ? array() : $std_fields;
@@ -24,6 +25,32 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             self::$options = array ("hostname" => $config->solr->server,
                                     "port" => $config->solr->port);
         }
+    }
+    
+    public function setFacetFields($facets) {
+        $this->facet_fields = $facets;
+    }
+    
+    public function getFacetFields() {
+        return $this->facet_fields;
+    }
+    
+    public function setSelectFields($fields) {
+        $this->std_fields = $fields;
+        if (!in_array("id", $this->std_fields))
+           $this->std_fields[] = "id";
+    }
+    
+    public function getSelectFields() {
+        return $this->std_fields;
+    }
+    
+    public function setSortField($field) {
+        $this->sort_field = $field;
+    }
+    
+    public function getSortField($field) {
+        return $this->sort_field;
     }
 	
     private function buildQuery($q) {
@@ -84,6 +111,9 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             }
         }
         
+        if ($this->sort_field != null) {
+            $query->addSortField($this->sort_field);
+        }
         $qr = $client->query($query);
         
         if(!$qr->success())

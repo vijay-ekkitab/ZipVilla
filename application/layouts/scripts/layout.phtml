@@ -5,12 +5,18 @@
     $this->headTitle('ZipVilla');
     echo $this->doctype(); 
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
+<html>
+<head>
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
         <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/site.css'); ?>
-    </head>
+        <script type="text/javascript">
+        function doSearch(id) {
+            var city = document.getElementById(id).value;
+            window.location.href = '/search?city='+city;
+        } 
+        </script>
+</head>
     
     <body>
       <div id="zvContainer">
@@ -29,7 +35,7 @@
 		</div>
 		<div id="whereTo">
 			<p>
-				<input type="text" name="city_frm" id="city_frm_id" size="50"
+				<input type="text" name="city_id" id="city_id" size="50"
 					maxlength="50" />
 			</p>
 		</div>
@@ -42,9 +48,14 @@
 			</div>
 			<div id="colSearchText">
 				<p>
-					<input type="button" value="Search" onclick="dispContent();">
+					<input type="button" value="Search" onclick="doSearch('city_id');"/>
 				</p>
 			</div>
+			<div id="colIndexText">
+                <p>
+                    <input type="button" value="Re-Index" onclick="window.location.href='/search/reindex';"/>
+                </p>
+            </div>
 		</div>
 		<div id="content">
             	<h1><?php echo $this->escape($this->title); ?></h1>

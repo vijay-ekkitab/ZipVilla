@@ -32,6 +32,7 @@ class ListingsImporter {
         
         $header = array();
         foreach($tmp as $h) {
+            $h = trim($h);
             if (preg_match('/(.*)\((.+)\)/', $h, $matches)) {
                 $name = $matches[1];
                 $sub_array = array();
@@ -66,14 +67,14 @@ class ListingsImporter {
             else 
             for ($i=0; $i<count($headernames); $i++) {
                 $subattr = $header[$headernames[$i]];
-                $content = $buffer[$i];
+                $content = trim($buffer[$i]);
                 $attrname = $headernames[$i];
                 if (is_array($subattr)) {
                     $vals = split(',', $content);
                     $sub_array = array();
                     if (count($vals) == (count($subattr) -1)) {
                         for ($j=1; $j<count($subattr); $j++) { // note: ignore element 0 which specifies list or not.
-                            $sub_array[$subattr[$j]] = $vals[$j-1];
+                            $sub_array[$subattr[$j]] = trim($vals[$j-1]);
                         }
                         if ($subattr[0] == TRUE) { // is a list;
                             $obj[$attrname] = array($sub_array);

@@ -1,0 +1,81 @@
+<?php
+$this->title = "Search Results";
+$this->headTitle($this->title);
+?>
+
+<?php if (isset($this->error)) { ?>
+    <p>An error was encountered in search.</p>
+ <?php } elseif ($this->results != null) {?>
+ <table>
+    <tr>
+        <th>Type</th>
+        <th>Street</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Bedrooms</th>
+        <th>Max Guests</th>
+        <th>Amenities</th>
+        <th>&nbsp;</th>
+    </tr>
+
+  <?php foreach($this->results as $result) : ?>
+        <tr>
+            <td><?php echo $this->escape($result->type);?></td>
+            <td><?php echo $this->escape($result->address__street_name);?></td>
+            <td><?php echo $this->escape($result->address__city);?></td>
+            <td><?php echo $this->escape($result->address__state);?></td>
+            <td><?php echo $this->escape($result->bedrooms);?></td>
+            <td><?php echo $this->escape($result->guests);?></td>
+
+        <?php $eoptions = $result->amenities;?>
+            <td><?php if ($eoptions != null) { foreach ($eoptions as $v) { echo "$v<br/>"; } }?></td>
+            <td> 
+                <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$result->id));?>">Edit</a>
+                <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'delete', 'id'=>$result->id));?>">Delete</a>
+            </td>
+        </tr>
+  <?php endforeach; ?>
+ </table>
+ <script type="text/javascript">
+        var villaLatLngs = new Array();
+        <?php 
+            $iCtr = 0;
+            $cLat;
+            $cLng;
+        ?>
+    
+        <?php   foreach($this->results as $result) : ?>
+            villaLatLngs[<?php echo $iCtr++ ?>] = new Array(
+                "<?php echo $this->escape($result->address__street_name);?>",
+                "<?php echo $this->escape($result->address__coordinates__latitude);?>", 
+                "<?php echo $this->escape($result->address__coordinates__longitude);?>",
+                "<?php echo $this->escape($result->address__city);?>");
+                <?php if( $this->escape($result->address__coordinates__latitude) > 0 )
+                    $cLat = $this->escape($result->address__coordinates__latitude);
+                    $cLng = $this->escape($result->address__coordinates__longitude);
+                ?>
+        <?php   endforeach; ?>
+        
+        var myMapOptions = {
+            zoom: 12,
+            center: latlng,
+            scale: 2,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+    </script>
+      
+    <script type="text/javascript" src="/js/jquery-min-164.js"> </script>
+    <script type="text/javascript" src="/js/mapMarker.js"> </script>
+    <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?sensor=false">
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            mapMarker( villaLatLngs, <?php echo $cLat ?>, <?php echo $cLng ?>, "zvMapInfo");
+        });
+    </script>
+ 
+ <?php } else {?>
+    <p>No results were returned from Search.</p>
+ <?php } ?>

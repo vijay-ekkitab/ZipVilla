@@ -20,6 +20,9 @@
           <actionMethod actionName="logout"/>
           <actionMethod actionName="register"/>
         </controllerFile>
+        <controllerFile controllerName="Search">
+          <actionMethod actionName="index"/>
+        </controllerFile>
       </controllersDirectory>
       <formsDirectory>
         <formFile formName="Album"/>
@@ -60,6 +63,9 @@
           </viewControllerScriptsDirectory>
           <viewControllerScriptsDirectory forControllerName="Login">
             <viewScriptFile forActionName="register"/>
+          </viewControllerScriptsDirectory>
+          <viewControllerScriptsDirectory forControllerName="Search">
+            <viewScriptFile forActionName="index"/>
           </viewControllerScriptsDirectory>
         </viewScriptsDirectory>
         <viewHelpersDirectory/>
@@ -105,6 +111,9 @@
             <testApplicationActionMethod forActionName="index"/>
             <testApplicationActionMethod forActionName="logout"/>
             <testApplicationActionMethod forActionName="register"/>
+          </testApplicationControllerFile>
+          <testApplicationControllerFile forControllerName="Search">
+            <testApplicationActionMethod forActionName="index"/>
           </testApplicationControllerFile>
         </testApplicationControllerDirectory>
       </testApplicationDirectory>

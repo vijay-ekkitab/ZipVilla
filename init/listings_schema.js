@@ -173,13 +173,13 @@ attrs = [
 	    name     : "latitude",
 	    datatype : "float", 
 	    keyword  : "false",
-        facet    : "false" 
+        facet    : "true" 
 	},
 	{
 	    name     : "longitude",
 	    datatype : "float", 
 	    keyword  : "false",
-        facet    : "false" 
+        facet    : "true" 
 	}, 
 	{
 	    name     : "street_number",
