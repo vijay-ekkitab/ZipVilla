@@ -1,6 +1,7 @@
 <?php
 $this->title = "Search Results";
 $this->headTitle($this->title);
+$mapHelper = $this->map(); 
 ?>
 
 <?php if (isset($this->error)) { ?>
@@ -36,46 +37,11 @@ $this->headTitle($this->title);
         </tr>
   <?php endforeach; ?>
  </table>
- <script type="text/javascript">
-        var villaLatLngs = new Array();
-        <?php 
-            $iCtr = 0;
-            $cLat;
-            $cLng;
-        ?>
-    
-        <?php   foreach($this->results as $result) : ?>
-            villaLatLngs[<?php echo $iCtr++ ?>] = new Array(
-                "<?php echo $this->escape($result->address__street_name);?>",
-                "<?php echo $this->escape($result->address__coordinates__latitude);?>", 
-                "<?php echo $this->escape($result->address__coordinates__longitude);?>",
-                "<?php echo $this->escape($result->address__city);?>");
-                <?php if( $this->escape($result->address__coordinates__latitude) > 0 )
-                    $cLat = $this->escape($result->address__coordinates__latitude);
-                    $cLng = $this->escape($result->address__coordinates__longitude);
-                ?>
-        <?php   endforeach; ?>
-        
-        var myMapOptions = {
-            zoom: 12,
-            center: latlng,
-            scale: 2,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-    </script>
-      
-    <script type="text/javascript" src="/js/jquery-min-164.js"> </script>
-    <script type="text/javascript" src="/js/mapMarker.js"> </script>
-    <script type="text/javascript"
-        src="http://maps.googleapis.com/maps/api/js?sensor=false">
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            mapMarker( villaLatLngs, <?php echo $cLat ?>, <?php echo $cLng ?>, "zvMapInfo");
-        });
-    </script>
  
+ <script type="text/javascript">
+    <?php echo $mapHelper->setMapFromSearchResults($this->results, 'zvMapInfo');?>
+ </script>
+
  <?php } else {?>
     <p>No results were returned from Search.</p>
  <?php } ?>

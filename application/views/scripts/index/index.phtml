@@ -1,6 +1,7 @@
 <?php
 $this->title = "Accomodations";
 $this->headTitle($this->title);
+$mapHelper = $this->map();
 ?>
 	<p>
 		<a
@@ -40,46 +41,8 @@ $this->headTitle($this->title);
         	</td>
 		</tr>
   <?php endforeach; ?>
-  
-	<script type="text/javascript">
-		var villaLatLngs = new Array();
-		<?php 
-			$iCtr = 0;
-			$cLat;
-			$cLng;
-		?>
-	
-		<?php 	foreach($this->listings as $listing) : ?>
-			villaLatLngs[<?php echo $iCtr++ ?>] = new Array(
-				"<?php echo $this->escape($listing->address['street_name']);?>",
-				"<?php echo $this->escape($listing->address['coordinates']['latitude']);?>", 
-				"<?php echo $this->escape($listing->address['coordinates']['longitude']);?>",
-				"<?php echo $this->escape($listing->address['city']);?>");
-				<?php if( $this->escape($listing->address['coordinates']['latitude']) > 0 )
-					$cLat = $this->escape($listing->address['coordinates']['latitude']);
-					$cLng = $this->escape($listing->address['coordinates']['longitude']);
-				?>
-		<?php	endforeach;	?>
-		
-		var myMapOptions = {
-			zoom: 12,
-			center: latlng,
-			scale: 2,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		}
-	</script>
-	  
-	<script type="text/javascript" src="/js/jquery-min-164.js"> </script>
-	<script type="text/javascript" src="/js/mapMarker.js"> </script>
-	<script type="text/javascript"
-		src="http://maps.googleapis.com/maps/api/js?sensor=false">
-	</script>
-
-	<script type="text/javascript">
-		$(document).ready(function(){
-			mapMarker( villaLatLngs, <?php echo $cLat ?>, <?php echo $cLng ?>, "zvMapInfo");
-		});
-	</script>
-  		
- </table>
+</table>
+<script type="text/javascript">
+   <?php echo $mapHelper->setMapFromDbListings($this->listings, 'zvMapInfo');?>
+</script>
 <?php }?>

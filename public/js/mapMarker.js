@@ -1,57 +1,51 @@
-function mapMarker( pMapInfo, pCenterLat, pCenterLng, pMapCanvas)
+function mapMarker(pMapCanvas)
  {
-
- //     for( i = 0; i < pMapInfo.length; ++i) {
- // 	  document.writeln(">>>> " + pMapInfo[i][0] + "<BR>");
- // 	  document.writeln(">>>> " + pMapInfo[i][1] + "<BR>");
- // 	  document.writeln(">>>> " + pMapInfo[i][2] + "<BR>");
- // 	  document.writeln(">>>> " + pMapInfo[i][3] + "<BR>");
- // 	  document.writeln(">>>> div " + pMapCanvas + "<BR>");
- //  	  document.writeln(">>>> iddiv " + document.getElementById(pMapCanvas) + "<BR>");
- //      }
-
-	var myMap;
+	var map;
 	var infowindow;
 	var marker=0;
 	var i;
+	
+	if ((typeof zv_map_center_latitude === 'undefined') || 
+	    (typeof zv_map_center_longitude === 'undefined')) {
+		return;
+	}
+	var latlng = new google.maps.LatLng(zv_map_center_latitude, zv_map_center_longitude);
+	var zv_options = {		
+					 	zoom: 12,
+					 	center: latlng,
+					 	scale: 2,
+					 	mapTypeId: google.maps.MapTypeId.ROADMAP
+					 };
 
-	var latlng = new google.maps.LatLng(pCenterLat, pCenterLng);
-	  
-	$(document).ready(function(){
-		var myOptions = {		
-			zoom: 12,
-			center: latlng,
-			scale: 2,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
+	map 		= new google.maps.Map(document.getElementById(pMapCanvas), zv_options);
+	infowindow 	= new google.maps.InfoWindow();
+	
+	if ((typeof zv_villa_locations === 'undefined') ||
+	    (! zv_villa_locations instanceof Array)) {
+		return;
+	}
 
-		myMap = new google.maps.Map(document.getElementById(pMapCanvas), myOptions);
-		infowindow = new google.maps.InfoWindow();
- 
-		$(document).ready(function(){
+	for( i = 0; i<zv_villa_locations.length; i++) {
+		$(document.getElementById(pMapCanvas)).append( 
+				'<div class="villas">'+'<h3>'+zv_villa_locations[i][0]+'</h3>'+'</div><div class="clear"></div>');
 
-			for( i = 0; i < pMapInfo.length; i++) {
-				$(document.getElementById(pMapCanvas)).append( '<div class="villas">'+'<h3>'+
-					pMapInfo[i][0]+'</h3>'+'</div><div class="clear"></div>'  );
-
-				if( pMapInfo[i][1] > 0 ) {   
+		if( zv_villa_locations[i][1] > 0 ) {   
 					marker = new google.maps.Marker({
-						position: new google.maps.LatLng(pMapInfo[i][1], pMapInfo[i][2]),
-						map: myMap,
-						title : pMapInfo[i][0],
-						html: pMapInfo[i][3] 
-					});
+								position: new google.maps.LatLng(zv_villa_locations[i][1], 
+																 zv_villa_locations[i][2]),
+								map: map,
+								title : zv_villa_locations[i][0],
+								html: zv_villa_locations[i][3] 
+							 });
 
-					google.maps.event.addListener(marker, 'click', (function(marker, i) {
-						return function() {
-							infowindow.setContent(this.html);
-							infowindow.open(myMap, this);
-						};
-					})(marker, i));
-				}
-			}
-		});
-	});
+					google.maps.event.addListener(marker, 
+												  'click', 
+												  function() {
+														infowindow.setContent(this.html);
+														infowindow.open(map, this);
+													});
+		}
+	}
 }
 
 // End of Script - Copyright (c) ZipVilla, 2011 - 2011.
