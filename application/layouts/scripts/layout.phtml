@@ -52,13 +52,9 @@
 			<div id="colSearchText">
 				<p>
 					<input type="button" value="Search" onclick="doSearch('city_id');"/>
+					<input type="button" value="Re-Index" onclick="window.location.href='/search/reindex';"/>
 				</p>
 			</div>
-			<div id="colIndexText">
-                <p>
-                    <input type="button" value="Re-Index" onclick="window.location.href='/search/reindex';"/>
-                </p>
-            </div>
 		</div>
 		<div id="content">
             	<h1><?php echo $this->escape($this->title); ?></h1>

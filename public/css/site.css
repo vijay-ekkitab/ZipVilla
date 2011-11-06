@@ -36,11 +36,11 @@ form #submitbutton {
     background-color: #FFFFFF;
     margin: 0 0 0 20px;
     padding: 0;
-    width: 1200px;
+    width: 1000px;
 }
 #zvContainer #zvHeader {
     float: left;
-    width: 1200px;
+    width: 1000px;
     height: 70px;
 }
 
@@ -61,7 +61,7 @@ form #submitbutton {
     float: left;
     margin: 0;
     padding: 0;
-    width: 350px;
+    width: 500px;
 }
 #colSearch #colSearchIcon {
     float: left;
@@ -69,21 +69,21 @@ form #submitbutton {
 }
 #colSearch #colSearchText {
     float: right;
-    width: 300px;
+    width: 450px;
 }
 #zvContainer #zvSeperator {
     border-top: 2px solid #CC0000;
     float: left;
-    width: 1200px;
+    width: 1000px;
 }
 #zvContainer #content {
 	  margin: 0;
     padding: 0;
     float: left;
-    width: 800px;
+    width: 700px;
 }
 #zvContainer #zvMapInfo {
-    float: left;
+    float: right;
     margin: 0;
     padding: 0;
     width: 250px;
@@ -91,6 +91,6 @@ form #submitbutton {
 }
 #zvContainer #zvFooter {
     float: left;
-    width: 1200px;
+    width: 1000px;
     height: 70px;
 }
