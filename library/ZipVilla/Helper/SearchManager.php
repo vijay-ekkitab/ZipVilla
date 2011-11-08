@@ -3,10 +3,11 @@ include_once("ListingsManager.php");
 include_once("ZipVilla/Utils.php");
 
 class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstract {
-
+    
     private $facet_fields;
     private $std_fields;
     private $sort_field = null;
+    private $sort_order = SolrQuery::ORDER_DESC;
     
     public function __construct($facet_fields = null, $std_fields = null) {
         $this->init();
@@ -45,8 +46,9 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         return $this->std_fields;
     }
     
-    public function setSortField($field) {
+    public function setSortField($field, $order = SolrQuery::ORDER_DESC) {
         $this->sort_field = $field;
+        $this->sort_order = $order;
     }
     
     public function getSortField($field) {
@@ -59,7 +61,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             $i = 0;
             foreach ($q as $fd => $val) {
                 if($i > 0) { $qstr = $qstr . " AND "; }
-                $qstr = $qstr . $fd . ":" . $val;
+                $qstr = $qstr . $fd . ":" . '"'. $val . '"';
                 $i++;
             }
         }
@@ -98,11 +100,11 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         if ($include_facets) {
             $facets = $this->facet_fields;
             $query_fields = array_keys($q);
-            foreach ($facets as $i => $facet) {
-                if (in_array($facet, $query_fields)) {
-                    unset($facets[$i]);
-                }
-            }
+            //foreach ($facets as $i => $facet) {
+                //if (in_array($facet, $query_fields)) {
+                //    unset($facets[$i]);
+                //}
+            //}
             if (count($facets) > 0) { 
                 $query->setFacet(true);
                 foreach($facets as $facet) {
@@ -112,7 +114,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         }
         
         if ($this->sort_field != null) {
-            $query->addSortField($this->sort_field);
+            $query->addSortField($this->sort_field, $this->sort_order);
         }
         $qr = $client->query($query);
         
