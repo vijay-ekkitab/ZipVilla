@@ -17,7 +17,7 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
 		$im = new ZipVilla_Helper_IndexManager();
 		$res = $im->delete();
 	}
-
+    
 	function _insertListing1() {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->query();
@@ -138,8 +138,88 @@ class SearchManagerTest extends PHPUnit_Framework_TestCase
         $docs = $results['docs'];
         $this->assertEquals(1, count($docs), "Wrong number of documents returned when searched with facet.");
         
-        $this->assertEquals(0, count($results['facets']), "Facets returned when not expected.");
+        $this->assertEquals(1, count($results['facets']), "Wrong number of facets returned.");
 		
+	} 
+	
+	public function testSearchWithDates() {
+	    $lm = new ZipVilla_Helper_ListingsManager();
+        $tname = "hotel";
+        $vals = array();
+        $rate = array();
+        $ids = array();
+        
+        $vals['description'] = "This is the first home.";
+        $vals['city'] = 'Goa';
+        $vals['rating'] = 1;
+        $rate['daily'] = 100; $rate['weekly'] = 600; $rate['monthly'] = 2000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $vals['description'] = "This is the second home.";
+        $vals['city'] = 'Goa';
+        $vals['rating'] = 2;
+        $rate['daily'] = 400; $rate['weekly'] = 2400; $rate['monthly'] = 8000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $vals['description'] = "This is the third home.";
+        $vals['city'] = 'Goa';
+        $vals['rating'] = 3;
+        $rate['daily'] = 300; $rate['weekly'] = 1800; $rate['monthly'] = 6000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $vals['description'] = "This is the fourth home.";
+        $vals['city'] = 'Goa';
+        $vals['rating'] = 4;
+        $rate['daily'] = 200; $rate['weekly'] = 1200; $rate['monthly'] = 4000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $im = new ZipVilla_Helper_IndexManager();
+        $im->delete();
+        $res = $im->indexAll();
+        
+        $sm = new ZipVilla_Helper_SearchManager();
+        //$sm->setSortField('rating');
+        
+	    $from = '2011-12-1';
+        $to   = '2011-12-10';
+        $results = $sm->search(array('city_state' => 'Goa'), $from, $to);
+        $this->assertEquals(4, count($results['docs']), "search() returned the wrong number of elements.");
+        foreach($results['docs'] as $doc) {
+            echo ">>> ".$doc['average_rate']."   ".$doc['rating']."\n";
+        }
+        
+        $vals = array();
+        $bookings = array();
+        $booking = array();
+        $booking['from'] = new MongoDate(strtotime('2011-12-1'));
+        $booking['to'] = new MongoDate(strtotime('2011-12-2'));
+        $bookings[] = $booking;
+        
+        $vals['booked'] = $bookings;
+        $lm->update($ids[0], $vals);
+	    $from = '2011-12-1';
+        $to   = '2011-12-10';
+        $results = $sm->search(array('city_state' => 'Goa'), $from, $to);
+        $this->assertEquals(3, count($results['docs']), "search() returned the wrong number of elements.");
+        //print_r($results['docs'][0]);
+        foreach($results['docs'] as $doc) {
+            echo ">>> ".$doc['average_rate']."   ".$doc['rating']."\n";
+        }
+        $results = $sm->search(array('city_state' => 'Goa'));
+        $this->assertEquals(4, count($results['docs']), "search() returned the wrong number of elements.");
+        //print_r($results['docs'][0]);
+        
+        
+        
 	}
+        
 }		
 ?>

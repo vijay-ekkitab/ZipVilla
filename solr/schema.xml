@@ -448,17 +448,21 @@
    <field name="amenities" type="string" indexed="true" stored="true" multiValued="true"/>
    <field name="suitability" type="string" indexed="true" stored="true" multiValued="true"/>
 
-   <field name="rate__daily" type="int" indexed="true" stored="true"/>
-   <field name="rate__weekly" type="int" indexed="true" stored="true"/>
-   <field name="rate__monthly" type="int" indexed="true" stored="true"/>
+   <field name="rate__daily" type="int" indexed="false" stored="false"/>
+   <field name="rate__weekly" type="ignored" indexed="false" stored="false"/>
+   <field name="rate__monthly" type="ignored" indexed="false" stored="false"/>
 
    <field name="title" type="text" indexed="true" stored="true"/>
    <field name="description" type="text" indexed="true" stored="true"/>
    <field name="rating" type="int" indexed="true" stored="true" default="0"/>
+   
+   <field name="images" type="string" indexed="false" stored="true" multiValued="true"/>
+   <field name="video" type="string" indexed="false" stored="true" multiValued="true"/>
 
    <!-- copyFields -->
    <field name="address" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="city_state" type="string" indexed="true" stored="false" multiValued="true"/>
+   <field name="average_rate" type="int" indexed="true" stored="true"/>
 
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
@@ -521,6 +525,7 @@
 
    <copyField source="address__city" dest="city_state"/>
    <copyField source="address__state" dest="city_state"/>
+   <copyField source="rate__daily" dest="average_rate"/>
 
 
    <!-- Above, multiple source fields are copied to the [text] field. 

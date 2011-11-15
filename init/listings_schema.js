@@ -161,13 +161,13 @@ attrs = [
 	    name     : "images",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "false"
+	    facet    : "true"
 	},
 	{
 	    name     : "video",
 	    valuetype: "multi-valued",	
 	    keyword  : "false",
-	    facet    : "false"
+	    facet    : "true"
 	},
 	{
 	    name     : "latitude",

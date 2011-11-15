@@ -51,7 +51,10 @@ class SearchController extends Zend_Controller_Action
                         $tmp[1] = trim($tmp[1]);
                         if (!in_array($tmp[0].$tmp[1],$facets))
                             $facets[] = $tmp[0].$tmp[1];
-                        $q[$tmp[0]] = $tmp[1];
+                        if (!isset($q[$tmp[0]])) {
+                            $q[$tmp[0]] = array();
+                        }
+                        $q[$tmp[0]][] = $tmp[1];
                     }
                 }
             }

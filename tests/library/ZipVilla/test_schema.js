@@ -15,6 +15,7 @@ tps =
 			"maxGuests",
 			"rate",
 			"special_rate",
+			"rating",
 			"booked"
 		] 
 	},
