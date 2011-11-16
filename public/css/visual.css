@@ -1,0 +1,155 @@
+@charset "utf-8";/*embeds Lato font*/
+@font-face {
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: normal;
+	src: url('Lato-Regular.eot');
+    src: local("?"), url("Lato-Regular.woff") format("woff"), url("Lato-Regular.ttf") format("truetype"), url("Lato-Regular.svg#webfontBsXB6tm7") format("svg");
+}
+/*Global styles*/
+body,img,p,ul,li, h2, h3, h1 {
+	font-family:Lato, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#666;
+	margin:0;
+	padding:0;
+	border:none;
+	outline:none;
+}
+a {
+	text-decoration:
+	none;outline:none;
+}
+p {
+	line-height:22px;
+}
+h1 {
+	font-size:36px;
+	color:#adcb21;
+	letter-spacing:1px;
+	text-transform:uppercase;
+}
+h2 {
+	font-size:18px;
+	color:#fff;
+	letter-spacing:1px;
+	text-transform:uppercase;
+}
+h3 {
+	font-size:16px;
+	font-weight:bold;
+	color:#fff;
+}
+input {
+	color:#0099CC;
+}
+body {
+	background:#fff url(../images/bg_body.jpg) top center repeat-x;
+	margin:0 auto;
+}
+.wrapper {/*fixed width for all the content*/
+	margin:0 auto;
+	width:960px;
+}
+.header {
+	float:left;
+	height:61px;
+	width:100%;
+}
+.header .logo {
+	float:left;
+	margin:17px 0 0 4px;
+}
+.v_top_nav li {
+	font-size:14px;
+	font-weight:bold;
+	border-right:1px dashed #b4bbbf;
+	list-style:none;
+}
+.v_top_nav li a {
+	color:#09c;
+}
+.v_top_nav li a:hover {
+	color:#666;
+}
+.v_search_form {
+	background:url(../images/bg_search_form.jpg) top center no-repeat;
+	width:960px;
+	height:90px;
+}
+.v_search .v_search_input {
+	background:url(../images/bg_search_result_page.jpg) top left no-repeat;
+	font-size:16px;
+	font-weight:bold;
+	color:#09c;
+}
+.v_search label {
+	color:#333;
+}
+.v_search .v_input_bg {
+	background:url(../images/bg_input1.jpg) top center no-repeat;
+}
+.v_search .v_dropdwon_bg {
+	background:url(../images/bg_input2.jpg) top center no-repeat;
+	color:#09c;
+}
+.v_search .v_submit_search {
+	background:url(../images/btn_search.jpg) top center no-repeat;
+}
+.v_search_results {
+	background:url(../images/bg_search_result.jpg) center bottom no-repeat;
+}
+.v_search_results .tab_content {
+	background-color:#fff;
+	padding:10px;
+	border-radius:4px;
+	float:left;
+	width:97%;
+}
+.v_search_results .display_no p {
+	font-size:14px;
+}
+.v_search_results .pagination li a {
+	background-color:#5ea0ce;
+	color:#fff;
+	-moz-border-radius-bottomleft:4px;
+	-moz-border-radius-bottomright:4px;
+}
+.v_search_results .pagination li a:hover, .v_search_results .pagination .current {
+	background-color:#fff;
+	color:#5ea0ce;
+	-moz-border-radius-bottomleft:4px;
+	-moz-border-radius-bottomright:4px;
+}
+.v_search_results .search_sort .dropdwon_bg {
+	background:url(../images/bg_input3.jpg) top center no-repeat;
+	color:#09c;
+}
+.v_search_results .search_sort {
+	color:#666;
+}
+.v_search_results .tab_content .search_result .villa_image {
+	background-color:#fff;
+	border:1px solid #ccc;
+	width:115px;
+	height:75px;
+}
+.v_search_results .tab_content .search_result .search_no {
+	background-color:#fff;
+	color:#c36;
+	text-align:center;
+	width:16px;
+	height:16px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+.v_search_results .tab_content .search_result .resort_details .reviews {
+	background:url(../images/bg_circle_review.jpg) top center no-repeat;
+}
+.footer {
+	background:url(../images/bg_footer.png) top center no-repeat;
+	float:left;
+	height:121px;
+	width:100%;
+}

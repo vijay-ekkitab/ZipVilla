@@ -1,0 +1,224 @@
+.l_top_nav {
+	float:right;
+}
+.l_top_nav ul {
+	float:left;
+	margin-top:25px;
+}
+.l_top_nav ul .last {
+	border:none;
+	margin-right:0;
+	padding-right:0;
+}
+.l_top_nav li {
+	float:left;
+	margin-right:10px;
+	padding-right:10px;
+	border-right:1px dashed #b4bbbf;
+	list-style:none;
+	line-height:22px;
+}
+.content {
+	float:left;
+	width:100%;
+	height:auto;
+	margin:30px 0;
+}
+.l_search {
+	float:left;
+	padding:25px;
+}
+.l_search .l_search_input {
+	width:495px;
+	height:30px;
+	border:none;
+	padding:5px;
+	float:left;
+}
+.l_search div {
+	float:left;
+	margin-left:12px;
+}
+.l_search .l_input_bg {
+	width:85px;
+	height:25px;
+	border:none;
+	padding-left:5px;
+}
+.l_search .l_dropdwon_bg {
+	width:50px;
+	height:25px;
+	border:none;
+	padding-top:3px;
+}
+.l_search .l_submit_search {
+	width:100px;
+	height:40px;
+	border:none;
+	margin-left:15px;
+	float:left;
+	cursor:pointer;
+}
+.l_search_results {
+	padding-bottom:23px;
+	float:left;
+	width:700px;
+	margin-top:20px;
+}
+.l_search_results .display_no {
+	float:left;
+	margin-top:5px;
+}
+.l_search_results .display_no p {
+	font-size:14px;
+}
+.l_search_results .display_no p span {
+	font-weight:bold;
+}
+.l_search_results .pagination {
+	float:right;
+}
+.l_search_results .pagination ul {
+	float:left;
+	margin-right:35px;
+}
+.l_search_results .pagination li {
+	float:left;
+	display:inline;
+	list-style:none;
+	margin:3px 2px 0 0;
+}
+.l_search_results .pagination li a {
+	padding:3px 7px;
+	margin-right:2px;
+}
+.l_search_results .pagination li a:hover, .l_search_results .pagination .current {
+	padding:3px 7px;
+	margin-right:2px;
+}
+.l_search_results .btn_next_page {
+	float:right;
+	clear:both;
+	margin-top:-5px;
+}
+.l_search_results .search_sort .dropdwon_bg {
+	width:134px;
+	height:25px;
+	border:none;
+	padding-left:5px;
+}
+.l_search_results .search_sort {
+	float:right;
+	position:absolute;
+	top:10px;
+	right:0;
+}
+.l_search_results .tab_content .search_result {
+	position:relative;
+	float:left;
+	padding:8px 0;
+	border-bottom:1px dashed #ccc;
+}
+.l_search_results .tab_content .search_result .villa_image {
+	padding:6px;
+	float:left;
+}
+.l_search_results .tab_content .search_result .villa_image img {
+	width:114px;
+	height:74px;
+}
+.l_search_results .tab_content .search_result .favorite {
+	float:left;
+	margin:4px 8px 0 8px;
+}
+.l_search_results .tab_content .search_result .resort_details {
+	float:left;
+	width:370px;
+}
+.l_search_results .tab_content .search_result .resort_details h2 {
+	color:#09c;
+	text-transform:none;
+	letter-spacing:0;
+}
+.l_search_results .tab_content .search_result .resort_details p span {
+	float:right;
+	color:#69ad44;
+}
+.l_search_results .tab_content .search_result .resort_details .reviews {
+	text-align:center;
+	width:30px;
+	height:30px;
+	float:left;
+	margin-top:5px;
+}
+.l_search_results .tab_content .search_result .resort_details .reviews p {
+	color:#c63;
+	font-weight:
+	bold;margin-top:4px;
+	text-align:center;
+}
+.l_search_results .tab_content .search_result .resort_details .reviews span, .search_results .tab_content .search_result .resort_details .ratings span {
+	color:#666;
+	font-weight:normal;
+	font-size:9px;
+	text-transform:uppercase;
+	margin-top:8px;
+	text-align:center;
+	float:left;
+}
+.l_search_results .tab_content .search_result .resort_details .ratings span {
+	clear:both;
+	margin-left:30px;
+}
+.tab_content .search_result .price span {
+	color:#666;
+	font-weight:normal;
+	font-size:9px;
+	text-transform:uppercase;
+	float:right;
+	margin:0 0 0 30px;
+}
+.l_search_results .tab_content .search_result .resort_details .ratings {
+	float:left;
+}
+.l_search_results .tab_content .search_result .resort_details .ratings ul {
+	float:left;
+	margin:10px 0 0 30px;
+	clear:right;
+}
+.l_search_results .tab_content .search_result .resort_details .ratings li {
+	float:left;
+	display:inline;
+	list-style:none;
+	margin-right:3px;
+}
+.l_search_results .tab_content .search_result .price {
+	float:right;
+	width:120px;
+}
+.l_search_results .tab_content .search_result .price p {
+	font-size:26px;
+	font-weight:bold;
+	color:#cc3366;
+	float:right;
+}
+.l_right_side_panel {
+	float:left;
+	width:245px;
+	margin:33px 0 0 15px;
+}
+.l_right_side_panel h3 {
+	color:#333;
+	float:left;
+}
+.l_right_side_panel p {
+	float:right;
+}
+.l_right_side_panel .map {
+	float:left;
+	width:240px;
+	height:220px;
+	margin:10px 0;
+	border-radius:4px;
+	border:1px solid #ccc;
+}
