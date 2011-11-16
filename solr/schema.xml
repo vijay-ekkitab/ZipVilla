@@ -428,7 +428,7 @@
 
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
    <field name="type" type="string" indexed="false" stored="true"/>
-   <field name="owner_id" type="int" indexed="false" stored="true"/>
+   <!-- <field name="owner_id" type="int" indexed="false" stored="true"/> -->
 
    <field name="address__street_name" type="string" indexed="false" stored="true"/>
    <field name="address__location" type="string" indexed="false" stored="true"/>

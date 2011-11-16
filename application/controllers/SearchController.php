@@ -19,29 +19,13 @@ class SearchController extends Zend_Controller_Action
     public function indexAction()
     {
         $logger = Zend_Registry::get('zvlogger');
+        $checkin = $this->_getParam('check_in', null);
+        $checkout = $this->_getParam('check_out', null);
+        $guests = $this->_getParam('guests', 0);
+        //$logger->debug("SearchController> checkin=[$checkin] checkout=[$checkout] guests=[$guests]");
         $place = $this->_getParam('query', 0);
         if ($place) {
-            /*
-            $select_fields=array('type', 
-                                 'rating',
-                                 'address__street_name',
-                                 'address__city', 
-                                 'address__state',
-                                 'address__coordinates__latitude',
-                                 'address__coordinates__longitude', 
-                                 'rate__daily',
-                                 'bedrooms',
-                                 'guests',
-                                 'amenities');
-            $facet_fields= array('amenities',
-                                 'suitability',
-                                 'onsite_services');
-            */
             $sm = $this->_helper->searchManager;
-            //$sm->setSelectFields($select_fields);
-            //$sm->setFacetFields($facet_fields);
-            //$sm->setSortField('rating');
-            //$sm->setSortField('rate__daily', SolrQuery::ORDER_ASC);
             $q = array('city_state' => $place);
             $facetstr = $this->_getParam('facet', 0);
             $facets = array();
@@ -61,7 +45,7 @@ class SearchController extends Zend_Controller_Action
                     }
                 }
             }
-            $search_results = $sm->search($q);
+            $search_results = $sm->search($q, $checkin, $checkout, $guests);
             
             if ($search_results) {
                 $this->view->search_query = $place;

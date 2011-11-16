@@ -6,6 +6,7 @@ const  LISTINGS       =  "listings" ;
 const  TYPES          =  "types" ;
 const  ATTRIBUTES     =  "attributes" ;
 const  ENUMERATIONS   =  "enumerations";
+const  OWNERS         =  "owners";
 
 #consts for attribute and type definitions
 const  ID           =  "id" ;

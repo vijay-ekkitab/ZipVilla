@@ -173,7 +173,10 @@ enums = [
     { "amenities" : ["Television", "Telephone", "Wifi", "Laundry", "Health Club", "Sauna", "Swimming Pool"] }
 ]
 
-print("creating the database test.. standing for vacation rental..");
+owners = [ {name : "Owner 1", address: "100 ft. Road, Bangalore", user_id: "own1"},
+           {name : "Owner 2", address: "80 ft. Road, Bangalore", user_id: "own2"} ]
+
+print("creating the database test...");
 conn = new Mongo();
 db = conn.getDB("test");
 //db.dropDatabase();
@@ -182,20 +185,26 @@ db.attributes.remove();
 for each (attr in attrs) {
 	db.attributes.save(attr);	
 }
-print("Inserted attribute meta data...");
+print("Inserted attribute meta data.");
 db.types.remove();
 print("Inserting vacation listing type definitions...");
 for each (t in tps) {
 	db.types.save(t);
 }
-print("inserted vacation listing type definitions...");
+print("inserted vacation listing type definitions.");
 db.enumerations.remove();
 print("Inserting attribute enumeration type definitions...");
 for each (t in enums) {
 	db.enumerations.save(t);
 }
-print("inserted attribute enumeration type definitions...");
+print("inserted attribute enumeration type definitions.");
 
+db.owners.remove();
+print("Inserting owners...");
+for each (t in owners) {
+	db.owners.save(t);
+}
+print("inserted owners.");
 //db.types.find();
 db.listings.remove();
-print("Done!!!");
+print("created test database.");

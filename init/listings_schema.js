@@ -4,7 +4,7 @@ tps =
 		name       :    "home",
 		attributes : [  
                         // ownership and location 
-			            "owner_id",
+			            "owner",
 			            "address",
                         // physical characteristics
 			            "bedrooms",
@@ -203,9 +203,8 @@ attrs = [
         facet    : "true" 
 	}, 
 	{
-	    name     : "owner_id",
-	    datatype : "integer", 
-	    keyword  : "true",
+	    name     : "owner",
+	    keyword  : "false",
         facet    : "false" 
 	},
 	{
