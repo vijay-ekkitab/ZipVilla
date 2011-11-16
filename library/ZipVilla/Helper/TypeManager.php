@@ -395,9 +395,11 @@ class Type {
             }
             elseif($attr->isType()) {
                 $rtype = $tm->getType($aname);
-                $tval = $rtype->makeObject($values);                
-                if ($tval != null) {
-                    $obj[$aname] = $tval;
+                if (!$rtype->isList()) {
+                    $tval = $rtype->makeObject($values);                
+                    if ($tval != null) {
+                        $obj[$aname] = $tval;
+                    }
                 }
             }
         }
@@ -444,10 +446,12 @@ class Type {
             }
             elseif($attr->isType()) {
                 $rtype = $tm->getType($aname);
-                $tval = isset($obj[$aname]) ? $obj[$aname] : array();
-                $tval = $rtype->updateObject($tval, $map);       
-                if ($tval != null) {
-                    $obj[$aname] = $tval;
+                if (!$rtype->isList()) {
+                    $tval = isset($obj[$aname]) ? $obj[$aname] : array();
+                    $tval = $rtype->updateObject($tval, $map);       
+                    if ($tval != null) {
+                        $obj[$aname] = $tval;
+                    }
                 }
             }
         }

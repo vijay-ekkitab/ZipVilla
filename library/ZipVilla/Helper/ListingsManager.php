@@ -14,9 +14,20 @@ include_once("ZipVilla/Availability.php");
 
 class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abstract {
 
-    public function __construct()
+    private $std_fields;
+    
+    public function __construct($std_fields = null)
     { 
-	
+        if ($std_fields == null) {
+            $this->std_fields = array('title', 'address__city', 'address__state',
+                                'address__country', 'average_rate', 'address__coordinates__latitude',
+                                'address__coordinates__longitude', 'images', 'rating');
+        }
+        else { 
+            $this->std_fields = $std_fields;
+        }
+        if (!in_array("id", $this->std_fields))
+            $this->std_fields[] = "id";
     }
 	
     /*********************************************************************
@@ -158,12 +169,7 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 	public function getAverageRate($id, $from, $to, $quiet=TRUE) {
 		if ($id != null) {
 			$listing = $this->queryById($id);
-			if ($listing != null) {
-				$std_rate = $listing->rate;
-				$special_rates = $listing->special_rate;
-				$pmodel = new PriceModel($special_rates, $std_rate);
-				return $pmodel->get_average_rate($from, $to, $quiet);
-			}
+			return $this->_getAverageRate($listing->getDoc(), $from, $to, $quiet);
 		}
 		return -1;
 	}
@@ -171,14 +177,31 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 	public function isAvailable($id, $from, $to) {
 		if ($id != null) {
 			$listing = $this->queryById($id);
-			if ($listing != null) {
-				$bookings = $listing->booked;
-				$av = new Availability();
-				return $av->is_available($bookings, $from, $to);
-			}
+			return ($this->_isAvailable($listing->getDoc(), $from, $to));
 		}
 		return FALSE;
 	}
+	
+    protected function _getAverageRate($listing, $from, $to, $quiet=TRUE) {
+        if ($listing != null) {
+            $std_rate = $listing['rate'];
+            $special_rates = isset($listing['special_rate']) ? $listing['special_rate'] : null;
+            $pmodel = new PriceModel($special_rates, $std_rate);
+            return $pmodel->get_average_rate($from, $to, $quiet);
+        }
+        return -1;
+    }
+    
+    protected function _isAvailable($listing, $from, $to) {
+        if ($listing != null) {
+            $bookings = isset($listing['booked']) ? $listing['booked'] : null;
+            if ($bookings == null)
+                return TRUE;
+            $av = new Availability();
+            return $av->is_available($bookings, $from, $to);
+        }
+        return FALSE;
+    }
 
 	public function getBookingCalendar($id, $from, $days, $quiet=TRUE) {
 		if (($id != null) && ($from != null) && ($days > 0)){
@@ -191,5 +214,95 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 		}
 		return array();
 	}
+	
+    private static function sort_by_rate($a, $b) {
+        if ($a['average_rate'] < $b['average_rate']) {
+            return -1;
+        }
+        elseif ($a['average_rate'] > $b['average_rate']) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    private static function sort_by_rating($a, $b) {
+        if ($a['rating'] < $b['rating']) {
+            return 1;
+        }
+        elseif ($a['rating'] > $b['rating']) {
+            return -1;
+        }
+        return 0;
+    }
+	
+    public function getListings($ids, $from=null, $to=null, $start=0, $end=20, $sortParams=null) {
+        $results = array();
+	    
+        if (($ids == null) || (!is_array($ids))) {
+            return $results;
+        }
+	    
+        $m_ids = array();
+        foreach($ids as $id) {
+            $m_ids[] = new MongoId($id);
+        }
+	    
+        $q = array();
+        $q['_id'] = array('$in' => $m_ids);
+	    
+        if (($from == null) || ($to == null)) {
+            $cursor = $this->getCursor($q);
+            foreach($cursor as $listing) {
+                $results[] = $listing;           
+            }
+            return $results;
+        }
+        
+        if (($sortParams == null) || (!is_array($sortParams))) {
+            $sortParams = array();
+        }
+        
+        $sortParams['field'] = isset($sortParams['field']) ? $sortParams['field'] : 'average_rate';
+        
+        $cursor = $this->getCursor($q);
+        
+        foreach($cursor as $listing) {
+            if ($this->_isAvailable($listing, $from, $to)) {
+                $listing['average_rate'] = $this->_getAverageRate($listing, $from, $to);
+                $listing = $this->select_and_flatten($listing, $this->std_fields);
+                $results[] = $listing;
+            }
+        }
+	    
+        if ($sortParams['field'] == 'average_rate')
+            usort($results, 'static::sort_by_rate');
+        elseif ($sortParams['field'] == 'rating')
+            usort($results, 'static::sort_by_rating');
+	    
+        $results = array_slice($results, $start, ($end - $start));
+        return $results;
+    }
+    
+    private function select_and_flatten($obj, $include, $prefix='') {
+        $map = array();
+        if (($obj == null)  || (isset($obj[0])))
+            return $map;
+        foreach ($obj as $k => $v) {
+            if (is_array($v)) {
+                $map = array_merge($map, $this->select_and_flatten($v, $include, $prefix.$k.POINTS));
+            }
+            else {
+                $check = $prefix.$k;
+                if ($check == '_id') {
+                    $check = 'id';
+                }
+                if (in_array($check, $include)) {
+                    $map[$check] = $check == 'id' ? $v->__toString() : $v;
+                }
+            }
+        }
+        return $map;
+    }
+    
 }
 ?>

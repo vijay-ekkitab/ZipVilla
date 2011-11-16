@@ -301,5 +301,57 @@ class ListingsManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($calendar), "Returned booking calendar is not correct, after listing update.");
         
     }
+    
+    
+    function testGetListing() {
+        
+        $lm = new ZipVilla_Helper_ListingsManager();
+        $tname = "hotel";
+        $vals = array();
+        $rate = array();
+        $ids = array();
+        
+        $vals['description'] = "This is the first home."; 
+        $vals['rating'] = 1;
+        $rate['daily'] = 100; $rate['weekly'] = 600; $rate['monthly'] = 2000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $vals['description'] = "This is the second home.";
+        $vals['rating'] = 2;
+        $rate['daily'] = 400; $rate['weekly'] = 2400; $rate['monthly'] = 8000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $vals['description'] = "This is the third home.";
+        $vals['rating'] = 3;
+        $rate['daily'] = 300; $rate['weekly'] = 1800; $rate['monthly'] = 6000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $vals['description'] = "This is the fourth home.";
+        $vals['rating'] = 4;
+        $rate['daily'] = 200; $rate['weekly'] = 1200; $rate['monthly'] = 4000;
+        $vals['rate'] = $rate;
+        $res = $lm->insert($tname,$vals);
+        $ids[] = $res->id;
+        
+        $from = new MongoDate(strtotime('2011-12-1'));
+        $to   = new MongoDate(strtotime('2011-12-10'));
+        $results = $lm->getListings($ids, $from, $to, 0, 10);
+        $this->assertEquals(4, count($results), "getListing() returned the wrong number of elements.");
+        foreach($results as $result) {
+            echo ">>> ".$result['average_rate']."   ".$result['rating']."\n";
+        }
+        $results = $lm->getListings($ids, $from, $to, 0, 10, array('field' => 'rating'));
+        $this->assertEquals(4, count($results), "getListing() returned the wrong number of elements.");
+        foreach($results as $result) {
+            echo ">>> ".$result['average_rate']."   ".$result['rating']."\n";
+        }
+    }
+    
 }
 ?>
