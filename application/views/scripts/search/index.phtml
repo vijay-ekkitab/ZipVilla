@@ -7,19 +7,7 @@ $mapHelper = $this->map();
 <?php if (isset($this->error)) { ?>
     <p>An error was encountered in search.</p>
  <?php } elseif ($this->results != null) {?>
- <table>
-    <tr>
-        <th>Type</th>
-        <th>Rating</th>
-        <th>Street</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Bedrooms</th>
-        <th>Max Guests</th>
-        <th>Rate</th>
-        <th>Amenities</th>
-        <th>&nbsp;</th>
-    </tr>
+
 
   <?php foreach($this->results as $result) : ?>
         <tr>
@@ -40,7 +28,7 @@ $mapHelper = $this->map();
             </td>
         </tr>
   <?php endforeach; ?>
- </table>
+
  <?php if ($this->facets != null) {?>
     <?php $facet_str = ($this->facet_query == null) ? '' : $this->facet_query . ','?>
     <?php foreach($this->facets->getPropertyNames() as $facet): ?>

@@ -26,8 +26,8 @@ function mapMarker(pMapCanvas)
 	}
 
 	for( i = 0; i<zv_villa_locations.length; i++) {
-		$(document.getElementById(pMapCanvas)).append( 
-				'<div class="villas">'+'<h3>'+zv_villa_locations[i][0]+'</h3>'+'</div><div class="clear"></div>');
+//		$(document.getElementById(pMapCanvas)).append( 
+//				'<div class="villas">'+'<h4>'+zv_villa_locations[i][0]+'</h4>'+'</div>');
 
 		if( zv_villa_locations[i][1] > 0 ) {   
 					marker = new google.maps.Marker({
