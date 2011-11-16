@@ -18,8 +18,10 @@ class SearchController extends Zend_Controller_Action
     
     public function indexAction()
     {
-        $place = $this->_getParam('city', 0);
+        $logger = Zend_Registry::get('zvlogger');
+        $place = $this->_getParam('query', 0);
         if ($place) {
+            /*
             $select_fields=array('type', 
                                  'rating',
                                  'address__street_name',
@@ -34,11 +36,12 @@ class SearchController extends Zend_Controller_Action
             $facet_fields= array('amenities',
                                  'suitability',
                                  'onsite_services');
+            */
             $sm = $this->_helper->searchManager;
-            $sm->setSelectFields($select_fields);
-            $sm->setFacetFields($facet_fields);
+            //$sm->setSelectFields($select_fields);
+            //$sm->setFacetFields($facet_fields);
             //$sm->setSortField('rating');
-            $sm->setSortField('rate__daily', SolrQuery::ORDER_ASC);
+            //$sm->setSortField('rate__daily', SolrQuery::ORDER_ASC);
             $q = array('city_state' => $place);
             $facetstr = $this->_getParam('facet', 0);
             $facets = array();
@@ -59,6 +62,7 @@ class SearchController extends Zend_Controller_Action
                 }
             }
             $search_results = $sm->search($q);
+            
             if ($search_results) {
                 $this->view->search_query = $place;
                 $this->view->facet_query = isset($facetstr) ? $facetstr : null;

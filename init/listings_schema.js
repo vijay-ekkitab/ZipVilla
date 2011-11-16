@@ -25,6 +25,7 @@ tps =
 			            "title",
 			            "description",
 			            "rating",
+			            "reviews",
 			            "images",
 			            "video"
 		            ] 
@@ -226,6 +227,12 @@ attrs = [
 	},
 	{
 	    name     : "rating",
+	    datatype : "integer",
+	    keyword  : "false",
+        facet    : "true" 
+	},
+	{
+	    name     : "reviews",
 	    datatype : "integer",
 	    keyword  : "false",
         facet    : "true" 

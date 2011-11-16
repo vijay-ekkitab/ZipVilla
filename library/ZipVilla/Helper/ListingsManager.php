@@ -19,9 +19,9 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
     public function __construct($std_fields = null)
     { 
         if ($std_fields == null) {
-            $this->std_fields = array('title', 'address__city', 'address__state',
+            $this->std_fields = array('title', 'address__city', 'address__state', 'address__street_name',
                                 'address__country', 'average_rate', 'address__coordinates__latitude',
-                                'address__coordinates__longitude', 'images', 'rating');
+                                'guests', 'address__coordinates__longitude', 'images', 'rating', 'reviews');
         }
         else { 
             $this->std_fields = $std_fields;

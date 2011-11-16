@@ -19,8 +19,8 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         }
             
         if ($std_fields == null) {
-            $this->std_fields = array('title', 'address__city', 'address__state',
-                                'address__country', 'average_rate', 'address__coordinates__latitude',
+            $this->std_fields = array('title', 'address__street_name', 'address__city', 'address__state',
+                                'guests', 'rating', 'reviews', 'address__country', 'average_rate', 'address__coordinates__latitude',
                                 'address__coordinates__longitude', 'images');
         }
         else { 
