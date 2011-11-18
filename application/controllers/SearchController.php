@@ -29,6 +29,8 @@ class SearchController extends Zend_Controller_Action
             
         if (!$place) {
             $place = '*';
+        }
+        if ($place == '*') {
             $q = array('city_state' => $place);
         }
         else {

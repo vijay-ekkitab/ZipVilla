@@ -1,0 +1,76 @@
+@charset "utf-8";
+@font-face {
+    font-family: "Lato";
+    font-style: normal;
+    font-weight: normal;
+	src: url('Lato-Regular.eot');
+    src: local("?"), url("Lato-Regular.woff") format("woff"), url("Lato-Regular.ttf") format("truetype"), url("Lato-Regular.svg#webfontBsXB6tm7") format("svg");
+}
+body,img,p,ul,li, h2, h3, h1 {font-family:Lato, Arial, Helvetica, sans-serif;font-size:12px;color:#666;margin:0;padding:0;border:none;outline:none;}
+a {text-decoration:none;outline:none;}
+p {line-height:22px;}
+h1{font-size:36px;color:#adcb21;letter-spacing:1px;text-transform:uppercase;}
+h2{font-size:18px;color:#fff; letter-spacing:1px;text-transform:uppercase;}
+h3{font-size:16px;font-weight:bold;color:#fff;}
+input{color:#0099CC;}
+body{background:#fff url(../images/bg_body.jpg) top center repeat-x;margin:0 auto;}
+.wrapper{margin:0 auto;width:960px;}
+.header{float:left;height:61px;width:100%;}
+.header .logo{float:left;margin:17px 0 0 4px;}
+.top_nav{float:right;}
+.top_nav ul{float:left;margin-top:25px;}
+.top_nav ul .last{border:none;margin-right:0;padding-right:0;}
+.top_nav li{font-size:14px;font-weight:bold;float:left;margin-right:10px;padding-right:10px;border-right:1px dashed #b4bbbf;list-style:none; line-height:22px;}
+.top_nav li a{color:#09c;}
+.top_nav li a:hover{color:#666;}
+.content{float:left;width:100%;height:auto;margin:30px 0;}
+.search_form{background:url(../images/bg_search_form.jpg) top center no-repeat;width:960px;height:90px;}
+.search{float:left;padding:25px;}
+.search .search_input{ background:url(../images/bg_search_result_page.jpg) top left no-repeat;font-size:16px;font-weight:bold;color:#09c;width:495px;height:30px;border:none;padding:5px;float:left;}
+.search div{float:left;margin-left:12px;}
+.search label{color:#333;}
+.search .input_bg{background:url(../images/bg_input1.jpg) top center no-repeat;width:85px;height:25px;border:none;padding-left:5px;}
+.search .dropdwon_bg{background:url(../images/bg_input2.jpg) top center no-repeat;color:#09c;width:50px;height:25px;border:none;padding-top:3px;}
+.search .submit_search{background:url(../images/btn_search.jpg) top center no-repeat;width:120px;height:40px;border:none;margin-left:15px;float:left;cursor:pointer;}
+.search_results{ background:url(../images/bg_search_result.jpg) center bottom no-repeat;padding-bottom:23px;float:left;width:700px;margin-top:20px;}
+.search_results .tab_content{background-color:#fff;padding:10px;border-radius:4px;float:left;width:97%;}
+.search_results .display_no{float:left;margin-top:5px;}
+.search_results .display_no p{font-size:14px;}
+.search_results .display_no p span{font-weight:bold;}
+.search_results .pagination{float:right;}
+.search_results .pagination ul{float:left;margin-right:35px;}
+.search_results .pagination li{float:left;display:inline;list-style:none;margin:3px 2px 0 0;}
+.search_results .pagination li a{background-color:#5ea0ce;color:#fff;padding:3px 7px;margin-right:2px;-moz-border-radius-bottomleft:4px;-moz-border-radius-bottomright:4px;}
+.search_results .pagination li a:hover, .search_results .pagination .current{background-color:#fff;color:#5ea0ce;padding:3px 7px;margin-right:2px;-moz-border-radius-bottomleft:4px;-moz-border-radius-bottomright:4px;}
+.search_results .btn_next_page{float:right;clear:both;margin-top:-5px;}
+.search_results .search_sort .dropdwon_bg{background:url(../images/bg_input3.jpg) top center no-repeat;color:#09c;width:134px;height:25px;border:none;padding-left:5px;}
+.search_results .search_sort {color:#666;}
+.search_results .search_sort{float:right;position:absolute;top:10px;right:0;}
+.search_results .tab_content .search_result{position:relative;float:left;padding:8px 0;border-bottom:1px dashed #ccc;}
+.search_results .tab_content .search_result .villa_image{ background-color:#fff;border:1px solid #ccc;width:115px;height:75px;padding:6px;float:left;}
+.search_results .tab_content .search_result .villa_image img{width:114px;height:74px;}
+.search_results .tab_content .search_result .search_no{background-color:#fff;color:#c36;text-align:center;width:16px;height:16px;position:absolute;top:0;left:0;}
+.search_results .tab_content .search_result .favorite{float:left;margin:4px 8px 0 8px;}
+.search_results .tab_content .search_result .resort_details{float:left;width:370px;}
+.search_results .tab_content .search_result .resort_details h2{color:#09c;text-transform:none;letter-spacing:0;}
+.search_results .tab_content .search_result .resort_details p span{float:right;color:#69ad44;}
+.search_results .tab_content .search_result .resort_details .reviews{background:url(../images/bg_circle_review.jpg) top center no-repeat;text-align:center;width:30px;height:30px;float:left;margin-top:5px;}
+.search_results .tab_content .search_result .resort_details .reviews p{color:#c63;font-weight:bold;margin-top:4px;text-align:center;}
+.search_results .tab_content .search_result .resort_details .reviews span, .search_results .tab_content .search_result .resort_details .ratings span{color:#666;font-weight:normal;font-size:9px;text-transform:uppercase;margin-top:8px;text-align:center;float:left;}
+.search_results .tab_content .search_result .resort_details .ratings span{clear:both;margin-left:30px;}
+.tab_content .search_result .price span{color:#666;font-weight:normal;font-size:9px;text-transform:uppercase;float:right;margin:0 0 0 30px;}
+.search_results .tab_content .search_result .resort_details .ratings{float:left;}
+.search_results .tab_content .search_result .resort_details .ratings ul{float:left;margin:10px 0 0 30px;clear:right;}
+.search_results .tab_content .search_result .resort_details .ratings li{float:left;display:inline;list-style:none;margin-right:3px;}
+.search_results .tab_content .search_result .price{float:right;width:120px;}
+.search_results .tab_content .search_result .price p{font-size:26px;font-weight:bold;color:#cc3366;float:right;}
+
+.right_side_panel{float:left;width:245px;margin:33px 0 0 15px;}
+.right_side_panel h3{color:#333;float:left;}
+.right_side_panel p{float:right;}
+.right_side_panel .map{float:left;width:240px;height:220px;margin:10px 0;}
+.right_side_panel .map iframe{width:240px;height:220px;border-radius:4px;border:1px solid #ccc;}
+
+
+
+.footer{background:url(../images/bg_footer.png) top center no-repeat;float:left;height:121px;width:100%;}

@@ -3,7 +3,8 @@
     $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
     $this->headTitle()->setSeparator(' - ');
     $this->headTitle('Zipvilla-Feel at Home-Away');
-    echo $this->doctype(); 
+    echo $this->doctype();
+    $baseUrl = $this->baseUrl();
 ?>
 <html>
 <head>
@@ -24,7 +25,7 @@
   <body class="blue">
 	<div class="wrapper"><!--outer wrapper to fix the width-->
     	<div class="header"><!--header section-->
-        	<div class="logo"><a href="index.html"><img src="/images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
+        	<div class="logo"><a href="index.html"><img src="<?php echo $baseUrl;?>/images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
             <div class="v_top_nav l_top_nav">
             	<ul>
             	    <li><a href="<?php echo $this->url(array('controller' => 'search', 'action' => 'reindex'));?>">Index</a></li>
@@ -99,20 +100,20 @@
                                 $pg1 = $this->page;
                                 $pg2 = ($this->page + 1) > $numpages ? null : $this->page + 1;
                                 $pg3 = ($this->page + 2) > $numpages ? null : $this->page + 2;
-                                if ($pg2 != null) $next_page_btn = TRUE;
+                                if ($pg2 != null) { $next_page_btn = TRUE; $next_page = $pg2; }
                              }
                              elseif ($pagesahead <= 0) {
                                 $pg3 = $this->page;
                                 $pg2 = ($this->page - 1) < 1  ? null : $this->page - 1;
                                 $pg1 = ($this->page - 2) < 1  ? null : $this->page - 2;
-                                if ($pg2 != null) $prev_page_btn = TRUE;
+                                if ($pg2 != null) { $prev_page_btn = TRUE; $prev_page = $pg2; }
                              }
                              else {
                                 $next_page_btn = TRUE;
                                 $prev_page_btn = TRUE;
                                 $pg2 = $this->page;
-                                $pg1 = $this->page - 1;
-                                $pg3 = $this->page + 1;
+                                $pg1 = $this->page - 1; $prev_page = $pg1;
+                                $pg3 = $this->page + 1; $next_page = $pg3;
                              }
                              $url = $this->url(array('controller'=>'search',
                                                      'action' => 'index', 
@@ -121,26 +122,28 @@
                                                      'check_out' => $this->checkout,
                                                      'guests' => $this->guests ), null, TRUE);
                              
-                              
+                             $pagenumbers = array($pg1, $pg2, $pg3);
                         ?>
                         	<ul>
-                        	    <?php if ($pg1 != null) {?>
-                            	<li><a href="<?php echo $url."/page/$pg1";?>" <?php if ($pg1 == $this->page) {?>class="current"<?php }?>><?php echo $pg1;?></a></li>
-                            	<?php }?>
-                            	<?php if ($pg2 != null) {?>
-                                <li><a href="<?php echo $url."/page/$pg2";?>" <?php if ($pg2 == $this->page) {?>class="current"<?php }?>><?php echo $pg2;?></a></li>
-                                <?php }?>
-                                <?php if ($pg3 != null) {?>
-                                <li><a href="<?php echo $url."/page/$pg3";?>" <?php if ($pg3 == $this->page) {?>class="current"<?php }?>><?php echo $pg3;?></a></li>
-                                <?php }?>
+                        	    <?php foreach ($pagenumbers as $pg):?>
+                        	       <?php if ($pg != null) {?>
+                                    <?php if ($pg == $this->page) {?>
+                                        <li class="current"><?php echo $pg;?></li>
+                                    <?php } else {?>
+                                        <li><a href="<?php echo $url."/page/$pg";?>"><?php echo $pg;?></a></li>
+                                    <?php }?>
+                                   <?php }?>
+                        	    <?php endforeach;?>
                             </ul>
                         </div>
-                        <?php if ($next_page_btn) { ?>
-                        <div class="btn_next_page"><img src="images/btn_next.jpg" alt="Next page" /></div><!--next page button-->
-                        <?php }?>
+                        <div class="l_page_buttons"><!--Previous Next Page buttons-->
                         <?php if ($prev_page_btn) { ?>
-                        <div class="btn_previous_page"><img src="images/btn_previous.jpg" alt="Previous page" /></div><!--next page button-->
+                        <a href="<?php echo $url."/page/$prev_page";?>"><div class="btn_prev_page"><img src="<?php echo $baseUrl;?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a><!--previous page button-->
                         <?php }?>
+                        <?php if ($next_page_btn) { ?>
+                        <a href="<?php echo $url."/page/$next_page";?>"><div class="btn_next_page"><img src="<?php echo $baseUrl;?>/images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
+                        <?php }?>
+                        </div><!--Previous Next Page buttons ends-->
                     <?php }?>
                    	</div><!--tab1 content ends here-->
                     <div id="tabs-2">

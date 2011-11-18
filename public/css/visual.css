@@ -16,6 +16,13 @@ body,img,p,ul,li, h2, h3, h1 {
 	border:none;
 	outline:none;
 }
+label {
+	font-size:14px;
+	font-weight:bold;
+	clear:both;
+	float:left;
+	margin-bottom:20px;
+}
 a {
 	text-decoration:
 	none;outline:none;
@@ -24,10 +31,11 @@ p {
 	line-height:22px;
 }
 h1 {
-	font-size:36px;
-	color:#adcb21;
+	font-size:55px;
+	color:#69ad44;
 	letter-spacing:1px;
-	text-transform:uppercase;
+	font-weight:bolder;
+	text-shadow: 0 0 1px #69ad44;
 }
 h2 {
 	font-size:18px;
@@ -147,9 +155,147 @@ body {
 .v_search_results .tab_content .search_result .resort_details .reviews {
 	background:url(../images/bg_circle_review.jpg) top center no-repeat;
 }
+.v_refine_results{}
 .footer {
 	background:url(../images/bg_footer.png) top center no-repeat;
 	float:left;
-	height:121px;
-	width:100%;
+	height:46px;
+	width:940px;
+	padding:75px 10px 0 10px;
+}
+.dsclimr  {
+	float:left;
+}
+.dsclimr span {
+	font-weight:bold;
+	margin-right:45px;
+	float:left;
+}
+.dsclimr a	{
+	color:#666;
+	text-decoration:underline;
+	margin:0 10px;
+}
+.v_futr_nav, .social_ico {
+	float:left;
+}
+.v_futr_nav ul {
+	float:left;
+	margin:0 10px 0 60px;
+}
+.social_ico ul {
+	float:left;
+}
+.v_futr_nav li, .social_ico li{
+	line-height:22px;
+	float:left;
+	display:inline;
+	list-style:none;
+}
+.v_futr_nav li{
+	margin-right:20px;
+}
+.social_ico li {
+	margin-right:10px;
+}
+.v_futr_nav li a {
+	color:#666;
+}
+/*************Registration Page***************/
+.v_rgstr_frm {
+	background:url(../images/bg_rgstr_page.jpg) top left repeat;
+	width:910px;
+	-moz-border-radius:4px;
+	padding:25px;
+}
+.register {
+	background-color:#fff;
+	border:2px dotted #ccc;
+	float:left;
+	width:440px;
+	margin:25px 0;
+	padding:25px;
+}
+.register .form-section input {
+	background:url(../images/bg_input_regi.jpg) top left no-repeat;
+	height:25px;
+	width:245px;
+	border:none;
+	float:left;
+	margin-top:10px;
+	padding:0 10px;
+}
+.register .form-section .username {
+	background:url(../images/bg_username.jpg) top left no-repeat;
+	height:40px;
+	width:415px;
+	border:none;
+	padding:0 10px;
+}
+.register .form-section .input {
+	background:url(../images/btn_creat_accnt.jpg) top left no-repeat;
+	width:169px;
+	height:40px;
+	clear:both;
+	float:left;
+	cursor:pointer;
+}
+.register .form-section .login {
+	background:url(../images/btn_login.jpg) top left no-repeat;
+	width:120px;
+	height:40px;
+	clear:both;
+	float:left;
+	cursor:pointer;
+}
+.register .form-section .chk_bx{
+	float:left;
+	width:300px;
+}
+.register .form-section .remeber_me{
+	float:right;
+	margin-top:10px;
+}
+.register .form-section .chk_bx input, .register .form-section .remeber_me input{
+	background:none;
+	float:left;
+	width:20px;
+	margin-right:5px;
+	border:none;
+}
+.register .form-section .remeber_me p {
+	width:175px;
+	line-height:44px;
+}
+.register .form-section .chk_bx p{
+	line-height:44px;
+}
+.register .form-section .chk_bx p a{
+	color:#0099cc;
+}
+.v_ctnt_right_regst {
+	float:left;
+	width:300px;
+	margin:50px 0 0 100px;
+}
+.v_ctnt_right_regst p{
+	font-size:18px;
+	margin-top:30px;
+}
+.v_ctnt_right_regst p span a{
+	font-size:14px;
+	color:#0099cc;
+}
+.error_msg {
+	background:url(../images/bg_errormsg.jpg) top left no-repeat;
+	width:960px;
+	height:30px;
+	float:left;
+	margin-bottom:20px;
+	text-align:center;
+	padding-top:10px;
+}
+.error_msg p{
+	font-size:14px;
+	font-weight:bold;
 }

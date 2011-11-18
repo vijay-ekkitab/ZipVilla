@@ -46,13 +46,13 @@
 	padding-left:5px;
 }
 .l_search .l_dropdwon_bg {
-	width:50px;
+	width:45px;
 	height:25px;
 	border:none;
-	padding-top:3px;
+	padding-left:5px;
 }
 .l_search .l_submit_search {
-	width:100px;
+	width:120px;
 	height:40px;
 	border:none;
 	margin-left:15px;
@@ -96,10 +96,20 @@
 	padding:3px 7px;
 	margin-right:2px;
 }
-.l_search_results .btn_next_page {
+.l_search_results .pagination .current {
+	margin:0 4px 0 0;
+}
+.l_page_buttons {
 	float:right;
 	clear:both;
-	margin-top:-5px;
+	margin-top:0px;
+}
+.l_search_results .btn_next_page {
+	float:left;
+}
+.l_search_results .btn_prev_page {
+	float:left;
+	margin-right:3px;
 }
 .l_search_results .search_sort .dropdwon_bg {
 	width:134px;
@@ -219,6 +229,87 @@
 	width:240px;
 	height:220px;
 	margin:10px 0;
+}
+.l_right_side_panel .map iframe {
+	width:240px;
+	height:220px;
 	border-radius:4px;
 	border:1px solid #ccc;
+}
+.l_refine_results{
+	background-color:#f5f5f5;
+	float:left;
+	width:220px;
+	border-radius:4px;
+	border:1px solid #dfdfdf;
+	margin-top:30px;
+	padding:10px;
+}
+.l_refine_results h4 {
+	margin:0;
+}
+.l_accordian_open {
+	float:left;
+	margin-right:10px;
+}
+.l_price {
+	float:left;
+	padding:10px 0;
+	border-bottom:1px dashed #ccc;
+	width:100%;
+}
+.l_slider{
+	background-color:#c0dbb1;
+	height:12px;
+	width:90%;
+	margin:15px 0;
+}
+.l_slider img {
+	float:left;
+	margin-top:-6px;
+}
+.l_low_price {
+	float:left;
+	color:#000;
+}
+.l_height_price {
+	float:right;
+	color:#000;
+}
+.l_km {
+	text-align:center;
+	color:#000;
+}
+.l_styled {
+      width: 14px;
+      height: 15px;
+      display: block;
+      clear: left;
+      float: left;
+}
+.l_right_side_panel .l_chkbox form {
+	margin-top:10px;
+}
+.l_right_side_panel .l_chkbox p{
+	float:left;
+}
+.l_room_nos{
+	background-color:#cfe5c4;
+	float:right;
+	width:25px;
+	height:17px;
+	-moz-border-radius:4px;
+	color:#82ad5a;
+	text-align:center;
+}
+.l_right_side_panel .l_cta {
+	float:right;
+	clear:both;
+}
+.l_right_side_panel .l_cta a {
+	color:#09c;
+}
+/*************Registration Page***************/
+.l_rgstr_frm {
+	float:left;
 }
