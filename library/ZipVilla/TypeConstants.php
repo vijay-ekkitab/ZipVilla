@@ -34,5 +34,7 @@ const  TITLE        =  "title" ;
 const  INDEXED      =  "indexed" ;
 const  ENUM_KEY_SPLITTER = ':';
 
+const  PAGE_SZ      =  20;
+
 
 ?>

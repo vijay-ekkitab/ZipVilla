@@ -27,7 +27,7 @@
         	<div class="logo"><a href="index.html"><img src="/images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
             <div class="v_top_nav l_top_nav">
             	<ul>
-            	<input type="button" value="Index" onclick="window.location.href='/search/reindex';"/>
+            	    <li><a href="<?php echo $this->url(array('controller' => 'search', 'action' => 'reindex'));?>">Index</a></li>
                 	<li><a href="#">How Zipvilla Works</a></li>
                     <li><?php echo $this->loggedInAs(); ?></li>
                     <li class="last"><?php echo $this->registerLink(); ?></li>
@@ -39,6 +39,7 @@
             	<div class="v_search l_search">
                 	<form action="/search" method="get">
                     	<input class="l_search_input v_search_input" type="text" name="query" id="query" size="73" value="" />
+                    	<input type="hidden" id="page" name="page" value="1" />
                         <div><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="10" id="checkin" name="check_in"/></label></div>
                         <div><label for="checkout">Check out<br /><input class="input_bg" type="text" id="checkout" size="10" name="check_out"/></label></div>
                         <div>
@@ -73,9 +74,8 @@
                         	<label for="guests">Sort by
                             	<select class="dropdwon_bg" id="sort_by" name="sort_by">
                                 	<option selected="">Recommended</option>
-                                    <option>2</option>
-                                    <option>9</option>
-                                    <option>10</option>
+                                    <option>Rate (high to low)</option>
+                                    <option>Rate (low to high)</option>
                                 </select>
                            	</label>
                        	</form>
@@ -85,15 +85,63 @@
                         	      	<h1><?php echo $this->escape($this->title); ?></h1>
             											<?php echo $this->layout()->content; ?>
                       	</div><!--tab_content ends here-->
-                        <div class="display_no"><p>Displaying <span>1</span> — <span>19</span> of <span>33</span> listings</p></div>
+                      	<?php if ($this->total_hits > 0) {?>
+                      	<?php $start = 1 + ($this->page - 1)*$this->pagesz; $end = ($start -1) + count($this->results); ?>
+                        <div class="display_no"><p>Displaying <span><?php echo $start;?></span> — <span><?php echo $end ?></span> of <span><?php echo $this->total_hits; ?></span> listings</p></div>
                         <div class="pagination"><!--pagination-->
+                        <?php 
+                             $numpages = 1 + (int)($this->total_hits/$this->pagesz);
+                             $backpages = $this->page - 1;
+                             $pagesahead = $numpages - $this->page;
+                             $next_page_btn = FALSE;
+                             $prev_page_btn = FALSE;
+                             if ($backpages <= 0) {
+                                $pg1 = $this->page;
+                                $pg2 = ($this->page + 1) > $numpages ? null : $this->page + 1;
+                                $pg3 = ($this->page + 2) > $numpages ? null : $this->page + 2;
+                                if ($pg2 != null) $next_page_btn = TRUE;
+                             }
+                             elseif ($pagesahead <= 0) {
+                                $pg3 = $this->page;
+                                $pg2 = ($this->page - 1) < 1  ? null : $this->page - 1;
+                                $pg1 = ($this->page - 2) < 1  ? null : $this->page - 2;
+                                if ($pg2 != null) $prev_page_btn = TRUE;
+                             }
+                             else {
+                                $next_page_btn = TRUE;
+                                $prev_page_btn = TRUE;
+                                $pg2 = $this->page;
+                                $pg1 = $this->page - 1;
+                                $pg3 = $this->page + 1;
+                             }
+                             $url = $this->url(array('controller'=>'search',
+                                                     'action' => 'index', 
+                                                     'query'=> $this->search_query,
+                                                     'check_in' => $this->checkin,
+                                                     'check_out' => $this->checkout,
+                                                     'guests' => $this->guests ), null, TRUE);
+                             
+                              
+                        ?>
                         	<ul>
-                            	<li><a href="#" class="current">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
+                        	    <?php if ($pg1 != null) {?>
+                            	<li><a href="<?php echo $url."/page/$pg1";?>" <?php if ($pg1 == $this->page) {?>class="current"<?php }?>><?php echo $pg1;?></a></li>
+                            	<?php }?>
+                            	<?php if ($pg2 != null) {?>
+                                <li><a href="<?php echo $url."/page/$pg2";?>" <?php if ($pg2 == $this->page) {?>class="current"<?php }?>><?php echo $pg2;?></a></li>
+                                <?php }?>
+                                <?php if ($pg3 != null) {?>
+                                <li><a href="<?php echo $url."/page/$pg3";?>" <?php if ($pg3 == $this->page) {?>class="current"<?php }?>><?php echo $pg3;?></a></li>
+                                <?php }?>
                             </ul>
                         </div>
+                        <?php if ($next_page_btn) { ?>
                         <div class="btn_next_page"><img src="images/btn_next.jpg" alt="Next page" /></div><!--next page button-->
+                        <?php }?>
+                        <?php if ($prev_page_btn) { ?>
+                        <div class="btn_previous_page"><img src="images/btn_previous.jpg" alt="Previous page" /></div><!--next page button-->
+                        <?php }?>
+                    <?php }?>
                    	</div><!--tab1 content ends here-->
                     <div id="tabs-2">
                     	<div class="tab_content">hasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>

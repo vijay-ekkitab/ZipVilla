@@ -22,46 +22,58 @@ class SearchController extends Zend_Controller_Action
         $checkin = $this->_getParam('check_in', null);
         $checkout = $this->_getParam('check_out', null);
         $guests = $this->_getParam('guests', 0);
+        $page = $this->_getParam('page', 0);
         //$logger->debug("SearchController> checkin=[$checkin] checkout=[$checkout] guests=[$guests]");
         $place = $this->_getParam('query', 0);
-        if ($place) {
-            $sm = $this->_helper->searchManager;
-            $q = array('city_state' => $place);
-            $facetstr = $this->_getParam('facet', 0);
-            $facets = array();
-            if ($facetstr) {
-                $parts = explode(',', $facetstr);
-                foreach ($parts as $part) {
-                    $tmp = explode('=', $part);
-                    if (count($tmp) == 2) {
-                        $tmp[0] = trim($tmp[0]);
-                        $tmp[1] = trim($tmp[1]);
-                        if (!in_array($tmp[0].$tmp[1],$facets))
-                            $facets[] = $tmp[0].$tmp[1];
-                        if (!isset($q[$tmp[0]])) {
-                            $q[$tmp[0]] = array();
-                        }
-                        $q[$tmp[0]][] = $tmp[1];
-                    }
-                }
-            }
-            $search_results = $sm->search($q, $checkin, $checkout, $guests);
+        $sm = $this->_helper->searchManager;
             
-            if ($search_results) {
-                $this->view->search_query = $place;
-                $this->view->facet_query = isset($facetstr) ? $facetstr : null;
-                $this->view->facets_used = $facets;
-                $this->view->results = $search_results['docs'];
-                if (isset($search_results['facets'])) {
-                    $this->view->facets = $search_results['facets'];
+        if (!$place) {
+            $place = '*';
+            $q = array('city_state' => $place);
+        }
+        else {
+            $q = array('city_state' => '"'.$place.'"');
+        }
+            
+        $facetstr = $this->_getParam('facet', 0);
+        $facets = array();
+        if ($facetstr) {
+            $parts = explode(',', $facetstr);
+            foreach ($parts as $part) {
+                $tmp = explode('=', $part);
+                if (count($tmp) == 2) {
+                    $tmp[0] = trim($tmp[0]);
+                    $tmp[1] = trim($tmp[1]);
+                    if (!in_array($tmp[0].$tmp[1],$facets))
+                        $facets[] = $tmp[0].$tmp[1];
+                    if (!isset($q[$tmp[0]])) {
+                        $q[$tmp[0]] = array();
+                    }
+                    $q[$tmp[0]][] = '"'.$tmp[1].'"';
                 }
-            }
-            else {
-                $this->view->error = 'encountered error in search.';
             }
         }
-        else 
-            $this->_helper->redirector('index', 'index');
+            
+        $search_results = $sm->search($q, $checkin, $checkout, $guests, $page, PAGE_SZ);
+            
+        if ($search_results) {
+            $this->view->search_query = $place;
+            $this->view->facet_query = isset($facetstr) ? $facetstr : null;
+            $this->view->checkin = $checkin;
+            $this->view->checkout = $checkout;
+            $this->view->guests = $guests;
+            $this->view->facets_used = $facets;
+            $this->view->results = $search_results['docs'];
+            $this->view->total_hits = $search_results['count'];
+            $this->view->page = $page;
+            $this->view->pagesz = PAGE_SZ;
+            if (isset($search_results['facets'])) {
+                $this->view->facets = $search_results['facets'];
+            }
+        }
+        else {
+            $this->view->error = 'encountered error in search.';
+        }
     }
 
 

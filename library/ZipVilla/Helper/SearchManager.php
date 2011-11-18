@@ -77,11 +77,11 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             foreach ($q as $fd => $val) {
                 if (is_array($val)) {
                     foreach($val as $v) {
-                        $qstr = $qstr. " AND " . $fd . ":" . '"'. $v . '"';
+                        $qstr = $qstr. " AND " . $fd . ":" . $v ;
                     }
                 }
                 else {
-                    $qstr = $qstr. " AND " . $fd . ":" . '"'. $val . '"';
+                    $qstr = $qstr. " AND " . $fd . ":" . $val ;
                 }
             }
         }
@@ -111,12 +111,12 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
 	 * @return - an array of listings, each of which is a map that can be accessed as
 	 *           simple PHP objects. 
 	 ***********************************************************************************/
-    public function search($q, $from=null, $to=null, $guests=1, $page=1, $pagesize=50) {
+    public function search($q, $from=null, $to=null, $guests=1, $page=1, $pagesize=20) {
         $client = new SolrClient(self::$options);
         $query = new SolrQuery();
         
         if ($q == null) {
-            return array ('docs' => array(), 'facets' => array());
+            return array ('docs' => array(), 'facets' => array(), 'count' => 0);
         }
         
         $qstr = $this->buildQuery($q, $guests);
@@ -125,7 +125,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         $logger->debug("Query>> $qstr");
         
         $start = ($page - 1)*$pagesize;
-        $end   = $start + $pagesize;
+        //$end   = $start + $pagesize;
         
         $query->setQuery($qstr);
         $query->setStart($start);
@@ -134,9 +134,13 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         if (($from != null) && ($to != null)) { //With dates, retrieve data from Mongo not Solr.
             $query->addField('id');
         }
-        else 
-        foreach($this->std_fields as $field) {
-            $query->addField($field);
+        else {
+            foreach($this->std_fields as $field) {
+                $query->addField($field);
+            }
+            $query->setStart($start);
+            $query->setRows($pagesize);
+            $logger->debug("Requesting $pagesize rows starting at $start.");
         }
         
         $facets = $this->facet_fields;
@@ -159,12 +163,14 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         $qr = $client->query($query);
         
         if(!$qr->success())
-            return array ('docs' => array(), 'facets' => array());
+            return array ('docs' => array(), 'facets' => array(), 'count' => 0);
         
         $resp = $qr->getResponse();
         $docs = $resp->response->docs;
+        $doc_count = $resp->response->numFound;
+        $logger->debug("Number of Hits>> $doc_count");
         if ($docs == null) 
-            return array ('docs' => array(), 'facets' => array());
+            return array ('docs' => array(), 'facets' => array(), 'count' => 0);
             
         if (($from != null) && ($to != null)) {
             $ids = array();
@@ -172,17 +178,18 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
                //echo "SearchManager>> Id: ".$doc['id']."\n";
                $ids[] = $doc['id']; 
             }
-            
             $lm = new ZipVilla_Helper_ListingsManager();
             $from = new MongoDate(strtotime($from));
             $to = new MongoDate(strtotime($to));
             $sortParams = array('field' => 'average_rate');
             if ($this->sort_field != null) 
                 $sortParams = array('field' => $this->sort_field);
-            $docs = $lm->getListings($ids, $from, $to, $start, $end, $sortParams);
+            $listings = $lm->getListings($ids, $from, $to, $start, $pagesize, $sortParams);
+            $docs = $listings['docs'];
+            $doc_count = $listings['count'];
         }
         $facets = isset($resp->facet_counts->facet_fields) ? $resp->facet_counts->facet_fields : array();
-        return array('docs'=> $docs , 'facets' => $facets); 
+        return array('docs'=> $docs , 'facets' => $facets, 'count' => $doc_count); 
     }
 	
     public function search_old($q, $include_facets=TRUE, $start=0, $count=50) {

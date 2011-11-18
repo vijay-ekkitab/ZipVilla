@@ -10,7 +10,7 @@ $mapHelper = $this->map();
 
 <?php
 // temp use of villaCtr - replace this later with number returned by search method
-$villaCtr = 0;
+$villaCtr = ($this->page - 1) * $this->pagesz;
 foreach($this->results as $result) : ?>
   <div class="search_result">
   <div class="search_no"> <?php echo ++$villaCtr ?></div>

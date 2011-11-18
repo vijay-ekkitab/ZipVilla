@@ -235,11 +235,11 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         return 0;
     }
 	
-    public function getListings($ids, $from=null, $to=null, $start=0, $end=20, $sortParams=null) {
+    public function getListings($ids, $from=null, $to=null, $start=0, $pagesize=20, $sortParams=null) {
         $results = array();
 	    
         if (($ids == null) || (!is_array($ids))) {
-            return $results;
+            return array('docs' => $results, 'count' => 0);
         }
 	    
         $m_ids = array();
@@ -252,10 +252,13 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 	    
         if (($from == null) || ($to == null)) {
             $cursor = $this->getCursor($q);
+            $count = 0;
             foreach($cursor as $listing) {
-                $results[] = $listing;           
+                $results[] = $listing;
+                $count++;           
             }
-            return $results;
+            $results = array_slice($results, $start, $pagesize);
+            return array('docs' => $results, 'count' => $count);
         }
         
         if (($sortParams == null) || (!is_array($sortParams))) {
@@ -265,12 +268,13 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         $sortParams['field'] = isset($sortParams['field']) ? $sortParams['field'] : 'average_rate';
         
         $cursor = $this->getCursor($q);
-        
+        $count = 0;
         foreach($cursor as $listing) {
             if ($this->_isAvailable($listing, $from, $to)) {
                 $listing['average_rate'] = $this->_getAverageRate($listing, $from, $to);
                 $listing = $this->select_and_flatten($listing, $this->std_fields);
                 $results[] = $listing;
+                $count++;
             }
         }
 	    
@@ -279,8 +283,8 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         elseif ($sortParams['field'] == 'rating')
             usort($results, 'static::sort_by_rating');
 	    
-        $results = array_slice($results, $start, ($end - $start));
-        return $results;
+        $results = array_slice($results, $start, $pagesize);
+        return array('docs' => $results, 'count' => $count);
     }
     
     private function select_and_flatten($obj, $include, $prefix='') {
