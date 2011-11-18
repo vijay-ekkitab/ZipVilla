@@ -1,5 +1,5 @@
 <?php
-
+include_once("ZipVilla/TypeConstants.php");
 class SearchController extends Zend_Controller_Action
 {
 
@@ -19,12 +19,14 @@ class SearchController extends Zend_Controller_Action
     public function indexAction()
     {
         $logger = Zend_Registry::get('zvlogger');
+        
         $checkin = $this->_getParam('check_in', null);
         $checkout = $this->_getParam('check_out', null);
         $guests = $this->_getParam('guests', 0);
         $page = $this->_getParam('page', 0);
-        //$logger->debug("SearchController> checkin=[$checkin] checkout=[$checkout] guests=[$guests]");
+        $sortorder = $this->_getParam('sort', SORT_ORDER_RATING);
         $place = $this->_getParam('query', 0);
+        //$logger->debug("<Search Controller> cin=$checkin,cout=$checkout,g=$guests,p=$page,s=$sortorder,q=$place.");
         $sm = $this->_helper->searchManager;
             
         if (!$place) {
@@ -56,7 +58,7 @@ class SearchController extends Zend_Controller_Action
             }
         }
             
-        $search_results = $sm->search($q, $checkin, $checkout, $guests, $page, PAGE_SZ);
+        $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $page, PAGE_SZ);
             
         if ($search_results) {
             $this->view->search_query = $place;
@@ -69,6 +71,7 @@ class SearchController extends Zend_Controller_Action
             $this->view->total_hits = $search_results['count'];
             $this->view->page = $page;
             $this->view->pagesz = PAGE_SZ;
+            $this->view->sortorder = $sortorder;
             if (isset($search_results['facets'])) {
                 $this->view->facets = $search_results['facets'];
             }

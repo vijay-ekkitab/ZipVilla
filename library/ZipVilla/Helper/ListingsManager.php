@@ -215,7 +215,17 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 		return array();
 	}
 	
-    private static function sort_by_rate($a, $b) {
+    private static function sort_by_rate_hl($a, $b) {
+        if ($a['average_rate'] < $b['average_rate']) {
+            return 1;
+        }
+        elseif ($a['average_rate'] > $b['average_rate']) {
+            return -1;
+        }
+        return 0;
+    }
+    
+    private static function sort_by_rate_lh($a, $b) {
         if ($a['average_rate'] < $b['average_rate']) {
             return -1;
         }
@@ -235,7 +245,7 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         return 0;
     }
 	
-    public function getListings($ids, $from=null, $to=null, $start=0, $pagesize=20, $sortParams=null) {
+    public function getListings($ids, $from=null, $to=null, $start=0, $pagesize=20, $sortType=SORT_ORDER_RATING) {
         $results = array();
 	    
         if (($ids == null) || (!is_array($ids))) {
@@ -261,11 +271,11 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
             return array('docs' => $results, 'count' => $count);
         }
         
-        if (($sortParams == null) || (!is_array($sortParams))) {
-            $sortParams = array();
-        }
+        //if (($sortParams == null) || (!is_array($sortParams))) {
+        //    $sortParams = array();
+        //}
         
-        $sortParams['field'] = isset($sortParams['field']) ? $sortParams['field'] : 'average_rate';
+        //$sortParams['field'] = isset($sortParams['field']) ? $sortParams['field'] : 'average_rate';
         
         $cursor = $this->getCursor($q);
         $count = 0;
@@ -278,10 +288,20 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
             }
         }
 	    
-        if ($sortParams['field'] == 'average_rate')
-            usort($results, 'static::sort_by_rate');
-        elseif ($sortParams['field'] == 'rating')
+        if ($sortOrder == SORT_ORDER_RATING) {
             usort($results, 'static::sort_by_rating');
+        }
+        elseif ($sortOrder == SORT_ORDER_RATE_HL) {
+            usort($results, 'static::sort_by_rate_hl');
+        }
+        elseif ($sortOrder == SORT_ORDER_RATE_LH) {
+            usort($results, 'static::sort_by_rate_lh');
+        }
+        
+        //if ($sortParams['field'] == 'average_rate')
+        //    usort($results, 'static::sort_by_rate');
+        //elseif ($sortParams['field'] == 'rating')
+        //    usort($results, 'static::sort_by_rating');
 	    
         $results = array_slice($results, $start, $pagesize);
         return array('docs' => $results, 'count' => $count);

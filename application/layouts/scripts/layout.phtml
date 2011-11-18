@@ -5,6 +5,12 @@
     $this->headTitle('Zipvilla-Feel at Home-Away');
     echo $this->doctype();
     $baseUrl = $this->baseUrl();
+    $url = $this->url(array('controller'=>'search',
+                            'action' => 'index', 
+                            'query'=> $this->search_query,
+                            'check_in' => $this->checkin,
+                            'check_out' => $this->checkout,
+                            'guests' => $this->guests), null, TRUE);
 ?>
 <html>
 <head>
@@ -14,15 +20,26 @@
                                     ->prependStylesheet($this->baseUrl().'/css/layout.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css'); ?>
         
-        <?php echo $this->headScript()->appendFile('/js/jquery-min-164.js') 
-                                      ->appendFile('/js/mapMarker.js')
+        <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js') 
+                                      ->appendFile($this->baseUrl().'/js/mapMarker.js')
                                       ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
-                                      ->appendFile('/js/jquery-ui-1.8.16.custom.min.js')
-                                      ->appendFile('/js/accordian.js');?>
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
+                                      ->appendFile($this->baseUrl().'/js/accordian.js');?>
 
+        <script type="text/javascript">
+        function doSort(sortbox) 
+        {
+        	location.href=sortbox.options[sortbox.selectedIndex].value;
+        }
+        function init() 
+        {
+            document.getElementById('select_'+'<?php echo $this->sortorder;?>').selected = true;
+        }
+        </script>
+        
 </head>
     
-  <body class="blue">
+  <body onload="init()" class="blue">
 	<div class="wrapper"><!--outer wrapper to fix the width-->
     	<div class="header"><!--header section-->
         	<div class="logo"><a href="index.html"><img src="<?php echo $baseUrl;?>/images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
@@ -73,10 +90,10 @@
                     <div class="search_sort">
                     	<form action="" method="get">
                         	<label for="guests">Sort by
-                            	<select class="dropdwon_bg" id="sort_by" name="sort_by">
-                                	<option selected="">Recommended</option>
-                                    <option>Rate (high to low)</option>
-                                    <option>Rate (low to high)</option>
+                            	<select onchange="doSort(this);" class="dropdwon_bg" id="sort_by" name="sort_by">
+                                	<option id="select_r"  value="<?php echo $url.'/sort/r/page/1'?>" >Recommended</option>
+                                    <option id="select_hl" value="<?php echo $url.'/sort/hl/page/1'?>">Rate (high to low)</option>
+                                    <option id="select_lh" value="<?php echo $url.'/sort/lh/page/1'?>">Rate (low to high)</option>
                                 </select>
                            	</label>
                        	</form>
@@ -115,13 +132,6 @@
                                 $pg1 = $this->page - 1; $prev_page = $pg1;
                                 $pg3 = $this->page + 1; $next_page = $pg3;
                              }
-                             $url = $this->url(array('controller'=>'search',
-                                                     'action' => 'index', 
-                                                     'query'=> $this->search_query,
-                                                     'check_in' => $this->checkin,
-                                                     'check_out' => $this->checkout,
-                                                     'guests' => $this->guests ), null, TRUE);
-                             
                              $pagenumbers = array($pg1, $pg2, $pg3);
                         ?>
                         	<ul>
@@ -130,7 +140,7 @@
                                     <?php if ($pg == $this->page) {?>
                                         <li class="current"><?php echo $pg;?></li>
                                     <?php } else {?>
-                                        <li><a href="<?php echo $url."/page/$pg";?>"><?php echo $pg;?></a></li>
+                                        <li><a href="<?php echo $url.'/page/'.$pg.'/sort/'.$this->sortorder;?>"><?php echo $pg;?></a></li>
                                     <?php }?>
                                    <?php }?>
                         	    <?php endforeach;?>
@@ -138,10 +148,10 @@
                         </div>
                         <div class="l_page_buttons"><!--Previous Next Page buttons-->
                         <?php if ($prev_page_btn) { ?>
-                        <a href="<?php echo $url."/page/$prev_page";?>"><div class="btn_prev_page"><img src="<?php echo $baseUrl;?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a><!--previous page button-->
+                        <a href="<?php echo $url."/page/$prev_page/sort/$this->sortorder";?>"><div class="btn_prev_page"><img src="<?php echo $baseUrl;?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a><!--previous page button-->
                         <?php }?>
                         <?php if ($next_page_btn) { ?>
-                        <a href="<?php echo $url."/page/$next_page";?>"><div class="btn_next_page"><img src="<?php echo $baseUrl;?>/images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
+                        <a href="<?php echo $url."/page/$next_page/sort/$this->sortorder";?>"><div class="btn_next_page"><img src="<?php echo $baseUrl;?>/images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
                         <?php }?>
                         </div><!--Previous Next Page buttons ends-->
                     <?php }?>

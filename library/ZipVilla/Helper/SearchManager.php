@@ -1,6 +1,7 @@
 <?php
 include_once("ListingsManager.php");
 include_once("ZipVilla/Utils.php");
+include_once("ZipVilla/TypeConstants.php");
 
 class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstract {
     
@@ -111,9 +112,10 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
 	 * @return - an array of listings, each of which is a map that can be accessed as
 	 *           simple PHP objects. 
 	 ***********************************************************************************/
-    public function search($q, $from=null, $to=null, $guests=1, $page=1, $pagesize=20) {
+    public function search($q, $from=null, $to=null, $guests=1, $sortorder=SORT_ORDER_RATING, $page=1, $pagesize=20) {
         $client = new SolrClient(self::$options);
         $query = new SolrQuery();
+        $logger = Zend_Registry::get('zvlogger');
         
         if ($q == null) {
             return array ('docs' => array(), 'facets' => array(), 'count' => 0);
@@ -121,7 +123,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         
         $qstr = $this->buildQuery($q, $guests);
         
-        $logger = Zend_Registry::get('zvlogger');
+        
         $logger->debug("Query>> $qstr");
         
         $start = ($page - 1)*$pagesize;
@@ -140,6 +142,15 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             }
             $query->setStart($start);
             $query->setRows($pagesize);
+            if ($sortorder == SORT_ORDER_RATING) {
+                $query->addSortField('rating', SolrQuery::ORDER_DESC );   
+            }
+            elseif ($sortorder == SORT_ORDER_RATE_HL) {
+                $query->addSortField('average_rate', SolrQuery::ORDER_DESC );
+            }
+            elseif ($sortorder == SORT_ORDER_RATE_LH) {
+                $query->addSortField('average_rate', SolrQuery::ORDER_ASC );
+            }
             $logger->debug("Requesting $pagesize rows starting at $start.");
         }
         

@@ -35,6 +35,9 @@ const  INDEXED      =  "indexed" ;
 const  ENUM_KEY_SPLITTER = ':';
 
 const  PAGE_SZ      =  20;
+const  SORT_ORDER_RATE_HL = 'hl';
+const  SORT_ORDER_RATE_LH = 'lh';
+const  SORT_ORDER_RATING  = 'r';
 
 
 ?>
