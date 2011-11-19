@@ -7,7 +7,7 @@ class Application_Form_Login extends Zend_Form
     {
         $this->setName("login");
         $this->setMethod('post');
-             
+        
         $this->addElement('text', 
         				  'username', 
         				  array(
@@ -30,31 +30,6 @@ class Application_Form_Login extends Zend_Form
             					'label'      => 'Password:',
         				  ));
 
-        $this->addElement('submit', 
-        				  'login', 
-        				  array(
-            					'required' => false,
-            					'ignore'   => true,
-            					'label'    => 'Login',
-        				  ));
-        				  
-        $this->setDecorators(array(
-            						'FormElements',
-            						array(
-            							'HtmlTag', 
-            							array(
-            								'tag' => 'dl', 
-            								'class' => 'zend_form'
-            							)
-            						),
-            						array(
-            							'Description', 
-            							array(
-            								'placement' => 'prepend'
-            							)
-            						),
-            						'Form'
-        					));
     }
 
 

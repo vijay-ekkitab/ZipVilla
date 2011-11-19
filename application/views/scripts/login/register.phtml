@@ -1,3 +1,43 @@
 <?php $this->headTitle('User Registration'); ?>
-<h1>Please Register</h1>
-<?php echo $this->form->setAction($this->url()); ?>
+<?php $this->layout()->setLayout('register_layout');?>
+<?php
+$firstname = '';
+$lastname  = '';
+$emailid   = '';
+$password  = '';
+$cnfrm_password = '';
+if ($this->userdata) {
+  $z = $this->userdata;
+  $firstname = isset($z['firstname']) ? $z['firstname'] : '';  
+  $lastname = isset($z['lastname']) ? $z['lastname'] : '';
+  $emailid = isset($z['emailid']) ? $z['emailid'] : '';
+  $password = isset($z['password']) ? $z['password'] : '';
+  $cnfrm_password = isset($z['cnfrm_password']) ? $z['cnfrm_password'] : '';  
+}
+$errors = $this->form->getMessages();
+$display_errors = array();
+foreach($errors as $field => $error) {
+    $display_errors[$field] = array();
+    foreach($error as $k => $v) {
+        $display_errors[$field][] = $v;
+    }
+}
+?>
+<div class="form-section">
+   <form method="post" id="register" name="register" action="#">
+    <label for="firstname">First name :<br /><input type="text" id="firstname" size="37" name="firstname" value="<?php echo $firstname;?>"/></label>
+    <?php if (isset($display_errors['username'])) foreach($display_errors['username'] as $error) echo "$error </br>";?>    
+    <label for="lastname">Last name :<br /><input type="text" id="lastname" size="37" name="lastname" value="<?php echo $lastname;?>"/></label>
+    <?php if (isset($display_errors['lastname'])) foreach($display_errors['lastname'] as $error) echo "$error </br>";?>    
+    <label for="emailid">Email address :<br /><input type="text" id="emailid" size="37" name="emailid" value="<?php echo $emailid;?>"/></label>
+    <?php if (isset($display_errors['emailid'])) foreach($display_errors['emailid'] as $error) echo "$error </br>";?>    
+    <label for="password">Password :<br /><input type="password" id="password" size="37" name="password" value="<?php echo $password;?>"/></label>
+    <?php if (isset($display_errors['password'])) foreach($display_errors['password'] as $error) echo "$error </br>";?>    
+    <label for="cnfrm_password">Confirm password :<br /><input type="password" id="cnfrm_password" size="37" name="cnfrm_password" value="<?php echo $cnfrm_password;?>"/></label>
+    <?php if (isset($display_errors['cnfrm_password'])) foreach($display_errors['cnfrm_password'] as $error) echo "$error </br>";?>    
+    <div class="chk_bx"><input type="checkbox" id="accept_terms" name="accept_terms"/><p>I accept the <a href="#">Terms of Service</a></p></div>
+    <?php if (isset($display_errors['accept_terms'])) foreach($display_errors['accept_terms'] as $error) echo "$error </br>";?>    
+    <input class="input" type="submit" id="login" name="login" value=""/>
+    
+   </form>
+</div> <!-- / form-section -->

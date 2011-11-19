@@ -1,0 +1,65 @@
+<?php /* echo $this->layout()->content; */ ?>
+<?php
+    $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
+    $this->headTitle()->setSeparator(' - ');
+    $this->headTitle('Zipvilla-Feel at Home-Away');
+    echo $this->doctype();
+    $baseUrl = $this->baseUrl();
+?>
+<html>
+<head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/visual.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/layout.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css'); ?>
+        
+        <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js') 
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
+                                      ->appendFile($this->baseUrl().'/js/accordian.js');?>
+
+</head>
+<body class="blue">
+    <div class="wrapper"><!--outer wrapper to fix the width-->
+        <div class="header"><!--header section-->
+            <div class="logo"><a href="index.html"><img src="<?php echo $baseUrl?>/images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
+            <div class="v_top_nav l_top_nav">
+                <ul>
+                    <li><a href="#">How Zipvilla Works</a></li>
+                </ul>
+            </div><!--top_nav ends-->
+        </div><!--header ends here-->
+        <div class="content"><!--content starts here-->
+            <div class="v_rgstr_frm l_rgstr_frm">
+                <h1>Join Zipvilla.</h1>
+                <div class="register"><!--left side content-->
+                    <?php echo $this->layout()->content; ?>
+                </div><!--left side content ends-->
+                <div class="v_ctnt_right_regst"><!--right side content-->
+                    <div><img src="<?php echo $baseUrl?>/images/btn_connect_fb.jpg" alt="facebook"></div>
+                    <p>Already a member of Zipvilla?<br><span><a href="#">Login now.</a></span></p>
+                </div><!--right side content ends-->
+            </div><!--registration form ends here-->
+        </div><!--content ends here-->
+        <div class="footer">
+            <div class="dsclimr"><p><span>&copy; 2011  ZipVilla.  All rights reserved.</span><a href="#">Privacy Policy</a>|<a href="#">Terms and Conditions</a></p></div>
+            <div class="l_futr_nav v_futr_nav">
+                <ul>
+                    <li><a href="#">How it works</a></li>
+                    <li><a href="#">FAQs</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Jobs</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="social_ico">
+                <ul>
+                    <li><a href="#"><img src="images/icon_fb.jpg" alt="Facebook"></a></li>
+                    <li><a href="#"><img src="images/icon_twitter.jpg" alt="twitter"></a></li>
+                </ul>
+            </div>
+        </div><!--footer ends here-->
+    </div><!--wrapper ends here-->
+</body>
+</html>
+

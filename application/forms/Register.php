@@ -1,5 +1,5 @@
 <?php
-
+include_once("ZipVilla/TypeConstants.php");
 class Application_Form_Register extends Zend_Form
 {
 
@@ -8,17 +8,20 @@ class Application_Form_Register extends Zend_Form
         $this->setName("register");
         $this->setMethod('post');
         
+        $this->addElementPrefixPath(
+                'ZipVilla',
+                APPLICATION_PATH.'/forms/validate/ZipVilla/',
+                'validate'
+        );
+        
         $this->addElement('text', 
-        				  'username', 
+        				  'emailid', 
         				  array(
             					'filters' => array('StringTrim', 'StringToLower'),
             					'validators' => array(
                 									array('StringLength', false, array(0, 50)),
                 									'EmailAddress',
-                									array('Db_NoRecordExists', false,
-                										  array('table' => 'users',
-                												'field'	=> 'username'))
-            										),
+                									array('ValidateRegisteredUser', false, array())),
             					'required'   => true,
             					'label'      => 'Email Address:',
         				 ));
@@ -57,7 +60,7 @@ class Application_Form_Register extends Zend_Form
         				  ));
         				  
         $this->addElement('password', 
-        				  'confirm_password', 
+        				  'cnfrm_password', 
         				  array(
             					'filters' => array('StringTrim'),
             					'validators' => array(
@@ -68,41 +71,17 @@ class Application_Form_Register extends Zend_Form
             					'label'      => 'Confirm Password:',
         				  ));
         				  
-        $this->addElement('captcha', 'captcha',
-        				   array('label' => 'Please verify you are human',
-        				   		 'captcha' => array(
-        				   						'captcha' => 'Figlet',
-        				   						'wordlen' => 6,
-        				   						'timeout' => 300
-        				   					  )
-        				   		)
+        $this->addElement('checkbox', 'accept_terms',
+        				   array('required'   => true,
+        				         'uncheckedValue'=> '',
+                                 'checkedValue' => 'on',
+        				         'validators' => array(
+        				                            array('notEmpty', true,
+        				                                array('messages' => array(
+        				                                      'isEmpty' => 'You must agree to the terms.')))))
         				 );
 
-        $this->addElement('submit', 
-        				  'login', 
-        				  array(
-            					'required' => false,
-            					'ignore'   => true,
-            					'label'    => 'Login',
-        				  ));
         				  
-        $this->setDecorators(array(
-            						'FormElements',
-            						array(
-            							'HtmlTag', 
-            							array(
-            								'tag' => 'dl', 
-            								'class' => 'zend_form'
-            							)
-            						),
-            						array(
-            							'Description', 
-            							array(
-            								'placement' => 'prepend'
-            							)
-            						),
-            						'Form'
-        					));
     }
 
 

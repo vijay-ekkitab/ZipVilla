@@ -1,3 +1,26 @@
 <?php $this->headTitle('Login'); ?>
-<h1>Please Login</h1>
-<?php echo $this->form->setAction($this->url()); ?>
+<?php $this->layout()->setLayout('login_layout');?>
+<?php 
+$username = '';
+if ($this->userdata) {
+  $username = isset($this->userdata['username']) ? $this->userdata['username'] : '';  
+}
+$errormsg = $this->form->getDescription();
+?>
+<?php if ($errormsg != '') { ?>
+<div class="error_msg">
+    <p><?php echo "$errormsg Please try again."; ?></p>
+</div>
+<?php } ?>
+<div class="register"><!--left side content-->
+   <div class="form-section">
+        <form method="post" id="register" name="register" action="#">
+            <label for="username">Email address :<br /><input class="username" type="text" id="username" size="37" name="username" value="<?php echo $username;?>"/></label>
+            <label for="password">Password :<br /><input type="password" class="username" id="password" size="37" name="password"/></label>
+            <input class="login" type="submit" id="login" name="login" value=""/>
+            <div class="remeber_me"><input type="checkbox" /><p>Remember me next time</p></div>
+        </form>
+   </div> <!-- / form-section -->
+</div><!--left side content ends-->
+    
+           
