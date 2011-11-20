@@ -51,27 +51,6 @@ foreach($this->results as $result) : ?>
     </div><!--search_result1 ends here-->
   </div>
 <?php endforeach; ?>
-
-<?php if ($this->facets != null) {?>
-    <?php $facet_str = ($this->facet_query == null) ? '' : $this->facet_query . ','?>
-    <?php foreach($this->facets->getPropertyNames() as $facet): ?>
-        <table border="1">
-            <tr>
-                <th scope="row"><?php echo $facet;?></th>
-                <th></th>
-            </tr>
-            <?php foreach ($this->facets[$facet]->getPropertyNames() as $type): ?>
-            <?php ?>
-            <?php if (!in_array(substr($facet,0,-1).substr($type,0,-1), $this->facets_used)) {?>
-                <tr>
-                    <td><a href="<?php echo $this->url(array('controller'=>'search', 'action'=>'index', 'query'=>$this->search_query, 'facet'=>$facet_str . trim($facet).'='.trim($type)));?>"><?php echo $type;?></a></td>
-                    <td><?php echo $this->facets[$facet][$type];?></td>
-                </tr>
-            <?php }?>
-            <?php endforeach; ?>
-        </table>
-    <?php endforeach; ?>
-<?php }?>
  <script type="text/javascript">
     <?php echo $mapHelper->setMapFromSearchResults($this->results, 'map');?>
  </script>

@@ -35,7 +35,8 @@ class ZipVilla_View_Helper_Map
         }
         $script .= '];';
         $invoke = '$(document).ready(function(){mapMarker(\''. $zvMapInfo. '\')});';
-        return $script . ' '. $pos . ' '.$invoke;
+        //return $script . ' '. $pos . ' '.$invoke;
+        return $script . ' '. $pos;
     }
     
     public function setMapFromDbListings($villas, $zvMapInfo) {

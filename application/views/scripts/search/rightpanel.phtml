@@ -1,0 +1,120 @@
+<?php $baseUrl = $this->baseUrl();?>
+<div class="l_refine_results v_refine_results">
+    
+    <form action="/search/refined" method="post">
+    <div id="accordion">
+    
+        <h4><a href="#">Price</a></h4>
+        <div class="acc_section">
+            <div class="l_slider">
+                <div><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_slider.jpg" /></a></div>
+                <div><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_slider.jpg" /></a></div>
+            </div>
+            <div class="l_low_price">Rs.500/-</div>
+            <div class="l_height_price">Rs.8500/-</div>
+        </div>
+    
+        <h4><a href="#">Room Type</a></h4>
+        <div class="acc_section l_chkbox">
+                <input type="checkbox" class="l_styled" /><p>Entire house / villa</p>
+                <div class="l_room_nos">33</div>
+                <input type="checkbox" class="l_styled" /><p>Entire house / villa</p>
+                <div class="l_room_nos">33</div>
+                <input type="checkbox" class="l_styled" /><p>Entire house / villa</p>
+            <div class="l_room_nos">33</div>
+        </div>
+    
+        <h4><a href="#">Amenities</a></h4>
+        <div class="acc_section l_chkbox">
+            <?php $feature = 'amenities';
+                  if (isset($this->facets[$feature])) {
+                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                        $checked = '';
+                        if (isset($this->facets_selected[$feature])) {
+                            foreach($this->facets_selected[$feature] as $facet) {
+                                if (preg_match("/\"?$type\"?/", $facet)) {
+                                    $checked = 'checked="yes"';
+                                    break;
+                                }
+                            } 
+                        } ?>
+                        <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
+                        <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
+                     <?php endforeach; ?>
+            <?php }?>        
+        </div>
+        
+        <h4><a href="#">Onsite Services</a></h4>
+        <div class="acc_section l_chkbox">
+            <?php $feature = 'onsite_services';
+                  if (isset($this->facets[$feature])) {
+                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                        $checked = '';
+                        if (isset($this->facets_selected[$feature])) {
+                            foreach($this->facets_selected[$feature] as $facet) {
+                                if (preg_match("/\"?$type\"?/", $facet)) {
+                                    $checked = 'checked="yes"';
+                                    break;
+                                }
+                            }
+                        } ?>
+                        <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
+                        <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
+                     <?php endforeach; ?>
+            <?php }?>        
+        </div>
+        
+        <h4><a href="#">Suitability</a></h4>
+        <div class="acc_section l_chkbox">
+            <?php $feature = 'suitability';
+                  if (isset($this->facets[$feature])) {
+                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                        $checked = '';
+                        if (isset($this->facets_selected[$feature])) {
+                            foreach($this->facets_selected[$feature] as $facet) {
+                                if (preg_match("/\"?$type\"?/", $facet)) {
+                                    $checked = 'checked="yes"';
+                                    break;
+                                }
+                            }
+                        } ?>
+                        <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
+                        <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
+                     <?php endforeach; ?>
+            <?php }?>        
+        </div>
+    
+        <h4><a href="#">Neighborhood</a></h4>
+        <div class="acc_section">
+            <p>This is the place to show neighborhood.</p>
+        </div>
+    
+        <h4><a href="#">Keywords</a></h4>
+        <div class="l_price">
+            <p>This is the place to show neighborhood.</p>
+        </div>
+    
+    </div>
+    <input class="l_cta" type="submit" value="Search Again"/> 
+    <input type="hidden" name="page" value="1" />
+    <input type="hidden" name="query" value="<?php echo $this->search_query?>" />
+    <input type="hidden" name="check_in" value="<?php echo $this->checkin?>" />
+    <input type="hidden" name="check_out" value="<?php echo $this->checkout?>" />
+    <input type="hidden" name="check_out" value="<?php echo $this->guests?>" />
+    <input type="hidden" name="sort" value="<?php echo $this->sortorder?>" />
+    </form>
+    <div class="l_cta"><a href="#">See more...</a></div>
+</div>
+<!-- 
+<div class="l_price">
+        <div class="l_accordian_open"><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_acco_open.jpg" /></a></div>
+        <h4><a href="#">Distance form nearest city</a></h4>
+        <div class="l_slider">
+            <div><a href="#"><img src="images/btn_slider.jpg" /></a></div>
+        </div>
+        <div class="l_km">50 km</div>
+    </div>
+-->

@@ -313,3 +313,7 @@
 .l_rgstr_frm {
 	float:left;
 }
+/*********** Tmp *****************/
+.acc_section {
+	overflow:hidden;
+}

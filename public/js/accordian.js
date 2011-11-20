@@ -1,7 +1,7 @@
 			$(function(){
 
 				// Accordion
-				$("#accordion").accordion({ header: "h3" });
+				$("#accordion").accordion({ header: "h4" });
 	
 				// Tabs
 				$('#tabs').tabs();

@@ -19,14 +19,17 @@
         <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/visual.css')
                                     ->prependStylesheet($this->baseUrl().'/css/layout.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css'); ?>
-        
+                                    
         <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js') 
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
                                       ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
-                                      ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
-                                      ->appendFile($this->baseUrl().'/js/accordian.js');?>
-
+                                      ->appendFile($this->baseUrl().'/js/accordian.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui.min.js'); ?>
+  
         <script type="text/javascript">
+        $(document).ready(function() {
+        	mapMarker('map');
+        });
         function doSort(sortbox) 
         {
         	location.href=sortbox.options[sortbox.selectedIndex].value;
@@ -100,8 +103,7 @@
                     </div>
                     <div id="tabs-1"><!--First tab content-->
                     	<div class="tab_content">
-                        	      	<h1><?php echo $this->escape($this->title); ?></h1>
-            											<?php echo $this->layout()->content; ?>
+            			<?php echo $this->layout()->content; ?>
                       	</div><!--tab_content ends here-->
                       	<?php if ($this->total_hits > 0) {?>
                       	<?php $start = 1 + ($this->page - 1)*$this->pagesz; $end = ($start -1) + count($this->results); ?>
@@ -167,10 +169,12 @@
             <div class="l_right_side_panel v_right_side_panel">
             	<div>
                 	<h3>Refine Results</h3>
-                    <p>33 Results</p>
+                    <p><?php echo $this->total_hits; ?> Results</p>
                 </div>
                 <div id="map" class="map">
                 </div>
+                <?php $this->setScriptPath(APPLICATION_PATH.'/views/scripts/search');
+                echo $this->render('rightpanel.phtml');?>
            	</div><!--right_side_panel ends here-->
         <div class="footer"></div><!--footer ends here-->
 				</div>
