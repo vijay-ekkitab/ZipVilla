@@ -34,7 +34,7 @@ class ZipVilla_View_Helper_Map
             }
         }
         $script .= '];';
-        $invoke = '$(document).ready(function(){mapMarker(\''. $zvMapInfo. '\')});';
+        //$invoke = '$(document).ready(function(){mapMarker(\''. $zvMapInfo. '\')});';
         //return $script . ' '. $pos . ' '.$invoke;
         return $script . ' '. $pos;
     }
@@ -60,7 +60,7 @@ class ZipVilla_View_Helper_Map
             }
         }
         $script .= '];';
-        $invoke = '$(document).ready(function(){mapMarker(\''. $zvMapInfo. '\')});';
+        // $invoke = '$(document).ready(function(){mapMarker(\''. $zvMapInfo. '\')});';
         //return $script . ' '. $pos . ' '.$invoke;
         return $script . ' '. $pos;
     }
