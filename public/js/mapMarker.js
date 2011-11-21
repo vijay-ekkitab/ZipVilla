@@ -34,9 +34,9 @@ function mapMarker(pMapCanvas, pStartIndex)
 
 			
 			if (typeof pStartIndex === 'undefined')
-				var markerImage = 'images/map_markers/red1_99/blank.png';
+				var markerImage = '/images/map_markers/red1_99/blank.png';
 			else
-				var markerImage = 'images/map_markers/red1_99/marker' + startIndex + '.png';
+				var markerImage = '/images/map_markers/red1_99/marker' + startIndex + '.png';
 			
 			var image = new google.maps.MarkerImage(markerImage, new google.maps.Size(20, 34), new google.maps.Point(0, 0), new google.maps.Point(10, 34));
 
