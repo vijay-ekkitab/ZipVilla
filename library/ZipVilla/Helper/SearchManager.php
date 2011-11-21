@@ -72,7 +72,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         return $this->sort_field;
     }
 	
-    private function buildQuery($q, $guests) {
+    private function buildQuery($q, $guests, $price_range) {
         $qstr = "";
         if($q != null) {
             foreach ($q as $fd => $val) {
@@ -88,6 +88,9 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         }
         if ($guests > 1) {
             $qstr = $qstr . " AND " . "guests:[" . $guests . " TO *]";
+        }
+        if ($price_range != null) {
+            $qstr = $qstr . " AND " . "average_rate:[" . $price_range[0] . " TO " . $price_range[1] . "]";
         }
         return preg_replace('/^ AND /', '', $qstr);
     }
@@ -112,7 +115,8 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
 	 * @return - an array of listings, each of which is a map that can be accessed as
 	 *           simple PHP objects. 
 	 ***********************************************************************************/
-    public function search($q, $from=null, $to=null, $guests=1, $sortorder=SORT_ORDER_RATING, $page=1, $pagesize=20) {
+    public function search($q, $from=null, $to=null, $guests=1, $sortorder=SORT_ORDER_RATING, 
+                           $price_range=null, $page=1, $pagesize=20) {
         $client = new SolrClient(self::$options);
         $query = new SolrQuery();
         $logger = Zend_Registry::get('zvlogger');
@@ -121,8 +125,12 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             return array ('docs' => array(), 'facets' => array(), 'count' => 0);
         }
         
-        $qstr = $this->buildQuery($q, $guests);
+        $solr_price_range = $price_range;
+        if (($from != null) && ($to != null)) {
+            $solr_price_range = null;
+        }
         
+        $qstr = $this->buildQuery($q, $guests, $solr_price_range);
         
         $logger->debug("Query>> $qstr");
         
@@ -168,9 +176,9 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             }
         }
         
-        if ($this->sort_field != null) {
+        /*if ($this->sort_field != null) {
             $query->addSortField($this->sort_field, $this->sort_order);
-        }
+        }*/
         $qr = $client->query($query);
         
         if(!$qr->success())
@@ -192,10 +200,10 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             $lm = new ZipVilla_Helper_ListingsManager();
             $from = new MongoDate(strtotime($from));
             $to = new MongoDate(strtotime($to));
-            $sortParams = array('field' => 'average_rate');
+            /*$sortParams = array('field' => 'average_rate');
             if ($this->sort_field != null) 
-                $sortParams = array('field' => $this->sort_field);
-            $listings = $lm->getListings($ids, $from, $to, $start, $pagesize, $sortParams);
+                $sortParams = array('field' => $this->sort_field);*/
+            $listings = $lm->getListings($ids, $from, $to, $start, $pagesize, $sortorder, $price_range);
             $docs = $listings['docs'];
             $doc_count = $listings['count'];
         }

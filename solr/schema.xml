@@ -456,6 +456,7 @@
    <field name="description" type="text" indexed="true" stored="true"/>
    <field name="rating" type="int" indexed="true" stored="true" default="0"/>
    <field name="reviews" type="int" indexed="false" stored="true" default="0"/>
+   <field name="shared" type="text" indexed="true" stored="true" default="no"/>
    
    <field name="images" type="string" indexed="false" stored="true" multiValued="true"/>
    <field name="video" type="string" indexed="false" stored="true" multiValued="true"/>

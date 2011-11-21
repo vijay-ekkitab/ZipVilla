@@ -57,7 +57,7 @@
 /* Component containers
 ----------------------------------*/
 .ui-widget { font-size: 1.1em; }
-.ui-widget .ui-widget { font-size: 1em; }
+.ui-widget .ui-widget { font-size: 1em; background-color: #fff; float: left; height: 30px; width: 100%;}
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 1em; }
 .ui-widget-content { /*border: 1px solid #dddddd; background: #eeeeee url(images/ui-bg_highlight-soft_100_eeeeee_1x100.png) 50% top repeat-x;*/ color: #333333; }
 .ui-widget-content a { color: #333333; }
@@ -333,8 +333,8 @@
 .ui-accordion .ui-accordion-header a { display: block; font-size: 1em; padding: .5em .5em .5em .7em; }
 .ui-accordion-icons .ui-accordion-header a { padding-left: 2.2em; }
 .ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
-.ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; margin-top: 8px; position: relative; top: 1px; margin-bottom: 2px; display: none; zoom: 1; margin-left:10px; }
-.ui-accordion .ui-accordion-content-active { display: block;width:65%;}
+.ui-accordion .ui-accordion-content { padding: 1em 0; border-top: 0; margin-top: 8px; position: relative; top: 1px; margin-bottom: 2px; display: none; zoom: 1; margin-left:10px; }
+.ui-accordion .ui-accordion-content-active { display: block;width:88%;}
 /*
  * jQuery UI Autocomplete 1.8.16
  *

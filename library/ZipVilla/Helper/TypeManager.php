@@ -204,7 +204,10 @@ class Attribute {
             return intval($val);
         }
         elseif($this->isBoolean()) {
-            return (bool)$val;
+            if (($val == 'yes') || ($val == 'true')) {
+                return 'yes';
+            }
+            return 'no';
         }
         elseif($this->isEnumerated()) {
             $result = array();

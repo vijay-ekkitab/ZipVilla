@@ -26,6 +26,7 @@ class SearchController extends Zend_Controller_Action
         $page = $this->_getParam('page', 1);
         $sortorder = $this->_getParam('sort', SORT_ORDER_RATING);
         $place = $this->_getParam('query', 0);
+        $price_range = null;
         //$logger->debug("<Search Controller> cin=$checkin,cout=$checkout,g=$guests,p=$page,s=$sortorder,q=$place.");
         $sm = $this->_helper->searchManager;
             
@@ -58,7 +59,7 @@ class SearchController extends Zend_Controller_Action
             }
         }
             
-        $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $page, PAGE_SZ);
+        $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $price_range, $page, PAGE_SZ);
             
         if ($search_results) {
             $this->view->search_query = $place;
@@ -97,6 +98,10 @@ class SearchController extends Zend_Controller_Action
         $page = isset($values['page']) ? $values['page'] : 1;
         $sortorder = isset($values['sort']) ? $values['sort'] : SORT_ORDER_RATING;
         $place = isset($values['query']) ? $values['query'] : 0;
+        $price_range = isset($values['price_range']) ? $values['price_range'] : null;
+        if (preg_match_all('/([0-9]+)/', $price_range, $matches)) {
+            $price_range = $matches[0];
+        }
         
         $sm = $this->_helper->searchManager;
             
@@ -124,7 +129,7 @@ class SearchController extends Zend_Controller_Action
             }
         }
         
-        $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $page, PAGE_SZ);
+        $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $price_range, $page, PAGE_SZ);
             
         if ($search_results) {
             $this->view->search_query = $place;

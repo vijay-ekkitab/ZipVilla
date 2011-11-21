@@ -33,10 +33,18 @@
 				});
 				
 				// Slider
-				$('#slider').slider({
+				$('#price_slider').slider({
 					range: true,
-					values: [17, 67]
+					min: 500,
+					max:10000,
+					values: [1000, 5000],
+					step:100,
+					slide: function( event, ui ) {
+						$( "#price_range" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
+					}
 				});
+				$( "#price_range" ).val( "Rs." + $( "#price_slider" ).slider( "values", 0 ) +
+						" - Rs." + $( "#price_slider" ).slider( "values", 1 ) );
 				
 				// Progressbar
 				$("#progressbar").progressbar({

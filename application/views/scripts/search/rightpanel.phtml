@@ -6,22 +6,25 @@
     
         <h4><a href="#">Price</a></h4>
         <div class="acc_section">
-            <div class="l_slider">
+            <div id="price_slider"></div>
+            <p>
+                <label style="margin-top:35px" for="price_range">Price range:</label>
+                <input style="color:#0099CC;float:left;margin-top:-15px;background-color:#F5F5F5;border:none;" type="text" id="price_range" name="price_range" value="Price Range is: Rs.1000 - Rs.5000." style="border:0; color:#f6931f; font-weight:bold;" />
+            </p>
+            <!--  <div class="l_slider">
                 <div><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_slider.jpg" /></a></div>
                 <div><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_slider.jpg" /></a></div>
-            </div>
+            </div> 
             <div class="l_low_price">Rs.500/-</div>
-            <div class="l_height_price">Rs.8500/-</div>
+            <div class="l_height_price">Rs.8500/-</div> -->
         </div>
     
         <h4><a href="#">Room Type</a></h4>
         <div class="acc_section l_chkbox">
-                <input type="checkbox" class="l_styled" /><p>Entire house / villa</p>
+                <input type="checkbox" class="l_styled" /><p>Entire home/villa</p>
                 <div class="l_room_nos">33</div>
-                <input type="checkbox" class="l_styled" /><p>Entire house / villa</p>
+                <input type="checkbox" class="l_styled" /><p>Shared</p>
                 <div class="l_room_nos">33</div>
-                <input type="checkbox" class="l_styled" /><p>Entire house / villa</p>
-            <div class="l_room_nos">33</div>
         </div>
     
         <h4><a href="#">Amenities</a></h4>
@@ -94,11 +97,11 @@
     
         <h4><a href="#">Keywords</a></h4>
         <div class="l_price">
-            <p>This is the place to show neighborhood.</p>
+            <p>This is the place to show keywords.</p>
         </div>
     
     </div>
-    <input class="l_cta" type="submit" value="Search Again"/> 
+    <input class="l_cta" style="float:left;margin:10px 0;" type="submit" value="Search Again"/> 
     <input type="hidden" name="page" value="1" />
     <input type="hidden" name="query" value="<?php echo $this->search_query?>" />
     <input type="hidden" name="check_in" value="<?php echo $this->checkin?>" />
@@ -106,7 +109,7 @@
     <input type="hidden" name="check_out" value="<?php echo $this->guests?>" />
     <input type="hidden" name="sort" value="<?php echo $this->sortorder?>" />
     </form>
-    <div class="l_cta"><a href="#">See more...</a></div>
+    <div class="l_cta" style="margin-top:15px;clear:none;"><a href="#">See more...</a></div>
 </div>
 <!-- 
 <div class="l_price">

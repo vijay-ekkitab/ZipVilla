@@ -27,7 +27,8 @@ tps =
 			            "rating",
 			            "reviews",
 			            "images",
-			            "video"
+			            "video",
+			            "shared"
 		            ] 
 	},
 
@@ -235,6 +236,12 @@ attrs = [
 	    datatype : "integer",
 	    keyword  : "false",
         facet    : "true" 
+	},
+	{
+		name     : "shared",
+		datatype : "boolean",
+		keyword  : "false",
+		facet    : "true"
 	}
 ];
 

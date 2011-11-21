@@ -245,7 +245,8 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         return 0;
     }
 	
-    public function getListings($ids, $from=null, $to=null, $start=0, $pagesize=20, $sortType=SORT_ORDER_RATING) {
+    public function getListings($ids, $from=null, $to=null, $start=0, $pagesize=20, 
+                                $sortOrder=SORT_ORDER_RATING, $price_range=null) {
         $results = array();
 	    
         if (($ids == null) || (!is_array($ids))) {
@@ -279,12 +280,18 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         
         $cursor = $this->getCursor($q);
         $count = 0;
+        if ($price_range == null) {
+            $price_range = array(0, 100000);
+        }
         foreach($cursor as $listing) {
             if ($this->_isAvailable($listing, $from, $to)) {
                 $listing['average_rate'] = $this->_getAverageRate($listing, $from, $to);
-                $listing = $this->select_and_flatten($listing, $this->std_fields);
-                $results[] = $listing;
-                $count++;
+                if (($listing['average_rate'] >= $price_range[0]) &&
+                    ($listing['average_rate'] <= $price_range[1])) {
+                    $listing = $this->select_and_flatten($listing, $this->std_fields);
+                    $results[] = $listing;
+                    $count++;
+                }
             }
         }
 	    
