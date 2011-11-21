@@ -1,9 +1,10 @@
-function mapMarker(pMapCanvas, startIndex)
+function mapMarker(pMapCanvas, pStartIndex)
  {
 	var map;
 	var infowindow;
 	var marker=0;
 	var i;
+	var startIndex = pStartIndex;
 	
 	if ((typeof zv_map_center_latitude === 'undefined') || 
 	    (typeof zv_map_center_longitude === 'undefined')) {
@@ -25,15 +26,19 @@ function mapMarker(pMapCanvas, startIndex)
 		return;
 	}
 
-	for( i = 0; i<zv_villa_locations.length; i++) {
+	for( i = 0; i<zv_villa_locations.length; i++, startIndex++) {
 //		$(document.getElementById(pMapCanvas)).append( 
 //				'<div class="villas">'+'<h4>'+zv_villa_locations[i][0]+'</h4>'+'</div>');
 
 		if( zv_villa_locations[i][1] > 0 ) {   
 
-			    var image = new google.maps.MarkerImage('images/map_markers/red1_99/marker' + (startIndex+i) + '.png',
-					new google.maps.Size(20, 34), new google.maps.Point(0, 0),
-					new google.maps.Point(10, 34));
+			
+			if (typeof pStartIndex === 'undefined')
+				var markerImage = 'images/map_markers/red1_99/blank.png';
+			else
+				var markerImage = 'images/map_markers/red1_99/marker' + startIndex + '.png';
+			
+			var image = new google.maps.MarkerImage(markerImage, new google.maps.Size(20, 34), new google.maps.Point(0, 0), new google.maps.Point(10, 34));
 
 			
 					marker = new google.maps.Marker({
