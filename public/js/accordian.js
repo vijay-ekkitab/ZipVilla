@@ -37,7 +37,7 @@
 					range: true,
 					min: 500,
 					max:10000,
-					values: [1000, 5000],
+					values: [500, 10000],
 					step:100,
 					slide: function( event, ui ) {
 						$( "#price_range" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
