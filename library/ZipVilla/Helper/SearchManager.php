@@ -13,7 +13,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
     public function __construct($facet_fields = null, $std_fields = null) {
         $this->init();
         if ($facet_fields == null) {
-            $this->facet_fields = array('amenities', 'onsite_services', 'suitability');
+            $this->facet_fields = array('amenities', 'onsite_services', 'suitability', 'shared');
         }
         else {
             $this->facet_fields = $facet_fields;
@@ -183,7 +183,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         
         if(!$qr->success())
             return array ('docs' => array(), 'facets' => array(), 'count' => 0);
-        
+        //$logger->debug($qr->getRawResponse());
         $resp = $qr->getResponse();
         $docs = $resp->response->docs;
         $doc_count = $resp->response->numFound;
