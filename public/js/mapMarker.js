@@ -11,7 +11,7 @@ function mapMarker(pMapCanvas, startIndex)
 	}
 	var latlng = new google.maps.LatLng(zv_map_center_latitude, zv_map_center_longitude);
 	var zv_options = {		
-					 	zoom: 12,
+					 	zoom: 10,
 					 	center: latlng,
 					 	scale: 2,
 					 	mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -31,7 +31,7 @@ function mapMarker(pMapCanvas, startIndex)
 
 		if( zv_villa_locations[i][1] > 0 ) {   
 
-			    var image = new google.maps.MarkerImage('/images/mapMarkers/red1_99/marker' + (startIndex+i) + '.png',
+			    var image = new google.maps.MarkerImage('images/map_markers/red1_99/marker' + (startIndex+i) + '.png',
 					new google.maps.Size(20, 34), new google.maps.Point(0, 0),
 					new google.maps.Point(10, 34));
 
@@ -53,6 +53,8 @@ function mapMarker(pMapCanvas, startIndex)
 													});
 		}
 	}
+	
+
 }
 
 // End of Script - Copyright (c) ZipVilla, 2011 - 2011.
