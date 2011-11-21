@@ -25,10 +25,11 @@
                                       ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
                                       ->appendFile($this->baseUrl().'/js/jquery-ui.min.js'); ?>
-  
+        
+        <?php $ctr = 1+($this->page - 1) * $this->pagesz;?>
         <script type="text/javascript">
         $(document).ready(function() {
-        	mapMarker('map', 1);
+        	mapMarker('map', <?php echo $ctr;?>);
         });
         function doSort(sortbox) 
         {
