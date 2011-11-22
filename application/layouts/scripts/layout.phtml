@@ -28,8 +28,25 @@
         
         <?php $ctr = 1+($this->page - 1) * $this->pagesz;?>
         <script type="text/javascript">
-        $(document).ready(function() {
-        	mapMarker('map', <?php echo $ctr;?>);
+        $(document).ready(function(){
+        	   <?php 
+                    $low = 500; $high = 10000;
+                    if (isset($this->price_range)) {
+                        $low=$this->price_range[0];
+                        $high=$this->price_range[1];
+                    }
+               ?>
+            mapMarker('map', <?php echo $ctr;?>);
+        	
+        	$('#price_slider').slider({
+                values: [<?php echo $low;?>, <?php echo $high;?>],
+            });
+        	$( "#price_range" ).val( "Rs." + $( "#price_slider" ).slider( "values", 0) +
+                    " - Rs." + $( "#price_slider" ).slider( "values", 1 ));
+
+        	$("#guests").val("<?php echo $this->guests;?>");
+        	$("#query").val("<?php echo $this->search_query;?>");
+            
         });
         function doSort(sortbox) 
         {
@@ -62,10 +79,10 @@
                 	<form action="/search" method="get">
                     	<input class="l_search_input v_search_input" type="text" name="query" id="query" size="73" value="" />
                     	<input type="hidden" id="page" name="page" value="1" />
-                        <div><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="10" id="checkin" name="check_in"/></label></div>
-                        <div><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg" type="text" id="checkout" size="10" name="check_out"/></label></div>
+                        <div><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="10" id="checkin" name="check_in" value="<?php echo $this->checkin;?>"/></label></div>
+                        <div><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg" type="text" id="checkout" size="10" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
                         <div>
-                        	<label for="guests">Guests<br />
+                        	<label for="guests">Guests<br/>
                                         <select class="v_dropdwon_bg l_dropdwon_bg" id="guests" name="guests">
                                             <option>1</option>
                                             <option>2</option>
@@ -76,7 +93,7 @@
                                             <option>7</option>
                                             <option>8</option>
                                             <option>9</option>
-                                            <option>10</option>
+                                            <option value="10">10+</option>
                                         </select>
                             </label>
                      	</div>
