@@ -16,7 +16,13 @@ foreach($this->results as $result) : ?>
   <div class="search_result">
   <div class="search_no"> <?php echo ++$villaCtr ?></div>
   <!--search result number-->
-  <div class="villa_image">  <img src="<?php echo $this->baseUrl();?>/images/resort_img.jpg" alt="resort name" />  </div>
+  <?php
+     $imagepath=$this->baseUrl().'/images/resort_img.jpg';
+     if ((isset($result['images'])) && (count($result['images']) > 0)) {
+        $imagepath = $this->baseUrl().'/images/listings/'.strtolower($result['address__city']).'/'.$result['images'][0];
+     }
+  ?>
+  <div class="villa_image">  <img src="<?php echo $imagepath;?>" alt="resort name" />  </div>
   <!--picture-->
   <div class="favorite">  <img src="<?php echo $this->baseUrl();?>/images/icon_favorite.jpg" alt="Favorite" />  </div>
   <div class="resort_details">

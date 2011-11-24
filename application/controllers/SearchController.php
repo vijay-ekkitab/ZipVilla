@@ -6,6 +6,9 @@ class SearchController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('lookahead', 'html')
+                    ->initContext();
     }
 
     public function reindexAction() 
@@ -98,9 +101,12 @@ class SearchController extends Zend_Controller_Action
         $page = isset($values['page']) ? $values['page'] : 1;
         $sortorder = isset($values['sort']) ? $values['sort'] : SORT_ORDER_RATING;
         $place = isset($values['query']) ? $values['query'] : 0;
-        $price_range = isset($values['price_range']) ? $values['price_range'] : null;
+        $price_range = isset($values['price_range']) ? $values['price_range'] : "Rs.500 - Rs.10000";
         if (preg_match_all('/([0-9]+)/', $price_range, $matches)) {
             $price_range = $matches[0];
+        }
+        else {
+            $price_range = array(500, 10000);
         }
         
         $sm = $this->_helper->searchManager;
@@ -143,6 +149,7 @@ class SearchController extends Zend_Controller_Action
             $this->view->page = $page;
             $this->view->pagesz = PAGE_SZ;
             $this->view->sortorder = $sortorder;
+            $this->view->price_range = $price_range;
             if (isset($search_results['facets'])) {
                 $this->view->facets = $search_results['facets'];
             }
@@ -154,6 +161,23 @@ class SearchController extends Zend_Controller_Action
         }
         
         $this->_helper->viewRenderer('index');
+    }
+    
+    public function lookaheadAction() {
+        $logger = Zend_Registry::get('zvlogger');
+        $results = array();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+           $values = $request->getPost();
+           $query = isset($values['query']) ? $values['query'] : '';
+           if ($query != '') {
+                $sm = $this->_helper->searchManager;
+                $q = array('city_state' => $query."*");
+                $results = $sm->search_ajax($q);
+                $this->lookahead = $results;
+           }
+        }
+        $this->view->lookahead = $results;
     }
     
 

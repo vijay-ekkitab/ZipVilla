@@ -13,7 +13,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
     public function __construct($facet_fields = null, $std_fields = null) {
         $this->init();
         if ($facet_fields == null) {
-            $this->facet_fields = array('amenities', 'onsite_services', 'suitability');
+            $this->facet_fields = array('amenities', 'onsite_services', 'suitability', 'shared');
         }
         else {
             $this->facet_fields = $facet_fields;
@@ -183,7 +183,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         
         if(!$qr->success())
             return array ('docs' => array(), 'facets' => array(), 'count' => 0);
-        
+        //$logger->debug($qr->getRawResponse());
         $resp = $qr->getResponse();
         $docs = $resp->response->docs;
         $doc_count = $resp->response->numFound;
@@ -211,6 +211,47 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         return array('docs'=> $docs , 'facets' => $facets, 'count' => $doc_count); 
     }
 	
+    public function search_ajax($q) {
+        $client = new SolrClient(self::$options);
+        $query = new SolrQuery();
+        $logger = Zend_Registry::get('zvlogger');
+        
+        $results = array(); 
+        
+        if ($q == null) {
+            return $results;
+        }
+        
+        $qstr = $this->buildQuery($q, 0, null);
+        
+        $query->setQuery($qstr);
+        
+        $query->addField('address__city');
+        $query->addField('address__state');
+        
+        $qr = $client->query($query);
+        
+        if(!$qr->success())
+            return $results;
+            
+        $resp = $qr->getResponse();
+        $docs = $resp->response->docs;
+        
+        if ($docs == null) 
+            return $results;
+       
+        foreach($docs as $doc) {
+            $city = isset($doc['address__city']) ? $doc['address__city'] : '';
+            $state = isset($doc['address__state']) ? $doc['address__state'] : '';
+            $citystate = $city.','.$state;
+            if ($citystate != '')
+                $results[] = $citystate;
+        }
+        $results = array_unique($results);
+        return $results;
+            
+    }
+    
     public function search_old($q, $include_facets=TRUE, $start=0, $count=50) {
         $client = new SolrClient(self::$options);
         $query = new SolrQuery();

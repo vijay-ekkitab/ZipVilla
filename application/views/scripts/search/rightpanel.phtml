@@ -21,10 +21,27 @@
     
         <h4><a href="#">Room Type</a></h4>
         <div class="acc_section l_chkbox">
-                <input type="checkbox" class="l_styled" /><p>Entire home/villa</p>
-                <div class="l_room_nos">33</div>
-                <input type="checkbox" class="l_styled" /><p>Shared</p>
-                <div class="l_room_nos">33</div>
+            <?php $feature = 'shared';
+                $no_checked = '';
+                $yes_checked = '';
+                if (isset($this->facets_selected[$feature])) {
+                    foreach($this->facets_selected[$feature] as $facet) {
+                         if (preg_match("/\"?yes\"?/", $facet)) {
+                             $yes_checked = 'checked="yes"';
+                         }
+                        if (preg_match("/\"?no\"?/", $facet)) {
+                             $no_checked = 'checked="yes"';
+                         }
+                    }
+                }?>
+                <input type="checkbox" name="<?php echo $feature.'[]';?>" value="no" class="l_styled" <?php echo $no_checked;?> /><p>Entire home/villa</p>
+                <?php if (isset($this->facets[$feature])) {?>
+                <div class="l_room_nos"><?php echo $this->facets[$feature]['no'];?></div>
+                <?php }?>
+                <input type="checkbox" name="<?php echo $feature.'[]';?>" value="yes" class="l_styled" <?php echo $yes_checked;?>/><p>Shared</p>
+                <?php if (isset($this->facets[$feature])) {?>
+                <div class="l_room_nos"><?php echo $this->facets[$feature]['yes'];?></div>
+                <?php }?>
         </div>
     
         <h4><a href="#">Amenities</a></h4>
@@ -106,7 +123,7 @@
     <input type="hidden" name="query" value="<?php echo $this->search_query?>" />
     <input type="hidden" name="check_in" value="<?php echo $this->checkin?>" />
     <input type="hidden" name="check_out" value="<?php echo $this->checkout?>" />
-    <input type="hidden" name="check_out" value="<?php echo $this->guests?>" />
+    <input type="hidden" name="guests" value="<?php echo $this->guests?>" />
     <input type="hidden" name="sort" value="<?php echo $this->sortorder?>" />
     </form>
     <div class="l_cta" style="margin-top:15px;clear:none;"><a href="#">See more...</a></div>
