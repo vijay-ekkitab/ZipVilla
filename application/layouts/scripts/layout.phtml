@@ -27,7 +27,19 @@
                                       ->appendFile($this->baseUrl().'/js/jquery-ui.min.js'); ?>
         
         <?php $ctr = 1+($this->page - 1) * $this->pagesz;?>
+        
         <script type="text/javascript">
+        function watchQueryBox() {
+            if ($('#query').data('lastValue') != $('#query').val()) {
+                $.ajax({ 
+                    type: "POST",
+                    url:"/default/search/lookahead/format/html",
+                    data:"query="+$('#query').val(),
+                    complete:function(data) { console.log(data.responseText);}});
+                $('#query').data('lastValue', $('#query').val());
+            }
+        }
+        	        
         $(document).ready(function(){
         	   <?php 
                     $low = 500; $high = 10000;
@@ -54,8 +66,12 @@
                     " - Rs." + $( "#price_slider" ).slider( "values", 1 ));
 
         	$("#guests").val("<?php echo $this->guests;?>");
-        	$("#query").val("<?php echo $this->search_query;?>");
+        	<?php if (isset($this->search_query)) {?>
+        	   $("#query").val("<?php echo $this->search_query;?>");
+        	<?php }?>
         	$("#sort_by").prop('selectedIndex', <?php echo $sort;?>);
+        	$('#query').data('lastValue', '<?php echo $this->search_query;?>');
+        	$('#query').bind('keypress', null, watchQueryBox);
             
         });
         function doSort(sortbox) 
@@ -83,7 +99,7 @@
         	<div class="v_search_form">
             	<div class="v_search l_search">
                 	<form action="/search" method="get">
-                    	<input class="l_search_input v_search_input" type="text" name="query" id="query" size="73" value="" />
+                    	<input class="l_search_input v_search_input" type="text" name="query" id="query" defaultvalue="Where are you going?" autocomplete="off" size="73" value="" />
                     	<input type="hidden" id="page" name="page" value="1" />
                         <div><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="10" id="checkin" name="check_in" value="<?php echo $this->checkin;?>"/></label></div>
                         <div><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg" type="text" id="checkout" size="10" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>

@@ -6,6 +6,9 @@ class SearchController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('lookahead', 'html')
+                    ->initContext();
     }
 
     public function reindexAction() 
@@ -158,6 +161,23 @@ class SearchController extends Zend_Controller_Action
         }
         
         $this->_helper->viewRenderer('index');
+    }
+    
+    public function lookaheadAction() {
+        $logger = Zend_Registry::get('zvlogger');
+        $results = array();
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+           $values = $request->getPost();
+           $query = isset($values['query']) ? $values['query'] : '';
+           if ($query != '') {
+                $sm = $this->_helper->searchManager;
+                $q = array('city_state' => $query."*");
+                $results = $sm->search_ajax($q);
+                $this->lookahead = $results;
+           }
+        }
+        $this->view->lookahead = $results;
     }
     
 
