@@ -18,13 +18,19 @@
         <?php echo $this->headTitle(); ?>
         <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/visual.css')
                                     ->prependStylesheet($this->baseUrl().'/css/layout.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css'); ?>
-                                    
-        <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js') 
+                                    ->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
+                                    ; ?>
+
+        <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js')
+                                      //->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
-                                      ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
+                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
-                                      ->appendFile($this->baseUrl().'/js/jquery-ui.min.js'); ?>
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui.min.js')
+
+                                       ;?>
         
         <?php $ctr = 1+($this->page - 1) * $this->pagesz;?>
         <script type="text/javascript">
@@ -39,7 +45,14 @@
         {
             document.getElementById('select_'+'<?php echo $this->sortorder;?>').selected = true;
         }
-        </script>
+      	$(function() {
+      		$( "#checkin" ).datepicker();
+      	});
+      	$(function() {
+      		$( "#checkout" ).datepicker();
+      	});
+      	
+      	</script>
         
 </head>
     
@@ -62,8 +75,15 @@
                 	<form action="/search" method="get">
                     	<input class="l_search_input v_search_input" type="text" name="query" id="query" size="73" value="" />
                     	<input type="hidden" id="page" name="page" value="1" />
+<!--
                         <div><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="10" id="checkin" name="check_in"/></label></div>
                         <div><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg" type="text" id="checkout" size="10" name="check_out"/></label></div>
+-->
+                        <div><label for="checkin">Check in<br />
+                        <input class="l_input_bg v_input_bg" type="text" size="10" id="checkin"  name="check_in"/></label></div>
+                        <div><label for="checkout">Check out<br />
+                        <input class="l_input_bg v_input_bg" type="text" size="10" id="checkout" name="check_out"/></label></div>
+
                         <div>
                         	<label for="guests">Guests<br />
                                         <select class="v_dropdwon_bg l_dropdwon_bg" id="guests" name="guests">
