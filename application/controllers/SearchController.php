@@ -101,12 +101,13 @@ class SearchController extends Zend_Controller_Action
         $page = isset($values['page']) ? $values['page'] : 1;
         $sortorder = isset($values['sort']) ? $values['sort'] : SORT_ORDER_RATING;
         $place = isset($values['query']) ? $values['query'] : 0;
-        $price_range = isset($values['price_range']) ? $values['price_range'] : "Rs.500 - Rs.10000";
+        $keywords = isset($values['keywords']) ? $values['keywords'] : 0;
+        $price_range = isset($values['price_range']) ? $values['price_range'] : "";
         if (preg_match_all('/([0-9]+)/', $price_range, $matches)) {
             $price_range = $matches[0];
         }
         else {
-            $price_range = array(500, 10000);
+            $price_range = array(MIN_RATE, MAX_RATE);
         }
         
         $sm = $this->_helper->searchManager;
@@ -135,6 +136,14 @@ class SearchController extends Zend_Controller_Action
             }
         }
         
+        if ($keywords) {
+            $keyword_array = explode(' ', $keywords);
+            for($i=0; $i<count($keyword_array); $i++) {
+                $keyword_array[$i] = '"'.$keyword_array[$i].'"';
+            }
+            $q['description'] = $keyword_array;
+        }
+        
         $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $price_range, $page, PAGE_SZ);
             
         if ($search_results) {
@@ -150,6 +159,7 @@ class SearchController extends Zend_Controller_Action
             $this->view->pagesz = PAGE_SZ;
             $this->view->sortorder = $sortorder;
             $this->view->price_range = $price_range;
+            $this->view->keywords = $keywords;
             if (isset($search_results['facets'])) {
                 $this->view->facets = $search_results['facets'];
             }

@@ -9,7 +9,7 @@
             <div id="price_slider"></div>
             <p>
                 <label style="margin-top:35px" for="price_range">Price range:</label>
-                <input style="color:#0099CC;float:left;margin-top:-15px;background-color:#F5F5F5;border:none;" type="text" id="price_range" name="price_range" value="Price Range is: Rs.500 - Rs.10000." style="border:0; color:#f6931f; font-weight:bold;" />
+                <input style="color:#0099CC;float:left;margin-top:-15px;background-color:#F5F5F5;border:none;" type="text" id="price_range" name="price_range" value="" style="border:0; color:#f6931f; font-weight:bold;" />
             </p>
             <!--  <div class="l_slider">
                 <div><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_slider.jpg" /></a></div>
@@ -134,12 +134,13 @@
         </div>
     
         <h4><a href="#">Keywords</a></h4>
-        <div class="l_price">
-            <p>This is the place to show keywords.</p>
+        <div class="acc_section">
+            <?php $keywords = isset($this->keywords) ? $this->keywords : ''; ?>
+            <input class="defaultText" type="text" name="keywords" id="keywords" title="Enter Keywords"  value="<?php echo $keywords;?>"/>
         </div>
     
     </div>
-    <input class="l_cta" style="float:left;margin:10px 0;" type="submit" value="Refine Search"/> 
+    <input class="l_cta" style="float:left;margin:10px 0;" type="submit" onclick="validate();return true;" value="Refine Search"/> 
     <input type="hidden" name="page" value="1" />
     <input type="hidden" name="query" value="<?php echo $this->search_query?>" />
     <input type="hidden" name="check_in" value="<?php echo $this->checkin?>" />

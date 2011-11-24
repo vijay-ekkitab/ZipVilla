@@ -35,8 +35,8 @@
 				// Slider
 				$('#price_slider').slider({
 					range: true,
-					min: 500,
-					max:10000,
+					min: 100,
+					max:20000,
 					values: [500, 10000],
 					step:100,
 					slide: function( event, ui ) {

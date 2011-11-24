@@ -40,5 +40,8 @@ const  SORT_ORDER_RATE_HL = 'hl';
 const  SORT_ORDER_RATE_LH = 'lh';
 const  SORT_ORDER_RATING  = 'r';
 
+const  MIN_RATE     = 100;
+const  MAX_RATE     = 20000;
+
 
 ?>

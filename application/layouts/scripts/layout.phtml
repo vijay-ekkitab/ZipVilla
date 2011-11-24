@@ -1,5 +1,6 @@
 <?php /* echo $this->layout()->content; */ ?>
 <?php
+    include_once("ZipVilla/TypeConstants.php");
     $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
     $this->headTitle()->setSeparator(' - ');
     $this->headTitle('Zipvilla-Feel at Home-Away');
@@ -21,10 +22,11 @@
                                     ->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
                                     ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/misc.css')
                                     ; ?>
 
         <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js')
-                                      //->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
+                                      ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
@@ -48,7 +50,7 @@
         	        
         $(document).ready(function(){
         	   <?php 
-                    $low = 500; $high = 10000;
+                    $low = MIN_RATE; $high = MAX_RATE;
                     if (isset($this->price_range)) {
                         $low=$this->price_range[0];
                         $high=$this->price_range[1];
@@ -72,12 +74,28 @@
                     " - Rs." + $( "#price_slider" ).slider( "values", 1 ));
 
         	$("#guests").val("<?php echo $this->guests;?>");
-        	<?php if (isset($this->search_query)) {?>
+        	<?php if ((isset($this->search_query)) &&  ($this->search_query != '*')){?>
         	   $("#query").val("<?php echo $this->search_query;?>");
         	<?php }?>
         	$("#sort_by").prop('selectedIndex', <?php echo $sort;?>);
         	$('#query').data('lastValue', '<?php echo $this->search_query;?>');
         	$('#query').bind('keypress', null, watchQueryBox);
+
+            $(".defaultText").focus(function(srcc) {
+        	    if ($(this).val() == $(this)[0].title) {
+        	        $(this).removeClass("defaultTextActive");
+        	        $(this).val("");
+        	    }
+        	 });
+        		    
+            $(".defaultText").blur(function() {
+                if ($(this).val() == "") {
+                    $(this).addClass("defaultTextActive");
+                    $(this).val($(this)[0].title);
+                }
+             });
+        		    
+            $(".defaultText").blur();    
             
         });
         function doSort(sortbox) 
@@ -94,6 +112,10 @@
       	$(function() {
       		$( "#checkout" ).datepicker();
       	});
+      	function validate() 
+      	{
+          	$(".defaultText").each(function(i) {if ($(this).val() == $(this)[0].title) $(this).val('');});
+      	}
       	
       	</script>
         
@@ -116,7 +138,7 @@
         	<div class="v_search_form">
             	<div class="v_search l_search">
                 	<form action="/search" method="get">
-                    	<input class="l_search_input v_search_input" type="text" name="query" id="query" defaultvalue="Where are you going?" autocomplete="off" size="73" value="" />
+                    	<input class="l_search_input v_search_input defaultText" type="text" title="Where do you want to go?" name="query" id="query" autocomplete="off" size="73" value="" />
                     	<input type="hidden" id="page" name="page" value="1" />
 <!--
                         <div><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="10" id="checkin" name="check_in"/></label></div>
@@ -143,7 +165,7 @@
                                         </select>
                             </label>
                      	</div>
-                        <input class="v_submit_search l_submit_search" type="submit" value=""/>
+                        <input class="v_submit_search l_submit_search" type="submit" onclick="validate();return true;" value=""/>
                     </form>
                 </div>
         	</div><!--search form ends here-->
