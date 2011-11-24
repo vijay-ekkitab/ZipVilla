@@ -13,7 +13,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
     public function __construct($facet_fields = null, $std_fields = null) {
         $this->init();
         if ($facet_fields == null) {
-            $this->facet_fields = array('amenities', 'onsite_services', 'suitability', 'shared');
+            $this->facet_fields = array('amenities', 'onsite_services', 'suitability', 'shared', 'address__location');
         }
         else {
             $this->facet_fields = $facet_fields;

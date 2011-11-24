@@ -108,8 +108,29 @@
         </div>
     
         <h4><a href="#">Neighborhood</a></h4>
-        <div class="acc_section">
-            <p>This is the place to show neighborhood.</p>
+        <div class="acc_section l_chkbox">
+            <?php $feature = 'address__location';
+                  $logger = Zend_Registry::get('zvlogger');
+                  if (isset($this->facets[$feature])) {
+                    $logger->debug("Facet results found for address__location");
+                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                        $logger->debug("Facet type: $type");
+                        $checked = '';
+                        if (isset($this->facets_selected[$feature])) {
+                            foreach($this->facets_selected[$feature] as $facet) {
+                                if (preg_match("/\"?$type\"?/", $facet)) {
+                                    $checked = 'checked="yes"';
+                                    break;
+                                }
+                            }
+                        } ?>
+                        <?php if ($this->facets[$feature][$type] > 0) {?>
+                            <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
+                            <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
+                        <?php }?>
+                     <?php endforeach; ?>
+            <?php }?>
         </div>
     
         <h4><a href="#">Keywords</a></h4>

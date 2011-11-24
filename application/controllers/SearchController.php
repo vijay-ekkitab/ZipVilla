@@ -118,7 +118,7 @@ class SearchController extends Zend_Controller_Action
             $q = array('city_state' => $place);
         }
         else {
-            $q = array('city_state' => '"'.$place.'"');
+            $q = array('city_state' => '"'.strtolower($place).'"');
         }
         
         if ($request->isPost()) {
@@ -172,7 +172,7 @@ class SearchController extends Zend_Controller_Action
            $query = isset($values['query']) ? $values['query'] : '';
            if ($query != '') {
                 $sm = $this->_helper->searchManager;
-                $q = array('city_state' => $query."*");
+                $q = array('city_state' => strtolower($query)."*");
                 $results = $sm->search_ajax($q);
                 $this->lookahead = $results;
            }
