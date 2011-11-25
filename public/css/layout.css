@@ -1,3 +1,6 @@
+.floatleft{
+	float:left;
+}
 .l_top_nav {
 	float:right;
 }
@@ -39,7 +42,7 @@
 	float:left;
 	margin-left:12px;
 }
-.l_search .l_input_bg {
+.l_search .l_input_bg, online_resrv .l_input_bg {
 	width:85px;
 	height:25px;
 	border:none;
@@ -115,7 +118,7 @@
 	width:134px;
 	height:25px;
 	border:none;
-	padding-left:5px;
+	padding:2px 0 0 5px;
 }
 .l_search_results .search_sort {
 	float:right;
@@ -224,7 +227,7 @@
 .l_right_side_panel p {
 	float:right;
 }
-.l_right_side_panel .map {
+.l_right_side_panel .map{
 	float:left;
 	width:240px;
 	height:220px;
@@ -313,7 +316,257 @@
 .l_rgstr_frm {
 	float:left;
 }
-/*********** Tmp *****************/
-.acc_section {
-	overflow:hidden;
+
+/*****************detailed page******************************/
+.l_social_ico {
+	float:left;
+	width:100%;
 }
+.l_link_back_page {
+	float:left;
+	padding-left:20px;
+}
+.l_social_netwrk{
+	float:right;
+	margin-top:15px;
+}
+.v_listing_header .v_ratings .reviews {
+	text-align:center;
+	width:30px;
+	height:30px;
+	float:left;
+	margin-top:5px;
+}
+.v_listing_header .v_ratings .reviews p {
+	color:#c63;
+	font-weight:
+	bold;margin-top:4px;
+	text-align:center;
+}
+.l_about_villa_left{
+	float:left;
+	width:400px;
+	margin:10px 15px 0 0;
+}
+.l_about_villa_left h2, .l_about_villa_right h2, .ratng_rvews h2{
+	color:#333;
+	text-transform:inherit;
+}
+.ratng_rvews h2 {
+	float:left;
+	margin-bottom:10px;
+	width:100%;
+}
+.l_about_villa_left p{
+	text-align:justify;
+}
+.l_about_villa_right{
+	float:left;
+	width:230px;
+	margin-top:10px;
+}
+.amnts{
+	float:left;
+}
+.amnts ul{
+	float:left;
+	margin:10px 0 20px 0;
+}
+.amnts li{
+	float:left;
+	display:inline;
+	margin-right:5px;
+}
+.ratng_rvews {
+	float:left;
+	width:100%;
+	border-top: 10px solid #daeffa;
+	border-bottom:1px dashed #ccc;
+	margin:10px 0 0 0;
+	padding:10px 0;
+}
+.write_review {
+	float:right;
+	width:200px;
+}
+.write_review p {
+	float:right;
+}
+.btn_write_review{
+	float:right;
+	margin-top:5px;
+}
+.list_review{
+	float:left;
+	width:100%;
+	border-bottom:1px dashed #ccc;
+	margin:10px 0 0 0;
+	padding:10px 0;
+}
+.img_profle {
+	float:left;
+	width:92px;
+	height:122px;
+	border:1px solid #ccc;
+	padding:4px;
+	text-align:center;
+	clear:both;
+}
+.img_profle p{
+	color:#09c;
+	clear:both;
+	margin:0;
+	font-weight:bold;
+	width:100%;
+	text-align:center;
+	line-height:16px;
+}
+.img_profle p span{
+	color:#666;
+	font-size:10px;
+	line-height:16px;
+	clear:both;
+	margin:0;
+	font-weight:normal;
+}
+.review {
+	float:left;
+	margin-left:20px;
+	width:530px;
+}
+.review h2 {
+	color:#cc6633;
+	text-transform:inherit;
+}
+.review p {
+	text-align:justify;
+}
+.form_write_review{
+	background-color:#ccc;
+	float:left;
+	width:97%;
+	margin:10px 0 0 0;
+	padding:10px;
+	-moz-border-radius:4px;
+}
+.form_write_review .input{
+	background:none;
+	border:none;
+	text-align:center;
+	color:#333;
+	font-weight:bold;
+	width:100%;
+}
+.online_resrv
+{
+	float:left;
+	width:226px;
+	height:220px;
+	margin:10px 0 0 0;
+	background-color:#eff6eb;
+	-moz-border-radius:4px;
+	border:1px solid #b3d5a0;
+	padding:7px;
+}
+.online_resrv  label{
+	font-size:12px;
+	font-weight:normal;
+	float:left;
+	margin-right:20px;
+}
+.online_resrv .l_input_bg{
+	background-image:none;
+	background-color:#fff;
+	-moz-border-radius:3px;
+	border:1px solid #ccc;
+}
+.online_resrv .l_dropdwon_bg {
+	width:25px;
+	height:16px;
+	border:none;
+	padding-left:5px;
+	border:1px solid #ccc;
+	-moz-border-radius:3px;
+}
+.online_resrv p{
+	float:left;
+}
+.online_resrv h2{
+	color:#cc3366;
+	float:left;
+	clear:both;
+}
+.form_online {
+	float:left;
+	clear:both;
+	border-top:1px dashed #ccc;
+	border-bottom:1px dashed #ccc;
+	padding-top:10px;
+	margin-top:5px;
+	width:100%;
+}
+.online_resrv_dropdwn {
+	float:right;
+}
+.sub_total {
+	float:left;
+	width:100%;
+}
+.online_resrv .sub_total h2{
+	color:#666;
+	float:left;
+	clear:both;
+	text-transform:inherit;
+	font-weight:normal;
+}
+.online_resrv .sub_total span{
+	font-size:9px;
+	color:#666;
+	float:left;
+	clear:both;
+}
+.btn_send_details {
+	margin:10px 0 0 3px;
+	float:left;
+}
+.acco_dtls{
+	float:left;
+	border-bottom:1px dashed #ccc;
+	width:100%;
+}
+.acco_dtls p{
+	float:left;
+	width:100%;
+	padding:5px 0;
+}
+.acco_dtls p span{
+	float:right;
+	font-weight:bold;
+}
+.acco_dtls p .blue{
+	color:#0099cc;
+}
+.host_ratings {
+	float:left;
+	width:100px;
+	margin:5px 0 0 10px;
+}
+.host_ratings span{
+	width:100%;
+	float:left;
+}
+.host_ratings p {
+	font-weight:bold;
+	clear:both;
+	float:left;
+	margin-bottom:10px;
+}
+.what{
+	margin-left:5px;
+	float:left;
+}
+.l_price .form_write_review{
+	width:92%;
+}
+
+
