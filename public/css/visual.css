@@ -26,6 +26,7 @@ label {
 a {
 	text-decoration:
 	none;outline:none;
+	color:#000;
 }
 p {
 	line-height:22px;
@@ -298,4 +299,120 @@ body {
 .error_msg p{
 	font-size:14px;
 	font-weight:bold;
+}
+
+/****************detailed page********************/
+.v_social_ico {
+}
+.v_link_back_page {
+	background:url(../images/btn_backpage.jpg) top left no-repeat;width:200px;height:17px;
+	color:#0099CC;
+}
+.v_link_back_page a {
+	color:#0099CC;
+}
+.v_link_back_page a:hover {
+	color:#666;
+}
+.v_listing_header {
+	background:url(../images/bg_list_header.jpg) top center no-repeat;
+	width:930px;
+	height:70px;
+	float:left;
+	padding:10px 15px;
+}
+.h2 {
+	float:left;
+}
+.h2 h1{
+	font-size:36px;
+	color:#69ad44;
+	font-weight:bold;
+	text-shadow: 0 0 1px #69ad44;
+	float:left;
+}
+.h2 h2 {
+	color:#666;
+	font-weight:normal;
+	text-shadow:none;
+	text-transform:none;
+	clear:both;
+	float:left;
+}
+.h2 span a{
+	background:url(../images/icon_favorite.jpg) center left no-repeat;
+	width:16px;
+	height:14px;
+	float:left;
+	margin:10px 0 0 5px;
+}
+.h2 span a:hover{
+	background:url(../images/icon_favorite-a.jpg) center left no-repeat;
+}
+.entire_villa {
+	background-color:#e4e4e4;
+	float:left;
+	-moz-border-radius:4px;
+	-moz-border-radius:4px;
+	margin:0 0 0 10px;
+}
+.entire_villa p{
+	color:#666;
+	font-weight:normal;
+	text-shadow:none;
+	padding:2px 7px;
+}
+.v_ratings{
+	float:right;
+}
+.v_listing_header .ratings span, .v_listing_header .v_ratings .reviews span {
+	color:#666;
+	font-weight:normal;
+	font-size:9px;
+	text-transform:uppercase;
+	margin-top:8px;
+	text-align:center;
+	float:left;
+}
+.ratings span {
+	clear:both;
+	margin-left:50px;
+}
+.ratng_rvews .ratings span {
+	clear:both;
+	margin:0;
+	font-size:11px;
+	width:100%;
+	float:left;
+}
+.ratng_rvews .ratings{
+	text-align:left;
+}
+.ratings {
+	width:135px;
+	float:left;
+	margin-right:25px;
+	text-align:center;
+}
+.ratings ul {
+	float:left;
+	margin:10px 0 0 30px;
+	clear:right;
+}
+.ratng_rvews .ratings ul{
+	margin:5px 0 5px 0;
+	clear:both;
+	width:100%;
+}
+.ratings li {
+	float:left;
+	display:inline;
+	list-style:none;
+	margin-right:3px;
+}
+.v_listing_header .v_ratings .reviews {
+	background:url(../images/bg_circle_review.jpg) top center no-repeat;
+}
+.slide{
+	float:left;
 }
