@@ -1,8 +1,8 @@
 <?php $baseUrl = $this->baseUrl();?>
 <div class="l_refine_results v_refine_results">
     
-    <form action="/search/refined" method="post">
-    <div id="accordion">
+	<form action="/search/refined" method="post">
+		<div id="accordion">
     
         <h4><a href="#">Price</a></h4>
         <div class="acc_section">
@@ -139,7 +139,7 @@
             <input class="defaultText" type="text" name="keywords" id="keywords" title="Enter Keywords"  value="<?php echo $keywords;?>"/>
         </div>
     
-    </div>
+    </div> <!-- accordian-->
     <input class="l_cta" style="float:left;margin:10px 0;" type="submit" onclick="validate();return true;" value="Refine Search"/> 
     <input type="hidden" name="page" value="1" />
     <input type="hidden" name="query" value="<?php echo $this->search_query?>" />
@@ -151,198 +151,216 @@
     
     <div class="l_cta" style="margin-top:15px;clear:none;"><a href="#lb_search_zv" name="lightbox_zv">See more...</a></div>
 
+	<form action="/search/refined" method="post">
 	<div id="boxes">
-      	<div id="color_box">
-    		<div id="lb_search_zv" style="height: 447px; width: 656px; background:none;" class="lb_window_zv">
-                <div>
-                    <div style="float: left;" class="cboxTopLeft"></div>
-                    <div style="float: left; width: 610px;" class="cboxTopCenter"></div>
-                    <div style="float: left;" id="cboxTopRight"></div>
-                </div>
+		<div id="color_box">
+			<div id="lb_search_zv" style="height: 447px; width: 656px; background:none;" class="lb_window_zv">
+				<div>
+					<div style="float: left;" class="cboxTopLeft"></div>
+					<div style="float: left; width: 610px;" class="cboxTopCenter"></div>
+					<div style="float: left;" id="cboxTopRight"></div>
+				</div>
 
 				<div style="clear: left;">
-            		<div style="float: left; height: 401px;" class="cboxMiddleLeft"></div>
-                	<div style="float: left; width: 630px; height: 430px;" class="cboxContent">
-                		<div style="display: block; width: 630px; overflow: auto;" class="cboxLoadedContent">
+					<div style="float: left; height: 401px;" class="cboxMiddleLeft"></div>
+						<div style="float: left; width: 630px; height: 430px;" class="cboxContent">
+							<div style="display: block; width: 630px; overflow: auto;" class="cboxLoadedContent">
 
-                    		<div class="filters_lightbox new-modal">
-                        		<div id="tabs">
-                                	<h2 class="clearfix">
-                                    	<ul class="filters_lightbox_nav">
-                                        	<li class="filters_lightbox_nav_element active"><a href="#tab1" style="padding:5px 10px;">Room Type</a></li>
-                                        	<li class="filters_lightbox_nav_element"><a href="#tab2" style="padding:5px 10px;">Amenities</a></li>
-                                        	<li class="filters_lightbox_nav_element"><a href="#tab3" style="padding:5px 10px;">Neighborhood</a></li>
-                                        	<li class="filters_lightbox_nav_element"><a href="#tab4" style="padding:5px 10px;">Onsite</a></li>
-                                    	</ul>
-                                	</h2>
-                                	
-                                	<div class="segment nopadding lightbox_filters"><!--ctnt tab-->
-<?php /*
-                                  		<ul id="tab1" style="background-image:none;">
-                                      		<li class="lightbox_filter_container">
- 
-                                        		<div class="lightbox_filters_left_column">
-                                              		<ul id="" class="search_filter_content">
-                                                		<li class="clearfix"><span class="facet_count">3283</span>
-                                                    <input id="" name="room_types" value="Entire home/apt" type="checkbox" />
-                                                    <label for="lightbox_room_type_0">Entire home</label>
-                                                		</li>
-                                                		<li class="clearfix"><span class="facet_count">2358</span>
-                                                    <input id="" name="room_types" value="Private room" type="checkbox" />
-                                                    <label for="lightbox_room_type_1">Private room</label>
-                                                		</li>
-                                                		<li class="clearfix"><span class="facet_count">196</span>
-                                                    <input id="" name="room_types" value="Shared room" type="checkbox" />
-                                                    <label for="lightbox_room_type_2">Shared room</label>
-                                                		</li>
-                                              		</ul>
-                                        		</div>
-                                      		</li>
-                                  		</ul><!--ctnt first tab ends-->
-*/ ?>                                  		
-                                  		<div>
-                                            <ul id="tab2" style="background-image:none;">
-                                                <li class="lightbox_filter_container"><!--ctnt second tab-->
-                                                    <ul class="search_filter_content">
+								<div class="filters_lightbox new-modal">
+									<div id="tabs">
+										<h2 class="clearfix">
+											<ul class="filters_lightbox_nav">
+												<li class="filters_lightbox_nav_element"><a href="#tab1" style="padding:5px 10px;">Room Type</a></li>
+												<li class="filters_lightbox_nav_element active"><a href="#tab2" style="padding:5px 10px;">Amenities</a></li>
+												<li class="filters_lightbox_nav_element"><a href="#tab3" style="padding:5px 10px;">Serv/Suit</a></li>
+												<li class="filters_lightbox_nav_element"><a href="#tab4" style="padding:5px 10px;">Neighborhood</a></li>
+											</ul>
+										</h2>
 
-            <?php $feature = 'amenities';
-                  if (isset($this->facets[$feature])) {
-                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-                        $checked = '';
-                        if (isset($this->facets_selected[$feature])) {
-                            foreach($this->facets_selected[$feature] as $facet) {
-                                if (preg_match("/\"?$type\"?/", $facet)) {
-                                    $checked = 'checked="yes"';
-                                    break;
-                                }
-                            } 
-                        } ?>
-                        <li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-                        <input class="l_styled" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/><p><?php echo $type;?></p>
-                         </li>
+										<div class="segment nopadding lightbox_filters"><!--ctnt tab-->
 
-                     <?php endforeach; ?>
-            <?php }?>        
-<!--             
-                                                        <li class="clearfix"><span class="facet_count">236</span><input id="lightbox_amenity_3" name="amenities" value="11" type="checkbox" /> <label for="lightbox_amenity_3">Smoking Allowed</label></li>
- -->
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                  		</div><!--ctnt second tab ends-->
-<?php /*                                  		
-                                  		<div>
-                                            <ul id="tab3"  style="background-image:none;">
-                                                <li class="lightbox_filter_container"><!--ctnt third tab-->
-                                                    <div class="lightbox_filters_left_column">
-                                                        <h3>Room Type</h3>
-                                                        <ul id="" class="search_filter_content">
-                                                            <li class="clearfix"><span class="facet_count">3283</span>
-                                                            <input id="lightbox_room_type_0" name="room_types" value="Entire home/apt" type="checkbox" />
-                                                            <label for="lightbox_room_type_0">Entire home/apt</label>
-                                                            </li>
-                                                            <li class="clearfix"><span class="facet_count">2358</span>
-                                                            <input id="lightbox_room_type_1" name="room_types" value="Private room" type="checkbox" />
-                                                            <label for="lightbox_room_type_1">Private room</label>
-                                                            </li>
-                                                            <li class="clearfix"><span class="facet_count">196</span>
-                                                            <input id="lightbox_room_type_2" name="room_types" value="Shared room" type="checkbox" />
-                                                            <label for="lightbox_room_type_2">Shared room</label>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="lightbox_filters_right_column">
-                                                        <h3>Room Type</h3>
-                                                        <ul id="" class="search_filter_content">
-                                                            <li class="clearfix"><span class="facet_count">3283</span>
-                                                            <input id="lightbox_room_type_0" name="room_types" value="Entire home/apt" type="checkbox" />
-                                                            <label for="lightbox_room_type_0">Entire home</label>
-                                                            </li>
-                                                            <li class="clearfix"><span class="facet_count">2358</span>
-                                                            <input id="lightbox_room_type_1" name="room_types" value="Private room" type="checkbox" />
-                                                            <label for="lightbox_room_type_1">Private room</label>
-                                                            </li>
-                                                            <li class="clearfix"><span class="facet_count">196</span>
-                                                            <input id="lightbox_room_type_2" name="room_types" value="Shared room" type="checkbox" />
-                                                            <label for="lightbox_room_type_2">Shared room</label>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                  		</div><!--ctnt third tab ends-->
-*/ ?>
+											<div> <!-- Room Type -->
+												<ul id="tab1" style="background-image:none;">
+													<li class="lightbox_filter_container">
+														<div class="lightbox_filters_left_column"> 
+															<ul id="" class="search_filter_content">
+																<li class="clearfix"><span class="facet_count">3283</span>
+																	<input id="" name="room_types" value="Entire home/apt" type="checkbox" />
+																	<label for="lightbox_room_type_0">Entire home</label>
+																</li>
+																<li class="clearfix"><span class="facet_count">2358</span>
+																	<input id="" name="room_types" value="Private room" type="checkbox" />
+																	<label for="lightbox_room_type_1">Private room</label>
+																</li>
+																<li class="clearfix"><span class="facet_count">196</span>
+																	<input id="" name="room_types" value="Shared room" type="checkbox" />
+																	<label for="lightbox_room_type_2">Shared room</label>
+																</li>
+															</ul>
+														</div>
+													</li>
+												</ul><!--ctnt first tab ends-->
+											</div> <!--Room Type-->
+                                  		
+											<div><!-- Amenities -->
+												<ul id="tab2" style="background-image:none;">
+													<li class="lightbox_filter_container"><!--ctnt second tab-->
+														<ul class="search_filter_content">
+															<?php $feature = 'amenities';
+															$iCtr = 0;
+															if (isset($this->facets[$feature])) {
+																foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+																	$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+																	$checked = '';
+																	if (isset($this->facets_selected[$feature])) {
+																		foreach($this->facets_selected[$feature] as $facet) {
+																			if (preg_match("/\"?$type\"?/", $facet)) {
+																				$checked = 'checked="yes"';
+																				break;
+																			}
+																		}
+																	} ?>
+																	<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
+																	<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/></p>
+																	<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
+																	<!--
+																	<li class="clearfix"><span class="facet_count">236</span>
+																	<input id="lightbox_amenity_3" name="amenities" value="11" type="checkbox" /> 
+																	<label for="lightbox_amenity_3">Smoking Allowed</label></li>
+																	-->
+																<?php endforeach; ?>
+															<?php }?>
+														</ul>
+													</li>
+												</ul>
+											</div><!--Amenities-->
+                                  		
+											<div> <!--Service/Suitability-->
+												<ul id="tab3" style="background-image:none;">
+													<li class="lightbox_filter_container"><!--ctnt forth tab-->
+														
+														<div class="lightbox_filters_left_column">
+															<h3>Onsite Services</h3>
+															<ul id="lightbox_filter_content_OnsiteServices" class="search_filter_content"> 
+																<?php $feature = 'onsite_services';
+																	$iCtr = 0;
+																	if (isset($this->facets[$feature])) {
+																		foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+																			$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+																			$checked = '';
+																			if (isset($this->facets_selected[$feature])) {
+																				foreach($this->facets_selected[$feature] as $facet) {
+																					if (preg_match("/\"?$type\"?/", $facet)) {
+																						$checked = 'checked="yes"';
+																						break;
+																					}
+																				}
+																			} ?>
+																			<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
+																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/></p>
+																			<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
+																		<?php endforeach; ?>
+																	<?php }?>                                                         
+															</ul>
+														</div>
 
-                                  		<div>
-                                            <ul id="tab4" style="background-image:none;">
-                                                <li class="lightbox_filter_container"><!--ctnt forth tab-->
-                                                    <div class="lightbox_filters_left_column">
-                                                        <h3>Services</h3>
-                                                        <ul id="lightbox_filter_content_room_type" class="search_filter_content">
-            <?php $feature = 'onsite_services';
-                  if (isset($this->facets[$feature])) {
-                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-                        $checked = '';
-                        if (isset($this->facets_selected[$feature])) {
-                            foreach($this->facets_selected[$feature] as $facet) {
-                                if (preg_match("/\"?$type\"?/", $facet)) {
-                                    $checked = 'checked="yes"';
-                                    break;
-                                }
-                            }
-                        } ?>
-                        
-                        <li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-                        <input id="" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/><p><?php echo $type;?></p>
-                        </li>                        
-                     <?php endforeach; ?>
-            <?php }?>                                                         
-                                                        </ul>
-                                                    </div>
-<?php /*                                                    
-                                                    <div class="lightbox_filters_right_column">
-                                                        <h3>Suitability</h3>
-                                                        <ul id="lightbox_filter_content_room_type" class="search_filter_content">
-                                                            <li class="clearfix"><span class="facet_count">3283</span>
-                                                                <input id="" name="room_types" value="Entire home/apt" type="checkbox" />
-                                                                <label for="lightbox_room_type_0">Entire home/apt</label>
-                                                            </li>
-                                                            <li class="clearfix"><span class="facet_count">2358</span>
-                                                                <input id="" name="room_types" value="Private room" type="checkbox" />
-                                                                <label for="lightbox_room_type_1">Private room</label>
-                                                            </li>
-                                                            <li class="clearfix"><span class="facet_count">196</span>
-                                                                <input id="" name="room_types" value="Shared room" type="checkbox" />
-                                                                <label for="lightbox_room_type_2">Shared room</label>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-*/ ?>                                                    
-                                                </li>
-                                            </ul><!--ctnt forth tab ends-->
-                                		</div><!--ctnt fourth tab ends-->
+														<div class="lightbox_filters_right_column">
+															<h3>Suitability</h3>
+															<ul id="lightbox_filter_content_Suitability" class="search_filter_content">
+																<?php $feature = 'suitability';
+																	$iCtr = 0;
+																	if (isset($this->facets[$feature])) {
+																		foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+																			$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+																			$checked = '';
+																			if (isset($this->facets_selected[$feature])) {
+																				foreach($this->facets_selected[$feature] as $facet) {
+																					if (preg_match("/\"?$type\"?/", $facet)) {
+																						$checked = 'checked="yes"';
+																						break;
+																					}
+																				}
+																			} ?>
+																			<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
+																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/></p>
+																			<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
+																		<?php endforeach; ?>
+																	<?php }?>
+															</ul>
+														</div>
+                                                   
+													</li>
+												</ul><!--ctnt forth tab ends-->
+											</div><!--Service/Suitability-->
 
-                         			</div>
-                      			</div>
-                  			</div>
+											<div><!--Neighbourhood -->
+												<ul id="tab4"  style="background-image:none;">
+													<li class="lightbox_filter_container"><!--ctnt third tab-->
+														<div class="lightbox_filters_left_column">
+															<!-- <h3>Room Type</h3>  -->
+															<ul id="" class="search_filter_content">
+															
+																<?php $feature = 'address__location';
+																	$iCtr = 0;															
+																	$logger = Zend_Registry::get('zvlogger');
+																	if (isset($this->facets[$feature])) {
+																		$logger->debug("Facet results found for address__location");
+																		foreach ($this->facets[$feature]->getPropertyNames() as $type):
+																			$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+																			$logger->debug("Facet type: $type");
+																			$checked = '';
+																			if (isset($this->facets_selected[$feature])) {
+																				foreach($this->facets_selected[$feature] as $facet) {
+																					if (preg_match("/\"?$type\"?/", $facet)) {
+																						$checked = 'checked="yes"';
+																						break;
+																					}
+																				}
+																			} ?>
 
-                            <div class="lightbox_filter_action_area segment buttons">
-                                <a href="#" class="close">Cancel</a>
-                                <input id="lightbox_search_button" class="button-glossy green" value="Search" type="submit" />
-                            </div>
-                            <div class="close cboxClose"></div>
-  						</div>
-          			</div>
-       	  		</div>
-       		</div>
-    	</div>
-    </div>
-    <div id="mask_zv"></div>
+																			<?php if ($this->facets[$feature][$type] > 0) {?>
+																				<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
+																					<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/></p>
+																					<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>                        
+																			<?php }?>
+																		<?php endforeach; ?>
+																	<?php }?>															
+															</ul>
+														</div>
+														<div class="lightbox_filters_right_column">
+														</div>
+													</li>
+												</ul>
+											</div><!--Neighbourhood -->
 
-  
+								</div>
+							</div>
+						</div>
+
+							<div class="lightbox_filter_action_area segment buttons">
+								<a href="#" class="close">Cancel</a>
+									<input id="lightbox_search_button" class="button-glossy green" value="Search" type="submit" onclick="validate();return true;" />
+									<input type="hidden" name="page" value="1" />
+									<input type="hidden" name="query" value="<?php echo $this->search_query?>" />
+									<input type="hidden" name="check_in" value="<?php echo $this->checkin?>" />
+									<input type="hidden" name="check_out" value="<?php echo $this->checkout?>" />
+									<input type="hidden" name="guests" value="<?php echo $this->guests?>" />
+									<input type="hidden" name="sort" value="<?php echo $this->sortorder?>" />
+							</div>
+							<div class="close cboxClose"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    </form>
+    
+	<div id="mask_zv"></div>
+
 </div>
+
 <!-- 
 <div class="l_price">
         <div class="l_accordian_open"><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_acco_open.jpg" /></a></div>
