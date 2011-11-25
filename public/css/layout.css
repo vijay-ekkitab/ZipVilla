@@ -115,7 +115,7 @@
 	width:134px;
 	height:25px;
 	border:none;
-	padding-left:5px;
+	padding:2px 0 0 5px;
 }
 .l_search_results .search_sort {
 	float:right;
@@ -313,7 +313,82 @@
 .l_rgstr_frm {
 	float:left;
 }
-/*********** Tmp *****************/
-.acc_section {
-	overflow:hidden;
+
+/*****************detailed page******************************/
+.l_social_ico {
+	float:left;
+	width:100%;
+}
+.l_link_back_page {
+	float:left;
+	padding-left:20px;
+}
+.l_social_netwrk{
+	float:right;
+	margin-top:15px;
+}
+.v_listing_header .v_ratings .reviews {
+	text-align:center;
+	width:30px;
+	height:30px;
+	float:left;
+	margin-top:5px;
+}
+.v_listing_header .v_ratings .reviews p {
+	color:#c63;
+	font-weight:
+	bold;margin-top:4px;
+	text-align:center;
+}
+.l_about_villa_left{
+	float:left;
+	width:400px;
+	margin:10px 15px 0 0;
+}
+.l_about_villa_left h2, .l_about_villa_right h2, .ratng_rvews h2{
+	color:#333;
+	text-transform:inherit;
+}
+.ratng_rvews h2 {
+	float:left;
+	margin-bottom:10px;
+	width:100%;
+}
+.l_about_villa_left p{
+	text-align:justify;
+}
+.l_about_villa_right{
+	float:left;
+	width:230px;
+	margin-top:10px;
+}
+.amnts{
+	float:left;
+}
+.amnts ul{
+	float:left;
+	margin:10px 0 20px 0;
+}
+.amnts li{
+	float:left;
+	display:inline;
+	margin-right:5px;
+}
+.ratng_rvews {
+	float:left;
+	width:100%;
+	border-top: 10px solid #daeffa;
+	margin:10px 0 0 0;
+	padding:10px 0;
+}
+.write_review {
+	float:right;
+	width:200px;
+}
+.write_review p {
+	float:right;
+}
+.btn_write_review{
+	float:right;
+	margin-top:5px;
 }
