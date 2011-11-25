@@ -17,21 +17,23 @@
 <head>
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
-        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/visual.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/layout.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
+        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/lightbox.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/misc.css')
+                                    //->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/layout.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/visual.css')
+        
+                                    
+                                    //->prependStylesheet($this->baseUrl().'/css/misc.css')
                                     ; ?>
 
-        <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js')
+        <?php echo $this->headScript()
+                                      ->appendFile($this->baseUrl().'/js/jquery-1.6.2.min.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
+                                      ->appendFile($this->baseUrl().'/js/accordian.js')
                                       ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
-                                      ->appendFile($this->baseUrl().'/js/accordian.js')
-                                      ->appendFile($this->baseUrl().'/js/jquery-ui.min.js')
-
                                        ;?>
         
         <?php $ctr = 1+($this->page - 1) * $this->pagesz;?>
@@ -268,52 +270,5 @@
 
  </body>
 </html>
-<?php 
-    /*
-    <body>
-      <div id="zvContainer">
-    	<div id="header"> 
-    		<div id="logged-in-as">
-				<?php echo $this->loggedInAs(); ?> 
-			</div>
-		</div>
-		<div id="header2"> 
-    		<div id="register-link">
-				<?php echo $this->registerLink(); ?> 
-			</div>
-		</div>
-		<div id="whereTo">
-			<p>
-				<input type="text" name="city_id" id="city_id" size="50"
-					maxlength="50" />
-			</p>
-		</div>
-		<div id="colSearch">
-			<div id="colSearchIcon">
-				<p>
-					<img src="/images/search_world_icon.jpg" width="45" height="35"
-						alt="image 1" />
-				</p>
-			</div>
-			<div id="colSearchText">
-				<p>
-					<input type="button" value="Search" onclick="doSearch('city_id');"/>
-					<input type="button" value="Re-Index" onclick="window.location.href='/search/reindex';"/>
-				</p>
-			</div>
-		</div>
-		<div id="content">
-            	<h1><?php echo $this->escape($this->title); ?></h1>
-            	<?php echo $this->layout()->content; ?>
-        	</div>
-        	<div id="zvMapInfo">
-        	   MapVilla
-        	</div>
-        <div id="zvFooter">
-        	<img src="/images/zipvilla_footer.jpg" alt="ZipVilla footer"></img>
-        </div>
-      </div>
-    </body>
-    */
-?>    
+   
 
