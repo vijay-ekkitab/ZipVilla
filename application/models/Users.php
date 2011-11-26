@@ -7,6 +7,14 @@
 include_once("ZipVilla/TypeConstants.php");
 include_once("Mongo/ModelBase.php");
 
+/*
+ * Fields:
+ *        emailid
+ *        firstname
+ *        lastname
+ *        password
+ */
+
 class Application_Model_Users extends Mongo_ModelBase {
 
     public static $_collectionName = USERS; 

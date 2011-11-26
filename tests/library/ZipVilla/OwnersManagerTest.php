@@ -17,7 +17,7 @@ class OwnersManagerTest extends PHPUnit_Framework_TestCase
     	}
     }
     
-    public function testGetOwners()
+    /*public function testGetOwners()
     {
         echo "\n";
         $om = new ZipVilla_Helper_OwnersManager();
@@ -69,6 +69,62 @@ class OwnersManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($listings), "Wrong number of listings returned for owner.");
         $listing = $listings[0];
         $this->assertEquals(10, $listing->rating, "Incorrect listing returned for owner.");
+        
+    }*/
+    
+    public function testGetOwnerforListing()
+    {
+        echo "\n";
+        $lm = new ZipVilla_Helper_ListingsManager();
+        $tname = "hotel";
+        $vals = array();
+        $vals['description'] = "This is the home of owner 1.";
+        $vals['state'] = 'Goa';
+        $vals['rating'] = 10;
+        $res1 = $lm->insert($tname,$vals);
+        
+        $lm = new ZipVilla_Helper_ListingsManager();
+        $tname = "hotel";
+        $vals = array();
+        $vals['description'] = "This is the home of owner 2.";
+        $vals['state'] = 'Kerala';
+        $vals['rating'] = 20;
+        $res2 = $lm->insert($tname,$vals);
+        
+        $lm = new ZipVilla_Helper_ListingsManager();
+        $tname = "hotel";
+        $vals = array();
+        $vals['description'] = "This is the home of owner 2.";
+        $vals['state'] = 'Tamil Nadu';
+        $vals['rating'] = 30;
+        $res3 = $lm->insert($tname,$vals);
+        
+        $user1 = array('emailid' =>'abc@xyz.com',
+                       'firstname' => 'John',
+                       'lastname' => 'Abraham',
+                       'password' => '123');
+        
+        $usr = new Application_Model_Users($user1);
+        $usr->save();
+        $this->assertNotNull($usr, "User 1 could not be created.");
+        
+        $res1->setOwner($usr);
+        
+        $results = $lm->query(array('owner' => $usr->getRef()));
+        $this->assertEquals(1, count($results), "Wrong number of listings returned for owner.");
+        
+        $property = $results[0];
+        
+        $this->assertEquals('Goa', $property->address['state'], "Wrong listing for owner.");
+        
+        $res2->setOwner($usr);
+        
+        $results = $lm->query(array('owner' => $usr->getRef()));
+        $this->assertEquals(2, count($results), "Wrong number of listings returned for owner.");
+        
+        foreach($results as $property) {
+            $this->assertTrue(in_array($property->address['state'], array('Goa', 'Kerala')), "Wrong listing for owner.");
+        }
         
     }
 

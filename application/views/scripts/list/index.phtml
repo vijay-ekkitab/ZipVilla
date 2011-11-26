@@ -2,30 +2,44 @@
 $this->title = "Property Detail";
 $this->headTitle($this->title);
 $this->layout()->setLayout('detail');
+$property = $this->property;
+$baseUrl = $this->baseUrl();
 //$mapHelper = $this->map();
+?>
+
+<?php if ($property == null) {?>
+    <p>There has been an internal error. The property is not found in the system.</p>
+<?php } else {?> <!-- Property detail available -->
+<?php $address = $property->address['street_number'] . ',' . $property->address['street_name'] . ',' .
+                 $property->address['city'] . ','. $property->address['state'] .','.
+                 $property->address['country'];
+      $property_type = $property->shared == 'yes' ? 'Shared house/villa' : 'Entire house/villa';
+      $reviews = Application_Model_Reviews::find(array('listing' => $property->getRef()));
 ?>
 <div class="v_social_ico l_social_ico">
                 <h4 class="l_link_back_page v_link_back_page"><a href="#">Back to search results</a></h4>
-                <div class="l_social_netwrk"><img src="images/icon_so_netwrk.jpg" /></div>
+                <div class="l_social_netwrk"><img src="<?php echo $baseUrl;?>/images/icon_so_netwrk.jpg" /></div>
             </div>
             <div class="v_listing_header">
-                <div class="h2"><h1>Hilltop Villa with 16 rooms</h1><span><a href="#"></a></span>
-                    <h2>Villa Vahol, North Goa, Goa, India</h2>
-                    <div class="entire_villa"><p>Entire house / villa</p></div>
+                <div class="h2"><h1><?php echo $this->escape($property->title);?></h1><span><a href="#"></a></span>
+                    <h2><?php echo $address;?></h2>
+                    <div class="entire_villa"><p><?php echo $property_type;?></p></div>
                 </div>
                 <div class="v_ratings">
                     <div class="ratings"><!--golden and silver stars-->
                         <ul>
-                            <li><img src="images/icon_ratings_gold.jpg" /></li>
-                            <li><img src="images/icon_ratings_gold.jpg" /></li>
-                            <li><img src="images/icon_ratings_gold.jpg" /></li>
-                            <li><img src="images/icon_ratings_gold.jpg" /></li>
-                            <li><img src="images/icon_ratings_silver.jpg" /></li>
+                           <?php for($rc=0; $rc < 5; $rc++) {
+                                if ((0+$property->rating) > $rc) 
+                                    echo '<li><img src="'.$baseUrl.'/images/icon_ratings_gold.jpg"/></li>';
+                                else
+                                    echo '<li><img src="'.$baseUrl.'/images/icon_ratings_silver.jpg"/></li>';
+                                } 
+                           ?>
                         </ul>
-                        <span>182 Ratings</span>
+                        <span>Av. Rating <?php echo $property->rating?></span>
                     </div>
                     <div class="reviews">
-                        <p>122</p>
+                        <p><?php echo count($reviews)?></p>
                         <span>Reviews</span>
                     </div>
                 </div>
@@ -219,4 +233,5 @@ $this->layout()->setLayout('detail');
                     </div>
                 </div>
             </div><!--right_side_panel ends here-->
+<?php }?> <!-- End property detail available -->
 
