@@ -10,9 +10,11 @@ include_once("Mongo/ModelBase.php");
 
 /*
  * Fields:
- *        emailid
+ *        user  [dbRef to users collection]
+ *        title
  *        content
  *        rating
+ *        date
  *        listing [dbRef to listings collection]
  */
 
@@ -40,6 +42,23 @@ class Application_Model_Reviews extends Mongo_ModelBase {
             $obj = static::$_collection->getDBRef($this->document['listing']);
             if ($obj != null) {
                 return new Application_Model_Listings($obj);
+            }
+        }
+        return null;
+    }
+    
+    public function setUser($user) {
+        if ($user != null) {
+            $this->document['user'] = $user->getRef();
+            static::update(array("_id"=>$this->id), $this->document);
+        }
+    }
+    
+    public function getUser() {
+        if (isset($this->document['user'])) {
+            $obj = static::$_collection->getDBRef($this->document['user']);
+            if ($obj != null) {
+                return new Application_Model_Users($obj);
             }
         }
         return null;
