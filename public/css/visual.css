@@ -86,7 +86,7 @@ body {
 	width:960px;
 	height:90px;
 }
-.v_search .v_search_input {
+.v_search .v_search_input{
 	background:url(../images/bg_search_result_page.jpg) top left no-repeat;
 	font-size:16px;
 	font-weight:bold;
@@ -95,7 +95,7 @@ body {
 .v_search label {
 	color:#333;
 }
-.v_search .v_input_bg {
+.v_search .v_input_bg, .online_resrv .v_input_bg{
 	background:url(../images/bg_input1.jpg) top center no-repeat;
 }
 .v_search .v_dropdwon_bg {

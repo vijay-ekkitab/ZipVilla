@@ -167,7 +167,7 @@
 							<div style="display: block; width: 630px; overflow: auto;" class="cboxLoadedContent">
 
 								<div class="filters_lightbox new-modal">
-									<div id="tabs">
+									<div id="tabs1">
 										<h2 class="clearfix">
 											<ul class="filters_lightbox_nav">
 												<li class="filters_lightbox_nav_element"><a href="#tab1" style="padding:5px 10px;">Room Type</a></li>
@@ -221,13 +221,13 @@
 																		}
 																	} ?>
 																	<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																	<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/></p>
+																	<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/>
 																	<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
-																	<!--
+																	<?php /* 
 																	<li class="clearfix"><span class="facet_count">236</span>
 																	<input id="lightbox_amenity_3" name="amenities" value="11" type="checkbox" /> 
 																	<label for="lightbox_amenity_3">Smoking Allowed</label></li>
-																	-->
+																	*/ ?>
 																<?php endforeach; ?>
 															<?php }?>
 														</ul>
@@ -241,7 +241,7 @@
 														
 														<div class="lightbox_filters_left_column">
 															<h3>Onsite Services</h3>
-															<ul id="lightbox_filter_content_OnsiteServices" class="search_filter_content"> 
+															<ul id="" class="search_filter_content"> 
 																<?php $feature = 'onsite_services';
 																	$iCtr = 0;
 																	if (isset($this->facets[$feature])) {
@@ -257,7 +257,7 @@
 																				}
 																			} ?>
 																			<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/></p>
+																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
 																			<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
 																		<?php endforeach; ?>
 																	<?php }?>                                                         
@@ -266,7 +266,7 @@
 
 														<div class="lightbox_filters_right_column">
 															<h3>Suitability</h3>
-															<ul id="lightbox_filter_content_Suitability" class="search_filter_content">
+															<ul id="" class="search_filter_content">
 																<?php $feature = 'suitability';
 																	$iCtr = 0;
 																	if (isset($this->facets[$feature])) {
@@ -282,7 +282,7 @@
 																				}
 																			} ?>
 																			<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/></p>
+																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
 																			<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
 																		<?php endforeach; ?>
 																	<?php }?>
@@ -320,7 +320,7 @@
 
 																			<?php if ($this->facets[$feature][$type] > 0) {?>
 																				<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																					<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/></p>
+																					<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/>
 																					<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>                        
 																			<?php }?>
 																		<?php endforeach; ?>
@@ -353,7 +353,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> <!--  boxes -->
 
     </form>
     
