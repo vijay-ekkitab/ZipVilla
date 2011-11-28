@@ -184,23 +184,41 @@
 													<li class="lightbox_filter_container">
 														<div class="lightbox_filters_left_column"> 
 															<ul id="" class="search_filter_content">
-																<li class="clearfix"><span class="facet_count">3283</span>
-																	<input id="" name="room_types" value="Entire home/apt" type="checkbox" />
-																	<label for="lightbox_room_type_0">Entire home</label>
-																</li>
-																<li class="clearfix"><span class="facet_count">2358</span>
-																	<input id="" name="room_types" value="Private room" type="checkbox" />
-																	<label for="lightbox_room_type_1">Private room</label>
-																</li>
-																<li class="clearfix"><span class="facet_count">196</span>
-																	<input id="" name="room_types" value="Shared room" type="checkbox" />
-																	<label for="lightbox_room_type_2">Shared room</label>
-																</li>
+															
+																<div class="acc_section l_chkbox">
+																	<?php $feature = 'shared';
+																		$no_checked = '';
+																		$yes_checked = '';
+																		if (isset($this->facets_selected[$feature])) {
+																			foreach($this->facets_selected[$feature] as $facet) {
+																				if (preg_match("/\"?yes\"?/", $facet)) {
+																					$yes_checked = 'checked="yes"';
+																				}
+																				if (preg_match("/\"?no\"?/", $facet)) {
+																					$no_checked = 'checked="yes"';
+																				}
+																			}
+																		}?>
+                
+																	<li class="clearfix"><input id="<?php echo $feature.++$iCtr.'[]';?>" type="checkbox" name="<?php echo $feature.'[]';?>" value="no" class="l_styled" <?php echo $no_checked;?>  />
+																	<label for="<?php echo $feature.++$iCtr.'[]';?>">Entire home/villa</label>
+																	<?php if (isset($this->facets[$feature])) {?>
+																		<span class="facet_count"><?php echo $this->facets[$feature]['no'];?></span></li>
+																	<?php }?>
+																	<li class="clearfix"><input id="<?php echo $feature.++$iCtr.'[]';?>" type="checkbox" name="<?php echo $feature.'[]';?>" value="yes" class="l_styled" <?php echo $yes_checked;?>  />
+																	<label for="<?php echo $feature.++$iCtr.'[]';?>">Shared</label>
+																	<?php if (isset($this->facets[$feature])) {?>
+																	<span class="facet_count"><?php echo $this->facets[$feature]['yes'];?></span></li>
+																	<?php }?>
 															</ul>
 														</div>
 													</li>
 												</ul><!--ctnt first tab ends-->
 											</div> <!--Room Type-->
+											
+
+											
+											
                                   		
 											<div><!-- Amenities -->
 												<ul id="tab2" style="background-image:none;">
@@ -221,7 +239,7 @@
 																		}
 																	} ?>
 																	<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																	<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/>
+																	<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
 																	<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
 																	<?php /* 
 																	<li class="clearfix"><span class="facet_count">236</span>
@@ -320,7 +338,7 @@
 
 																			<?php if ($this->facets[$feature][$type] > 0) {?>
 																				<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																					<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" type="checkbox" <?php echo $checked;?>/>
+																					<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
 																					<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>                        
 																			<?php }?>
 																		<?php endforeach; ?>
