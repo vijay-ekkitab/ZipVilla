@@ -30,7 +30,7 @@ class Application_Model_Listings extends Mongo_ModelBase {
         if (isset($this->document['owner'])) {
             $obj = static::$_collection->getDBRef($this->document['owner']);
             if ($obj != null) {
-                return new Application_Model_Owners($obj);
+                return new Application_Model_Users($obj);
             }
         }
         return null;

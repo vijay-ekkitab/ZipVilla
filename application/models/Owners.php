@@ -7,6 +7,12 @@
 include_once("ZipVilla/TypeConstants.php");
 include_once("Mongo/ModelBase.php");
 
+/*
+ * Fields:
+ *        emailid
+ *        listings [array of dbRefs to listings collection] 
+ */
+
 class Application_Model_Owners extends Mongo_ModelBase {
 
     public static $_collectionName = OWNERS; 

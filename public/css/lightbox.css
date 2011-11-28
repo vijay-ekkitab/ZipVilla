@@ -1,0 +1,257 @@
+ol,ul {
+	list-style:none;
+}
+table{
+	border-collapse:separate;
+	border-spacing:0;
+}
+caption,th,td { 
+	text-align:left;
+	font-weight:normal;
+}
+.clearfix:after { 
+	content:".";
+	display:block;
+	height:0;
+	clear:both;
+	visibility:hidden
+}
+.cboxMiddleLeft {
+	width:21px;
+}
+.cboxTopCenter {
+	height:21px;
+}
+.cboxContent {
+	background:#fff;
+}
+.cboxLoadedContent {
+	margin-bottom:28px;
+}
+#color_box .cboxContent {
+	border:2px solid #000;
+	overflow:visible;
+	padding:20px;
+	border-radius:6px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	background:#efefef;
+	background:-webkit-gradient(linear,center top,center bottom,from(white),to(#efefef));
+	background:-moz-linear-gradient(top,white,#efefef);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffefefef',GradientType=0);
+	box-shadow:inset 0 1px 0 rgba(255,255,255,0.8),inset 0 -1px 0 rgba(255,255,255,0.4),0 2px 8px 0 rgba(0,0,0,0.9);
+	-o-box-shadow:inset 0 1px 0 rgba(255,255,255,0.8),inset 0 -1px 0 rgba(255,255,255,0.4),0 2px 8px 0 rgba(0,0,0,0.9);
+	-moz-box-shadow:inset 0 1px 0 rgba(255,255,255,0.8),inset 0 -1px 0 rgba(255,255,255,0.4),0 2px 8px 0 rgba(0,0,0,0.9);	
+	-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,0.8),inset 0 -1px 0 rgba(255,255,255,0.4),0 2px 8px 0 rgba(0,0,0,0.9)
+}
+#color_box .cboxLoadedContent {
+	margin-bottom:0
+}
+.button-glossy.green {
+	font-size:16px;
+	cursor:pointer;
+	width:100px;
+	height:33px;
+	color:#fff;
+	border:1px solid #b22d59;
+	background:#ca3265;
+	background:-webkit-gradient(linear,center top,center bottom,from(#c43162),to(#ca3265));
+	background:-moz-linear-gradient(top,#c43162,#ca3265);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c43162',endColorstr='#ca3265',GradientType=0);
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+}
+.button-glossy:hover{}
+.cboxLoadedContent h2 {
+	padding:5px 10px;
+	font-size:1.8em;
+	font-weight:bold;
+}
+#color_box .cboxContent {
+	padding:0
+}
+.cboxLoadedContent .new-modal,.new-modal {
+	/*width:610px;*/
+	background:#f5f5f5;
+	background:-webkit-gradient(linear,center top,center bottom,from(white),to(#f5f5f5));
+	background:-moz-linear-gradient(top,white,#f5f5f5);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#fff5f5f5',GradientType=0);
+	border-radius:10px;
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	color:#393c3d;
+}
+.cboxLoadedContent .new-modal .segment,.cboxLoadedContent .new-modal>h2,.cboxLoadedContent .new-modal>form>h2,.new-modal .segment,.new-modal>h2,.new-modal>form>h2 {
+	padding:18px 15px;
+	border-top:1px solid #fff;
+	border-bottom:1px solid #d5d5d5;
+	border-radius:6px;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+}
+.cboxLoadedContent .new-modal .segment.nopadding,.cboxLoadedContent .new-modal>h2.nopadding,.cboxLoadedContent .new-modal>form>h2.nopadding,.new-modal .segment.nopadding,.new-modal>h2.nopadding,.new-modal>form>h2.nopadding {
+	padding:0
+}
+.cboxLoadedContent .new-modal .segment .buttons,.cboxLoadedContent .new-modal>h2.buttons,.cboxLoadedContent .new-modal>form>h2.buttons,.new-modal .segment.buttons,.new-modal>h2.buttons,.new-modal>form>h2.buttons {
+	background:#ddd;
+	background:-webkit-gradient(linear,center top,center bottom,from(#eee),to(#ddd));
+	background:-moz-linear-gradient(top,#eee,#ddd);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeeeeee',endColorstr='#ffdddddd',GradientType=0);
+	padding:10px 15px;
+}
+.search_filter_content label {
+	cursor:pointer;
+	color:#787878;
+	font-size:12px;
+	line-height:26px;
+	float:none;
+	font-weight:normal;
+}
+.search_filter_content .facet_count {
+	color:#74a346;
+	background:#cfe5c4;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	display:block;
+	float:right;
+	padding:1px 7px;
+	text-align:center;
+	font-size:12px;
+}
+.filters_lightbox_nav_element {
+	float:left;
+	margin-right:20px;
+	font-size:18px;
+	text-transform:none;
+}
+.filters_lightbox_nav a {
+	color:#3d93d4;
+	text-decoration:none;
+}
+.filters_lightbox_nav .active a, .filters_lightbox_nav a:hover {
+	color:#333!important;
+}
+.lightbox_filters {
+	height:315px;
+}
+.lightbox_filter_action_area{
+	text-align:right;
+	height:100px;
+	float:right;
+	margin:10px 10px 0 0;
+}
+.lightbox_filter_action_area a{
+	color:#1d95cb;
+	font-size:15px;
+	padding-right:15px;
+	text-decoration:underline;
+}
+.lightbox_filter_container {
+	height:282px;
+	padding:15px;
+	box-sizing:border-box;
+}
+.lightbox_filter_container .search_filter_content {
+	padding:10px 15px 10px 0;
+	height:242px;
+	overflow:auto;
+}
+.filters_lightbox h3{
+	font-size:14px;
+	font-weight:bold;
+	color:#333;
+	padding:0 0 7px 0;
+	border-bottom:1px dotted #d1d1d1;
+}
+.lightbox_filters_left_column {
+	width:190px;
+	height:282px;
+	float:left;
+	margin-right:30px;
+}
+.lightbox_filters_right_column {
+	width:190px;
+	height:282px;
+	float:left;
+}
+.cboxClose {
+	top:-11px;
+	left:-10px;
+	background:url(../images/btn_closea.png);
+	width:22px;
+	height:22px;
+}
+.cboxClose {
+	cursor:pointer;
+}
+.cboxClose {
+	position:absolute;
+	top:23px;
+	left:26px;
+	width:22px;
+	height:22px;
+	text-indent:-9999px;
+}
+#mask_zv { 
+	position:absolute;
+	left:0;
+	top:0;
+	z-index:9000;
+	background-color:#000;
+	display:none;
+}  
+#boxes .lb_window_zv { 
+	position:absolute;
+	left:0;
+	top:0;
+	width:440px;
+	height:200px;
+	display:none;
+	z-index:9999;
+	padding:20px;
+}
+#boxes #lb_search_roomtype_zv {
+	width:375px;
+	height:203px;
+	padding:10px;
+	background-color:#ffffff;
+}
+#boxes #dialog1 {
+	width:375px;
+	height:203px;
+}
+#dialog1 .d-header {
+	background:url(images/login-header.png) no-repeat 0 0 transparent;
+	width:375px;
+	height:150px;
+}
+#dialog1 .d-header input{
+	position:relative;
+	top:60px;
+	left:100px;
+	border:3px solid #cccccc;
+	height:22px;
+	width:200px;
+	font-size:15px;
+	padding:5px;
+	margin-top:4px;
+}
+#dialog1 .d-blank {
+	float:left;
+	background:url(images/login-blank.png) no-repeat 0 0 transparent;
+	width:267px;
+	height:53px;
+}
+#dialog1 .d-login {
+	float:left;
+	width:108px;
+	height:53px;
+}
+#boxes #lb_search_amenities_zv {
+	background:url(images/notice.png) no-repeat 0 0 transparent;
+	width:326px;
+	height:229px;
+	padding:50px 0 20px 25px;
+}

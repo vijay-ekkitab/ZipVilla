@@ -61,6 +61,11 @@ class SearchController extends Zend_Controller_Action
                 }
             }
         }
+        
+        $session = new Zend_Session_Namespace('guest_data');
+        $session->checkin = $checkin;
+        $session->checkout = $checkout;
+        $session->guests = $guests;
             
         $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $price_range, $page, PAGE_SZ);
             

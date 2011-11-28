@@ -1,0 +1,286 @@
+<?php
+$this->title = "Property Detail";
+$this->headTitle($this->title);
+$this->layout()->setLayout('detail');
+$property = $this->property;
+$baseUrl = $this->baseUrl();
+//$mapHelper = $this->map();
+?>
+
+<?php if ($property == null) {?>
+    <p>There has been an internal error. The property is not found in the system.</p>
+<?php } else {?> <!-- Property detail available -->
+<?php $address = $property->address['street_number'] . ',' . $property->address['street_name'] . ',' .
+                 $property->address['city'] . ','. $property->address['state'] .','.
+                 $property->address['country'];
+      $property_type = $property->shared == 'yes' ? 'Shared house/villa' : 'Entire house/villa';
+      $reviews = Application_Model_Reviews::find(array('listing' => $property->getRef()));
+      $daily_rate = isset($property->rate['daily']) ? $property->rate['daily'] : 0;
+      $weekly_rate = isset($property->rate['weekly']) ? $property->rate['weekly'] : 0;
+      $monthly_rate = isset($property->rate['monthly']) ? $property->rate['monthly'] : 0;
+      if ($weekly_rate == 0) $weekly_rate = 7 * $daily_rate;
+      if ($monthly_rate == 0) $monthly_rate = 30 * $daily_rate;
+      $room_type = "Entire home/villa";
+      if ($property->shared == 'yes') $room_type = "Shared home/villa";
+      $country = isset($property->address['country']) ? $property->address['country'] : 'India';
+      $owner = $property->getOwner();
+      $owner_name = '';
+      $owner_image = 'default_user_image.jpg';
+      if ($owner != null) {
+          $owner_name = $owner->firstname . ' ' . $owner->lastname;
+          $owner_image = $owner->image;
+      }
+?>
+<script type="text/javascript">
+function calculate_rate() {
+	var checkin=$("#checkin").val();
+	var checkout=$("#checkout").val();
+	var guests=$("#guests").val();
+	var id="<?php echo $property->id;?>";
+    $.ajax({ 
+        type: "POST",
+        url:"/default/list/calculate/format/html",
+        data:"id="+id+"&checkin="+checkin+"&checkout="+checkout+"&guests="+guests,
+        complete:function(data) { $("#calc_rate").text("Rs. "+data.responseText);}});
+}
+</script>
+<div class="v_social_ico l_social_ico">
+                <h4 class="l_link_back_page v_link_back_page"><a href="#">Back to search results</a></h4>
+                <div class="l_social_netwrk"><img src="<?php echo $baseUrl;?>/images/icon_so_netwrk.jpg" /></div>
+            </div>
+            <div class="v_listing_header">
+                <div class="h2"><h1><?php echo $this->escape($property->title);?></h1><span><a href="#"></a></span>
+                    <h2><?php echo $address;?></h2>
+                    <div class="entire_villa"><p><?php echo $property_type;?></p></div>
+                </div>
+                <div class="v_ratings">
+                    <div class="ratings"><!--golden and silver stars-->
+                        <ul>
+                           <?php for($rc=0; $rc < 5; $rc++) {
+                                if ((0+$property->rating) > $rc) 
+                                    echo '<li><img src="'.$baseUrl.'/images/icon_ratings_gold.jpg"/></li>';
+                                else
+                                    echo '<li><img src="'.$baseUrl.'/images/icon_ratings_silver.jpg"/></li>';
+                                } 
+                           ?>
+                        </ul>
+                        <span>Av. Rating <?php echo $property->rating?></span>
+                    </div>
+                    <div class="reviews">
+                        <p><?php echo count($reviews)?></p>
+                        <span>Reviews</span>
+                    </div>
+                </div>
+            </div><!--v_listing_header ends here-->
+            <div class="l_search_results v_search_results"><!--Search result sections starts here-->
+                <div id="tabs"><!--tabs-->
+                    <ul>
+                        <li><a href="#tabs-1">Photos</a></li>
+                        <li><a href="#tabs-2">Videos</a></li>
+                        <li><a href="#tabs-3">Map</a></li>
+                        <li><a href="#tabs-4">Availability</a></li>
+                    </ul>
+                    <div id="tabs-1"><!--First tab content-->
+                        <div class="tab_content">
+                            <div class="slide"><img src="<?php echo $baseUrl;?>/images/dummyimg3.jpg" /></div>
+                            <div class="l_about_villa_left">
+                                <h2>About your stay</h2>
+                                <p><?php echo $property->description;?></p>
+                            </div><!--l_about_villa_left ends-->
+                            <div class="l_about_villa_right">
+                                <h2>Amenities</h2>
+                                <div class="amnts">
+                                    <ul>
+                                        <?php 
+                                             $features = array('amenities', 'onsite_services', 'suitability');
+                                             foreach($features as $feature) {
+                                                if ($property->{$feature} != null) {
+                                                    foreach($property->{$feature} as $k => $v) { 
+                                                        $icon = preg_replace('/ /','', $k); ?>
+                                                        <li><img src="<?php echo $baseUrl;?>/images/ico_swm.jpg" title="<?php echo $k;?>"/></li>
+                                              <?php } 
+                                                }
+                                             } 
+                                        ?>
+                                    </ul>
+                                </div>
+                                <h2>House Rules</h2>
+                                <p><?php echo $property->house_rules;?></p>
+                            </div><!--l_about_villa_right ends-->
+                            <div class="ratng_rvews">
+                                <h2>Ratings &amp; Reviews</h2>
+                                <div class="ratings"><!--golden and silver stars-->
+                                    <span>Average rating</span>
+                                    <ul>
+                                        <?php for($rc=0; $rc < 5; $rc++) {
+                                            if ((0+$property->rating) > $rc) 
+                                                echo '<li><img src="'.$baseUrl.'/images/icon_ratings_gold.jpg"/></li>';
+                                            else
+                                                echo '<li><img src="'.$baseUrl.'/images/icon_ratings_silver.jpg"/></li>';
+                                            } 
+                                        ?>
+                                        <li><?php echo $property->rating;?></li>
+                                    </ul>
+                                    <span>Based on <?php echo count($reviews);?> reviews</span>
+                                </div>
+                                <div class="ratings"><!--golden and silver stars-->
+                                    <a href="list/rate?id=<?php echo $property->id;?>">
+                                    <span>Have you been here?</span>
+                                    <ul>
+                                        <li><img src="<?php echo $baseUrl;?>/images/icon_ratings_silver.jpg" /></li>
+                                        <li><img src="<?php echo $baseUrl;?>/images/icon_ratings_silver.jpg" /></li>
+                                        <li><img src="<?php echo $baseUrl;?>/images/icon_ratings_silver.jpg" /></li>
+                                        <li><img src="<?php echo $baseUrl;?>/images/icon_ratings_silver.jpg" /></li>
+                                        <li><img src="<?php echo $baseUrl;?>/images/icon_ratings_silver.jpg" /></li>
+                                    </ul>
+                                    <span>Rate your experience</span>
+                                    </a>
+                                </div>
+                                <div class="write_review">
+                                    <p><strong><?php echo count($reviews);?> Reviews</strong></p>
+                                    <div class="btn_write_review"><a href="list/rate?id=<?php echo $property->id;?>"><img src="images/btn_writ_revew.jpg" alt="Write review"></a></div>
+                                </div><!--write_review ends-->
+                            </div><!--ratng_rvews ends-->
+                            <?php if ($reviews != null) {
+                                foreach($reviews as $review) { 
+                                    $user = $review->getUser(); ?>                                        
+                                        <div class="list_review">
+                                            <div class="img_profle"><img src="<?php echo $baseUrl;?>/images/user/<?php echo $user->image;?>" />
+                                                <p><?php echo $user->firstname;?><br><span><?php $review->date;?></span></p>
+                                            </div>
+                                            <div class="review">
+                                                <h2><?php echo $review->title;?></h2>
+                                                <p><?php echo $review->content;?></p>
+                                            </div>
+                                        </div><!--list_review ends here-->
+                                <?php }
+                            } ?>
+                            <!--<div class="form_write_review">
+                                <FORM action="mail.php" method="post">
+                                    <textarea cols="100" name="message" rows="3" class="FrmtxtArea"></textarea><br>
+                                    <INPUT class="input" type="submit" value="Submit review">
+                                </FORM>
+                            </div>--><!--form_write_review-->
+                        </div><!--tab_content ends here-->
+                        <!--  <div class="display_no"><p>Displaying <span>1</span> — <span>19</span> of <span>33</span> listings</p></div> -->
+                        <!-- <div class="pagination">
+                            <ul>
+                                <li class="current">1</li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                            </ul>
+                        </div> -->
+                        <!-- 
+                        <div class="l_page_buttons">
+                            <div class="btn_prev_page"><a href="#"><img src="images/btn_prev_page.jpg" alt="Previous page" /></a></div>
+                            <div class="btn_next_page"><a href="#"><img src="images/btn_next.jpg" alt="Next page" /></a></div>
+                        </div> -->
+                    </div><!--tab1 content ends here-->
+                    <div id="tabs-2">
+                        <div class="tab_content">Video tab content goes here.</div>
+                    </div><!--tab2 content ends here-->
+                    <div id="tabs-3">
+                          <div class="tab_content">Map tab content goes here.</div>
+                    </div><!--tab3 content ends here-->
+                    <div id="tabs-4">
+                          <div class="tab_content">Availability tab content goes here.</div>
+                    </div><!--tab3 content ends here-->
+                </div>
+            </div><!--search result ends here-->
+            <div class="l_right_side_panel v_right_side_panel">
+                <div>
+                    <h3>Make an online reservation</h3>
+                </div>
+                <div class="online_resrv">
+                    <div>
+                        <p>From</p>
+                        <h2 id="show_rate">Rs. <?php echo $daily_rate;?></h2>
+                    </div>
+                    <div class="online_resrv_dropdwn">
+                        <form action="">
+                            <select id="show_rate_options" name="per night">
+                                <option selected="selected" value="<?php echo $daily_rate;?>">per night</option>
+                                <option value="<?php echo $weekly_rate;?>">per week</option>
+                                <option value="<?php echo $monthly_rate;?>">per month</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="form_online">
+                        <form action="" method="get">
+                            <div class="floatleft"><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="5" id="checkin" name="check_in" value="<?php echo $this->checkin;?>"/></label></div>
+                            <div class="floatleft"><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg" type="text" id="checkout" size="5" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
+                            <div class="floatleft">
+                                <label for="guests">Guests<br /><input type="text" class="v_dropdwon_bg l_dropdwon_bg" id="guests" name="guests" value="<?php echo $this->guests;?>"/>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="sub_total">
+                        <button type="button" onclick="calculate_rate();">Calculate</button>
+                        <p>Subtotal</p>
+                        <h2 id="calc_rate">Rs,45,000</h2>
+                        <span>(excludes ZipVilla fee Rs.3,000)</span>
+                        <div class="btn_send_details"><a href="#"><img src="images/btn_send_details.jpg" /></a></div>
+                    </div>
+                </div>
+                <div class="l_refine_results v_refine_results">
+                    <div class="l_price">
+                        <div class="l_accordian_open"><a href="#"><img src="images/btn_acco_open.jpg" /></a></div>
+                        <h4><a href="#">Accomodation Details</a></h4>
+                        
+                        <div class="acco_dtls">
+                            <p>Room type:<span><?php echo $room_type; ?></span></p>
+                        </div>
+                        <div class="acco_dtls">
+                            <p>Bed Type:<span> ? </span></p>
+                        </div>
+                        <div class="acco_dtls">
+                            <p>Accomodates:<span><?php echo $property->guests; ?></span></p>
+                        </div>
+                        <div class="acco_dtls">
+                            <p>Bedrooms:<span><?php echo $property->bedrooms; ?></span></p>
+                        </div>
+                        <div class="acco_dtls">
+                            <p>Baths:<span><?php echo $property->baths; ?></span></p>
+                        </div>
+                        <div class="acco_dtls">
+                            <p>Country:<span class="blue"><?php echo $country; ?></span></p>
+                        </div>
+                    </div>
+                    <div class="l_price">
+                        <div class="l_accordian_open"><a href="#"><img src="images/btn_acco_open.jpg" /></a></div>
+                        <?php $owner_line = '[Add Owner]'; $owner_link = '/list/addOwner?id='.$property->id;
+                              if ($owner != null) { $owner_line = 'About your host'; $owner_link = '';}?>
+                        <h4><a href="<?php echo $owner_link;?>"><?php echo $owner_line;?></a></h4>
+                        <div style="margin-top:10px;" class="img_profle"><img src="<?php echo $baseUrl.'/images/users/'.$owner_image;?>"/>
+                            <p><?php echo $owner_name;?><!-- <br><span>31 October, 2011</span> --></p>
+                        </div>
+                        <div class="host_ratings">
+                            <div>
+                                <span>Response rate:</span>
+                                <p>100% <div class="what"><img src="images/btn_questin.jpg" /></div></p>
+                            </div>
+                            <div>
+                                <span>Acceptance rate:</span>
+                                <p>100%<div  class="what"><img src="images/btn_questin.jpg" /></div></p>
+                            </div>
+                            <div>
+                                <span>Verfied via Facebook</span>
+                                <p>342 Friends</p>
+                            </div>
+                        </div>
+                            <div class="form_write_review">
+                                <FORM action="mail.php" method="post">
+                                    <textarea cols="22" name="message" rows="1" class="FrmtxtArea"></textarea><br>
+                                    <INPUT class="input" type="submit" value="Send it now">
+                                </FORM>
+                            </div><!--form_write_review-->
+                    </div>
+                    <div class="l_price">
+                        <div class="l_accordian_open"><a href="#"><img src="images/btn_acco_open.jpg" /></a></div>
+                        <h4><a href="#">Other Listings</a></h4>
+                    </div>
+                </div>
+            </div><!--right_side_panel ends here-->
+<?php }?> <!-- End property detail available -->
+

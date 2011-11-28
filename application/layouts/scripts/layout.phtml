@@ -125,17 +125,7 @@
     
   <body class="blue">
 	<div class="wrapper"><!--outer wrapper to fix the width-->
-    	<div class="header"><!--header section-->
-        	<div class="logo"><a href="index.html"><img src="<?php echo $baseUrl;?>/images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
-            <div class="v_top_nav l_top_nav">
-            	<ul>
-            	    <li><a href="<?php echo $this->url(array('controller' => 'search', 'action' => 'reindex'));?>">Index</a></li>
-                	<li><a href="#">How Zipvilla Works</a></li>
-                    <li><?php echo $this->loggedInAs(); ?></li>
-                    <li class="last"><?php echo $this->registerLink(); ?></li>
-                </ul>
-            </div><!--top_nav ends-->
-   		</div><!--header ends here-->
+        <?php echo $this->render('header.phtml');?>
         <div class="content">
         	<div class="v_search_form">
             	<div class="v_search l_search">
@@ -263,14 +253,12 @@
                 </div>
                 <div id="map" class="map">
                 </div>
-                <?php $this->setScriptPath(APPLICATION_PATH.'/views/scripts/search');
+                <?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search');
                 echo $this->render('rightpanel.phtml');?>
            	</div><!--right_side_panel ends here-->
-        <div class="footer"></div><!--footer ends here-->
-				</div>
-			</div>
-
+        </div><!-- content ends here -->
+        <?php echo $this->render('footer.phtml');?>
+	</div><!-- wrapper ends here -->
  </body>
 </html>
-   
 

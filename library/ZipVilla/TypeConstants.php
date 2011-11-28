@@ -8,6 +8,7 @@ const  ATTRIBUTES     =  "attributes" ;
 const  ENUMERATIONS   =  "enumerations";
 const  OWNERS         =  "owners";
 const  USERS          =  "users";
+const  REVIEWS        =  "reviews";
 
 #consts for attribute and type definitions
 const  ID           =  "id" ;

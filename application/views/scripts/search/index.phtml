@@ -26,7 +26,7 @@ foreach($this->results as $result) : ?>
   <!--picture-->
   <div class="favorite">  <img src="<?php echo $this->baseUrl();?>/images/icon_favorite.jpg" alt="Favorite" />  </div>
   <div class="resort_details">
-  <h2><?php echo $this->escape($result['title']);?></h2>
+  <h2><a href="<?php echo $this->baseUrl().'/list?id='.$result['id'];?>"><?php echo $this->escape($result['title']);?></a></h2>
   <p>
   <?php echo $this->escape($result['address__street_name']);?>,
   <?php echo $this->escape($result['address__city']);?>,

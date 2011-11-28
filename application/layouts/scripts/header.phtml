@@ -1,0 +1,11 @@
+<div class="header"><!--header section-->
+	<div class="logo"><a href="index.html"><img src="<?php echo $this->baseUrl();?>/images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
+    <div class="v_top_nav l_top_nav">
+    	<ul>
+    	    <li><a href="<?php echo $this->url(array('controller' => 'search', 'action' => 'reindex'));?>">Index</a></li>
+        	<li><a href="#">How Zipvilla Works</a></li>
+            <li><?php echo $this->loggedInAs(); ?></li>
+            <li class="last"><?php echo $this->registerLink(); ?></li>
+        </ul>
+    </div><!--top_nav ends-->
+</div><!--header ends here-->
