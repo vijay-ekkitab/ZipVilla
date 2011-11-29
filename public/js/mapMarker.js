@@ -4,7 +4,8 @@ function mapMarker(pMapCanvas, pStartIndex)
 	var infowindow;
 	var marker=0;
 	var i;
-	var startIndex = pStartIndex;
+	//var startIndex = pStartIndex;
+	var startIndex = 0;  // if we ever need to use startIndex DELETE this line and use the one above
 	
 	if ((typeof zv_map_center_latitude === 'undefined') || 
 	    (typeof zv_map_center_longitude === 'undefined')) {
@@ -26,10 +27,11 @@ function mapMarker(pMapCanvas, pStartIndex)
 		return;
 	}
 
-	for( i = 0; i<zv_villa_locations.length; i++, startIndex++) {
+	for( i = 0; i < zv_villa_locations.length; i++, startIndex++) {
 //		$(document.getElementById(pMapCanvas)).append( 
-//				'<div class="villas">'+'<h4>'+zv_villa_locations[i][0]+'</h4>'+'</div>');
-
+//				'<div class="villas">'+'<h4>{'+zv_villa_locations[i][0]
+//				+'}-{'+zv_villa_locations[i][1]+'}-{'+zv_villa_locations[i][2]+'}</h4></div>');
+	
 		if( zv_villa_locations[i][1] > 0 ) {   
 
 			
@@ -37,12 +39,11 @@ function mapMarker(pMapCanvas, pStartIndex)
 //				var markerImage = '/images/map_markers/red1_99/blank.png';
 //			else
 //				var markerImage = '/images/map_markers/red1_99/marker' + startIndex + '.png';
-
+			
 			var markerImage = '/images/map_markers/red1_99/marker' + (1+i) + '.png';
 			
 			var image = new google.maps.MarkerImage(markerImage, new google.maps.Size(20, 34), new google.maps.Point(0, 0), new google.maps.Point(10, 34));
 
-			
 					marker = new google.maps.Marker({
 								position: new google.maps.LatLng(zv_villa_locations[i][1], 
 																 zv_villa_locations[i][2]),
@@ -57,11 +58,10 @@ function mapMarker(pMapCanvas, pStartIndex)
 												  function() {
 														infowindow.setContent(this.html);
 														infowindow.open(map, this);
+														inforwindow.setMaxWidth(100);
 													});
 		}
 	}
-	
-
 }
 
 // End of Script - Copyright (c) ZipVilla, 2011 - 2011.
