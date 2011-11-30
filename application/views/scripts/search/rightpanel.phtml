@@ -112,10 +112,8 @@
             <?php $feature = 'address__location';
                   $logger = Zend_Registry::get('zvlogger');
                   if (isset($this->facets[$feature])) {
-                    $logger->debug("Facet results found for address__location");
                     foreach ($this->facets[$feature]->getPropertyNames() as $type): 
                         $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-                        $logger->debug("Facet type: $type");
                         $checked = '';
                         if (isset($this->facets_selected[$feature])) {
                             foreach($this->facets_selected[$feature] as $facet) {
@@ -322,10 +320,8 @@
 																	$iCtr = 0;															
 																	$logger = Zend_Registry::get('zvlogger');
 																	if (isset($this->facets[$feature])) {
-																		$logger->debug("Facet results found for address__location");
 																		foreach ($this->facets[$feature]->getPropertyNames() as $type):
 																			$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-																			$logger->debug("Facet type: $type");
 																			$checked = '';
 																			if (isset($this->facets_selected[$feature])) {
 																				foreach($this->facets_selected[$feature] as $facet) {

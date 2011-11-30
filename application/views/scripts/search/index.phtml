@@ -17,10 +17,7 @@ foreach($this->results as $result) : ?>
   <div class="search_no"> <?php echo ++$villaCtr ?></div>
   <!--search result number-->
   <?php
-     $imagepath=$this->baseUrl().'/images/resort_img.jpg';
-     if ((isset($result['images'])) && (count($result['images']) > 0)) {
-        $imagepath = $this->baseUrl().'/images/listings/'.strtolower($result['address__city']).'/'.$result['images'][0];
-     }
+    $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $result);
   ?>
   <div class="villa_image">  <img src="<?php echo $imagepath;?>" alt="resort name" />  </div>
   <!--picture-->
