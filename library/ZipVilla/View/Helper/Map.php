@@ -23,9 +23,11 @@ class ZipVilla_View_Helper_Map
         $script .= 'var zv_villa_locations = [';
         foreach($villas as $villa) {
             $script .= '[' .
-                        '\''.$this->view->escape($villa['address__street_name']) . '\',' .
+                        '\''.$this->view->escape($villa['title']) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__latitude']) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__longitude']) . '\',' .
+                        '\''.$this->view->escape($villa['title']) . ',' .
+                        '\''.$this->view->escape($villa['street__name']) . ',' .
                         '\''.$this->view->escape($villa['address__city']) . '\''. 
                        '],';
             if (($pos == null) && ($villa['address__coordinates__latitude'] > 0)) {
@@ -49,10 +51,12 @@ class ZipVilla_View_Helper_Map
         $script .= 'var zv_villa_locations = [';
         foreach($villas as $villa) {
             $script .= '[' .
-                        '\''.$this->view->escape($villa->address['street_name']) . '\',' .
+                        '\''.$this->view->escape($villa->title) . '\',' .
                         '\''.$this->view->escape($villa->address['coordinates']['latitude']) . '\',' .
                         '\''.$this->view->escape($villa->address['coordinates']['longitude']) . '\',' .
-                        '\''.$this->view->escape($villa->address['city']) . '\''. 
+                        '\''.$this->view->escape($villa->title) . ',' 
+                            .$this->view->escape($villa->address['street_name']) . ',' 
+                            .$this->view->escape($villa->address['city']) . '.\''. 
                        '],';
             if (($pos == null) && ($villa->address['coordinates']['latitude'] > 0)) {
                 $pos = 'var zv_map_center_latitude = \''.$this->view->escape($villa->address['coordinates']['latitude']).'\'; ' .
