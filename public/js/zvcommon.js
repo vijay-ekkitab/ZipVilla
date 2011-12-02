@@ -34,6 +34,7 @@ $(document).ready(function()
 	
 		//transition effect
 		$(id).fadeIn(2000); 
+		$(window).scrollTop($("#lb_search_zv").offset().top);
 	
 	});
 	
