@@ -2,13 +2,60 @@
 include_once("ZipVilla/TypeConstants.php");
 class SearchController extends Zend_Controller_Action
 {
-
+    const CHECKIN  = 'check_in';
+    const CHECKOUT = 'check_out';
+    const GUESTS   = 'guests';
+    const QUERY    = 'query';
+    const PAGE     = 'page';
+    const SORT     = 'sort';
+    const PRICE_RANGE = 'price_range';
+    const KEYWORDS = 'keywords';
+    
+    protected $facets = array('amenities', 'onsite_services', 'suitability', 'address__location', 'shared');
+    
     public function init()
     {
         /* Initialize action controller here */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('lookahead', 'html')
                     ->initContext();
+    }
+    
+    protected function save_session_data($values)
+    {
+        $session = new Zend_Session_Namespace('guest_data');
+        $session->values = $values;
+    }
+    
+    protected function get_session_data()
+    {
+        $session = new Zend_Session_Namespace('guest_data');
+        return $session->values;
+    }
+    
+    protected function read_value($values, $index, $default=null)
+    {
+        return isset($values[$index]) ? $values[$index] : $default;
+    }
+    
+    protected function set_view_params($values, $results, $q) 
+    {
+        $this->view->search_query   = $this->read_value($values, SearchController::QUERY);
+        $this->view->checkin        = $this->read_value($values, SearchController::CHECKIN);
+        $this->view->checkout       = $this->read_value($values, SearchController::CHECKOUT);
+        $this->view->guests         = $this->read_value($values, SearchController::GUESTS);
+        $this->view->page           = $this->read_value($values, SearchController::PAGE);
+        $this->view->pagesz         = PAGE_SZ;
+        $this->view->sortorder      = $this->read_value($values, SearchController::SORT);
+        $this->view->price_range    = $this->read_value($values, SearchController::PRICE_RANGE);
+        $this->view->keywords       = $this->read_value($values, SearchController::KEYWORDS);
+        $this->view->results        = $results['docs'];
+        $this->view->total_hits     = $results['count'];
+        if (isset($results['facets'])) {
+            $this->view->facets     = $results['facets'];
+        }
+        unset($q['city_state']);
+        $this->view->facets_selected = $q;
     }
 
     public function reindexAction() 
@@ -23,160 +70,82 @@ class SearchController extends Zend_Controller_Action
     {
         $logger = Zend_Registry::get('zvlogger');
         
-        $checkin = $this->_getParam('check_in', null);
-        $checkout = $this->_getParam('check_out', null);
-        $guests = $this->_getParam('guests', 1);
-        $page = $this->_getParam('page', 1);
-        $sortorder = $this->_getParam('sort', SORT_ORDER_RATING);
-        $place = $this->_getParam('query', 0);
-        $price_range = null;
-        //$logger->debug("<Search Controller> cin=$checkin,cout=$checkout,g=$guests,p=$page,s=$sortorder,q=$place.");
-        $sm = $this->_helper->searchManager;
-            
-        if (!$place) {
-            $place = '*';
-        }
-        if ($place == '*') {
-            $q = array('city_state' => $place);
-        }
-        else {
-            $q = array('city_state' => '"'.$place.'"');
-        }
-            
-        $facetstr = $this->_getParam('facet', 0);
-        $facets = array();
-        if ($facetstr) {
-            $parts = explode(',', $facetstr);
-            foreach ($parts as $part) {
-                $tmp = explode('=', $part);
-                if (count($tmp) == 2) {
-                    $tmp[0] = trim($tmp[0]);
-                    $tmp[1] = trim($tmp[1]);
-                    if (!in_array($tmp[0].$tmp[1],$facets))
-                        $facets[] = $tmp[0].$tmp[1];
-                    if (!isset($q[$tmp[0]])) {
-                        $q[$tmp[0]] = array();
-                    }
-                    $q[$tmp[0]][] = '"'.$tmp[1].'"';
-                }
+        $values = $this->getRequest()->getParams();
+        
+        if (!isset($values[SearchController::QUERY])) {
+            $values = $this->get_session_data();
+            if ($values == null) {
+                $this->_helper->redirector('index', 'index');
             }
         }
         
-        $session = new Zend_Session_Namespace('guest_data');
-        $session->checkin = $checkin;
-        $session->checkout = $checkout;
-        $session->guests = $guests;
+        $sm = $this->_helper->searchManager;
             
-        $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $price_range, $page, PAGE_SZ);
-            
-        if ($search_results) {
-            $this->view->search_query = $place;
-            $this->view->facet_query = isset($facetstr) ? $facetstr : null;
-            $this->view->checkin = $checkin;
-            $this->view->checkout = $checkout;
-            $this->view->guests = $guests;
-            $this->view->facets_used = $facets;
-            $this->view->results = $search_results['docs'];
-            $this->view->total_hits = $search_results['count'];
-            $this->view->page = $page;
-            $this->view->pagesz = PAGE_SZ;
-            $this->view->sortorder = $sortorder;
-            if (isset($search_results['facets'])) {
-                $this->view->facets = $search_results['facets'];
-            }
+        if ((!isset($values[SearchController::QUERY])) ||
+            ($values[SearchController::QUERY] == '')) {
+            $values[SearchController::QUERY] = '*';
         }
-        else {
-            $this->view->error = 'encountered error in search.';
-        }
-    }
 
-    public function refinedAction()
-    {
-        $logger = Zend_Registry::get('zvlogger');
-        $request = $this->getRequest();
-        if (!$request->isPost()) {
-            $this->_helper->redirector('index', 'index');
-        }
-        
-        $values = $request->getPost();
-        
-        $checkin = isset($values['check_in']) ? $values['check_in'] : null;
-        $checkout = isset($values['check_out']) ? $values['check_out'] : null;
-        $guests = isset($values['guests']) ? $values['guests'] : 1;
-        $page = isset($values['page']) ? $values['page'] : 1;
-        $sortorder = isset($values['sort']) ? $values['sort'] : SORT_ORDER_RATING;
-        $place = isset($values['query']) ? $values['query'] : 0;
-        $keywords = isset($values['keywords']) ? $values['keywords'] : 0;
-        $price_range = isset($values['price_range']) ? $values['price_range'] : "";
-        if (preg_match_all('/([0-9]+)/', $price_range, $matches)) {
-            $price_range = $matches[0];
-        }
+        if (!isset($values[SearchController::PRICE_RANGE]))
+            $values[SearchController::PRICE_RANGE] = null;
         else {
-            $price_range = array(MIN_RATE, MAX_RATE);
-        }
-        
-        $sm = $this->_helper->searchManager;
-            
-        if (!$place) {
-            $place = '*';
-        }
-        if ($place == '*') {
-            $q = array('city_state' => $place);
-        }
-        else {
-            $q = array('city_state' => '"'.strtolower($place).'"');
-        }
-        
-        if ($request->isPost()) {
-            foreach ($values as $key => $value) {
-                if (is_array($value)) {
-                    if (!isset($q[$key])) {
-                        $q[$key] = array();
-                    }
-                    foreach($value as $v) {
-                        $v = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $v);
-                        $q[$key][] = '"' . $v . '"';
-                    }
+            if(is_string($values[SearchController::PRICE_RANGE])) {
+                if (preg_match_all('/([0-9]+)/', $values[SearchController::PRICE_RANGE], $matches)) {
+                    $values[SearchController::PRICE_RANGE] = $matches[0];
+                }
+                else {
+                    $values[SearchController::PRICE_RANGE] = array(MIN_RATE, MAX_RATE);
                 }
             }
         }
         
-        if ($keywords) {
-            $keyword_array = explode(' ', $keywords);
+        $q = array();
+        
+        if ($values[SearchController::QUERY] == '*') {
+            $q = array('city_state' => $values[SearchController::QUERY]);
+        }
+        else {
+            $q = array('city_state' => '"'.$values[SearchController::QUERY].'"');
+        }
+        
+        foreach ($this->facets as $facet) {
+            if (isset($values[$facet])) {
+                if (!isset($q[$facet])) {
+                    $q[$facet] = array();
+                }
+                foreach($values[$facet] as $v) {
+                    $v = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $v);
+                    $q[$facet][] = '"' . $v . '"';
+                }
+            }
+        }
+        
+        if (isset($values[SearchController::KEYWORDS])) {
+            $keyword_array = explode(' ', $values[SearchController::KEYWORDS]);
             for($i=0; $i<count($keyword_array); $i++) {
                 $keyword_array[$i] = '"'.$keyword_array[$i].'"';
             }
             $q['description'] = $keyword_array;
         }
         
-        $search_results = $sm->search($q, $checkin, $checkout, $guests, $sortorder, $price_range, $page, PAGE_SZ);
+        $search_results = $sm->search($q, 
+                                      $this->read_value($values, SearchController::CHECKIN),
+                                      $this->read_value($values, SearchController::CHECKOUT),
+                                      $this->read_value($values, SearchController::GUESTS,1),
+                                      $this->read_value($values, SearchController::SORT,SORT_ORDER_RATING),
+                                      $this->read_value($values, SearchController::PRICE_RANGE),
+                                      $this->read_value($values, SearchController::PAGE,1),
+                                      PAGE_SZ);
             
         if ($search_results) {
-            $this->view->search_query = $place;
-            //$this->view->facet_query = isset($facetstr) ? $facetstr : null;
-            $this->view->checkin = $checkin;
-            $this->view->checkout = $checkout;
-            $this->view->guests = $guests;
-            //$this->view->facets_used = $facets;
-            $this->view->results = $search_results['docs'];
-            $this->view->total_hits = $search_results['count'];
-            $this->view->page = $page;
-            $this->view->pagesz = PAGE_SZ;
-            $this->view->sortorder = $sortorder;
-            $this->view->price_range = $price_range;
-            $this->view->keywords = $keywords;
-            if (isset($search_results['facets'])) {
-                $this->view->facets = $search_results['facets'];
-            }
-            unset($q['city_state']);
-            $this->view->facets_selected = $q;
+            $this->set_view_params($values, $search_results, $q);
         }
         else {
             $this->view->error = 'encountered error in search.';
         }
-        
-        $this->_helper->viewRenderer('index');
+        $this->save_session_data($values);
     }
+
     
     public function lookaheadAction() {
         $logger = Zend_Registry::get('zvlogger');

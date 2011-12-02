@@ -1,0 +1,58 @@
+<?php 
+    $numpages = ($this->total_hits % $this->pagesz) > 0 ? 1 + (int)($this->total_hits/$this->pagesz) : (int)($this->total_hits/$this->pagesz);
+    $backpages = $this->page - 1;
+    $pagesahead = $numpages - $this->page;
+    $next_page_btn = FALSE;
+    $prev_page_btn = FALSE;
+    if ($backpages <= 0) {
+        $pg1 = $this->page;
+        $pg2 = ($this->page + 1) > $numpages ? null : $this->page + 1;
+        $pg3 = ($this->page + 2) > $numpages ? null : $this->page + 2;
+        if ($pg2 != null) { $next_page_btn = TRUE; $next_page = $pg2; }
+    }
+    elseif ($pagesahead <= 0) {
+        $pg3 = $this->page;
+        $pg2 = ($this->page - 1) < 1  ? null : $this->page - 1;
+        $pg1 = ($this->page - 2) < 1  ? null : $this->page - 2;
+        if ($pg2 != null) { $prev_page_btn = TRUE; $prev_page = $pg2; }
+    }
+    else {
+        $next_page_btn = TRUE;
+        $prev_page_btn = TRUE;
+        $pg2 = $this->page;
+        $pg1 = $this->page - 1; $prev_page = $pg1;
+        $pg3 = $this->page + 1; $next_page = $pg3;
+    }
+    $pagenumbers = array($pg1, $pg2, $pg3);
+    $start = 1 + ($this->page - 1)*$this->pagesz; $end = ($start -1) + count($this->results);
+?>
+
+<div class="tab_content">
+     <?php echo $this->layout()->content; ?>
+</div>
+<?php if ($this->total_hits > 0) {?>
+    <div class="display_no">
+        <p>Displaying <span><?php echo $start;?></span> — <span><?php echo $end ?></span> of <span><?php echo $this->total_hits; ?></span> listings</p>
+    </div>
+    <div class="pagination"><!--pagination-->
+	<ul>
+	    <?php foreach ($pagenumbers as $pg):?>
+	       <?php if ($pg != null) {?>
+            <?php if ($pg == $this->page) {?>
+                <li class="current"><?php echo $pg;?></li>
+            <?php } else {?>
+                <li><a href="#" onclick="setPage(<?php echo $pg;?>); validate();document.search_form.submit();"><?php echo $pg;?></a></li>
+            <?php }?>
+           <?php }?>
+	    <?php endforeach;?>
+    </ul>
+    </div>
+    <div class="l_page_buttons"><!--Previous Next Page buttons-->
+        <?php if ($prev_page_btn) { ?>
+            <a href="#" onclick="setPage(<?php echo $prev_page;?>); validate();document.search_form.submit();"><div class="btn_prev_page"><img src="<?php echo $baseUrl;?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a>
+        <?php }?>
+        <?php if ($next_page_btn) { ?>
+            <a href="#" onclick="setPage(<?php echo $next_page;?>); validate();document.search_form.submit();"><div class="btn_next_page"><img src="<?php echo $baseUrl;?>/images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
+        <?php }?>
+    </div><!--Previous Next Page buttons ends-->
+<?php }?>

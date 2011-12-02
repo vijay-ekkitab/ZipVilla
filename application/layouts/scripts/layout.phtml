@@ -35,132 +35,17 @@
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                        ;?>
-        
-        <?php $ctr = 1+($this->page - 1) * $this->pagesz;?>
-        
-        <script type="text/javascript">
-        function watchQueryBox() {
-            if ($('#query').data('lastValue') != $('#query').val()) {
-                $.ajax({ 
-                    type: "POST",
-                    url:"/default/search/lookahead/format/html",
-                    data:"query="+$('#query').val(),
-                    complete:function(data) { console.log(data.responseText);}});
-                $('#query').data('lastValue', $('#query').val());
-            }
-        }
-        	        
-        $(document).ready(function(){
-        	   <?php 
-                    $low = MIN_RATE; $high = MAX_RATE;
-                    if (isset($this->price_range)) {
-                        $low=$this->price_range[0];
-                        $high=$this->price_range[1];
-                    }
-                    $sort = 0;
-                    if (isset($this->sortorder)) {
-                        if ($this->sortorder == 'hl') {
-                            $sort = 1;
-                        }
-                        elseif ($this->sortorder == 'lh') {
-                            $sort = 2;
-                        }
-                    }
-               ?>
-            mapMarker('map', <?php echo $ctr;?>);
-        	
-        	$('#price_slider').slider({
-                values: [<?php echo $low;?>, <?php echo $high;?>],
-            });
-        	$( "#price_range" ).val( "Rs." + $( "#price_slider" ).slider( "values", 0) +
-                    " - Rs." + $( "#price_slider" ).slider( "values", 1 ));
-
-        	$("#guests").val("<?php echo $this->guests;?>");
-        	<?php if ((isset($this->search_query)) &&  ($this->search_query != '*')){?>
-        	   $("#query").val("<?php echo $this->search_query;?>");
-        	<?php }?>
-        	$("#sort_by").prop('selectedIndex', <?php echo $sort;?>);
-        	$('#query').data('lastValue', '<?php echo $this->search_query;?>');
-        	$('#query').bind('keypress', null, watchQueryBox);
-
-            $(".defaultText").focus(function(srcc) {
-        	    if ($(this).val() == $(this)[0].title) {
-        	        $(this).removeClass("defaultTextActive");
-        	        $(this).val("");
-        	    }
-        	 });
-        		    
-            $(".defaultText").blur(function() {
-                if ($(this).val() == "") {
-                    $(this).addClass("defaultTextActive");
-                    $(this).val($(this)[0].title);
-                }
-             });
-        		    
-            $(".defaultText").blur();    
-            
-        });
-        function doSort(sortbox) 
-        {
-        	location.href=sortbox.options[sortbox.selectedIndex].value;
-        }
-        function init() 
-        {
-            document.getElementById('select_'+'<?php echo $this->sortorder;?>').selected = true;
-        }
-      	$(function() {
-      		$( "#checkin" ).datepicker();
-      	});
-      	$(function() {
-      		$( "#checkout" ).datepicker();
-      	});
-      	function validate() 
-      	{
-          	$(".defaultText").each(function(i) {if ($(this).val() == $(this)[0].title) $(this).val('');});
-      	}
-      	
-      	</script>
+                                       
+        <?php echo $this->render('search_page_js.phtml');?>
         
 </head>
-    
   <body class="blue">
 	<div class="wrapper"><!--outer wrapper to fix the width-->
         <?php echo $this->render('header.phtml');?>
         <div class="content">
-        	<div class="v_search_form">
-            	<div class="v_search l_search">
-                	<form action="/search" method="get">
-                    	<input class="l_search_input v_search_input defaultText" type="text" title="Where do you want to go?" name="query" id="query" autocomplete="off" size="73" value="" />
-                    	<input type="hidden" id="page" name="page" value="1" />
-<!--
-                        <div><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="10" id="checkin" name="check_in"/></label></div>
-                        <div><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg" type="text" id="checkout" size="10" name="check_out"/></label></div>
--->
-                        <div><label for="checkin">Check in<br />
-                        <input class="l_input_bg v_input_bg" type="text" size="10" id="checkin"  name="check_in"  value="<?php echo $this->checkin;?>"/></label></div>
-                        <div><label for="checkout">Check out<br />
-                        <input class="l_input_bg v_input_bg" type="text" size="10" id="checkout" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
-
-                        <div>
-                        	<label for="guests">Guests<br/>
-                                        <select class="v_dropdwon_bg l_dropdwon_bg" id="guests" name="guests">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                            <option>6</option>
-                                            <option>7</option>
-                                            <option>8</option>
-                                            <option>9</option>
-                                            <option value="10">10+</option>
-                                        </select>
-                            </label>
-                     	</div>
-                        <input class="v_submit_search l_submit_search" type="submit" onclick="validate();return true;" value=""/>
-                    </form>
-                </div>
-        	</div><!--search form ends here-->
+            <form id="search_form" name="search_form" action="/search" method="post">
+            <?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
+            <?php echo $this->render('search_top.phtml');?>
             <div class="l_search_results v_search_results"><!--Search result sections starts here-->
             
             	<div id="tabs"><!--tabs-->
@@ -169,79 +54,15 @@
                         <li><a href="#tabs-2">Photo</a></li>
                         <li><a href="#tabs-3">Map</a></li>
                     </ul>
-                    <div class="search_sort">
-                    	<form action="" method="get">
-                        	<label for="guests">Sort by
-                            	<select onchange="doSort(this);" class="dropdwon_bg" id="sort_by" name="sort_by">
-                                	<option id="select_r"  value="<?php echo $url.'/sort/r/page/1'?>" >Recommended</option>
-                                    <option id="select_hl" value="<?php echo $url.'/sort/hl/page/1'?>">Rate (high to low)</option>
-                                    <option id="select_lh" value="<?php echo $url.'/sort/lh/page/1'?>">Rate (low to high)</option>
-                                </select>
-                           	</label>
-                       	</form>
-                    </div>
+                    <?php echo $this->render('sort_box.phtml');?>
                     <div id="tabs-1"><!--First tab content-->
-                    	<div class="tab_content">
-            			<?php echo $this->layout()->content; ?>
-                      	</div><!--tab_content ends here-->
-                      	<?php if ($this->total_hits > 0) {?>
-                      	<?php $start = 1 + ($this->page - 1)*$this->pagesz; $end = ($start -1) + count($this->results); ?>
-                        <div class="display_no"><p>Displaying <span><?php echo $start;?></span> — <span><?php echo $end ?></span> of <span><?php echo $this->total_hits; ?></span> listings</p></div>
-                        <div class="pagination"><!--pagination-->
-                        <?php 
-                             $numpages = 1 + (int)($this->total_hits/$this->pagesz);
-                             $backpages = $this->page - 1;
-                             $pagesahead = $numpages - $this->page;
-                             $next_page_btn = FALSE;
-                             $prev_page_btn = FALSE;
-                             if ($backpages <= 0) {
-                                $pg1 = $this->page;
-                                $pg2 = ($this->page + 1) > $numpages ? null : $this->page + 1;
-                                $pg3 = ($this->page + 2) > $numpages ? null : $this->page + 2;
-                                if ($pg2 != null) { $next_page_btn = TRUE; $next_page = $pg2; }
-                             }
-                             elseif ($pagesahead <= 0) {
-                                $pg3 = $this->page;
-                                $pg2 = ($this->page - 1) < 1  ? null : $this->page - 1;
-                                $pg1 = ($this->page - 2) < 1  ? null : $this->page - 2;
-                                if ($pg2 != null) { $prev_page_btn = TRUE; $prev_page = $pg2; }
-                             }
-                             else {
-                                $next_page_btn = TRUE;
-                                $prev_page_btn = TRUE;
-                                $pg2 = $this->page;
-                                $pg1 = $this->page - 1; $prev_page = $pg1;
-                                $pg3 = $this->page + 1; $next_page = $pg3;
-                             }
-                             $pagenumbers = array($pg1, $pg2, $pg3);
-                        ?>
-                        	<ul>
-                        	    <?php foreach ($pagenumbers as $pg):?>
-                        	       <?php if ($pg != null) {?>
-                                    <?php if ($pg == $this->page) {?>
-                                        <li class="current"><?php echo $pg;?></li>
-                                    <?php } else {?>
-                                        <li><a href="<?php echo $url.'/page/'.$pg.'/sort/'.$this->sortorder;?>"><?php echo $pg;?></a></li>
-                                    <?php }?>
-                                   <?php }?>
-                        	    <?php endforeach;?>
-                            </ul>
-                        </div>
-                        <div class="l_page_buttons"><!--Previous Next Page buttons-->
-                        <?php if ($prev_page_btn) { ?>
-                        <a href="<?php echo $url."/page/$prev_page/sort/$this->sortorder";?>"><div class="btn_prev_page"><img src="<?php echo $baseUrl;?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a><!--previous page button-->
-                        <?php }?>
-                        <?php if ($next_page_btn) { ?>
-                        <a href="<?php echo $url."/page/$next_page/sort/$this->sortorder";?>"><div class="btn_next_page"><img src="<?php echo $baseUrl;?>/images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
-                        <?php }?>
-                        </div><!--Previous Next Page buttons ends-->
-                    <?php }?>
+                        <?php echo $this->render('tab_list.phtml');?>
                    	</div><!--tab1 content ends here-->
                     <div id="tabs-2">
-                    	<div class="tab_content">hasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
+                    	<div class="tab_content">This is the place for Search Results by Photo</div>
                     </div><!--tab2 content ends here-->
                     <div id="tabs-3">
-                    	  <div class="tab_content">hasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.</div>
+                    	  <div class="tab_content">This is the place for Search Results by Map</div>
                     </div><!--tab3 content ends here-->
                 </div>
                 
@@ -251,11 +72,9 @@
                 	<h3>Refine Results</h3>
                     <p><?php echo $this->total_hits; ?> Results</p>
                 </div>
-                <div id="map" class="map">
-                </div>
-                <?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search');
-                echo $this->render('rightpanel.phtml');?>
-           	</div><!--right_side_panel ends here-->
+                <div id="map" class="map"></div>
+                <?php echo $this->render('rightpanel.phtml');?>
+            </form>
         </div><!-- content ends here -->
         <?php echo $this->render('footer.phtml');?>
 	</div><!-- wrapper ends here -->

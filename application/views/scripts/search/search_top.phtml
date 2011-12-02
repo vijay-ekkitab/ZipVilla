@@ -1,0 +1,28 @@
+<div class="v_search_form">
+	<div class="v_search l_search">
+    	    <input type="hidden" id="page" name="page" value="1" />
+        	<input class="l_search_input v_search_input defaultText" type="text" title="Where do you want to go?" name="query" id="query" autocomplete="off" size="73" value="" />
+            <div><label for="checkin">Check in<br />
+            <input class="l_input_bg v_input_bg" type="text" size="10" id="checkin"  name="check_in"  value="<?php echo $this->checkin;?>"/></label></div>
+            <div><label for="checkout">Check out<br />
+            <input class="l_input_bg v_input_bg" type="text" size="10" id="checkout" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
+
+            <div>
+            	<label for="guests">Guests<br/>
+                            <select class="v_dropdwon_bg l_dropdwon_bg" id="guests" name="guests">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>7</option>
+                                <option>8</option>
+                                <option>9</option>
+                                <option value="10">10+</option>
+                            </select>
+                </label>
+         	</div>
+            <input class="v_submit_search l_submit_search" type="submit" onclick="setPage(1); validate();return true;" value=""/>
+    </div>
+</div>

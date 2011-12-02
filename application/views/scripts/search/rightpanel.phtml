@@ -1,387 +1,180 @@
 <?php $baseUrl = $this->baseUrl();?>
+<script type="text/javascript">
+function getFacetValues()
+{
+	var features = ['shared', 'amenities', 'onsite_services', 'suitability', 'address__location'];
+	for (var i in features) {
+		   var feature = features[i];
+		   $(".lbox_"+feature).children().remove();
+		   $(".acc_section").find("[name='"+feature+"[]']").each(
+				   function() {
+					    var checked = $(this).is(':checked');
+					    addCheckBox(feature, $(this).val(), $(this).next().text(), $(this).next().next().text(), checked);
+				   });
+	};
+	
+}
+function addCheckBox(feature, name, label, value, checked) {
+	
+	var container = $(".lbox_"+feature);
+	//alert(feature+','+name+','+label+','+value+','+checked);
+	var checked_flag = '';
+	if (checked) {
+		checked_flag = 'checked="yes"';
+	}
+    var html = '<li class="clearfix"><input type="checkbox" id="lbox_'+feature+'" value="'+name+'" class="l_styled"' + checked_flag +'/>' +
+               '<label>'+label+'</label> <span class="facet_count">'+value+'</span></li>';
+    //alert(html);
+    container.append($(html));
+}
+</script>
 <div class="l_refine_results v_refine_results">
     
-	<form action="/search/refined" method="post">
-		<div id="accordion">
+	<div id="accordion">
+
+    <h4><a href="#">Price</a></h4>
+    <div class="acc_section">
+        <div id="price_slider"></div>
+        <p>
+            <label style="margin-top:35px" for="price_range">Price range:</label>
+            <input style="color:#0099CC;float:left;margin-top:-15px;background-color:#F5F5F5;border:none;" type="text" id="price_range" name="price_range" value="" style="border:0; color:#f6931f; font-weight:bold;" />
+        </p>
+    </div>
     
-        <h4><a href="#">Price</a></h4>
-        <div class="acc_section">
-            <div id="price_slider"></div>
-            <p>
-                <label style="margin-top:35px" for="price_range">Price range:</label>
-                <input style="color:#0099CC;float:left;margin-top:-15px;background-color:#F5F5F5;border:none;" type="text" id="price_range" name="price_range" value="" style="border:0; color:#f6931f; font-weight:bold;" />
-            </p>
-            <!--  <div class="l_slider">
-                <div><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_slider.jpg" /></a></div>
-                <div><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_slider.jpg" /></a></div>
-            </div> 
-            <div class="l_low_price">Rs.500/-</div>
-            <div class="l_height_price">Rs.8500/-</div> -->
-        </div>
+    <h4><a href="#">Room Type</a></h4>
     
-        <h4><a href="#">Room Type</a></h4>
-        <div class="acc_section l_chkbox">
-            <?php $feature = 'shared';
-                $no_checked = '';
-                $yes_checked = '';
-                if (isset($this->facets_selected[$feature])) {
-                    foreach($this->facets_selected[$feature] as $facet) {
-                         if (preg_match("/\"?yes\"?/", $facet)) {
-                             $yes_checked = 'checked="yes"';
-                         }
-                        if (preg_match("/\"?no\"?/", $facet)) {
-                             $no_checked = 'checked="yes"';
-                         }
-                    }
-                }?>
-                <input type="checkbox" name="<?php echo $feature.'[]';?>" value="no" class="l_styled" <?php echo $no_checked;?> /><p>Entire home/villa</p>
-                <?php if (isset($this->facets[$feature])) {?>
-                <div class="l_room_nos"><?php echo $this->facets[$feature]['no'];?></div>
-                <?php }?>
-                <input type="checkbox" name="<?php echo $feature.'[]';?>" value="yes" class="l_styled" <?php echo $yes_checked;?>/><p>Shared</p>
-                <?php if (isset($this->facets[$feature])) {?>
-                <div class="l_room_nos"><?php echo $this->facets[$feature]['yes'];?></div>
-                <?php }?>
-        </div>
-    
-        <h4><a href="#">Amenities</a></h4>
-        <div class="acc_section l_chkbox">
-            <?php $feature = 'amenities';
-                  if (isset($this->facets[$feature])) {
-                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-                        $checked = '';
-                        if (isset($this->facets_selected[$feature])) {
-                            foreach($this->facets_selected[$feature] as $facet) {
-                                if (preg_match("/\"?$type\"?/", $facet)) {
-                                    $checked = 'checked="yes"';
-                                    break;
-                                }
-                            } 
-                        } ?>
-                        <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
-                        <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
-                     <?php endforeach; ?>
-            <?php }?>        
-        </div>
+    <div class="acc_section l_chkbox">
+        <?php $feature = 'shared';
+            $idcounter = 0;
+            $no_checked = '';
+            $yes_checked = '';
+            if (isset($this->facets_selected[$feature])) {
+                foreach($this->facets_selected[$feature] as $facet) {
+                     if (preg_match("/\"?yes\"?/", $facet)) {
+                         $yes_checked = 'checked="yes"';
+                     }
+                    if (preg_match("/\"?no\"?/", $facet)) {
+                         $no_checked = 'checked="yes"';
+                     }
+                }
+            }
+        ?>
+        <input type="checkbox" name="<?php echo $feature.'[]';?>" value="no" class="l_styled" <?php echo $no_checked;?> /><p>Entire home/villa</p>
+        <?php if (isset($this->facets[$feature])) {?>
+            <div class="l_room_nos"><?php echo $this->facets[$feature]['no'];?></div>
+        <?php }?>
         
-        <h4><a href="#">Onsite Services</a></h4>
-        <div class="acc_section l_chkbox">
-            <?php $feature = 'onsite_services';
-                  if (isset($this->facets[$feature])) {
-                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-                        $checked = '';
-                        if (isset($this->facets_selected[$feature])) {
-                            foreach($this->facets_selected[$feature] as $facet) {
-                                if (preg_match("/\"?$type\"?/", $facet)) {
-                                    $checked = 'checked="yes"';
-                                    break;
-                                }
+        <input type="checkbox" name="<?php echo $feature.'[]';?>" value="yes" class="l_styled" <?php echo $yes_checked;?>/><p>Shared</p>
+        <?php if (isset($this->facets[$feature])) {?>
+            <div class="l_room_nos"><?php echo $this->facets[$feature]['yes'];?></div>
+        <?php }?>
+    </div>
+    
+    <h4><a href="#">Amenities</a></h4>
+    
+    <div class="acc_section l_chkbox">
+        <?php $feature = 'amenities';
+              if (isset($this->facets[$feature])) {
+                foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                    $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                    $checked = '';
+                    if (isset($this->facets_selected[$feature])) {
+                        foreach($this->facets_selected[$feature] as $facet) {
+                            if (preg_match("/\"?$type\"?/", $facet)) {
+                                $checked = 'checked="yes"';
+                                break;
                             }
-                        } ?>
-                        <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
-                        <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
-                     <?php endforeach; ?>
-            <?php }?>        
-        </div>
+                        } 
+                    } 
+        ?>
+                    <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
+                    <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
+                 <?php endforeach; ?>
+        <?php }?>        
+    </div>
         
-        <h4><a href="#">Suitability</a></h4>
-        <div class="acc_section l_chkbox">
-            <?php $feature = 'suitability';
-                  if (isset($this->facets[$feature])) {
-                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-                        $checked = '';
-                        if (isset($this->facets_selected[$feature])) {
-                            foreach($this->facets_selected[$feature] as $facet) {
-                                if (preg_match("/\"?$type\"?/", $facet)) {
-                                    $checked = 'checked="yes"';
-                                    break;
-                                }
+    <h4><a href="#">Onsite Services</a></h4>
+    
+    <div class="acc_section l_chkbox">
+        <?php $feature = 'onsite_services';
+              if (isset($this->facets[$feature])) {
+                foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                    $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                    $checked = '';
+                    if (isset($this->facets_selected[$feature])) {
+                        foreach($this->facets_selected[$feature] as $facet) {
+                            if (preg_match("/\"?$type\"?/", $facet)) {
+                                $checked = 'checked="yes"';
+                                break;
                             }
-                        } ?>
+                        }
+                    } 
+        ?>
+                    <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
+                    <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
+                <?php endforeach; ?>
+        <?php }?>        
+    </div>
+        
+    <h4><a href="#">Suitability</a></h4>
+    
+    <div class="acc_section l_chkbox">
+        <?php $feature = 'suitability';
+              if (isset($this->facets[$feature])) {
+                foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                    $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                    $checked = '';
+                    if (isset($this->facets_selected[$feature])) {
+                        foreach($this->facets_selected[$feature] as $facet) {
+                            if (preg_match("/\"?$type\"?/", $facet)) {
+                                $checked = 'checked="yes"';
+                                break;
+                            }
+                        }
+                    } 
+        ?>
+                    <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
+                    <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
+                 <?php endforeach; ?>
+        <?php }?>        
+    </div>
+    
+    <h4><a href="#">Neighborhood</a></h4>
+    
+    <div class="acc_section l_chkbox">
+        <?php $feature = 'address__location';
+              $logger = Zend_Registry::get('zvlogger');
+              if (isset($this->facets[$feature])) {
+                foreach ($this->facets[$feature]->getPropertyNames() as $type): 
+                    $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
+                    $checked = '';
+                    if (isset($this->facets_selected[$feature])) {
+                        foreach($this->facets_selected[$feature] as $facet) {
+                            if (preg_match("/\"?$type\"?/", $facet)) {
+                                $checked = 'checked="yes"';
+                                break;
+                            }
+                        }
+                    } 
+        ?>
+                    <?php if ($this->facets[$feature][$type] > 0) {?>
                         <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
                         <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
-                     <?php endforeach; ?>
-            <?php }?>        
-        </div>
+                    <?php }?>
+                 <?php endforeach; ?>
+        <?php }?>
+    </div>
     
-        <h4><a href="#">Neighborhood</a></h4>
-        <div class="acc_section l_chkbox">
-            <?php $feature = 'address__location';
-                  $logger = Zend_Registry::get('zvlogger');
-                  if (isset($this->facets[$feature])) {
-                    foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-                        $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-                        $checked = '';
-                        if (isset($this->facets_selected[$feature])) {
-                            foreach($this->facets_selected[$feature] as $facet) {
-                                if (preg_match("/\"?$type\"?/", $facet)) {
-                                    $checked = 'checked="yes"';
-                                    break;
-                                }
-                            }
-                        } ?>
-                        <?php if ($this->facets[$feature][$type] > 0) {?>
-                            <input name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" class="l_styled" <?php echo $checked;?>/><p><?php echo $type;?></p>
-                            <div class="l_room_nos"><?php echo $this->facets[$feature][$type];?></div>
-                        <?php }?>
-                     <?php endforeach; ?>
-            <?php }?>
-        </div>
+    <h4><a href="#">Keywords</a></h4>
+        
+    <div class="acc_section">
+        <?php $keywords = isset($this->keywords) ? $this->keywords : ''; ?>
+        <input class="defaultText" type="text" name="keywords" id="keywords" title="Enter Keywords"  value="<?php echo $keywords;?>"/>
+    </div>
     
-        <h4><a href="#">Keywords</a></h4>
-        <div class="acc_section">
-            <?php $keywords = isset($this->keywords) ? $this->keywords : ''; ?>
-            <input class="defaultText" type="text" name="keywords" id="keywords" title="Enter Keywords"  value="<?php echo $keywords;?>"/>
-        </div>
-    
-    </div> <!-- accordian-->
+    </div>
     <input class="l_cta" style="float:left;margin:10px 0;" type="submit" onclick="validate();return true;" value="Refine Search"/> 
-    <input type="hidden" name="page" value="1" />
-    <input type="hidden" name="query" value="<?php echo $this->search_query?>" />
-    <input type="hidden" name="check_in" value="<?php echo $this->checkin?>" />
-    <input type="hidden" name="check_out" value="<?php echo $this->checkout?>" />
-    <input type="hidden" name="guests" value="<?php echo $this->guests?>" />
-    <input type="hidden" name="sort" value="<?php echo $this->sortorder?>" />
-    </form>
-    
-    <div class="l_cta" style="margin-top:15px;clear:none;"><a href="#lb_search_zv" name="lightbox_zv">See more...</a></div>
-
-	<form action="/search/refined" method="post">
-	<div id="boxes">
-		<div id="color_box">
-			<div id="lb_search_zv" style="height: 447px; width: 656px; background:none;" class="lb_window_zv">
-				<div>
-					<div style="float: left;" class="cboxTopLeft"></div>
-					<div style="float: left; width: 610px;" class="cboxTopCenter"></div>
-					<div style="float: left;" id="cboxTopRight"></div>
-				</div>
-
-				<div style="clear: left;">
-					<div style="float: left; height: 401px;" class="cboxMiddleLeft"></div>
-						<div style="float: left; width: 630px; height: 430px;" class="cboxContent">
-							<div style="display: block; width: 630px; overflow: auto;" class="cboxLoadedContent">
-
-								<div class="filters_lightbox new-modal">
-									<div id="tabs1">
-										<h2 class="clearfix">
-											<ul class="filters_lightbox_nav">
-												<li class="filters_lightbox_nav_element"><a href="#tab1" style="padding:5px 10px;">Room Type</a></li>
-												<li class="filters_lightbox_nav_element active"><a href="#tab2" style="padding:5px 10px;">Amenities</a></li>
-												<li class="filters_lightbox_nav_element"><a href="#tab3" style="padding:5px 10px;">Serv/Suit</a></li>
-												<li class="filters_lightbox_nav_element"><a href="#tab4" style="padding:5px 10px;">Neighborhood</a></li>
-											</ul>
-										</h2>
-
-										<div class="segment nopadding lightbox_filters"><!--ctnt tab-->
-
-											<div> <!-- Room Type -->
-												<ul id="tab1" style="background-image:none;">
-													<li class="lightbox_filter_container">
-														<div class="lightbox_filters_left_column"> 
-															<ul id="" class="search_filter_content">
-															
-																<div class="acc_section l_chkbox">
-																	<?php $feature = 'shared';
-																		$no_checked = '';
-																		$yes_checked = '';
-																		if (isset($this->facets_selected[$feature])) {
-																			foreach($this->facets_selected[$feature] as $facet) {
-																				if (preg_match("/\"?yes\"?/", $facet)) {
-																					$yes_checked = 'checked="yes"';
-																				}
-																				if (preg_match("/\"?no\"?/", $facet)) {
-																					$no_checked = 'checked="yes"';
-																				}
-																			}
-																		}?>
-                
-																	<li class="clearfix"><input id="<?php echo $feature.++$iCtr.'[]';?>" type="checkbox" name="<?php echo $feature.'[]';?>" value="no" class="l_styled" <?php echo $no_checked;?>  />
-																	<label for="<?php echo $feature.++$iCtr.'[]';?>">Entire home/villa</label>
-																	<?php if (isset($this->facets[$feature])) {?>
-																		<span class="facet_count"><?php echo $this->facets[$feature]['no'];?></span></li>
-																	<?php }?>
-																	<li class="clearfix"><input id="<?php echo $feature.++$iCtr.'[]';?>" type="checkbox" name="<?php echo $feature.'[]';?>" value="yes" class="l_styled" <?php echo $yes_checked;?>  />
-																	<label for="<?php echo $feature.++$iCtr.'[]';?>">Shared</label>
-																	<?php if (isset($this->facets[$feature])) {?>
-																	<span class="facet_count"><?php echo $this->facets[$feature]['yes'];?></span></li>
-																	<?php }?>
-															</ul>
-														</div>
-													</li>
-												</ul><!--ctnt first tab ends-->
-											</div> <!--Room Type-->
-											
-
-											
-											
-                                  		
-											<div><!-- Amenities -->
-												<ul id="tab2" style="background-image:none;">
-													<li class="lightbox_filter_container"><!--ctnt second tab-->
-														<ul class="search_filter_content">
-															<?php $feature = 'amenities';
-															$iCtr = 0;
-															if (isset($this->facets[$feature])) {
-																foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-																	$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-																	$checked = '';
-																	if (isset($this->facets_selected[$feature])) {
-																		foreach($this->facets_selected[$feature] as $facet) {
-																			if (preg_match("/\"?$type\"?/", $facet)) {
-																				$checked = 'checked="yes"';
-																				break;
-																			}
-																		}
-																	} ?>
-																	<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																	<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
-																	<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
-																	<?php /* 
-																	<li class="clearfix"><span class="facet_count">236</span>
-																	<input id="lightbox_amenity_3" name="amenities" value="11" type="checkbox" /> 
-																	<label for="lightbox_amenity_3">Smoking Allowed</label></li>
-																	*/ ?>
-																<?php endforeach; ?>
-															<?php }?>
-														</ul>
-													</li>
-												</ul>
-											</div><!--Amenities-->
-                                  		
-											<div> <!--Service/Suitability-->
-												<ul id="tab3" style="background-image:none;">
-													<li class="lightbox_filter_container"><!--ctnt forth tab-->
-														
-														<div class="lightbox_filters_left_column">
-															<h3>Onsite Services</h3>
-															<ul id="" class="search_filter_content"> 
-																<?php $feature = 'onsite_services';
-																	$iCtr = 0;
-																	if (isset($this->facets[$feature])) {
-																		foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-																			$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-																			$checked = '';
-																			if (isset($this->facets_selected[$feature])) {
-																				foreach($this->facets_selected[$feature] as $facet) {
-																					if (preg_match("/\"?$type\"?/", $facet)) {
-																						$checked = 'checked="yes"';
-																						break;
-																					}
-																				}
-																			} ?>
-																			<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
-																			<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
-																		<?php endforeach; ?>
-																	<?php }?>                                                         
-															</ul>
-														</div>
-
-														<div class="lightbox_filters_right_column">
-															<h3>Suitability</h3>
-															<ul id="" class="search_filter_content">
-																<?php $feature = 'suitability';
-																	$iCtr = 0;
-																	if (isset($this->facets[$feature])) {
-																		foreach ($this->facets[$feature]->getPropertyNames() as $type): 
-																			$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-																			$checked = '';
-																			if (isset($this->facets_selected[$feature])) {
-																				foreach($this->facets_selected[$feature] as $facet) {
-																					if (preg_match("/\"?$type\"?/", $facet)) {
-																						$checked = 'checked="yes"';
-																						break;
-																					}
-																				}
-																			} ?>
-																			<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																			<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
-																			<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>
-																		<?php endforeach; ?>
-																	<?php }?>
-															</ul>
-														</div>
-                                                   
-													</li>
-												</ul><!--ctnt forth tab ends-->
-											</div><!--Service/Suitability-->
-
-											<div><!--Neighbourhood -->
-												<ul id="tab4"  style="background-image:none;">
-													<li class="lightbox_filter_container"><!--ctnt third tab-->
-														<div class="lightbox_filters_left_column">
-															<!-- <h3>Room Type</h3>  -->
-															<ul id="" class="search_filter_content">
-															
-																<?php $feature = 'address__location';
-																	$iCtr = 0;															
-																	$logger = Zend_Registry::get('zvlogger');
-																	if (isset($this->facets[$feature])) {
-																		foreach ($this->facets[$feature]->getPropertyNames() as $type):
-																			$type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-																			$checked = '';
-																			if (isset($this->facets_selected[$feature])) {
-																				foreach($this->facets_selected[$feature] as $facet) {
-																					if (preg_match("/\"?$type\"?/", $facet)) {
-																						$checked = 'checked="yes"';
-																						break;
-																					}
-																				}
-																			} ?>
-
-																			<?php if ($this->facets[$feature][$type] > 0) {?>
-																				<li class="clearfix"><span class="facet_count"><?php echo $this->facets[$feature][$type];?></span>
-																					<input id="<?php echo $feature.++$iCtr.'[]';?>" name="<?php echo $feature.'[]';?>" value="<?php echo $type;?>" type="checkbox" <?php echo $checked;?>/>
-																					<label for="<?php echo $feature.++$iCtr.'[]';?>"><?php echo $type;?></label></li>                        
-																			<?php }?>
-																		<?php endforeach; ?>
-																	<?php }?>															
-															</ul>
-														</div>
-														<div class="lightbox_filters_right_column">
-														</div>
-													</li>
-												</ul>
-											</div><!--Neighbourhood -->
-
-								</div>
-							</div>
-						</div>
-
-							<div class="lightbox_filter_action_area segment buttons">
-								<a href="#" class="close">Cancel</a>
-									<input id="lightbox_search_button" class="button-glossy green" value="Search" type="submit" onclick="validate();return true;" />
-									<input type="hidden" name="page" value="1" />
-									<input type="hidden" name="query" value="<?php echo $this->search_query?>" />
-									<input type="hidden" name="check_in" value="<?php echo $this->checkin?>" />
-									<input type="hidden" name="check_out" value="<?php echo $this->checkout?>" />
-									<input type="hidden" name="guests" value="<?php echo $this->guests?>" />
-									<input type="hidden" name="sort" value="<?php echo $this->sortorder?>" />
-							</div>
-							<div class="close cboxClose"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> <!--  boxes -->
-
-    </form>
-    
-	<div id="mask_zv"></div>
-
 </div>
 
-<!-- 
-<div class="l_price">
-        <div class="l_accordian_open"><a href="#"><img src="<?php echo $baseUrl;?>/images/btn_acco_open.jpg" /></a></div>
-        <h4><a href="#">Distance form nearest city</a></h4>
-        <div class="l_slider">
-            <div><a href="#"><img src="images/btn_slider.jpg" /></a></div>
-        </div>
-        <div class="l_km">50 km</div>
-    </div>
--->
+<div class="l_cta" style="margin-top:15px;clear:none;"><a href="#lb_search_zv" onclick="getFacetValues();" name="lightbox_zv">See more...</a></div>
+<?php echo $this->render('search_lightbox.phtml');?>

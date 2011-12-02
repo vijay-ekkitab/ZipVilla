@@ -1,0 +1,93 @@
+<?php 
+    $ctr = 1+($this->page - 1) * $this->pagesz;
+
+    $low = MIN_RATE; $high = MAX_RATE;
+    if (isset($this->price_range)) {
+        $low=$this->price_range[0];
+        $high=$this->price_range[1];
+    }
+    $sort = 0;
+    if (isset($this->sortorder)) {
+        if ($this->sortorder == 'hl') {
+            $sort = 1;
+        }
+        elseif ($this->sortorder == 'lh') {
+            $sort = 2;
+        }
+    }
+?>
+
+<script type="text/javascript">
+    function watchQueryBox() {
+        if ($('#query').data('lastValue') != $('#query').val()) {
+            $.ajax({ 
+                type: "POST",
+                url:"/default/search/lookahead/format/html",
+                data:"query="+$('#query').val(),
+                complete:function(data) { console.log(data.responseText);}});
+            $('#query').data('lastValue', $('#query').val());
+        }
+    }
+    	        
+    $(document).ready(function(){
+    	   
+        mapMarker('map', <?php echo $ctr;?>);
+    	
+    	$('#price_slider').slider({
+            values: [<?php echo $low;?>, <?php echo $high;?>],
+        });
+        
+    	$( "#price_range" ).val( "Rs." + $( "#price_slider" ).slider( "values", 0) +
+                " - Rs." + $( "#price_slider" ).slider( "values", 1 ));
+    
+    	$("#guests").val("<?php echo $this->guests;?>");
+    	<?php if ((isset($this->search_query)) &&  ($this->search_query != '*')){?>
+    	   $("#query").val("<?php echo $this->search_query;?>");
+    	<?php }?>
+    	
+    	$("#sort").prop('selectedIndex', <?php echo $sort;?>);
+    	$('#query').data('lastValue', '<?php echo $this->search_query;?>');
+    	$('#query').bind('keypress', null, watchQueryBox);
+    
+        $(".defaultText").focus(function(srcc) {
+    	    if ($(this).val() == $(this)[0].title) {
+    	        $(this).removeClass("defaultTextActive");
+    	        $(this).val("");
+    	    }
+    	 });
+    		    
+        $(".defaultText").blur(function() {
+            if ($(this).val() == "") {
+                $(this).addClass("defaultTextActive");
+                $(this).val($(this)[0].title);
+            }
+         });
+    		    
+        $(".defaultText").blur();
+        
+    });
+    
+    function doSort(sortbox) 
+    {
+    	location.href=sortbox.options[sortbox.selectedIndex].value;
+    }
+    function setPage(page)
+    {
+        $("#page").val(page);
+    }
+    function init() 
+    {
+        document.getElementById('select_'+'<?php echo $this->sortorder;?>').selected = true;
+    }
+    $(function() {
+    	$( "#checkin" ).datepicker();
+    });
+    $(function() {
+    	$( "#checkout" ).datepicker();
+    });
+    function validate() 
+    {
+      	$(".defaultText").each(function(i) {if ($(this).val() == $(this)[0].title) $(this).val('');});
+    }
+
+</script>

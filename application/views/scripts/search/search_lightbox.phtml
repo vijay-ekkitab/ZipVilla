@@ -1,0 +1,128 @@
+<?php $baseUrl = $this->baseUrl();?>
+<script type="text/javascript">
+function setSelections()
+{
+	var features = ['shared', 'amenities', 'onsite_services', 'suitability', 'address__location'];
+    for (var i in features) {
+        feature = features[i];
+        var checked = new Array();
+        $("[id='lbox_"+feature+"']:checked").each(function()
+        {
+		   checked.push($(this).val());
+		});
+        setCheckBox(feature, checked);
+    }
+}
+
+function setCheckBox(feature, values) {
+	$("[name='"+feature+"[]']").removeAttr('checked');
+	$("[name='"+feature+"[]']").val(values);
+    //alert(feature+','+values.toString());
+}
+</script>
+<div id="boxes">
+	<div id="color_box">
+		<div id="lb_search_zv" style="height: 447px; width: 656px; background:none;" class="lb_window_zv">
+			<div>
+				<div style="float: left;" class="cboxTopLeft"></div>
+				<div style="float: left; width: 610px;" class="cboxTopCenter"></div>
+				<div style="float: left;" id="cboxTopRight"></div>
+			</div>
+
+			<div style="clear: left;">
+				<div style="float: left; height: 401px;" class="cboxMiddleLeft"></div>
+					<div style="float: left; width: 630px; height: 430px;" class="cboxContent">
+						<div style="display: block; width: 630px; overflow: auto;" class="cboxLoadedContent">
+
+							<div class="filters_lightbox new-modal">
+								<div id="tabs1">
+									<h2 class="clearfix">
+										<ul class="filters_lightbox_nav">
+											<li class="filters_lightbox_nav_element"><a href="#tab1" style="padding:5px 10px;">Room Type</a></li>
+											<li class="filters_lightbox_nav_element active"><a href="#tab2" style="padding:5px 10px;">Amenities</a></li>
+											<li class="filters_lightbox_nav_element"><a href="#tab3" style="padding:5px 10px;">Services</a></li>
+											<li class="filters_lightbox_nav_element"><a href="#tab4" style="padding:5px 10px;">Neighborhood</a></li>
+										</ul>
+									</h2>
+
+									<div class="segment nopadding lightbox_filters"><!--ctnt tab-->
+
+										<div> <!-- Room Type -->
+											<ul id="tab1" style="background-image:none;">
+												<li class="lightbox_filter_container">
+													<div class="lightbox_filters_left_column"> 
+														<ul class="search_filter_content">
+															<div class="lbox_shared l_chkbox">
+															</div>
+														</ul>
+													</div>
+												</li>
+											</ul><!--ctnt first tab ends-->
+										</div> <!--Room Type-->
+										
+										<div><!-- Amenities -->
+											<ul id="tab2" style="background-image:none;">
+												<li class="lightbox_filter_container"><!--ctnt second tab-->
+													<ul class="search_filter_content">
+													   <div class="lbox_amenities l_chkbox">
+                                                       </div>
+													</ul>
+												</li>
+											</ul>
+										</div><!--Amenities-->
+                              		
+										<div> <!--Service/Suitability-->
+											<ul id="tab3" style="background-image:none;">
+												<li class="lightbox_filter_container"><!--ctnt forth tab-->
+													
+													<div class="lightbox_filters_left_column">
+														<h3>Onsite Services</h3>
+														<ul class="search_filter_content">
+														<div class="lbox_onsite_services l_chkbox">
+                                                        </div> 
+														</ul>
+													</div>
+
+													<div class="lightbox_filters_right_column">
+														<h3>Suitability</h3>
+														<ul class="search_filter_content">
+														<div class="lbox_suitability l_chkbox">
+                                                        </div>
+														</ul>
+													</div>
+                                               
+												</li>
+											</ul><!--ctnt forth tab ends-->
+										</div><!--Service/Suitability-->
+
+										<div><!--Neighbourhood -->
+											<ul id="tab4"  style="background-image:none;">
+												<li class="lightbox_filter_container"><!--ctnt third tab-->
+											div		<div class="lightbox_filters_left_column">
+														<!-- <h3>Room Type</h3>  -->
+														<ul class="search_filter_content">
+														<div class="lbox_address__location l_chkbox">
+                                                        </div>
+														</ul>
+													</div>
+													<div class="lightbox_filters_right_column">
+													</div>
+												</li>
+											</ul>
+										</div><!--Neighbourhood -->
+							         </div>
+						        </div>
+					        </div>
+						<div class="lightbox_filter_action_area segment buttons">
+							<a href="#" class="close">Cancel</a>
+								<input id="lightbox_search_button" class="button-glossy green" value="Search" type="submit" onclick="setSelections();setPage(1); validate();return true;" />
+						</div>
+						<div class="close cboxClose"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> <!--  boxes -->
+
+<div id="mask_zv"></div>
