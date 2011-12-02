@@ -4,8 +4,8 @@ function mapMarker(pMapCanvas, pStartIndex)
 	var infowindow;
 	var marker=0;
 	var i;
-	//var startIndex = pStartIndex;
-	var startIndex = 0;  // if we ever need to use startIndex DELETE this line and use the one above
+	var startIndex = pStartIndex;
+	//var startIndex = 0;  // if we ever need to use startIndex DELETE this line and use the one above
 	
 	if ((typeof zv_map_center_latitude === 'undefined') || 
 	    (typeof zv_map_center_longitude === 'undefined')) {
@@ -40,7 +40,7 @@ function mapMarker(pMapCanvas, pStartIndex)
 //			else
 //				var markerImage = '/images/map_markers/red1_99/marker' + startIndex + '.png';
 			
-			var markerImage = '/images/map_markers/red1_99/marker' + (1+i) + '.png';
+			var markerImage = '/images/map_markers/red1_99/marker' + startIndex + '.png';
 			
 			var image = new google.maps.MarkerImage(markerImage, new google.maps.Size(20, 34), new google.maps.Point(0, 0), new google.maps.Point(10, 34));
 

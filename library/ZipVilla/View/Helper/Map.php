@@ -23,10 +23,10 @@ class ZipVilla_View_Helper_Map
         $script .= 'var zv_villa_locations = [';
         foreach($villas as $villa) {
             $script .= '[' .
-                        '\''.$this->view->escape($villa['title']) . '\',' .
+                        '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__latitude']) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__longitude']) . '\',' .
-                        '\''.$this->view->escape($villa['title']) . ',' .
+                        '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . ',' .
                         '\''.$this->view->escape($villa['street__name']) . ',' .
                         '\''.$this->view->escape($villa['address__city']) . '\''. 
                        '],';
