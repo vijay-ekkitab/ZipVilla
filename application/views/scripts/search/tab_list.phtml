@@ -1,4 +1,7 @@
 <?php 
+    if ((!isset($this->pagesz)) || ($this->pagesz ==0)) {
+        $this->pagesz = 10;
+    }
     $numpages = ($this->total_hits % $this->pagesz) > 0 ? 1 + (int)($this->total_hits/$this->pagesz) : (int)($this->total_hits/$this->pagesz);
     $backpages = $this->page - 1;
     $pagesahead = $numpages - $this->page;

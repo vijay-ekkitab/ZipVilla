@@ -1,4 +1,6 @@
 <?php
+include_once 'ZipVilla/TypeConstants.php';
+
 class ZipVilla_AuthAdapter implements Zend_Auth_Adapter_Interface
 {
     private $_username;
@@ -23,7 +25,7 @@ class ZipVilla_AuthAdapter implements Zend_Auth_Adapter_Interface
             if ($user->isValidPsw($this->_password)) {
                 $result =  new Zend_Auth_Result(
                     Zend_Auth_Result::SUCCESS,
-                    $this->_username);
+                    $user->emailid.AUTH_FIELD_SEPARATOR.$user->firstname);
             }
             else {
                 $result =  new Zend_Auth_Result(

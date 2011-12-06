@@ -1,0 +1,89 @@
+<?php
+    include_once "ZipVilla/TypeConstants.php";
+    $baseurl=$this->baseurl;
+    $logger = Zend_Registry::get('zvlogger');
+    $pages = array();
+    if ($this->reviews != null) {
+        $numpages = ceil(count($this->reviews) / REVIEWS_PER_PAGE);
+        $thispage = ceil(($this->start + 1) / REVIEWS_PER_PAGE);
+        $firstpage = 1;
+        $lastpage = $numpages;
+        if ($lastpage > $firstpage) {
+            $backpages = $thispage - $firstpage;
+            $pagesahead = $lastpage - $thispage;
+            $prevpage = FALSE;
+            $nextpage = FALSE;
+            if (($backpages > 0) && ($pagesahead > 0)){
+                $prevpage = $thispage-1;
+                $nextpage = $thispage+1;
+                $pages[0] = $thispage -1;
+                $pages[1] = $thispage;
+                $pages[2] = $thispage +1;
+            }
+            elseif ($backpages > 0) {
+                $prevpage = $thispage-1;
+                if ($backpages >= 2) {
+                    $pages[0] = $thispage -2;
+                    $pages[1] = $thispage -1;
+                    $pages[2] = $thispage;
+                }
+                else {
+                    $pages[0] = $thispage -1;
+                    $pages[1] = $thispage;
+                }
+            }
+            elseif ($pagesahead > 0) {
+                $nextpage = $thispage+1;
+                if ($pagesahead >= 2) {
+                    $pages[0] = $thispage;
+                    $pages[1] = $thispage +1;
+                    $pages[2] = $thispage +2;
+                }
+                else {
+                    $pages[0] = $thispage;
+                    $pages[1] = $thispage +1;
+                }
+            }
+        }
+        for ($i=$this->start; ($i<count($this->reviews)) && ($i < ($this->start + REVIEWS_PER_PAGE)); $i++) {
+            $review = $this->reviews[$i];
+            $user = $review->getUser(); ?>                                     
+            <div class="list_review">
+                <div class="img_profle">
+                    <img src="<?php echo $baseurl.'/images/user/'.$user->image;?>" />
+                    <p><?php echo $user->firstname;?>
+                    <br><span><?php $review->date;?></span></p>
+                </div>
+                <div class="review">
+                    <h2><?php echo $review->title;?></h2>
+                    <p><?php echo $review->content;?></p>
+                </div>
+            </div>
+<?php }}?>
+<?php if (count($this->reviews) > 0) {?>
+    <div class="display_no"><p>Displaying <span><?php $num = ($thispage - 1)*REVIEWS_PER_PAGE + 1; echo $num;?></span> — <span><?php $num = ($thispage - 1)*REVIEWS_PER_PAGE + REVIEWS_PER_PAGE; echo $num > count($this->reviews)? count($this->reviews) : $num;?></span> of <span><?php echo count($this->reviews);?></span> reviews</p></div> -->
+<?php }?>
+<?php if (count($pages) > 0) {?>
+
+<div class="pagination">
+    <ul>
+        <?php foreach ($pages as $pg):?>
+            <?php if ($pg == $thispage) {?>
+                <li class="current"><?php echo $pg;?></li>
+            <?php } else {?>
+                <li><a href="#" onclick="getReviews(<?php $num = ($pg-1)*REVIEWS_PER_PAGE; echo $num;?>); return false;"><?php echo $pg;?></a></li>
+            <?php }?>
+        <?php endforeach;?>
+    </ul>
+</div>
+<div class="l_page_buttons">
+    <?php if ($prevpage) {?>
+        <a href="#" onclick="getReviews(<?php $num = ($thispage-2)*REVIEWS_PER_PAGE; echo $num;?>); return false;"><div class="btn_prev_page"><img src="<?php echo $baseurl;?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a>
+    <?php }?>
+    <?php if ($nextpage) {?>
+        <a href="#" onclick="getReviews(<?php $num = ($thispage)*REVIEWS_PER_PAGE; echo $num;?>); return false;"><div class="btn_next_page"><img src="<?php echo $baseurl;?>/images/btn_next.jpg" alt="Next page" /></div></a>
+    <?php }?>
+</div> 
+
+<?php }?>
+        

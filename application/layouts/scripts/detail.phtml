@@ -16,7 +16,7 @@
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
                                     ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
                                     ->prependStylesheet($this->baseUrl().'/css/misc.css')
-                                    ->prependStylesheet($this->baseUrl().'css/jquery.ad-gallery.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/jquery.ad-gallery.css')
                                     ; ?>
 
         <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js')
@@ -25,7 +25,7 @@
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
                                       ->appendFile($this->baseUrl().'/js/jquery-ui.min.js')
-                                      ->appendFile($this->baseUrl().'js/jquery.ad-gallery.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
                                       ->appendFile($this->baseUrl().'/js/slideshow.js')
                                        ;?>
         
@@ -38,7 +38,52 @@
                 $("#show_rate").text("Rs. "+option);
             });
            calculate_rate();
+           $(".defaultText").focus(function(srcc) {
+               if ($(this).val() == $(this)[0].title) {
+                   $(this).removeClass("defaultTextActive");
+                   $(this).val("");
+               }
+            });
+                   
+           $(".defaultText").blur(function() {
+               if ($(this).val() == "") {
+                   $(this).addClass("defaultTextActive");
+                   $(this).val($(this)[0].title);
+               }
+            });
+                   
+           $(".defaultText").blur();
+
+           <?php if ($this->property != null) {?>
+           getReviews(0);
+           <?php }?>
         });
+
+        function validate() 
+        {
+            var isvalid = false;
+            $(".defaultText").each(function(i) {
+                if ($(this).val() == $(this)[0].title) 
+                    $(this).val(''); 
+                else 
+                    isvalid=true;
+                }
+            );
+            if (!isvalid) 
+            	$(".defaultText").blur();
+            return isvalid;
+        }
+
+        function getReviews(start) {
+            var baseurl = '<?php echo $this->baseUrl();?>'; 
+            var id = '<?php echo $this->property->id;?>';
+            $.ajax({ 
+                type: "POST",
+                url:"/default/list/getreviews/format/html",
+                data:"id="+id+"&start="+start+"&baseurl="+baseurl,
+                complete:function(data) { $("#user_reviews").html(data.responseText);}
+            });
+        }
         
       	
       	</script>
