@@ -63,7 +63,6 @@ class ListController extends Zend_Controller_Action
             $checkin = isset($values['checkin']) ? $values['checkin'] : null;
             $checkout = isset($values['checkout']) ? $values['checkout'] : null;
             $guests = isset($values['guests']) ? $values['guests'] : 1;
-            $logger->debug("Values: '".$checkin."' '".$checkout."'");
             if (($id != null) && ($id != '') && ($checkin != '') && ($checkout != '')) {
                 $lm = $this->_helper->listingsManager;
                 $start = new MongoDate(strtotime($checkin));

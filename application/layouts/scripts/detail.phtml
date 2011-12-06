@@ -1,4 +1,3 @@
-<?php /* echo $this->layout()->content; */ ?>
 <?php
     include_once("ZipVilla/TypeConstants.php");
     $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
@@ -17,6 +16,7 @@
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
                                     ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
                                     ->prependStylesheet($this->baseUrl().'/css/misc.css')
+                                    ->prependStylesheet($this->baseUrl().'css/jquery.ad-gallery.css')
                                     ; ?>
 
         <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js')
@@ -25,7 +25,8 @@
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
                                       ->appendFile($this->baseUrl().'/js/jquery-ui.min.js')
-
+                                      ->appendFile($this->baseUrl().'js/jquery.ad-gallery.js')
+                                      ->appendFile($this->baseUrl().'/js/slideshow.js')
                                        ;?>
         
         <script type="text/javascript">

@@ -44,5 +44,7 @@ const  SORT_ORDER_RATING  = 'r';
 const  MIN_RATE     = 100;
 const  MAX_RATE     = 20000;
 
+const  THUMB_WIDTH  = 50;
+
 
 ?>

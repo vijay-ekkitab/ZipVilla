@@ -82,7 +82,39 @@ function calculate_rate() {
                     </ul>
                     <div id="tabs-1"><!--First tab content-->
                         <div class="tab_content">
-                            <div class="slide"><img src="<?php echo $baseUrl;?>/images/dummyimg3.jpg" /></div>
+                            <div class="slide">
+                                <!-- <img src="<?php echo $baseUrl;?>/images/dummyimg3.jpg" />  -->
+                                <div id="gallery" class="ad-gallery">
+                                    <div class="ad-image-wrapper"></div>
+                                    <div class="ad-nav">
+                                        <div class="ad-thumbs">
+                                          <ul class="ad-thumb-list">
+                                          <?php
+                                          $logger = Zend_Registry::get('zvlogger'); 
+                                          $imageprefix = $this->zvImage()->getImagePathPrefix($baseUrl, $property);
+                                          $realpathprefix =  APPLICATION_PATH . '/../public';
+                                          $realthumbdir = $realpathprefix . $imageprefix . '/thumbs';
+                                          $realimagedir = $realpathprefix . $imageprefix;
+                                          //$logger->debug("Real Thumb: $realthumbdir, Real Image: $realimagedir");
+                                          
+                                          foreach ($property->images as $image):
+                                                $image = trim($image);
+                                                if (!file_exists("$realimagedir/$image"))
+                                                    continue;
+                                                if (!file_exists("$realthumbdir/$image")) {
+                                                    if (!file_exists($realthumbdir)) {
+                                                        mkdir($realthumbdir);
+                                                    }
+                                                    $this->zvImage()->createThumb("$realimagedir/$image", "$realthumbdir/$image");
+                                                }
+                                          ?>
+                                                <li><a href="<?php echo "$imageprefix/$image";?>"><img src="<?php echo "$imageprefix/thumbs/$image";?>" /></a></li>
+                                          <?php endforeach;?>
+                                          </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="l_about_villa_left">
                                 <h2>About your stay</h2>
                                 <p><?php echo $property->description;?></p>
