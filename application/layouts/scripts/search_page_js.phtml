@@ -31,8 +31,9 @@
     	        
     $(document).ready(function(){
     	   
-        mapMarker('map', <?php echo $ctr;?>);
-    	
+        //mapMarker('map', <?php echo $ctr;?>);
+        mapMarker('map', 1);
+        
     	$('#price_slider').slider({
             values: [<?php echo $low;?>, <?php echo $high;?>],
         });
