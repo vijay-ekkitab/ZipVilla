@@ -9,8 +9,8 @@ class ListController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
-        $ajaxContext->addActionContext('calculate', 'html')
-                    ->addActionContext('getreviews', 'html')
+        $ajaxContext->addActionContext('calculate', 'json')
+                    ->addActionContext('getreviews', 'json')
                     ->initContext();
     }
 
@@ -113,8 +113,7 @@ class ListController extends Zend_Controller_Action
 
     public function calculateAction()
     {
-        $logger = Zend_Registry::get('zvlogger');
-
+        $this->_helper->viewRenderer->setNoRender();    
         $request = $this->getRequest();
         $rate = 0;
         $days = 1;
@@ -142,10 +141,13 @@ class ListController extends Zend_Controller_Action
                 $rate = $property->rate['daily'];
             }
         }
-        $this->view->rate = round($rate * $days);
+        
+        //$this->view->rate = round($rate * $days);
+        echo Zend_Json::encode(array('total' => round($rate*$days)));
     }
     
     public function getreviewsAction() {
+        $this->_helper->viewRenderer->setNoRender();
         $logger = Zend_Registry::get('zvlogger');
         $request = $this->getRequest();
         $reviews = null;
@@ -161,9 +163,127 @@ class ListController extends Zend_Controller_Action
                 $reviews = Application_Model_Reviews::find(array('listing' => $property->getRef()));
             }
         }
-        $this->view->reviews = $reviews;
+        $pages = array();
+        if ($reviews == null)
+            return;
+        $numpages = ceil(count($reviews) / REVIEWS_PER_PAGE);
+        $thispage = ceil(($start + 1) / REVIEWS_PER_PAGE);
+        $firstpage = 1;
+        $lastpage = $numpages;
+            
+        if ($lastpage > $firstpage) {
+            $backpages = $thispage - $firstpage;
+            $pagesahead = $lastpage - $thispage;
+            $prevpage = FALSE;
+            $nextpage = FALSE;
+            if (($backpages > 0) && ($pagesahead > 0)){
+                $prevpage = $thispage-1;
+                $nextpage = $thispage+1;
+                $pages[0] = $thispage -1;
+                $pages[1] = $thispage;
+                $pages[2] = $thispage +1;
+            }
+            elseif ($backpages > 0) {
+                $prevpage = $thispage-1;
+                if ($backpages >= 2) {
+                    $pages[0] = $thispage -2;
+                    $pages[1] = $thispage -1;
+                    $pages[2] = $thispage;
+                }
+                else {
+                    $pages[0] = $thispage -1;
+                    $pages[1] = $thispage;
+                }
+            }
+            elseif ($pagesahead > 0) {
+                $nextpage = $thispage+1;
+                if ($pagesahead >= 2) {
+                    $pages[0] = $thispage;
+                    $pages[1] = $thispage +1;
+                    $pages[2] = $thispage +2;
+                }
+                else {
+                    $pages[0] = $thispage;
+                    $pages[1] = $thispage +1;
+                }
+            }
+        }
+        $user_reviews = '';
+        for ($i=$start; ($i<count($reviews)) && ($i < ($start + REVIEWS_PER_PAGE)); $i++) {
+            $review = $reviews[$i];
+            $user = $review->getUser();
+            $user_reviews = $user_reviews . '<div class="list_review">' .
+                                            '<div class="img_profle">' .
+                                            '<img src="'.$baseurl.'/images/user/'.$user->image.'"/>' .
+                                            '<p>' . $user->firstname . '<br><span>' . $review->date. '</span></p>' .
+                                            '</div>' .
+                                            '<div class="review"> <h2>' . $review->title . '</h2>' .
+                                            '<p>' . $review->content . '</p>' .
+                                            '</div> </div>';
+        }
+        
+        $user_reviews_notice = '';
+        $num1 = ($thispage - 1)*REVIEWS_PER_PAGE + 1;
+        $num2 = ($thispage - 1)*REVIEWS_PER_PAGE + REVIEWS_PER_PAGE;
+        $num2 = $num2 > count($reviews) ? count($reviews) : $num2;
+        if (count($reviews) > 0) {
+            $user_reviews_notice = '<div class="display_no"><p>Displaying <span>' .
+                                   $num1 .
+                                   '</span> — <span>' .
+                                   $num2 . 
+                                   '</span> of <span>' .
+                                   count($reviews) . 
+                                   '</span> reviews</p></div>';
+        }
+        
+        $user_reviews_pages = '';
+        if (count($pages) > 0) {
+
+             $user_reviews_pages = '<div class="pagination"> <ul>' ;
+             foreach ($pages as $pg) {
+                if ($pg == $thispage) {
+                    $user_reviews_pages .= '<li class="current">' .
+                                           $pg .
+                                           '</li>';
+                }
+                else {
+                    $num = ($pg-1)*REVIEWS_PER_PAGE;
+                    $user_reviews_pages .= '<li><a href="#" onclick="getReviews(' .
+                                           $num .
+                                           '); return false;">' .
+                                           $pg .
+                                           '</a></li>';
+                }
+             }
+             $user_reviews_pages .= '</ul></div>';
+             $user_reviews_pages .= '<div class="l_page_buttons">' ;
+             if ($prevpage) {
+                $num = ($thispage-2)*REVIEWS_PER_PAGE;
+                $user_reviews_pages .= '<a href="#" onclick="getReviews(' .
+                                       $num .
+                                       '); return false;">' .
+                                       '<div class="btn_prev_page"><img src="' .
+                                       $baseurl . '/images/btn_prev_page.jpg"'.
+                                       'alt="Previous page"/></div></a>' ;
+             }
+             if ($nextpage) {
+                 $num = ($thispage)*REVIEWS_PER_PAGE;
+                 $user_reviews_pages .= '<a href="#" onclick="getReviews(' .
+                                       $num .
+                                       '); return false;">' .
+                                       '<div class="btn_next_page"><img src="' .
+                                       $baseurl . '/images/btn_next.jpg"' .
+                                       'alt="Next page" /></div></a>' ;
+             }
+             $user_reviews_pages .= '</div>'; 
+        }
+        echo Zend_Json::encode(array('user_reviews' => $user_reviews,
+                                     'user_reviews_notice' => $user_reviews_notice,
+                                     'user_reviews_pages'=> $user_reviews_pages));
+        
+        /*$this->view->reviews = $reviews;
         $this->view->start = $start;
-        $this->view->baseurl = $baseurl;
+        $this->view->baseurl = $baseurl;*/
     }
     
     public function addownerAction()
@@ -190,7 +310,9 @@ class ListController extends Zend_Controller_Action
             $id = $this->_getParam('id', 0);
             $form->getElement('id')->setValue($id);
         }
+        $this->view->getHelper('BaseUrl')->setBaseUrl('..');
         $this->view->form = $form;
+        $this->view->headline = 'Please select Owner.';
     }
 }
 

@@ -74,14 +74,20 @@
             return isvalid;
         }
 
-        function getReviews(start) {
-            var baseurl = '<?php echo $this->baseUrl();?>'; 
-            var id = '<?php echo $this->property->id;?>';
+        function getReviews(_start) {
+            var _baseurl = '<?php echo $this->baseUrl();?>'; 
+            var _id = '<?php echo $this->property->id;?>';
             $.ajax({ 
                 type: "POST",
-                url:"/default/list/getreviews/format/html",
-                data:"id="+id+"&start="+start+"&baseurl="+baseurl,
-                complete:function(data) { $("#user_reviews").html(data.responseText);}
+                dataType: "json",
+                url:"/default/list/getreviews/format/json",
+                data:{id:_id, start:_start, baseurl:_baseurl},
+                complete:function(json) { 
+                	var resp = jQuery.parseJSON(json.responseText.substring(2)); 
+                	$("#user_reviews").html(resp.user_reviews);
+                	$("#user_reviews_notice").html(resp.user_reviews_notice);
+                	$("#user_reviews_pages").html(resp.user_reviews_pages);
+                }
             });
         }
         

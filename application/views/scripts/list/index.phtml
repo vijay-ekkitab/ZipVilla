@@ -40,15 +40,16 @@ if ((!isset($this->user_rating)) || ($this->user_rating == null)) {
 ?>
 <script type="text/javascript">
 function calculate_rate() {
-	var checkin=$("#checkin").val();
-	var checkout=$("#checkout").val();
-	var guests=$("#guests").val();
-	var id="<?php echo $property->id;?>";
+	var _checkin=$("#checkin").val();
+	var _checkout=$("#checkout").val();
+	var _guests=$("#guests").val();
+	var _id="<?php echo $property->id;?>";
     $.ajax({ 
         type: "POST",
-        url:"/default/list/calculate/format/html",
-        data:"id="+id+"&checkin="+checkin+"&checkout="+checkout+"&guests="+guests,
-        complete:function(data) { $("#calc_rate").text("Rs. "+data.responseText);}});
+        dataType: "json",
+        url:"/default/list/calculate/format/json",
+        data:{id:_id,checkin:_checkin,checkout:_checkout,guests:_guests},
+        complete:function(json) { $("#calc_rate").text("Rs. "+jQuery.parseJSON(json.responseText.substring(2)).total);}});
 }
 </script>
 <div class="v_social_ico l_social_ico">
@@ -194,14 +195,10 @@ function calculate_rate() {
                                 </FORM>
                             </div>
                         </div><!--tab_content ends here-->
-                        <!-- <div class="display_no"><p>Displaying <span>1</span> — <span>19</span> of <span><?php echo $reviews;?></span> reviews</p></div> -->
-                        <!-- <div class="pagination">
-                            <ul>
-                                <li class="current">1</li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                            </ul>
-                        </div> -->
+                        <div id="user_reviews_notice">
+                        </div> 
+                        <div id="user_reviews_pages">
+                        </div>
                         <!-- 
                         <div class="l_page_buttons">
                             <div class="btn_prev_page"><a href="#"><img src="images/btn_prev_page.jpg" alt="Previous page" /></a></div>
@@ -281,7 +278,7 @@ function calculate_rate() {
                     </div>
                     <div class="l_price">
                         <div class="l_accordian_open"><a href="#"><img src="images/btn_acco_open.jpg" /></a></div>
-                        <?php $owner_line = '[Add Owner]'; $owner_link = '/list/addOwner?id='.$property->id;
+                        <?php $owner_line = '[Add Owner]'; $owner_link = $this->baseUrl('/list/addOwner?id='.$property->id);
                               if ($owner != null) { $owner_line = 'About your host'; $owner_link = '';}?>
                         <h4><a href="<?php echo $owner_link;?>"><?php echo $owner_line;?></a></h4>
                         <div style="margin-top:10px;" class="img_profle"><img src="<?php echo $this->baseUrl('/images/users/'.$owner_image);?>"/>
