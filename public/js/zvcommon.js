@@ -60,11 +60,13 @@ $(document).ready(function()
 	
 });
 
-function showlightbox(id, mask) 
+function showlightbox(id, mask, msg) 
 {
 	//Get the screen height and width
 	var maskHeight = $(document).height();
 	var maskWidth = $(window).width();
+	
+	msg = msg || '';
 
 	//Set heigth and width to mask_zv to fill up the whole screen
 	$(mask).css({'width':maskWidth,'height':maskHeight});
@@ -79,6 +81,10 @@ function showlightbox(id, mask)
 	//Set the popup window to center
 	$(id).css('top',  winH/2-$(id).height()/2);
 	$(id).css('left', winW/2-$(id).width()/2);
+	
+	if (msg != '') {
+		$('#lb_show_msg').append('<p><strong>'+msg+'</strong></p>');
+	}
 
 	//transition effect
 	$(id).fadeIn(2000); 

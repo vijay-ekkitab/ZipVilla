@@ -105,6 +105,7 @@ class ListController extends Zend_Controller_Action
             $this->view->guests   = $session->guests;
             $this->view->user_rating = $rating;
             $this->_helper->viewRenderer('index');
+            $this->view->showPopupMsg = 'Thank you for your feedback. We appreciate your inputs.';
             $url = $this->view->getHelper('BaseUrl')->setBaseUrl('..');
         }
         else {

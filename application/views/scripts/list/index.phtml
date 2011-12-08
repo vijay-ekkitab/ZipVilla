@@ -124,6 +124,18 @@ function login(iduser,idpsw, idmsg) {
 function requestLogin() {
 	showlightbox('#lb_login', '#mask_zv');
 }
+
+function writeReview(id) {
+	checkLogin();
+    if (!userloggedin) {
+        lastdecline = 'writeReview(\''+id+'\')';
+        requestLogin();
+        return;
+    }
+    
+    $(id).show();
+    $(window).scrollTop($(id).offset().top);
+}
 </script>
 <div class="v_social_ico l_social_ico">
                 <h4 class="l_link_back_page v_link_back_page"><a href="/search">Back to search results</a></h4>
@@ -254,18 +266,18 @@ function requestLogin() {
                                 </div>
                                 <div class="write_review">
                                     <p><strong><?php echo $reviews;?> Reviews</strong></p>
-                                    <div class="btn_write_review"><a href="#" onclick="$(window).scrollTop($('#review_form').offset().top);$('#review_area').focus();return false;"><img src="<?php echo $this->baseUrl('/images/btn_writ_revew.jpg');?>" alt="Write review"></a></div>
+                                    <div class="btn_write_review"><a href="#" onclick="writeReview('.form_write_review');return false;"><img src="<?php echo $this->baseUrl('/images/btn_writ_revew.jpg');?>" alt="Write review"></a></div>
                                 </div><!--write_review ends-->
                             </div><!--ratng_rvews ends-->
                             <div id="user_reviews">
                             </div>
-                            <div class="form_write_review">
+                            <div class="form_write_review" style="display:none;">
                                 <FORM id="review_form" action="<?php echo $this->baseUrl('/list/submit_review');?>" method="post">
                                     <textarea name="title" title="Your title for the review" style="width:100%;" cols="100" name="message" rows="1" class="FrmtxtArea defaultText"></textarea><br>
                                     <textarea name="content" title="Share your experience..." style="width:100%;" cols="100" name="message" rows="3" class="FrmtxtArea defaultText"></textarea><br>
                                     <input type="hidden" name="id" value="<?php echo $property->id;?>" />
                                     <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
-                                    <div align="center"><INPUT type="submit" value="Submit review" onclick="return validate();"> </div>
+                                    <div align="center"><INPUT type="submit" value="Submit review" onclick="if (validate()) {$('.form_write_review').hide();return true;} return false;"> </div>
                                 </FORM>
                             </div>
                         </div><!--tab_content ends here-->
@@ -404,6 +416,14 @@ function requestLogin() {
                     </div>
                     <div class="close cboxClose"></div>
                 </div>
+            </div>
+            <div id="boxes">
+                <div id="lb_thankyou" style="height: 200px; width: 400px; background:none;display:none;" class="lb_window_zv">
+                    <div id="lb_show_msg" class="register">
+                    </div>
+                    <button type="button" class="close">OK</button>
+                </div>
+                <!-- <div class="close cboxClose"></div>  -->
             </div>
             <div id="mask_zv"></div>
 <?php }?> <!-- End property detail available -->

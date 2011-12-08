@@ -57,6 +57,10 @@
            <?php if ($this->property != null) {?>
            getReviews(0);
            <?php }?>
+
+           <?php if ($this->showPopupMsg) {?>
+           showlightbox('#lb_thankyou', '#maskzv', '<?php echo $this->showPopupMsg;?>');
+           <?php } ?>
         });
 
         function validate() 
