@@ -406,7 +406,7 @@ function writeReview(id) {
                                 <label for="username">Email address :<br /><input class="username" type="text" id="username" size="37" name="username" value=""/></label>
                                 <label for="password">Password :<br /><input type="password" class="username" id="password" size="37" name="password"/></label>
                                 <input class="login" type="submit" onclick="login('#username', '#password', '.error_msg');return false;" id="login" name="login" value=""/> 
-                                <button type="button" class="close">Cancel</button>
+                                <input class="cancel close" type="submit" onclick="return false;" value=""/>
                                 <!-- <a href="#" class="close">Cancel</a> -->
                             <!-- </form> -->
                         </div>

@@ -1,2 +1,11 @@
 .defaultText { width: 300px; }
 .defaultTextActive { color: #a1a1a1; font-style: italic; }
+.register .form-section .cancel {
+    background:url(../images/btn_cancel.jpg) top left no-repeat;
+    width:120px;
+    height:40px;
+    clear:right;
+    float:right;
+    cursor:pointer;
+}
+
