@@ -39,6 +39,10 @@ if ((!isset($this->user_rating)) || ($this->user_rating == null)) {
       
 ?>
 <script type="text/javascript">
+
+var lastdecline = null;
+var userloggedin = false;
+
 function calculate_rate() {
 	var _checkin=$("#checkin").val();
 	var _checkout=$("#checkout").val();
@@ -50,6 +54,75 @@ function calculate_rate() {
         url:"/default/list/calculate/format/json",
         data:{id:_id,checkin:_checkin,checkout:_checkout,guests:_guests},
         complete:function(json) { $("#calc_rate").text("Rs. "+jQuery.parseJSON(json.responseText.substring(2)).total);}});
+}
+
+function checkLogin() {
+	if (userloggedin) 
+		return;
+	$.ajax({ 
+        type: "POST",
+        dataType: "json",
+        async: false,
+        url:"/default/list/checklogin/format/json",
+        data:{},
+        complete:function(json) {
+                var loggedin = json.responseText.substring(2);
+                if (loggedin == 'yes')
+                    userloggedin = true;
+            }
+        }
+    );
+}
+
+function setRate(score) {
+	checkLogin();
+	if (!userloggedin) {
+		lastdecline = 'setRate('+score+')';
+		requestLogin();
+		return;
+	}
+	var image;
+	for(var i=1; i<=<?php echo MAX_RATING;?>;i++) {
+		if (i<=score) {
+			image="<?php echo $this->baseUrl('/images/icon_ratings_gold.jpg');?>";
+		}
+		else {
+			image="<?php echo $this->baseUrl('/images/icon_ratings_silver.jpg');?>";
+		}
+		$("#rate"+i).attr("src", image);
+	}
+} 
+
+function login(iduser,idpsw, idmsg) {
+	var user = $(iduser).val();
+	var psw  = $(idpsw).val();
+	$.ajax({ 
+        type: "POST",
+        dataType: "json",
+        async: false,
+        url:"/default/login/ajaxlogin/format/json",
+        data:{username:user, password:psw},
+        complete:function(json) {
+                var loggedin = json.responseText.substring(2);
+                if (loggedin == 'yes') {
+                    userloggedin = true;
+                    closelightbox('#lb_login', '#mask_zv');
+                    if (lastdecline != null) {
+                        eval(lastdecline);
+                        lastdecline = null;
+                    }
+                }
+                else {
+                    $(idmsg).append('<p>username or password is incorrect.</p>');
+                }
+            }
+        }
+    );
+    return success;
+}
+
+function requestLogin() {
+	showlightbox('#lb_login', '#mask_zv');
 }
 </script>
 <div class="v_social_ico l_social_ico">
@@ -168,11 +241,12 @@ function calculate_rate() {
                                         <?php for($rc=0; $rc < MAX_RATING; $rc++) {
                                             $score = $rc+1;
                                             $url = $this->baseUrl('list/rate?id='.$property->id);
-                                            echo '<a href="'.$url.'&score='.$score.'">';
+                                            //echo '<a href="'.$url.'&score='.$score.'">';
+                                            echo '<a onclick="setRate('.$score.');return false;">';
                                             if ((0+$this->user_rating) > $rc)
-                                                echo '<li><img src="'.$this->baseUrl('/images/icon_ratings_gold.jpg').'"/></li>';
+                                                echo '<li><img id="rate'.$score.'" src="'.$this->baseUrl('/images/icon_ratings_gold.jpg').'"/></li>';
                                             else 
-                                                echo '<li><img src="'.$this->baseUrl('/images/icon_ratings_silver.jpg').'"/></li>';
+                                                echo '<li><img id="rate'.$score.'" src="'.$this->baseUrl('/images/icon_ratings_silver.jpg').'"/></li>';
                                             echo '</a>';
                                         }?>                                
                                     </ul>
@@ -311,5 +385,26 @@ function calculate_rate() {
                     </div>
                 </div>
             </div><!--right_side_panel ends here-->
+            <div id="boxes">
+                <div id="lb_login" style="height: 447px; width: 656px; background:none;" class="lb_window_zv">
+                    <div id="lightbox_login" class="register">
+                        <div class="form-section">
+                            <div class="error_msg" style="width:100%;"></div>
+                            <!-- <form method="post" id="register" name="register" action="#">  -->
+                                <label for="username">Email address :<br /><input class="username" type="text" id="username" size="37" name="username" value=""/></label>
+                                <label for="password">Password :<br /><input type="password" class="username" id="password" size="37" name="password"/></label>
+                                <input class="login" type="submit" onclick="login('#username', '#password', '.error_msg');return false;" id="login" name="login" value=""/> 
+                                <button type="button" class="close">Cancel</button>
+                                <!-- <a href="#" class="close">Cancel</a> -->
+                            <!-- </form> -->
+                        </div>
+                    </div>
+                    <div class="lightbox_filter_action_area segment buttons">
+                            
+                    </div>
+                    <div class="close cboxClose"></div>
+                </div>
+            </div>
+            <div id="mask_zv"></div>
 <?php }?> <!-- End property detail available -->
 

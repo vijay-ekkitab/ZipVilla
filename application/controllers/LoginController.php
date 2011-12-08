@@ -22,6 +22,9 @@ class LoginController extends Zend_Controller_Action
     public function init()
     {
         /* Initialize action controller here */
+        $ajaxContext = $this->_helper->getHelper('AjaxContext');
+        $ajaxContext->addActionContext('ajaxlogin', 'json')
+                    ->initContext();
     }
 
     public function preDispatch()
@@ -42,6 +45,16 @@ class LoginController extends Zend_Controller_Action
         }
         */
         
+    }
+    
+    public function ajaxloginAction() 
+    {
+        $values = $this->getRequest()->getPost();
+        if($this->_process($values))
+            $response = 'yes';
+        else
+            $response = 'no'; 
+        echo $response;
     }
 
     public function indexAction()

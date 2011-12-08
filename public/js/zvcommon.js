@@ -59,3 +59,35 @@ $(document).ready(function()
 	$('#tabs1').tabs();
 	
 });
+
+function showlightbox(id, mask) 
+{
+	//Get the screen height and width
+	var maskHeight = $(document).height();
+	var maskWidth = $(window).width();
+
+	//Set heigth and width to mask_zv to fill up the whole screen
+	$(mask).css({'width':maskWidth,'height':maskHeight});
+	
+	//transition effect		
+	$(mask).fadeIn(1000);	
+	$(mask).fadeTo("slow",0.8);	
+
+	var winH = $(document).height();
+	var winW = $(document).width();
+
+	//Set the popup window to center
+	$(id).css('top',  winH/2-$(id).height()/2);
+	$(id).css('left', winW/2-$(id).width()/2);
+
+	//transition effect
+	$(id).fadeIn(2000); 
+	$(window).scrollTop($(id).offset().top);
+}
+
+function closelightbox(id, mask)
+{
+	$(mask).hide();
+	$(id).hide();
+};
+

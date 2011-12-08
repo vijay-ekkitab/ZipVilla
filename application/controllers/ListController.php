@@ -11,6 +11,7 @@ class ListController extends Zend_Controller_Action
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('calculate', 'json')
                     ->addActionContext('getreviews', 'json')
+                    ->addActionContext('checklogin', 'json')
                     ->initContext();
     }
 
@@ -314,5 +315,18 @@ class ListController extends Zend_Controller_Action
         $this->view->form = $form;
         $this->view->headline = 'Please select Owner.';
     }
+    
+    public function checkloginAction()
+    {
+        $this->_helper->viewRenderer->setNoRender();
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity())
+            $response = "yes";
+        else
+            $response = "no";
+            
+        echo $response;
+    }
+    
 }
 
