@@ -53,13 +53,8 @@
                                        	  // Initialise the first and second carousel by class selector.
                                        	  // Note that they use both the same configuration options (none in this case).
                                        	 jQuery('.first-and-second-carousel').jcarousel({
-                                       		wrap:"circular"});
-                                       
-                                       		// If you want to use a caoursel with different configuration options,
-                                       		// you have to initialise it seperately.
-                                       		// We do it by an id selector here.
-                                       		jQuery('#third-carousel').jcarousel({
-                                       			vertical: true,wrap:"circular"});
+                                       		wrap:"circular"
+                                         		});
                                        });
                                        </script>
                                        
@@ -97,20 +92,20 @@
 							<li><a href="#tabs-2">Most booked</a></li>
 							<li><a href="#tabs-3">Most rated</a></li>
 						</ul>
-							<div id="tabs-1"><!--First tab content-->
+							<div id="tabs-1"><!--Most Viewed Tab-->
 								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-								<?php echo $this->render('home_viewed.phtml');?>								
-							</div><!--tab1 content ends here-->
+								<?php echo $this->render('home_viewed.phtml');?>
+							</div><!--Most Viewed Tab ends here-->
 							
-							<div id="tabs-2">
+							<div id="tabs-2"><!--Most Booked Tab-->
 								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
 								<?php echo $this->render('home_booked.phtml');?>			
-							</div><!--tab2 content ends here-->
+							</div><!--Most Booked Tab ends here-->
 
-              <div id="tabs-3">
+              <div id="tabs-3"><!--Most Rated Tab-->
 								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
 								<?php echo $this->render('home_rated.phtml');?>			
-               </div><!--tab3 content ends here-->
+               </div><!--Most Rated Tab ends here-->
              </div>
            </div>
        	</div><!--content ends here-->
