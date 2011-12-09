@@ -1,13 +1,7 @@
 <?php
-$this->title = "Accomodations";
+$this->title = "ZipVilla - Home Page";
 $this->headTitle($this->title);
-$mapHelper = $this->map();
 ?>
-	<p>
-		<a
-			href="<?php echo $this->url(array('controller'=>'index', 'action'=>'add'));?>">Add
-			new accomodation</a>
-	</p>
 
  <?php if ($this->listings == null) { ?>
 	<p>There are no accomodations to show.</p>

@@ -1,0 +1,81 @@
+<?php /* echo $this->layout()->content; */ ?>
+<?php
+    include_once("ZipVilla/TypeConstants.php");
+    $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
+    $this->headTitle()->setSeparator(' - ');
+    $this->headTitle('Zipvilla-Feel at Home-Away');
+    echo $this->doctype();
+    $baseUrl = $this->baseUrl();
+    $url = $this->url(array('controller'=>'search',
+                            'action' => 'index', 
+                            'query'=> $this->search_query,
+                            'check_in' => $this->checkin,
+                            'check_out' => $this->checkout,
+                            'guests' => $this->guests), null, TRUE);
+?>
+<html>
+<head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/lightbox.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
+                                    //->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/layout.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/visual.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/misc.css')
+                                    ; ?>
+
+        <?php echo $this->headScript()
+                                      ->appendFile($this->baseUrl().'/js/jquery-1.6.2.min.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
+                                      ->appendFile($this->baseUrl().'/js/accordian.js')
+                                      ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
+                                      ->appendFile($this->baseUrl().'/js/mapMarker.js')
+                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
+                                       ;?>
+                                       
+        <?php echo $this->render('search_page_js.phtml');?>
+        
+</head>
+  <body class="blue">
+	<div class="wrapper"><!--outer wrapper to fix the width-->
+        <?php echo $this->render('header.phtml');?>
+        <div class="content">
+            <form id="search_form" name="search_form" action="/search" method="post">
+            <?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
+            <?php echo $this->render('search_top.phtml');?>
+            <div class="l_search_results v_search_results"><!--Search result sections starts here-->
+            
+            	<div id="tabs"><!--tabs-->
+                	<ul>
+                    	<li><a href="#tabs-1">List</a></li>
+                        <li><a href="#tabs-2">Photo</a></li>
+                        <li><a href="#tabs-3">Map</a></li>
+                    </ul>
+                    <?php echo $this->render('sort_box.phtml');?>
+                    <div id="tabs-1"><!--First tab content-->
+                        <?php echo $this->render('tab_list.phtml');?>
+                   	</div><!--tab1 content ends here-->
+                    <div id="tabs-2">
+                    	<div class="tab_content">This is the place for Search Results by Photo</div>
+                    </div><!--tab2 content ends here-->
+                    <div id="tabs-3">
+                    	  <div class="tab_content">This is the place for Search Results by Map</div>
+                    </div><!--tab3 content ends here-->
+                </div>
+                
+         	</div><!--search result ends here-->
+            <div class="l_right_side_panel v_right_side_panel">
+            	<div>
+                	<h3>Refine Results</h3>
+                    <p><?php echo $this->total_hits; ?> Results</p>
+                </div>
+                <div id="map" class="map"></div>
+                <?php echo $this->render('rightpanel.phtml');?>
+            </form>
+        </div><!-- content ends here -->
+        <?php echo $this->render('footer.phtml');?>
+	</div><!-- wrapper ends here -->
+ </body>
+</html>
+

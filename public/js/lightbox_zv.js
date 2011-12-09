@@ -49,6 +49,9 @@ $(document).ready(function() {
 	$('#mask_zv').click(function () {
 		$(this).hide();
 		$('.lb_window_zv').hide();
-	});			
+	});
+	
+	$('#tabs').tabs();
+	$('#tabs1').tabs();
 	
 });

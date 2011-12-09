@@ -1,0 +1,68 @@
+body, h1, ul, li {
+    border: 0 none;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: url("/images/temp/bg-texture.jpg") repeat scroll 0 0 #E8DBCB;
+}
+#zv_hp_sponsored_images {
+    margin: -450px auto;
+    position: relative;
+    width: 50px;
+}
+h1 {
+    background: url("/images/temp/harley-logo.png") repeat scroll 0 0 transparent;
+    height: 226px;
+    margin: 0 auto;
+    position: relative;
+    text-indent: -9999px;
+    top: 100px;
+    width: 262px;
+    z-index: 10;
+}
+div#zv_hp_slideshow {
+    background: url("/images/temp/border.png") repeat scroll 0 0 transparent;
+    height: 250px;
+    overflow: scroll;
+    padding: 15px 0 0 12px;
+    position: relative;
+    width: 400px;
+    z-index: 5;
+}
+div#zv_hp_slideshow ul#zv_hp_nav {
+    display: none;
+    list-style: none outside none;
+    position: relative;
+    top: 100px;
+    z-index: 15;
+}
+div#zv_hp_slideshow ul#zv_hp_nav li#zv_hp_prev {
+    float: left;
+    margin: 0 0 0 30px;
+}
+div#zv_hp_slideshow ul#zv_hp_nav li#zv_hp_next {
+    float: right;
+    margin: 0 40px 0 0;
+}
+div#zv_hp_slideshow ul#zv_hp_nav li a {
+    display: block;
+    height: 80px;
+    text-indent: -9999px;
+    width: 80px;
+}
+div#zv_hp_slideshow ul#zv_hp_nav li#zv_hp_prev a {
+    background: url("/images/temp/prev.png") repeat scroll 0 0 transparent;
+}
+div#zv_hp_slideshow ul#zv_hp_nav li#zv_hp_next a {
+    background: url("/images/temp/next.png") repeat scroll 0 0 transparent;
+}
+div#zv_hp_slideshow ul#zv_hp_slides {
+    list-style: none outside none;
+}
+div#zv_hp_slideshow ul#zv_hp_slides li {
+    margin: 0 0 20px;
+}
+a {
+    outline: medium none;
+}
