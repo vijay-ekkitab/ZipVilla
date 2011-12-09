@@ -11,7 +11,7 @@
 	<?php if (isset($this->error)) { ?>
 		<p>An error was encountered in search.</p>
 		<?php } elseif ($this->results != null) { ?>
-		<?php $iCtr=0; // REMOVE THIS LINE LATER once the api's are ready to provide the image file names ?>  
+		<?php $iCtr=0; // REMOVE THIS LINE LATER and change the image names once the api's and the date is ready to provide the image file names ?>  
 		<?php foreach($this->results as $sponsoredData) : ?>	
 			<li>
 				<a class="thumb" name="leaf" href="images/<?php echo ++$iCtr?>.jpg" title="Title #0"><img src="images/control.jpg" alt="villaImage" /></a>

@@ -4,17 +4,17 @@
 			<p>An error was encountered in search.</p>
 				<?php } elseif ($this->results != null) { ?>
 					<?php $iCtr=0;   // REMOVE THIS LINE LATER once the api's are ready to provide the image file names ?>
-					<?php foreach($this->results as $mostViewedData) : ?>	
+					<?php foreach($this->results as $mostRatedData) : ?>	
 						<li><img src="images/<?php echo ++$iCtr?>.jpg" height="70" width="110">
 							<p>
 							<?php 
-								if( strlen($this->escape($mostViewedData['title'])) > VILLA_NAME_SMALL_SIZE )
-									echo substr($this->escape($mostViewedData['title']),0,(VILLA_NAME_SMALL_SIZE-3)).'...';
+								if( strlen($this->escape($mostRatedData['title'])) > VILLA_NAME_SMALL_SIZE )
+									echo substr($this->escape($mostRatedData['title']),0,(VILLA_NAME_SMALL_SIZE-3)).'...';
 								else
-									echo $this->escape($mostViewedData['title']);
+									echo $this->escape($mostRatedData['title']);
 							?>
 							</p>
-							<span><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Indian Rupee" /><?php echo $this->escape(0+$mostViewedData['average_rate']);?></span>
+							<span><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Indian Rupee" /><?php echo $this->escape(0+$mostRatedData['average_rate']);?></span>
 						</li>
  					<?php endforeach; ?>
  				<?php } else {?>
