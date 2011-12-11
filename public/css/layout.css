@@ -117,8 +117,8 @@
 .l_search_results .search_sort .dropdwon_bg {
 	width:134px;
 	height:25px;
-	border:none;
-	padding:2px 0 0 5px;
+	/*border:none;
+	padding:2px 0 0 5px;*/
 }
 .l_search_results .search_sort {
 	float:right;
@@ -166,8 +166,8 @@
 }
 .l_search_results .tab_content .search_result .resort_details .reviews p {
 	color:#c63;
-	font-weight:
-	bold;margin-top:4px;
+	font-weight:bold;
+	margin-top:4px;
 	text-align:center;
 }
 .l_search_results .tab_content .search_result .resort_details .reviews span, .search_results .tab_content .search_result .resort_details .ratings span {
@@ -330,14 +330,14 @@
 	float:right;
 	margin-top:15px;
 }
-.v_listing_header .v_ratings .reviews {
+.v_listing_header .v_ratings .reviews, .slide_text .v_ratings .reviews {
 	text-align:center;
 	width:30px;
 	height:30px;
 	float:left;
 	margin-top:5px;
 }
-.v_listing_header .v_ratings .reviews p {
+.v_listing_header .v_ratings .reviews p, .slide_text .v_ratings .reviews p {
 	color:#c63;
 	font-weight:
 	bold;margin-top:4px;
@@ -472,7 +472,7 @@
 	font-size:12px;
 	font-weight:normal;
 	float:left;
-	margin-right:20px;
+	margin-right:18px;
 }
 .online_resrv .l_input_bg{
 	background-image:none;
@@ -568,5 +568,4 @@
 .l_price .form_write_review{
 	width:92%;
 }
-
 

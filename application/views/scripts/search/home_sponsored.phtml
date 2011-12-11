@@ -1,0 +1,56 @@
+<div id="gallery" class="slide_content">
+	<div class="slideshow-container">
+		<div id="loading" class="loader"></div>
+		<div id="slideshow" class="slideshow"></div>
+	</div>
+	<div id="caption" class="caption-container"></div>
+</div>
+<div id="thumbs" class="navigation">
+	<?php const VILLA_NAME_LARGE_SIZE = 25; ?>
+	<ul class="thumbs noscript">
+	<?php if (isset($this->error)) { ?>
+		<p>An error was encountered in search.</p>
+		<?php } elseif ($this->results != null) { ?>
+		<?php $iCtr=0; // REMOVE THIS LINE LATER and change the image names once the api's and the date is ready to provide the image file names ?>  
+		<?php foreach($this->results as $sponsoredData) : ?>	
+			<li>
+				<a class="thumb" name="leaf" href="images/<?php echo ++$iCtr?>.jpg" title="Title #0"><img src="images/control.jpg" alt="villaImage" /></a>
+					<div class="caption">
+						<div class="image-title">
+							<div class="slide_text">
+								<div class="floatleft">
+									<h3><span>
+										<?php 
+											if( strlen($this->escape($sponsoredData['title'])) > VILLA_NAME_LARGE_SIZE )
+												echo substr($this->escape($sponsoredData['title']),0,(VILLA_NAME_LARGE_SIZE-3)).'...';
+											else
+												echo $this->escape($sponsoredData['title']);
+										?>
+									</span></h3>
+									<h2>  <img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="rupeeImage" />
+									<?php echo $this->escape(0+$sponsoredData['average_rate']);?><span>Per night</span></h2>
+								</div>
+								<div class="v_ratings">
+									<div class="ratings_div"><!--golden and silver stars-->
+										<?php for($rc=0; $rc < 5; $rc++) {
+											if ((0+$sponsoredData['rating']) > $rc) 
+												echo '<div><img src="'.$this->baseUrl().'/images/icon_ratings_gold.jpg"/></div>';
+											else
+												echo '<div><img src="'.$this->baseUrl().'/images/icon_ratings_silver.jpg"/></div>';
+											} ?>                                            
+											<span><?php echo $this->escape(0+$sponsoredData['rating']);?>Ratings</span>
+								</div>
+								<div class="reviews">
+									<?php echo $this->escape(0+$sponsoredData['reviews']);?><span>Reviews</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+			<?php endforeach; ?>
+		<?php } else {?>
+			<p>No results were returned from search.</p>
+		<?php } ?> 						
+	</ul>
+</div>

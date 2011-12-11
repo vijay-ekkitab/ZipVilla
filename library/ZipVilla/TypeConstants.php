@@ -49,5 +49,9 @@ const  MAX_RATING   = 5;
 const  AUTH_FIELD_SEPARATOR = '::';
 const  REVIEWS_PER_PAGE = 3;
 
+const  HOMEPAGE_SPONSORED_DATA    = "hsd";
+const  HOMEPAGE_MOST_VIEWED_DATA  = "hmvd";
+const  HOMEPAGE_MOST_BOOKED_DATA  = "hmbd";
+const  HOMEPAGE_MOST_RATED_DATA   = "hmrd";
 
 ?>

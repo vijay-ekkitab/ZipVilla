@@ -21,8 +21,10 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->listings = $this->_helper->listingsManager->query();
+        $this->view->listings = $this->_helper->listingsManager->queryById($id);
     }
+
+/*
 
     public function addAction()
     {
@@ -98,7 +100,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->listing = $this->_helper->listingsManager->queryById($id);
         }
     }
-
+*/
 
 }
 
