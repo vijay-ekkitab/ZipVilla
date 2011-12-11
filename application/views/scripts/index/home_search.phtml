@@ -1,0 +1,26 @@
+
+	<div class="search_homebx">
+	   <input class="search_home defaultText" type="text" name="query" id="query" size="73" title="Where do you want to go?" autocomplete="off" value=""/> 
+	   <input class="submit_search" type="submit" value="" onclick="validate();return true;" />
+	   <div class="floatleft"><label for="checkin"><br/>Check in<br/>
+            <input class="input_home" type="text" size="10" id="checkin"  name="check_in"  value="<?php echo $this->checkin;?>"/></label>
+       </div>
+       <div class="floatleft"><label for="checkout"><br/>Check out<br/>
+            <input class="input_home" type="text" size="10" id="checkout" name="check_out" value="<?php echo $this->checkout;?>"/></label>
+       </div>
+	   <div class="floatleft">	<label for="guests"><br/>Guests<br/>
+		<select class="guest_home" id="guests" name="guests">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+			<option>5</option>
+			<option>6</option>
+			<option>7</option>
+			<option>8</option>
+			<option>9</option>
+			<option value="10">10+</option>
+		</select></label>
+	   </div>
+   </div>
+    

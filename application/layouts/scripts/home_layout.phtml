@@ -6,6 +6,7 @@
     $this->headTitle('New layout()  Zipvilla-Feel at Home-Away');
     echo $this->doctype();
     $baseUrl = $this->baseUrl();
+    $this->addScriptPath(APPLICATION_PATH.'/views/scripts/index'); 
     $url = $this->url(array('controller'=>'search',
                             'action' => 'index', 
                             'query'=> $this->search_query,
@@ -34,31 +35,68 @@
                                       ->appendFile($this->baseUrl().'/js/jquery-1.6.2.min.js')
                                       ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
-                                      ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
+                                      //->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.galleriffic.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.opacityrollover.js')
-                                      ->appendFile($this->baseUrl().'/js/galleriffic.js')
+                                      //->appendFile($this->baseUrl().'/js/galleriffic.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.jcarousel.min.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
                                       ->appendFile($this->baseUrl().'/js/slideshow.js')
         
                                        ;?>
-                                       <script type="text/javascript">
-                                          			document.write('<style>.noscript { display: none; }</style>');
-                                       </script>                                       
-                                       <script type="text/javascript">
-                                         jQuery(document).ready(function() {
-                                       	  // Initialise the first and second carousel by class selector.
-                                       	  // Note that they use both the same configuration options (none in this case).
-                                       	 jQuery('.first-and-second-carousel').jcarousel({
-                                       		wrap:"circular"
-                                         		});
-                                       });
-                                       </script>
+<script type="text/javascript">
+  			//document.write('<style>.noscript { display: none; }</style>');
+</script> 
+                                      
+<script type="text/javascript">
+
+function watchQueryBox() {
+    if ($('#query').data('lastValue') != $('#query').val()) {
+        $.ajax({ 
+            type: "POST",
+            url:"/default/search/lookahead/format/html",
+            data:"query="+$('#query').val(),
+            complete:function(data) { console.log(data.responseText);}});
+        $('#query').data('lastValue', $('#query').val());
+    }
+}
+function validate() 
+{
+    $(".defaultText").each(function(i) {if ($(this).val() == $(this)[0].title) $(this).val('');});
+}
+
+$(document).ready(function() {
+    // Initialise the first and second carousel by class selector.
+    // Note that they use both the same configuration options (none in this case).
+    $('.first-and-second-carousel').jcarousel({wrap:"circular"});
+    
+    $("#guests").val('1');
+
+    $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
+    $('#query').bind('keypress', null, watchQueryBox);
+
+    $(".defaultText").focus(function(srcc) {
+        if ($(this).val() == $(this)[0].title) {
+            $(this).removeClass("defaultTextActive");
+            $(this).val("");
+        }
+     });
+        
+    $(".defaultText").blur(function() {
+        if ($(this).val() == "") {
+            $(this).addClass("defaultTextActive");
+            $(this).val($(this)[0].title);
+        }
+     });
+        
+    $(".defaultText").blur(); 
+});
+    
+</script>
                                        
-        <?php echo $this->render('search_page_js.phtml'); ?>
+        <?php //echo $this->render('search_page_js.phtml'); ?>
 
 </head>
 <body class="blue">
@@ -71,7 +109,6 @@
 
 				<div class="home_search"><!--home search-->
 					<form id="search_form_home" name="search_form_home" action="/search" method="post">
-						<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
 						<?php echo $this->render('home_search.phtml');?>
 					</form>
 				</div><!--home search ends-->
@@ -79,36 +116,12 @@
 
 
 			<div class="slide_right"><!--slideshow-right-->
-				<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
 				<?php echo $this->render('home_sponsored.phtml');?>
 			</div><!--slideshow-right ends-->
+		</div>
            
-			<div class="bg_slide_btm"></div>
-				<div class="slide_bottom">
-					<div id="tabs"><!--tabs-->
-						<?php const VILLA_NAME_SMALL_SIZE = 15; ?>
-						<ul>
-							<li><a href="#tabs-1">Most viewed</a></li>
-							<li><a href="#tabs-2">Most booked</a></li>
-							<li><a href="#tabs-3">Most rated</a></li>
-						</ul>
-							<div id="tabs-1"><!--Most Viewed Tab-->
-								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-								<?php echo $this->render('home_viewed.phtml');?>
-							</div><!--Most Viewed Tab ends here-->
-							
-							<div id="tabs-2"><!--Most Booked Tab-->
-								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-								<?php echo $this->render('home_booked.phtml');?>			
-							</div><!--Most Booked Tab ends here-->
-
-              <div id="tabs-3"><!--Most Rated Tab-->
-								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-								<?php echo $this->render('home_rated.phtml');?>			
-               </div><!--Most Rated Tab ends here-->
-             </div>
-           </div>
-       	</div><!--content ends here-->
+           <?php echo $this->render('home_slide_bottom.phtml');?>
+        <!-- </div> --><!--content ends here-->
         <?php echo $this->render('footer.phtml');?>
   	</div><!--wrapper ends here-->
 </body>
