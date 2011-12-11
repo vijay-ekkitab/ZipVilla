@@ -37,30 +37,56 @@
                 var option = $("#show_rate_options").val();
                 $("#show_rate").text("Rs. "+option);
             });
-           calculate_rate();
-           $(".defaultText").focus(function(srcc) {
+            $('.dropdown_sm').change(function() {
+            	var option = $(".dropdown_sm").val();
+            	$('#loadergif').empty().html("<img src=\"<?php echo $this->baseUrl('/css/loader.gif');?>\"/>");
+            	$.ajax({ 
+                    type: "POST",
+                    dataType: "html",
+                    url:"/default/list/getcalendar/format/html",
+                    data:"id="+'<?php echo $this->property->id;?>'+"&date="+option,
+                    complete:function(data) {
+                    	 $('#loadergif').empty();
+            	         $('.calendar1').children('table').remove();
+                         $(".calendar1").prepend(data.responseText);
+                    }
+                });
+            });
+            $('.dropdown_sm').prop('selectedIndex', "<?php echo date('M  Y');?>");
+            $.ajax({ 
+                type: "POST",
+                dataType: "html",
+                url:"/default/list/getcalendar/format/html",
+                data:"id="+'<?php echo $this->property->id;?>'+"&date="+'<?php echo date('M  Y');?>',
+                complete:function(data) { 
+                     //$('.calendar1').children('table').remove();
+                     $(".calendar1").prepend(data.responseText);
+                }
+            });
+            calculate_rate();
+            $(".defaultText").focus(function(srcc) {
                if ($(this).val() == $(this)[0].title) {
                    $(this).removeClass("defaultTextActive");
                    $(this).val("");
                }
             });
                    
-           $(".defaultText").blur(function() {
+            $(".defaultText").blur(function() {
                if ($(this).val() == "") {
                    $(this).addClass("defaultTextActive");
                    $(this).val($(this)[0].title);
                }
             });
                    
-           $(".defaultText").blur();
+            $(".defaultText").blur();
 
-           <?php if ($this->property != null) {?>
-           getReviews(0);
-           <?php }?>
+            <?php if ($this->property != null) {?>
+            getReviews(0);
+            <?php }?>
 
-           <?php if ($this->showPopupMsg) {?>
-           showlightbox('#lb_thankyou', '#maskzv', '<?php echo $this->showPopupMsg;?>');
-           <?php } ?>
+            <?php if ($this->showPopupMsg) {?>
+            showlightbox('#lb_thankyou', '#maskzv', '<?php echo $this->showPopupMsg;?>');
+            <?php } ?>
         });
 
         function validate() 
@@ -98,7 +124,7 @@
       	
       	</script>
 </head>
-    
+
 <body class="blue">
 	<div class="wrapper"><!--outer wrapper to fix the width-->
         <?php echo $this->render('header.phtml');?>

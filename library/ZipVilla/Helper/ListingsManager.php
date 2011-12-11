@@ -182,6 +182,38 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 		return FALSE;
 	}
 	
+	public function getRates($id, $from, $to) {
+	    $rates = array();
+	    if ($id != null) {
+	        $listing = $this->queryById($id);
+	        if ($listing != null) {
+	            $std_rate = $listing->rate;
+	            $special_rates = $listing->special_rate;
+	            if ($special_rates != null) {
+	                $fromsec = $from->sec;
+	                $tosec = $to->sec;
+	                foreach($special_rates as $special) {
+	                    $spfromsec = $special['period']['from']->sec;
+	                    $sptosec   = $special['period']['to']->sec;
+	                    if (($sptosec < $fromsec) || ($spfromsec > $tosec)) 
+	                       continue;
+	                    $start = $fromsec > $spfromsec ? $fromsec : $spfromsec;
+	                    $end =  $tosec < $sptosec ? $tosec : $sptosec;
+	                    $rates[] = array('type' => 'special',
+	                                     'from' => new MongoDate($start),
+	                                     'to'   => new MongoDate($end),
+                                         'rate' => $special['rate']['daily']);
+	                }
+	            }
+	            /*$rates[] = array('type' => 'standard',
+	                             'from' => null, 
+	                             'to'   => null,
+ 	                             'rate' => $std_rate['daily']);*/
+	        }
+	    }
+	    return $rates;
+	}
+	
     protected function _getAverageRate($listing, $from, $to, $quiet=TRUE) {
         if ($listing != null) {
             $std_rate = $listing['rate'];

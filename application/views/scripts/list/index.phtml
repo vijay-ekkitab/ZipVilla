@@ -9,7 +9,7 @@ $logger = Zend_Registry::get('zvlogger');
 if ((!isset($this->user_rating)) || ($this->user_rating == null)) {
     $this->user_rating = 0;
 }
-
+$this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
 //$mapHelper = $this->map();
 ?>
 
@@ -173,133 +173,114 @@ function writeReview(id) {
                         <li><a href="#tabs-3">Map</a></li>
                         <li><a href="#tabs-4">Availability</a></li>
                     </ul>
-                    <div id="tabs-1"><!--First tab content-->
-                        <div class="tab_content">
-                            <div class="slide">
-                                <!-- <img src="<?php echo $baseUrl;?>/images/dummyimg3.jpg" />  -->
-                                <div id="gallery" class="ad-gallery">
-                                    <div class="ad-image-wrapper"></div>
-                                    <div class="ad-nav">
-                                        <div class="ad-thumbs">
-                                          <ul class="ad-thumb-list">
-                                          <?php
-                                          $imageprefix = $this->zvImage()->getImagePathPrefix('', $property);
-                                          $realpathprefix =  APPLICATION_PATH . '/../public';
-                                          $realthumbdir = $realpathprefix . $imageprefix . '/thumbs';
-                                          $realimagedir = $realpathprefix . $imageprefix;
-                                          //$logger->debug("Real Thumb: $realthumbdir, Real Image: $realimagedir");
-                                          
-                                          foreach ($property->images as $image):
-                                                $image = trim($image);
-                                                if (!file_exists("$realimagedir/$image"))
-                                                    continue;
-                                                if (!file_exists("$realthumbdir/$image")) {
-                                                    if (!file_exists($realthumbdir)) {
-                                                        mkdir($realthumbdir);
-                                                    }
-                                                    $this->zvImage()->createThumb("$realimagedir/$image", "$realthumbdir/$image");
-                                                }
-                                          ?>
-                                                <li><a href="<?php echo $this->baseUrl($imageprefix.'/'.$image);?>"><img src="<?php echo $this->baseUrl($imageprefix.'/thumbs/'.$image);?>" /></a></li>
-                                          <?php endforeach;?>
-                                          </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                    <!-- <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">  -->
+                        <div id="tabs-1">
+                            <div class="tab_content">
+                                <?php echo $this->render('tab_photos.phtml');?>
                             </div>
-                            <div class="l_about_villa_left">
-                                <h2>About your stay</h2>
-                                <p><?php echo $property->description;?></p>
-                            </div><!--l_about_villa_left ends-->
-                            <div class="l_about_villa_right">
-                                <h2>Amenities</h2>
-                                <div class="amnts">
-                                    <ul>
-                                        <?php 
-                                             $features = array('amenities', 'onsite_services', 'suitability');
-                                             foreach($features as $feature) {
-                                                if ($property->{$feature} != null) {
-                                                    foreach($property->{$feature} as $k => $v) { 
-                                                        $icon = preg_replace('/ /','', $k); ?>
-                                                        <li><img src="<?php echo $this->baseUrl('/images/ico_swm.jpg');?>" title="<?php echo $k;?>"/></li>
-                                              <?php } 
-                                                }
-                                             } 
-                                        ?>
-                                    </ul>
-                                </div>
-                                <h2>House Rules</h2>
-                                <p><?php echo $property->house_rules;?></p>
-                            </div><!--l_about_villa_right ends-->
-                            <div class="ratng_rvews">
-                                <h2>Ratings &amp; Reviews</h2>
-                                <div class="ratings"><!--golden and silver stars-->
-                                    <span>Average rating</span>
-                                    <ul>
-                                        <?php for($rc=0; $rc < MAX_RATING; $rc++) {
-                                            if ((0+$property->rating) > $rc) 
-                                                echo '<li><img src="'.$this->baseUrl('/images/icon_ratings_gold.jpg').'"/></li>';
-                                            else
-                                                echo '<li><img src="'.$this->baseUrl('/images/icon_ratings_silver.jpg').'"/></li>';
-                                            } 
-                                        ?>
-                                        <li><?php echo $property->rating;?></li>
-                                    </ul>
-                                    <span>Based on <?php echo $reviews;?> reviews</span>
-                                </div>
-                                <div class="ratings"><!--golden and silver stars-->
-                                    <span>Have you been here?</span>
-                                    <ul>
-                                        <?php for($rc=0; $rc < MAX_RATING; $rc++) {
-                                            $score = $rc+1;
-                                            $url = $this->baseUrl('list/rate?id='.$property->id);
-                                            //echo '<a href="'.$url.'&score='.$score.'">';
-                                            echo '<a onclick="setRate('.$score.');return false;">';
-                                            if ((0+$this->user_rating) > $rc)
-                                                echo '<li><img id="rate'.$score.'" src="'.$this->baseUrl('/images/icon_ratings_gold.jpg').'"/></li>';
-                                            else 
-                                                echo '<li><img id="rate'.$score.'" src="'.$this->baseUrl('/images/icon_ratings_silver.jpg').'"/></li>';
-                                            echo '</a>';
-                                        }?>                                
-                                    </ul>
-                                    <span>Rate your experience</span>
-                                </div>
-                                <div class="write_review">
-                                    <p><strong><?php echo $reviews;?> Reviews</strong></p>
-                                    <div class="btn_write_review"><a href="#" onclick="writeReview('.form_write_review');return false;"><img src="<?php echo $this->baseUrl('/images/btn_writ_revew.jpg');?>" alt="Write review"></a></div>
-                                </div><!--write_review ends-->
-                            </div><!--ratng_rvews ends-->
-                            <div id="user_reviews">
-                            </div>
-                            <div class="form_write_review" style="display:none;">
-                                <FORM id="review_form" action="<?php echo $this->baseUrl('/list/submit_review');?>" method="post">
-                                    <textarea name="title" title="Your title for the review" style="width:100%;" cols="100" name="message" rows="1" class="FrmtxtArea defaultText"></textarea><br>
-                                    <textarea name="content" title="Share your experience..." style="width:100%;" cols="100" name="message" rows="3" class="FrmtxtArea defaultText"></textarea><br>
-                                    <input type="hidden" name="id" value="<?php echo $property->id;?>" />
-                                    <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
-                                    <div align="center"><INPUT type="submit" value="Submit review" onclick="if (validate()) {$('.form_write_review').hide();return true;} return false;"> </div>
-                                </FORM>
-                            </div>
-                        </div><!--tab_content ends here-->
-                        <div id="user_reviews_notice">
-                        </div> 
-                        <div id="user_reviews_pages">
                         </div>
+                        <div id="tabs-2">
+                            <div class="tab_content">
+                                <?php echo $this->render('tab_videos.phtml');?>
+                            </div>
+                        </div>
+                        <div id="tabs-3">
+                            <div class="tab_content">
+                                <?php echo $this->render('tab_map.phtml');?>
+                            </div>
+                        </div>
+                        <div id="tabs-4">
+                            <div class="tab_content">
+                                <?php echo $this->render('tab_availability.phtml');?>
+                            </div>
+                        </div>
+                        <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+                    <div class="tab_content">
+                        <div class="l_about_villa_left">
+                            <h2>About your stay</h2>
+                            <p><?php echo $property->description;?></p>
+                        </div><!--l_about_villa_left ends-->
+                        <div class="l_about_villa_right">
+                            <h2>Amenities</h2>
+                            <div class="amnts">
+                                <ul>
+                                    <?php 
+                                         $features = array('amenities', 'onsite_services', 'suitability');
+                                         foreach($features as $feature) {
+                                            if ($property->{$feature} != null) {
+                                                foreach($property->{$feature} as $k => $v) { 
+                                                    $icon = preg_replace('/ /','', $k); ?>
+                                                    <li><img src="<?php echo $this->baseUrl('/images/ico_swm.jpg');?>" title="<?php echo $k;?>"/></li>
+                                          <?php } 
+                                            }
+                                         } 
+                                    ?>
+                                </ul>
+                            </div>
+                            <h2>House Rules</h2>
+                            <p><?php echo $property->house_rules;?></p>
+                        </div><!--l_about_villa_right ends-->
+                        <div class="ratng_rvews">
+                            <h2>Ratings &amp; Reviews</h2>
+                            <div class="ratings"><!--golden and silver stars-->
+                                <span>Average rating</span>
+                                <ul>
+                                    <?php for($rc=0; $rc < MAX_RATING; $rc++) {
+                                        if ((0+$property->rating) > $rc) 
+                                            echo '<li><img src="'.$this->baseUrl('/images/icon_ratings_gold.jpg').'"/></li>';
+                                        else
+                                            echo '<li><img src="'.$this->baseUrl('/images/icon_ratings_silver.jpg').'"/></li>';
+                                        } 
+                                    ?>
+                                    <li><?php echo $property->rating;?></li>
+                                </ul>
+                                <span>Based on <?php echo $reviews;?> reviews</span>
+                            </div>
+                            <div class="ratings"><!--golden and silver stars-->
+                                <span>Have you been here?</span>
+                                <ul>
+                                    <?php for($rc=0; $rc < MAX_RATING; $rc++) {
+                                        $score = $rc+1;
+                                        $url = $this->baseUrl('list/rate?id='.$property->id);
+                                        //echo '<a href="'.$url.'&score='.$score.'">';
+                                        echo '<a onclick="setRate('.$score.');return false;">';
+                                        if ((0+$this->user_rating) > $rc)
+                                            echo '<li><img id="rate'.$score.'" src="'.$this->baseUrl('/images/icon_ratings_gold.jpg').'"/></li>';
+                                        else 
+                                            echo '<li><img id="rate'.$score.'" src="'.$this->baseUrl('/images/icon_ratings_silver.jpg').'"/></li>';
+                                        echo '</a>';
+                                    }?>                                
+                                </ul>
+                                <span>Rate your experience</span>
+                            </div>
+                            <div class="write_review">
+                                <p><strong><?php echo $reviews;?> Reviews</strong></p>
+                                <div class="btn_write_review"><a href="#" onclick="writeReview('.form_write_review');return false;"><img src="<?php echo $this->baseUrl('/images/btn_writ_revew.jpg');?>" alt="Write review"></a></div>
+                            </div><!--write_review ends-->
+                        </div><!--ratng_rvews ends-->
+                        <div id="user_reviews">
+                        </div>
+                        <div class="form_write_review" style="display:none;">
+                            <FORM id="review_form" action="<?php echo $this->baseUrl('/list/submit_review');?>" method="post">
+                                <textarea name="title" title="Your title for the review" style="width:100%;" cols="100" name="message" rows="1" class="FrmtxtArea defaultText"></textarea><br>
+                                <textarea name="content" title="Share your experience..." style="width:100%;" cols="100" name="message" rows="3" class="FrmtxtArea defaultText"></textarea><br>
+                                <input type="hidden" name="id" value="<?php echo $property->id;?>" />
+                                <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
+                                <div align="center"><INPUT type="submit" value="Submit review" onclick="if (validate()) {$('.form_write_review').hide();return true;} return false;"> </div>
+                            </FORM>
+                        </div>
+                    </div><!--tab_content ends here-->
+                   
+                    <div id="user_reviews_notice">
+                    </div> 
+                    <div id="user_reviews_pages">
+                    </div>
+                     </div>
                         <!-- 
                         <div class="l_page_buttons">
                             <div class="btn_prev_page"><a href="#"><img src="images/btn_prev_page.jpg" alt="Previous page" /></a></div>
                             <div class="btn_next_page"><a href="#"><img src="images/btn_next.jpg" alt="Next page" /></a></div>
                         </div> -->
-                    </div><!--tab1 content ends here-->
-                    <div id="tabs-2">
-                        <div class="tab_content">Video tab content goes here.</div>
-                    </div><!--tab2 content ends here-->
-                    <div id="tabs-3">
-                          <div class="tab_content">Map tab content goes here.</div>
-                    </div><!--tab3 content ends here-->
-                    <div id="tabs-4">
-                          <div class="tab_content">Availability tab content goes here.</div>
-                    </div><!--tab3 content ends here-->
                 </div>
             </div><!--search result ends here-->
             <div class="l_right_side_panel v_right_side_panel">

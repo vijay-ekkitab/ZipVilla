@@ -1,5 +1,7 @@
 <?php
 include_once("ZipVilla/TypeConstants.php");
+include_once("ZipVilla/Helper/ListingsManager.php");
+
 class ListController extends Zend_Controller_Action
 {
 
@@ -12,6 +14,7 @@ class ListController extends Zend_Controller_Action
         $ajaxContext->addActionContext('calculate', 'json')
                     ->addActionContext('getreviews', 'json')
                     ->addActionContext('checklogin', 'json')
+                    ->addActionContext('getcalendar', 'html')
                     ->initContext();
     }
 
@@ -329,5 +332,89 @@ class ListController extends Zend_Controller_Action
         echo $response;
     }
     
+    public function getcalendarAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $request = $this->getRequest();
+        $rate = 0;
+        $days = 1;
+        $datestr = '';
+        if ($request->isPost()) {
+            $datestr = $request->getPost('date', date('M  Y'));
+            $id = $request->getPost('id', null);
+        }
+        if ($datestr == '') {
+            $this->_helper->viewRenderer->setNoRender();
+            return;
+        }
+        $startday = date('N',strtotime('01 '.$datestr));
+        $startday = $startday%7;
+        $tmp1 = explode(',', date('m,Y', strtotime($datestr)));
+        $numdays = cal_days_in_month(CAL_GREGORIAN, $tmp1[0], $tmp1[1]);
+        
+        $booked = array();
+        $specials = array();
+        $special_dates = array();
+        
+        if ($id) {
+            $lm = new ZipVilla_Helper_ListingsManager();
+            $from = new MongoDate(strtotime($datestr));
+            $booked_dates = $lm->getBookingCalendar($id, $from, $numdays);
+            foreach($booked_dates as $b) {
+                $f = intval(date('j', $b['from']->sec));
+                $t = intval(date('j', $b['to']->sec));
+                for ($i=$f;$i<=$t; $i++)
+                    $booked[] = $i;
+            }
+            $to = new MongoDate($from->sec  + (86400 * ($numdays-1)));
+            //$logger->debug('>>> From: '.date('d-m-Y', $from->sec).'  To: '.date('d-m-Y', $to->sec));
+            $special_rates = $lm->getRates($id, $from, $to);
+            foreach($special_rates as $s) {
+                $f = intval(date('j', $s['from']->sec));
+                $t = intval(date('j', $s['to']->sec));
+                for ($i=$f;$i<=$t; $i++) {
+                    $specials[$i] = $s['rate'];
+                }
+            }
+            $special_dates = array_keys($specials);
+        }
+        
+        $tmp2 = explode(',', date('m,j'));
+        $today = 0;
+        if ($tmp2[0] == $tmp1[0]) { //same month
+            $today = $tmp2[1];
+        }
+        $html = '<table><tbody><tr><th>SUN</th><th>MON</th><th>TUE</th><th>WEN</th><th>THU</th><th>FRI</th><th>SAT</th></tr>';
+        $i=0;
+        
+        $html .= '<tr>';
+        for($i=0; $i<$startday; $i++) {
+            $html .= '<td><span></span></td>';
+        }
+        for ($start=1; $start<=$numdays; $start++,$i++) {
+            if (($i>0) && ($i%7 == 0)) {
+                $html .= '</tr><tr>';
+            }
+            $class = '';
+            $special_price = '';
+            if ($start >= $today) {
+                if (in_array($start, $booked)) {
+                    $class = 'unavail';
+                }
+                else {
+                    $class = 'avail';
+                }
+                if (in_array($start, $special_dates)) {
+                    $special_price = '</br><div class="today_price">Rs.'.$specials[$start].'</div>';
+                }
+            }
+            $html .= '<td class="'.$class.'"><span>'.$start.'</span>'.$special_price.'</td>';
+        }
+        $html .= '</tr></tbody></table>';
+        $this->view->html = $html;
+    }
+        
+                    
+                    
+    
 }
-
