@@ -1,0 +1,37 @@
+<?php
+include_once "ZipVilla/TypeConstants.php";
+$property = $this->property;
+$logger = Zend_Registry::get('zvlogger');
+?>
+
+<div class="slide">
+    <div id="gallery" class="ad-gallery">
+        <div class="ad-image-wrapper"></div>
+        <div class="ad-nav">
+            <div class="ad-thumbs">
+              <ul class="ad-thumb-list">
+              <?php
+              $imageprefix = $this->zvImage()->getImagePathPrefix('', $property);
+              $realpathprefix =  APPLICATION_PATH . '/../public';
+              $realthumbdir = $realpathprefix . $imageprefix . '/thumbs';
+              $realimagedir = $realpathprefix . $imageprefix;
+              
+              foreach ($property->images as $image):
+                    $image = trim($image);
+                    if (!file_exists("$realimagedir/$image"))
+                        continue;
+                    if (!file_exists("$realthumbdir/$image")) {
+                        if (!file_exists($realthumbdir)) {
+                            mkdir($realthumbdir);
+                        }
+                        $this->zvImage()->createThumb("$realimagedir/$image", "$realthumbdir/$image");
+                    }
+              ?>
+                    <li><a href="<?php echo $this->baseUrl($imageprefix.'/'.$image);?>"><img src="<?php echo $this->baseUrl($imageprefix.'/thumbs/'.$image);?>" /></a></li>
+              <?php endforeach;?>
+              </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

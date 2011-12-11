@@ -1,0 +1,39 @@
+<?php
+include_once "ZipVilla/TypeConstants.php";
+$property = $this->property;
+$logger = Zend_Registry::get('zvlogger');
+?>
+<div class="slide" style="border-bottom-width:0px;">
+    <div class="slct_mnth"><!--form select-->
+        <div class="slct_mnth_dropdwn">
+            <form action="">
+                <p><strong>Select Month</strong></p>
+                <select class="dropdown_sm" name="per night">
+                    <?php for ($i=0; $i<=12;$i++) { 
+                        $d = date('M  Y', strtotime('+'.$i.' months')); ?>
+                        <option value="<?php echo $d;?>"><?php echo $d; ?></option>
+                    <?php }?>
+                </select>
+            </form>
+        </div>
+    </div><!--form select ends-->
+    <div id="loadergif"></div>
+    <div class="calendar1">
+        <div class="refer">
+            <div class="available key">&nbsp;</div>
+            <div class="key-text">Available</div>
+            <div class="unavailable key">&nbsp;</div>
+            <div class="key-text">Unavailable</div>
+            <div class="past key">&nbsp;</div>
+            <div class="key-text">Past</div>
+        </div>
+    </div>
+    <div class="avail_note">
+        <h2>A note on availability</h2>
+        <p>The calendar is updated by the landlord and should be considered as approximate.
+           We suggest that you get in touch with the landlord to confirm the availability on your preferred dates of stay.</p>
+        </br>
+        <p>Unmarked days have the standard rate of Rs. <?php echo $property->rate['daily'];?>.</p>   
+    </div>
+</div>
+
