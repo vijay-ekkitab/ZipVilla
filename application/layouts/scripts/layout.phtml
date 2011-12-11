@@ -3,7 +3,7 @@
     include_once("ZipVilla/TypeConstants.php");
     $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
     $this->headTitle()->setSeparator(' - ');
-    $this->headTitle('New layout()  Zipvilla-Feel at Home-Away');
+    $this->headTitle('Zipvilla-Feel at Home-Away');
     echo $this->doctype();
     $baseUrl = $this->baseUrl();
     $url = $this->url(array('controller'=>'search',
@@ -17,16 +17,11 @@
 <head>
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
-        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/skins/ie7/skin.css')
-                                    ->prependStylesheet($this->baseUrl().'/skins/tango/skin.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/galleriffic-2.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/jquery.ad-gallery.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
+        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/lightbox.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
                                     //->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
                                     ->prependStylesheet($this->baseUrl().'/css/layout.css')
                                     ->prependStylesheet($this->baseUrl().'/css/visual.css')
-
                                     ->prependStylesheet($this->baseUrl().'/css/misc.css')
                                     ; ?>
 
@@ -37,81 +32,50 @@
                                       ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
-                                      ->appendFile($this->baseUrl().'/js/jquery.galleriffic.js')
-                                      ->appendFile($this->baseUrl().'/js/jquery.opacityrollover.js')
-                                      ->appendFile($this->baseUrl().'/js/galleriffic.js')
-                                      ->appendFile($this->baseUrl().'/js/jquery.jcarousel.min.js')
-                                      ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
-                                      ->appendFile($this->baseUrl().'/js/slideshow.js')
-        
                                        ;?>
-                                       <script type="text/javascript">
-                                          			document.write('<style>.noscript { display: none; }</style>');
-                                       </script>                                       
-                                       <script type="text/javascript">
-                                         jQuery(document).ready(function() {
-                                       	  // Initialise the first and second carousel by class selector.
-                                       	  // Note that they use both the same configuration options (none in this case).
-                                       	 jQuery('.first-and-second-carousel').jcarousel({
-                                       		wrap:"circular"
-                                         		});
-                                       });
-                                       </script>
                                        
-        <?php echo $this->render('search_page_js.phtml'); ?>
-
+        <?php echo $this->render('search_page_js.phtml');?>
+        
 </head>
-<body class="blue">
+  <body class="blue">
 	<div class="wrapper"><!--outer wrapper to fix the width-->
-		<?php echo $this->render('header.phtml');?>
-		<div class="content">
-			<div class="srch_bx_home"><!--srch_bx_home-->
-				<h1>Discover amazing places to stay.</h1>
-				<p>1000s of exclusive properties in over a 100 cities awaiting your arrival.</p>
-
-				<div class="home_search"><!--home search-->
-					<form id="search_form_home" name="search_form_home" action="/search" method="post">
-						<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-						<?php echo $this->render('home_search.phtml');?>
-					</form>
-				</div><!--home search ends-->
-			</div><!--srch_bx_home ends-->
-
-
-			<div class="slide_right"><!--slideshow-right-->
-				<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-				<?php echo $this->render('home_sponsored.phtml');?>
-			</div><!--slideshow-right ends-->
-           
-			<div class="bg_slide_btm"></div>
-				<div class="slide_bottom">
-					<div id="tabs"><!--tabs-->
-						<?php const VILLA_NAME_SMALL_SIZE = 15; ?>
-						<ul>
-							<li><a href="#tabs-1">Most viewed</a></li>
-							<li><a href="#tabs-2">Most booked</a></li>
-							<li><a href="#tabs-3">Most rated</a></li>
-						</ul>
-							<div id="tabs-1"><!--Most Viewed Tab-->
-								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-								<?php echo $this->render('home_viewed.phtml');?>
-							</div><!--Most Viewed Tab ends here-->
-							
-							<div id="tabs-2"><!--Most Booked Tab-->
-								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-								<?php echo $this->render('home_booked.phtml');?>			
-							</div><!--Most Booked Tab ends here-->
-
-              <div id="tabs-3"><!--Most Rated Tab-->
-								<?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
-								<?php echo $this->render('home_rated.phtml');?>			
-               </div><!--Most Rated Tab ends here-->
-             </div>
-           </div>
-       	</div><!--content ends here-->
+        <?php echo $this->render('header.phtml');?>
+        <div class="content">
+            <form id="search_form" name="search_form" action="/search" method="post">
+            <?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
+            <?php echo $this->render('search_top.phtml');?>
+            <div class="l_search_results v_search_results"><!--Search result sections starts here-->
+            
+            	<div id="tabs"><!--tabs-->
+                	<ul>
+                    	<li><a href="#tabs-1">List</a></li>
+                        <li><a href="#tabs-2">Photo</a></li>
+                        <li><a href="#tabs-3">Map</a></li>
+                    </ul>
+                    <?php echo $this->render('sort_box.phtml');?>
+                    <div id="tabs-1"><!--First tab content-->
+                        <?php echo $this->render('tab_list.phtml');?>
+                   	</div><!--tab1 content ends here-->
+                    <div id="tabs-2">
+                    	<div class="tab_content">This is the place for Search Results by Photo</div>
+                    </div><!--tab2 content ends here-->
+                    <div id="tabs-3">
+                    	  <div class="tab_content">This is the place for Search Results by Map</div>
+                    </div><!--tab3 content ends here-->
+                </div>
+                
+         	</div><!--search result ends here-->
+            <div class="l_right_side_panel v_right_side_panel">
+            	<div>
+                	<h3>Refine Results</h3>
+                    <p><?php echo $this->total_hits; ?> Results</p>
+                </div>
+                <div id="map" class="map"></div>
+                <?php echo $this->render('rightpanel.phtml');?>
+            </form>
+        </div><!-- content ends here -->
         <?php echo $this->render('footer.phtml');?>
-  	</div><!--wrapper ends here-->
-</body>
-
+	</div><!-- wrapper ends here -->
+ </body>
 </html>
 
