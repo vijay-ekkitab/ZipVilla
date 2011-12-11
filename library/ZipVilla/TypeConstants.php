@@ -9,6 +9,10 @@ const  ENUMERATIONS   =  "enumerations";
 const  OWNERS         =  "owners";
 const  USERS          =  "users";
 const  REVIEWS        =  "reviews";
+const  SPONSORED      =  "sponsored";
+const  MOST_VIEWED    =  "mostviewed";
+const  MOST_BOOKED    =  "mostbooked";
+const  MOST_RATED     =  "mostrated";
 
 #consts for attribute and type definitions
 const  ID           =  "id" ;

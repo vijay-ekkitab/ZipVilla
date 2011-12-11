@@ -33,6 +33,7 @@ class Application_Model_Users extends Mongo_ModelBase {
      * Generate a reference to this document 
      */
     public function getRef() {
+        static::init();
         return static::$_collection->createDBRef(array('_id' => $this->id));
     }
     

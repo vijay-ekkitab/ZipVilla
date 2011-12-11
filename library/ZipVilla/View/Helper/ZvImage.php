@@ -17,8 +17,22 @@ class ZipVilla_View_Helper_ZvImage
     
     public function getFirstListingImage($baseUrl, $listing) {
         $logger = Zend_Registry::get('zvlogger');
-        if (($listing != null) && isset($listing['address__city']) && isset($listing['images'][0])) 
-            return $baseUrl.'/images/listings/'.strtolower($listing['address__city']).'/'.$listing['images'][0];
+        $city = '';
+        $image = '';
+        if ($listing == null) {
+            return null;
+        }
+        if ($listing instanceof Application_Model_Listings) {
+            $city = $listing->address['city'];
+            $image = $listing->images[0];
+        }
+        else {
+            $city = isset($listing['address__city']) ? $listing['address__city'] : '';
+            $image = isset($listing['images'][0]) ? $listing['images'][0] : '';
+        }
+        if (($city != '') && ($image != ''))
+            return $baseUrl.'/images/listings/'.strtolower($city).'/'.$image;
+            
         return $baseUrl.'/images/listings/default_img.jpg';
     }
     
