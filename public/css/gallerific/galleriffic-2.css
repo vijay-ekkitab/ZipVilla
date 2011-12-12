@@ -1,14 +1,14 @@
-div.content {
+div.slide_content {
 	/* The display of content is enabled using jQuery so that the slideshow content won't display unless javascript is enabled. */
 	display: none;
 	float: right;
-	width: 550px; 
+	width: 100%; 
 }
-div.content a, div.navigation a {
+div.slide_content a, div.navigation a {
 	text-decoration: none;
 	color: #777;
 }
-div.content a:focus, div.content a:hover, div.content a:active {
+div.slide_content a:focus, div.slide_content a:hover, div.slide_content a:active {
 	text-decoration: underline;
 }
 div.controls {
@@ -27,7 +27,7 @@ div.nav-controls {
 div.slideshow-container {
 	position: relative;
 	clear: both;
-	height: 502px; /* This should be set to be at least the height of the largest image in the slideshow */
+	height: 100%; /* This should be set to be at least the height of the largest image in the slideshow */
 }
 div.loader {
 	position: absolute;
@@ -49,18 +49,22 @@ div.slideshow span.image-wrapper {
 	left: 0;
 }
 div.slideshow a.advance-link {
-	display: block;
-	width: 550px;
-	height: 502px; /* This should be set to be at least the height of the largest image in the slideshow */
-	line-height: 502px; /* This should be set to be at least the height of the largest image in the slideshow */
+	/*display: block;*/
+	width: 410px;
+	height: 240px; /* This should be set to be at least the height of the largest image in the slideshow */
+	line-height: 410px; /* This should be set to be at least the height of the largest image in the slideshow */
 	text-align: center;
 }
 div.slideshow a.advance-link:hover, div.slideshow a.advance-link:active, div.slideshow a.advance-link:visited {
 	text-decoration: none;
 }
 div.slideshow img {
-	vertical-align: middle;
+	vertical-align: top;
 	border: 1px solid #ccc;
+	min-width:408px;
+	max-width:408px;
+	max-height:238px;
+	min-height:238px;
 }
 div.download {
 	float: right;
@@ -68,7 +72,6 @@ div.download {
 div.caption-container {
 	position: relative;
 	clear: left;
-	height: 75px;
 }
 span.image-caption {
 	display: block;
@@ -91,10 +94,14 @@ div.image-desc {
 div.navigation {
 	/* The navigation style is set using jQuery so that the javascript specific styles won't be applied unless javascript is enabled. */
 }
-ul.thumbs {
+ul.thumbs{
 	clear: both;
 	margin: 0;
 	padding: 0;
+	width:100%;
+	position:relative;
+	top:300px;
+	left:150px;
 }
 ul.thumbs li {
 	float: left;
@@ -105,10 +112,8 @@ ul.thumbs li {
 a.thumb {
 	padding: 2px;
 	display: block;
-	border: 1px solid #ccc;
 }
 ul.thumbs li.selected a.thumb {
-	background: #000;
 }
 a.thumb:focus {
 	outline: none;
