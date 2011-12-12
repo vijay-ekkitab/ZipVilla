@@ -2,8 +2,8 @@
 	<ul id="mostBookedCarousel" class="first-and-second-carousel jcarousel-skin-tango">
 		<?php if (isset($this->error)) { ?>
 			<p>An error was encountered in search.</p>
-				<?php } elseif ($this->mostbookedlistings != null) { ?>
-					<?php foreach($this->mostbookedlistings as $mostBookedData) : ?>
+				<?php } elseif ($this->mostBookedListings != null) { ?>
+					<?php foreach($this->mostBookedListings as $mostBookedData) : ?>
 					<?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $mostBookedData);?>	
 						<li><img src="<?php echo $image;?>" height="70" width="110">
 							<p>

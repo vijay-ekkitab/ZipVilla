@@ -10,8 +10,8 @@
     <ul class="thumbs noscript">
     <?php if (isset($this->error)) { ?>
         <p>An error was encountered in search.</p>
-    <?php } elseif ($this->sponsoredlistings != null) { ?>
-		<?php foreach($this->sponsoredlistings as $sponsoredData) : ?>	
+    <?php } elseif ($this->sponsoredListings != null) { ?>
+		<?php foreach($this->sponsoredListings as $sponsoredData) : ?>	
 			<li>
 			     <?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $sponsoredData);?>
 				<a class="thumb" name="leaf" href="<?php echo $image;?>" title="Title #0"><img src="<?php echo $this->baseUrl('/images/control.jpg');?>" alt="villaImage" /></a>

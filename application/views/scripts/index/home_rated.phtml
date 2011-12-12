@@ -2,8 +2,8 @@
 	<ul id="mostRatedCarousel" class="first-and-second-carousel jcarousel-skin-tango">
 		<?php if (isset($this->error)) { ?>
 			<p>An error was encountered in search.</p>
-				<?php } elseif ($this->mostratedlistings != null) { ?>
-					<?php foreach($this->mostratedlistings as $mostRatedData) : ?>	
+				<?php } elseif ($this->bestRatedListings != null) { ?>
+					<?php foreach($this->bestRatedListings as $mostRatedData) : ?>	
 					<?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $mostRatedData);?>    
 						<li><img src="<?php echo $image;?>" height="70" width="110">
 							<p>

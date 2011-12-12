@@ -12,7 +12,7 @@ const  REVIEWS        =  "reviews";
 const  SPONSORED      =  "sponsored";
 const  MOST_VIEWED    =  "mostviewed";
 const  MOST_BOOKED    =  "mostbooked";
-const  MOST_RATED     =  "mostrated";
+const  BEST_RATED     =  "bestrated";
 
 #consts for attribute and type definitions
 const  ID           =  "id" ;
