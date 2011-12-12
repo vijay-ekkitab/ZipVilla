@@ -4,18 +4,18 @@
 			<p>An error was encountered in search.</p>
 				<?php } elseif ($this->mostViewedListings != null) { ?>
 					<?php foreach($this->mostViewedListings as $mostViewedData) : ?>
-					    <?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $mostViewedData);?>	
-						<li><img src="<?php echo $image;?>" height="70" width="110">
-							<p>
-							<?php 
-								if( strlen($this->escape($mostViewedData->title)) > VILLA_NAME_SMALL_SIZE )
-									echo substr($this->escape($mostViewedData->title),0,(VILLA_NAME_SMALL_SIZE-3)).'...';
-								else
-									echo $this->escape($mostViewedData->title);
-							?>
-							</p>
-							<span><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Indian Rupee" /><?php echo $this->escape(0+$mostViewedData->rate['daily']);?></span>
-						</li>
+						<?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $mostViewedData);?>	
+							<li><img src="<?php echo $image;?>" height="70" width="110">
+								<p>
+								<?php 
+									if( strlen($this->escape($mostViewedData->title)) > VILLA_NAME_SMALL_SIZE )
+										echo substr($this->escape($mostViewedData->title),0,(VILLA_NAME_SMALL_SIZE-3)).'...';
+									else
+										echo $this->escape($mostViewedData->title);
+								?>
+								</p>
+								<span><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Indian Rupee" /><?php echo $this->escape(0+$mostViewedData->rate['daily']);?></span>
+							</li>
  					<?php endforeach; ?>
  				<?php } else {?>
 			<p>No results were returned from search.</p>

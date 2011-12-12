@@ -3,7 +3,7 @@
     include_once("ZipVilla/TypeConstants.php");
     $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
     $this->headTitle()->setSeparator(' - ');
-    $this->headTitle('New layout()  Zipvilla-Feel at Home-Away');
+    $this->headTitle('Zipvilla ~ Feel at Home-Away.');
     echo $this->doctype();
     $baseUrl = $this->baseUrl();
     $this->addScriptPath(APPLICATION_PATH.'/views/scripts/index'); 
@@ -122,16 +122,17 @@ $(function() {
 				</div><!--home search ends-->
 			</div><!--srch_bx_home ends-->
 
-
 			<div class="slide_right"><!--slideshow-right-->
 				<?php echo $this->render('home_sponsored.phtml');?>
 			</div><!--slideshow-right ends-->
-		</div>
-           
-           <?php echo $this->render('home_slide_bottom.phtml');?>
-        <!-- </div> --><!--content ends here-->
-        <?php echo $this->render('footer.phtml');?>
-  	</div><!--wrapper ends here-->
+			<div class="bg_slide_btm"></div>
+
+			<div class="slide_bottom">
+				<?php echo $this->render('home_slide_bottom.phtml');?>
+			</div>
+		</div> <!--content ends here-->
+			<?php echo $this->render('footer.phtml');?>
+	</div><!--wrapper ends here-->
 </body>
 
 </html>
