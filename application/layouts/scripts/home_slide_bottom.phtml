@@ -1,5 +1,4 @@
-<div class="bg_slide_btm"></div>
-<div class="slide_bottom">
+
 	<div id="tabs"><!--tabs-->
 		<?php const VILLA_NAME_SMALL_SIZE = 15; ?>
 		<ul>
@@ -7,17 +6,17 @@
 			<li><a href="#tabs-2">Most booked</a></li>
 			<li><a href="#tabs-3">Most rated</a></li>
 		</ul>
-			<div id="tabs-1"><!--Most Viewed Tab-->
-				<?php echo $this->render('home_viewed.phtml');?>
-			</div><!--Most Viewed Tab ends here-->
-			
-			<div id="tabs-2"><!--Most Booked Tab-->
-				<?php echo $this->render('home_booked.phtml');?>			
-			</div><!--Most Booked Tab ends here-->
 
-            <div id="tabs-3"><!--Most Rated Tab-->
-				<?php echo $this->render('home_rated.phtml');?>			
-            </div><!--Most Rated Tab ends here-->
-    </div>
-</div>
+		<div id="tabs-1"><!--Most Viewed Tab-->
+			<?php echo $this->render('home_viewed.phtml');?>
+		</div><!--Most Viewed Tab ends here-->
+			
+		<div id="tabs-2"><!--Most Booked Tab-->
+			<?php echo $this->render('home_booked.phtml');?>			
+		</div><!--Most Booked Tab ends here-->
+
+		<div id="tabs-3"><!--Most Rated Tab-->
+			<?php echo $this->render('home_rated.phtml');?>			
+		</div><!--Most Rated Tab ends here-->
+	</div>
 
