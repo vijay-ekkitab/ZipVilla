@@ -89,15 +89,17 @@
             <?php } ?>
         });
 
-        function validate() 
+        function validate(names) 
         {
             var isvalid = false;
             $(".defaultText").each(function(i) {
-                if ($(this).val() == $(this)[0].title) 
-                    $(this).val(''); 
-                else 
-                    isvalid=true;
-                }
+            	if (jQuery.inArray($(this).attr('name'),names) > -1) {
+            	    if ($(this).val() == $(this)[0].title) 
+            	        $(this).val(''); 
+            	    else 
+            	        isvalid=true;
+            	}
+            }
             );
             if (!isvalid) 
             	$(".defaultText").blur();

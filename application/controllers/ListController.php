@@ -1,11 +1,17 @@
 <?php
 include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Helper/ListingsManager.php");
+include_once(APPLICATION_PATH."/controllers/SearchController.php");
 
 class ListController extends Zend_Controller_Action
 {
 
     protected $requireslogin = array('rate', 'submitreview');
+    
+    protected function read_value($values, $index, $default=null)
+    {
+        return isset($values[$index]) ? $values[$index] : $default;
+    }
 
     public function init()
     {
@@ -40,9 +46,11 @@ class ListController extends Zend_Controller_Action
         if ($id != null) {
             $this->view->property = $this->_helper->listingsManager->queryById($id);
             $session = new Zend_Session_Namespace('guest_data');
-            $this->view->checkin  = $session->checkin;
-            $this->view->checkout = $session->checkout;
-            $this->view->guests   = $session->guests;
+            $session_values = $session->values;
+            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
+            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
+            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
+            //$this->view->user_rating = $this->read_value($session_values, 'user_rating');
         }
         else {
             $this->_helper->redirector('index', 'index');
@@ -56,9 +64,12 @@ class ListController extends Zend_Controller_Action
             $score = $this->_getParam('score', 0);
             $this->view->property = $this->_helper->listingsManager->queryById($id);
             $session = new Zend_Session_Namespace('guest_data');
-            $this->view->checkin  = $session->checkin;
-            $this->view->checkout = $session->checkout;
-            $this->view->guests   = $session->guests;
+            $session_values = $session->values;
+            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
+            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
+            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
+            $session_values['user_rating'] = $score;
+            $session->values = $session_values;
             $this->view->user_rating = $score;
             $this->_helper->viewRenderer('index');
             $url = $this->view->getHelper('BaseUrl')->setBaseUrl('..');
@@ -103,9 +114,12 @@ class ListController extends Zend_Controller_Action
             }
             $this->view->property = $property;
             $session = new Zend_Session_Namespace('guest_data');
-            $this->view->checkin  = $session->checkin;
-            $this->view->checkout = $session->checkout;
-            $this->view->guests   = $session->guests;
+            $session_values = $session->values;
+            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
+            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
+            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
+            $session_values['user_rating'] = $rating;
+            $session->values = $session_values;
             $this->view->user_rating = $rating;
             $this->_helper->viewRenderer('index');
             $this->view->showPopupMsg = 'Thank you for your feedback. We appreciate your inputs.';
@@ -140,6 +154,14 @@ class ListController extends Zend_Controller_Action
                         $rate = $pmodel->get_average_rate($start, $end);
                     }
                 }
+                //save session data
+                $session = new Zend_Session_Namespace('guest_data');
+                $session_values = $session->values;
+                $session_values[SearchController::CHECKIN] = $checkin;
+                $session_values[SearchController::CHECKOUT] = $checkout;
+                $session_values[SearchController::GUESTS] = $guests;
+                $session->values = $session_values;
+                
             }
             elseif (($id != null) && ($id != '')) {
                 $property = $this->_helper->listingsManager->queryById($id);
@@ -413,6 +435,35 @@ class ListController extends Zend_Controller_Action
         $html .= '</tr></tbody></table>';
         $this->view->html = $html;
     }
+    
+    public function sendmessageAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $values = $request->getPost();
+            $id = isset($values['id']) ? $values['id'] : null;
+            $title = isset($values['message']) ? $values['message'] : '';
+            $rating = isset($values['rating']) ? $values['rating'] : 0;
+            $property = Application_Model_Listings::findOne(array("_id"=>new MongoId($id)));
+            $this->view->property = $property;
+            $session = new Zend_Session_Namespace('guest_data');
+            $session_values = $session->values;
+            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
+            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
+            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
+            $session_values['user_rating'] = $rating;
+            $session->values = $session_values;
+            $this->view->user_rating = $rating;
+            $this->_helper->viewRenderer('index');
+            $this->view->showPopupMsg = 'Thank you. Your message is being forwarded to the owner.';
+            $url = $this->view->getHelper('BaseUrl')->setBaseUrl('..');
+        }
+        else {
+            $this->_helper->redirector('index', 'index'); //error!
+        }
+    }
+    
         
                     
                     

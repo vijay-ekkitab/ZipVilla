@@ -19,12 +19,13 @@ foreach($this->results as $result) : ?>
   <!--search result number-->
   <?php
     $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $result);
+    $link = $this->baseUrl('/list?id='.$result['id']);
   ?>
-  <div class="villa_image">  <img src="<?php echo $imagepath;?>" alt="resort name" />  </div>
+  <div class="villa_image">  <a href="<?echo $link;?>"> <img src="<?php echo $imagepath;?>" alt="resort name" /></a>  </div>
   <!--picture-->
   <div class="favorite">  <img src="<?php echo $this->baseUrl();?>/images/icon_favorite.jpg" alt="Favorite" />  </div>
   <div class="resort_details">
-  <h2><a href="<?php echo $this->baseUrl().'/list?id='.$result['id'];?>"><?php echo $this->escape($result['title']);?></a></h2>
+  <h2><a href="<?php echo $link;?>"><?php echo $this->escape($result['title']);?></a></h2>
   <p>
   <?php echo $this->escape($result['address__street_name']);?>,
   <?php echo $this->escape($result['address__city']);?>,

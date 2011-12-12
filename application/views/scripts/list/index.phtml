@@ -91,6 +91,9 @@ function setRate(score) {
 		}
 		$("#rate"+i).attr("src", image);
 	}
+	$('input[name="rating"]').each(function() {
+		$(this).val(score);
+	});
 } 
 
 function login(iduser,idpsw, idmsg) {
@@ -136,6 +139,19 @@ function writeReview(id) {
     $(id).show();
     $(window).scrollTop($(id).offset().top);
 }
+
+function sendMessage(id) {
+    checkLogin();
+    if (!userloggedin) {
+        lastdecline = 'sendMessage(\''+id+'\')';
+        requestLogin();
+        return;
+    }
+    if (validate(['message'])) {
+        $(id).submit();
+    }
+}
+
 </script>
 <div class="v_social_ico l_social_ico">
                 <h4 class="l_link_back_page v_link_back_page"><a href="/search">Back to search results</a></h4>
@@ -266,7 +282,7 @@ function writeReview(id) {
                                 <textarea name="content" title="Share your experience..." style="width:100%;" cols="100" name="message" rows="3" class="FrmtxtArea defaultText"></textarea><br>
                                 <input type="hidden" name="id" value="<?php echo $property->id;?>" />
                                 <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
-                                <div align="center"><INPUT type="submit" value="Submit review" onclick="if (validate()) {$('.form_write_review').hide();return true;} return false;"> </div>
+                                <div align="center"><INPUT type="submit" value="Submit review" onclick="if (validate(['title', 'content'])) {$('.form_write_review').hide();return true;} return false;"> </div>
                             </FORM>
                         </div>
                     </div><!--tab_content ends here-->
@@ -366,9 +382,11 @@ function writeReview(id) {
                             </div>
                         </div>
                             <div class="form_write_review">
-                                <FORM action="mail.php" method="post">
-                                    <textarea cols="22" name="message" rows="1" class="FrmtxtArea"></textarea><br>
-                                    <INPUT class="input" type="submit" value="Send it now">
+                                <FORM id="send_message" action="<?php echo $this->baseUrl('/list/sendmessage');?>" method="post">
+                                    <textarea cols="22" style="width:100%;" name="message" title="Got a question for this host?" rows="1" class="FrmtxtArea defaultText"></textarea><br>
+                                    <INPUT class="input" type="submit" onclick="sendMessage('#send_message');return false;" value="Send it now">
+                                    <input type="hidden" name="id" value="<?php echo $property->id;?>" />
+                                    <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
                                 </FORM>
                             </div><!--form_write_review-->
                     </div>
