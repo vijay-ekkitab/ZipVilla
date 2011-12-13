@@ -82,8 +82,9 @@ function showlightbox(id, mask, msg)
 	$(id).css('top',  winH/2-$(id).height()/2);
 	$(id).css('left', winW/2-$(id).width()/2);
 	
+	$('#lb_show_msg').children('p').remove();
 	if (msg != '') {
-		$('#lb_show_msg').append('<p><strong>'+msg+'</strong></p>');
+		$('#lb_show_msg').prepend('<p><strong>'+msg+'</strong></p>');
 	}
 
 	//transition effect

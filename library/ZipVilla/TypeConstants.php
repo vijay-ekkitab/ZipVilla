@@ -58,4 +58,6 @@ const  HOMEPAGE_MOST_VIEWED_DATA  = "hmvd";
 const  HOMEPAGE_MOST_BOOKED_DATA  = "hmbd";
 const  HOMEPAGE_MOST_RATED_DATA   = "hmrd";
 
+const  SESSION_NAME = "guest_data";
+
 ?>

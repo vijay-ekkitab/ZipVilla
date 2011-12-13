@@ -140,16 +140,52 @@ function writeReview(id) {
     $(window).scrollTop($(id).offset().top);
 }
 
-function sendMessage(id) {
+function submitForm(id, names) {
     checkLogin();
     if (!userloggedin) {
-        lastdecline = 'sendMessage(\''+id+'\')';
+        var str='[';
+        for (i in names) {
+            if (i>0) str=str+","; 
+            str = str+"'"+names[i]+"'";
+        }
+        str=str+']';
+        lastdecline = "submitForm('"+id+"',"+str+")";
         requestLogin();
-        return;
+        return false;
     }
-    if (validate(['message'])) {
-        $(id).submit();
+    if (validate(names)) {
+    	var inputs = $(id+' :input');
+        var values = {};
+        inputs.each(function() {
+            values[this.name] = $(this).val();
+        });
+        $.ajax({ 
+            type: "POST",
+            dataType: "json",
+            async: false,
+            url:"/default/list/form/format/json",
+            data:values,
+            complete:function(json) {
+                    var response = json.responseText.substring(2);
+                    showlightbox('#lb_thankyou', '#mask_zv', response);
+                }
+            }
+        );
+        clearForm(names);
+        return true;
     }
+    else {
+        return false;
+    }
+}
+
+function clearForm(inputs) {
+	for (i in inputs) {
+		$("[name="+inputs[i]+"]").each(function(){
+			$(this).val('');
+		});
+	}
+	$(".defaultText").blur();
 }
 
 </script>
@@ -276,13 +312,13 @@ function sendMessage(id) {
                         </div><!--ratng_rvews ends-->
                         <div id="user_reviews">
                         </div>
-                        <div class="form_write_review" style="display:none;">
-                            <FORM id="review_form" action="<?php echo $this->baseUrl('/list/submit_review');?>" method="post">
+                        <div id="div_review_form" class="form_write_review" style="display:none;">
+                            <FORM id="review_form" action="#" method="post">
                                 <textarea name="title" title="Your title for the review" style="width:100%;" cols="100" name="message" rows="1" class="FrmtxtArea defaultText"></textarea><br>
                                 <textarea name="content" title="Share your experience..." style="width:100%;" cols="100" name="message" rows="3" class="FrmtxtArea defaultText"></textarea><br>
                                 <input type="hidden" name="id" value="<?php echo $property->id;?>" />
                                 <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
-                                <div align="center"><INPUT type="submit" value="Submit review" onclick="if (validate(['title', 'content'])) {$('.form_write_review').hide();return true;} return false;"> </div>
+                                <div align="center"><INPUT type="submit" value="Submit review" onclick="if (submitForm('#review_form', ['title', 'content'])) {$('#div_review_form').hide();return false;} return false;"> </div>
                             </FORM>
                         </div>
                     </div><!--tab_content ends here-->
@@ -332,12 +368,12 @@ function sendMessage(id) {
                         <p>Subtotal</p>
                         <h2 id="calc_rate">Rs,45,000</h2>
                         <span>(excludes ZipVilla fee Rs.3,000)</span>
-                        <div class="btn_send_details"><a href="#"><img src="images/btn_send_details.jpg" /></a></div>
+                        <div class="btn_send_details"><a href="#"><img src="<?php echo $this->baseUrl('/images/btn_send_details.jpg');?>" /></a></div>
                     </div>
                 </div>
                 <div class="l_refine_results v_refine_results">
                     <div class="l_price">
-                        <div class="l_accordian_open"><a href="#"><img src="images/btn_acco_open.jpg" /></a></div>
+                        <div class="l_accordian_open"><a href="#"><img src="<?php $this->baseUrl('/images/btn_acco_open.jpg');?>" /></a></div>
                         <h4><a href="#">Accomodation Details</a></h4>
                         
                         <div class="acco_dtls">
@@ -360,7 +396,7 @@ function sendMessage(id) {
                         </div>
                     </div>
                     <div class="l_price">
-                        <div class="l_accordian_open"><a href="#"><img src="images/btn_acco_open.jpg" /></a></div>
+                        <div class="l_accordian_open"><a href="#"><img src="<?php echo $this->baseUrl('/images/btn_acco_open.jpg');?>" /></a></div>
                         <?php $owner_line = '[Add Owner]'; $owner_link = $this->baseUrl('/list/addOwner?id='.$property->id);
                               if ($owner != null) { $owner_line = 'About your host'; $owner_link = '';}?>
                         <h4><a href="<?php echo $owner_link;?>"><?php echo $owner_line;?></a></h4>
@@ -370,11 +406,11 @@ function sendMessage(id) {
                         <div class="host_ratings">
                             <div>
                                 <span>Response rate:</span>
-                                <p>100% <div class="what"><img src="images/btn_questin.jpg" /></div></p>
+                                <p>100% <div class="what"><img src="<?php echo $this->baseUrl('/images/btn_questin.jpg');?>" /></div></p>
                             </div>
                             <div>
                                 <span>Acceptance rate:</span>
-                                <p>100%<div  class="what"><img src="images/btn_questin.jpg" /></div></p>
+                                <p>100%<div  class="what"><img src="<?php echo $this->baseUrl('/images/btn_questin.jpg');?>" /></div></p>
                             </div>
                             <div>
                                 <span>Verfied via Facebook</span>
@@ -382,16 +418,16 @@ function sendMessage(id) {
                             </div>
                         </div>
                             <div class="form_write_review">
-                                <FORM id="send_message" action="<?php echo $this->baseUrl('/list/sendmessage');?>" method="post">
-                                    <textarea cols="22" style="width:100%;" name="message" title="Got a question for this host?" rows="1" class="FrmtxtArea defaultText"></textarea><br>
-                                    <INPUT class="input" type="submit" onclick="sendMessage('#send_message');return false;" value="Send it now">
+                                <FORM id="send_message" action="#" method="post">
+                                    <textarea cols="22" style="width:100%;" name="message" title="Got a question for this host?" rows="5" class="FrmtxtArea defaultText"></textarea><br>
+                                    <INPUT class="input" type="submit" onclick="submitForm('#send_message', ['message']);return false;" value="Send it now">
                                     <input type="hidden" name="id" value="<?php echo $property->id;?>" />
                                     <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
                                 </FORM>
                             </div><!--form_write_review-->
                     </div>
                     <div class="l_price">
-                        <div class="l_accordian_open"><a href="#"><img src="images/btn_acco_open.jpg" /></a></div>
+                        <div class="l_accordian_open"><a href="#"><img src="<?php echo $this->baseUrl('/images/btn_acco_open.jpg');?>" /></a></div>
                         <h4><a href="#">Other Listings</a></h4>
                     </div>
                 </div>
@@ -419,8 +455,9 @@ function sendMessage(id) {
             <div id="boxes">
                 <div id="lb_thankyou" style="height: 200px; width: 400px; background:none;display:none;" class="lb_window_zv">
                     <div id="lb_show_msg" class="register">
+                        <button type="button" class="close">OK</button>
                     </div>
-                    <button type="button" class="close">OK</button>
+                    
                 </div>
                 <!-- <div class="close cboxClose"></div>  -->
             </div>

@@ -6,7 +6,14 @@ include_once(APPLICATION_PATH."/controllers/SearchController.php");
 class ListController extends Zend_Controller_Action
 {
 
-    protected $requireslogin = array('rate', 'submitreview');
+    const USER_RATING  = 'user_rating';
+    const PROPERTY_ID  = 'id';
+    const MESSAGE      = 'message';
+    const TITLE        = 'title';
+    const CONTENT      = 'content';
+    const RATING       = 'rating';
+    
+    //protected $requireslogin = array('rate', 'submitreview');
     
     protected function read_value($values, $index, $default=null)
     {
@@ -21,20 +28,42 @@ class ListController extends Zend_Controller_Action
                     ->addActionContext('getreviews', 'json')
                     ->addActionContext('checklogin', 'json')
                     ->addActionContext('getcalendar', 'html')
+                    ->addActionContext('form', 'json')
                     ->initContext();
     }
 
     public function preDispatch()
     {
-        if (!Zend_Auth::getInstance()->hasIdentity()) {
+        /*if (!Zend_Auth::getInstance()->hasIdentity()) {
             if (in_array($this->getRequest()->getActionName(), $this->requireslogin)) {
                 // Save the requested Uri
                 $this->_helper->lastDecline->saveRequestUri();
-                // Only logged in users have access to the Rating Page;
+                // Only logged in users have access to the access controlled pages;
                 // Direct all other users to the Login Page.
                 $this->_helper->redirector('index', 'login');
             }
+        }*/
+    }
+    
+    protected function readSession() {
+        $session = new Zend_Session_Namespace(SESSION_NAME);
+        $session_values = isset($session->values) ? $session->values : array();
+        $values = array();
+        $values[SearchController::CHECKIN]    = $this->read_value($session_values, SearchController::CHECKIN);
+        $values[SearchController::CHECKOUT]   = $this->read_value($session_values, SearchController::CHECKOUT);
+        $values[SearchController::GUESTS]     = $this->read_value($session_values, SearchController::GUESTS, 1);
+        $values[ListController::USER_RATING]  = $this->read_value($session_values, ListController::USER_RATING, 0);
+        $values[ListController::PROPERTY_ID]  = $this->read_value($session_values, ListController::PROPERTY_ID, 0);
+        return $values;
+    }
+    
+    protected function saveSession($values) {
+        $session = new Zend_Session_Namespace(SESSION_NAME);
+        $session_values = isset($session->values) ? $session->values : array();
+        foreach($values as $key => $value) {
+            $session_values[$key] = $value;
         }
+        $session->values = $session_values;
     }
 
     public function indexAction()
@@ -45,12 +74,17 @@ class ListController extends Zend_Controller_Action
 
         if ($id != null) {
             $this->view->property = $this->_helper->listingsManager->queryById($id);
-            $session = new Zend_Session_Namespace('guest_data');
-            $session_values = $session->values;
-            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
-            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
-            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
-            //$this->view->user_rating = $this->read_value($session_values, 'user_rating');
+            $session_values = $this->readSession();
+            $this->view->{SearchController::CHECKIN}  = $session_values[SearchController::CHECKIN];
+            $this->view->{SearchController::CHECKOUT} = $session_values[SearchController::CHECKOUT];
+            $this->view->{SearchController::GUESTS}   = $session_values[SearchController::GUESTS];
+            if ($session_values[ListController::PROPERTY_ID] == $this->view->property->id) {
+                $this->view->{ListController::USER_RATING} = $session_values[ListController::USER_RATING];
+            }
+            else {
+                $this->saveSession(array(ListController::PROPERTY_ID => $this->view->property->id,
+                                  ListController::USER_RATING => 0));
+            }
         }
         else {
             $this->_helper->redirector('index', 'index');
@@ -63,14 +97,12 @@ class ListController extends Zend_Controller_Action
         if ($id != null) {
             $score = $this->_getParam('score', 0);
             $this->view->property = $this->_helper->listingsManager->queryById($id);
-            $session = new Zend_Session_Namespace('guest_data');
-            $session_values = $session->values;
-            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
-            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
-            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
-            $session_values['user_rating'] = $score;
-            $session->values = $session_values;
-            $this->view->user_rating = $score;
+            $session_values = $this->readSession();
+            $this->view->{SearchController::CHECKIN}  = $session_values[SearchController::CHECKIN];
+            $this->view->{SearchController::CHECKOUT} = $session_values[SearchController::CHECKOUT];
+            $this->view->{SearchController::GUESTS}   = $session_values[SearchController::GUESTS];
+            $this->saveSession(array(ListController::USER_RATING => $score));
+            $this->view->{ListController::USER_RATING} = $score;
             $this->_helper->viewRenderer('index');
             $url = $this->view->getHelper('BaseUrl')->setBaseUrl('..');
         }
@@ -79,54 +111,30 @@ class ListController extends Zend_Controller_Action
         }
     }
 
-    public function submitreviewAction()
+    protected function submitReview($id, $title, $content, $rating)
     {
         $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity()) {
-            $username = $auth->getIdentity();
+        if (!$auth->hasIdentity()) {
+            return;
         }
-        else {
-            $this->_helper->redirector('index', 'index'); //error!
-        }
+        $username = $auth->getIdentity();
         $pos = strpos($username,AUTH_FIELD_SEPARATOR);
         if ($pos)  {
             $username = substr($username,0,$pos);
         }
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $values = $request->getPost();
-            $id = isset($values['id']) ? $values['id'] : null;
-            $title = isset($values['title']) ? $values['title'] : '';
-            $content = isset($values['content']) ? $values['content'] : '';
-            $rating = isset($values['rating']) ? $values['rating'] : 0;
-            $date = date('d-m-Y');
-            $review = array('title' => $title,
-                            'content' => $content,
-                            'rating' => $rating,
-                            'date' => $date);
-            $dbr = new Application_Model_Reviews($review);
-            $property = Application_Model_Listings::findOne(array("_id"=>new MongoId($id)));
-            $user = Application_Model_Users::findOne(array("emailid"=>$username));
-            if ($property && $user) {
-                $dbr->save();
-                $dbr->setListing($property);
-                $dbr->setUser($user);
-            }
-            $this->view->property = $property;
-            $session = new Zend_Session_Namespace('guest_data');
-            $session_values = $session->values;
-            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
-            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
-            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
-            $session_values['user_rating'] = $rating;
-            $session->values = $session_values;
-            $this->view->user_rating = $rating;
-            $this->_helper->viewRenderer('index');
-            $this->view->showPopupMsg = 'Thank you for your feedback. We appreciate your inputs.';
-            $url = $this->view->getHelper('BaseUrl')->setBaseUrl('..');
-        }
-        else {
-            $this->_helper->redirector('index', 'index'); //error!
+        $date = date('d-m-Y');
+        $review = array('title' => $title,
+                        'content' => $content,
+                        'rating' => $rating,
+                        'date' => $date);
+            
+        $dbr = new Application_Model_Reviews($review);
+        $property = Application_Model_Listings::findOne(array("_id"=>new MongoId($id)));
+        $user = Application_Model_Users::findOne(array("emailid"=>$username));
+        if ($property && $user) {
+            $dbr->save();
+            $dbr->setListing($property);
+            $dbr->setUser($user);
         }
     }
 
@@ -155,13 +163,9 @@ class ListController extends Zend_Controller_Action
                     }
                 }
                 //save session data
-                $session = new Zend_Session_Namespace('guest_data');
-                $session_values = $session->values;
-                $session_values[SearchController::CHECKIN] = $checkin;
-                $session_values[SearchController::CHECKOUT] = $checkout;
-                $session_values[SearchController::GUESTS] = $guests;
-                $session->values = $session_values;
-                
+                $this->saveSession(array(SearchController::CHECKIN   => $checkin,
+                                  SearchController::CHECKOUT  => $checkout,
+                                  SearchController::GUESTS    => $guests));
             }
             elseif (($id != null) && ($id != '')) {
                 $property = $this->_helper->listingsManager->queryById($id);
@@ -436,32 +440,31 @@ class ListController extends Zend_Controller_Action
         $this->view->html = $html;
     }
     
-    public function sendmessageAction()
+    public function formAction()
     {
         $logger = Zend_Registry::get('zvlogger');
+        $this->_helper->viewRenderer->setNoRender();
         $request = $this->getRequest();
+        $response = '';
         if ($request->isPost()) {
             $values = $request->getPost();
-            $id = isset($values['id']) ? $values['id'] : null;
-            $title = isset($values['message']) ? $values['message'] : '';
-            $rating = isset($values['rating']) ? $values['rating'] : 0;
-            $property = Application_Model_Listings::findOne(array("_id"=>new MongoId($id)));
-            $this->view->property = $property;
-            $session = new Zend_Session_Namespace('guest_data');
-            $session_values = $session->values;
-            $this->view->checkin  = $this->read_value($session_values, SearchController::CHECKIN);
-            $this->view->checkout = $this->read_value($session_values, SearchController::CHECKOUT);
-            $this->view->guests   = $this->read_value($session_values, SearchController::GUESTS);
-            $session_values['user_rating'] = $rating;
-            $session->values = $session_values;
-            $this->view->user_rating = $rating;
-            $this->_helper->viewRenderer('index');
-            $this->view->showPopupMsg = 'Thank you. Your message is being forwarded to the owner.';
-            $url = $this->view->getHelper('BaseUrl')->setBaseUrl('..');
+            $id = $this->read_value($values, ListController::PROPERTY_ID, 0);
+            $title = $this->read_value($values, ListController::TITLE);
+            $content = $this->read_value($values, ListController::CONTENT);
+            $message = $this->read_value($values, ListController::MESSAGE);
+            $rating = $this->read_value($values, ListController::RATING, 0);
+            if ($message != null) {//send message
+                #TODO: send message to ZipVilla.
+                $response = 'Thank you. Your message has been forwarded to the owner.';
+            }
+            elseif (($title != null) || ($content != null)) {//submit review
+                $this->submitReview($id, $title, $content, $rating);
+                $response = 'Thank you for your feedback. We appreciate your inputs.';
+            }
+            $this->saveSession(array(ListController::USER_RATING => $rating));
+            
         }
-        else {
-            $this->_helper->redirector('index', 'index'); //error!
-        }
+        echo $response;
     }
     
         
