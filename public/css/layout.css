@@ -89,7 +89,7 @@
 	float:left;
 	display:inline;
 	list-style:none;
-	margin:3px 2px 0 0;
+	margin:0px 2px 0 0;
 }
 .l_search_results .pagination li a {
 	padding:3px 7px;
@@ -105,7 +105,7 @@
 .l_page_buttons {
 	float:right;
 	clear:both;
-	margin-top:0px;
+	margin-top:5px;
 }
 .l_search_results .btn_next_page {
 	float:left;
