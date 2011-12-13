@@ -7,7 +7,7 @@
     src: local("?"), url("Lato-Regular.woff") format("woff"), url("Lato-Regular.ttf") format("truetype"), url("Lato-Regular.svg#webfontBsXB6tm7") format("svg");
 }
 /*Global styles*/
-body,img,p,ul,li, h2, h3, h1 {
+body,img,p,ul,li, h2, h3, h1,h4,h5 {
 	font-family:Lato, Arial, Helvetica, sans-serif;
 	font-size:12px;
 	color:#666;
@@ -48,6 +48,12 @@ h3 {
 	font-size:16px;
 	font-weight:bold;
 	color:#fff;
+}
+h4 {
+	font-size:14px;
+	font-weight:bold;
+	color:#09c;
+	line-height:16px;
 }
 input {
 	color:#0099CC;
@@ -143,7 +149,7 @@ body {
 	width:115px;
 	height:75px;
 }
-.v_search_results .tab_content .search_result .search_no {
+.v_search_results .tab_content .search_result .search_no, .wrpr_photo .search_no {
 	background-color:#fff;
 	color:#c36;
 	text-align:center;
@@ -202,6 +208,44 @@ body {
 .v_futr_nav li a {
 	color:#666;
 }
+
+/****Photo page********/
+.wrpr_photo {
+	background-color:#fff;
+	width:190px;
+	height:194px;
+	float:left;
+	border:1px solid #ccc;
+	margin:0 9px 10px 0;
+	padding:8px;
+	position:relative;
+}
+.photo_img img {
+	float:left;
+	max-width:190px;
+	max-height:135px;
+	min-width:190px;
+	min-height:135px;
+}
+.wrpr_photo span {
+	font-size:16px;
+	color:#c36;
+	font-weight:bold;
+}
+.wrpr_photo .details{
+	float:left;
+	width:100%;
+	margin-top:5px;
+}
+.wrpr_photo .details .favorite {
+	float:right;
+}
+#tabs3 .map{
+	float:left;
+	width:650px;
+	height:690px;
+}
+
 /*************Registration Page***************/
 .v_rgstr_frm {
 	background:url(../images/bg_rgstr_page.jpg) top left repeat;
@@ -422,9 +466,9 @@ body {
 }
 /****Home page********/
 .srch_bx_home{
-	background:url(../images/bg_search_home.jpg) top left repeat-y;
+	background:url(../images/bg_search_home.jpg) top left no-repeat;
 	width:450px;
-	height:350px;
+	height:300px;
 	float:left;
 	padding:25px;
 	margin-right:25px;
@@ -471,8 +515,8 @@ body {
 .home_search .guest_home{
 	background:url(../images/bg_guests_home.jpg) top left no-repeat;
 	width:35px;
-	height:25px;
-	/* padding:5px; */
+	height:20px;
+	padding:5px;
 	margin-top:7px;
 	border:none;
 	float:left;
@@ -480,7 +524,7 @@ body {
 .slide_right{
 	float:left;
 	width:422px;
-	height:350px;
+	height:300px;
 	padding:10px 0 10px 8px;
 	border-right:1px solid #eeeeef;
 	border-left:1px solid #eeeeef;
