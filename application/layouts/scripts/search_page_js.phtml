@@ -18,6 +18,9 @@
 ?>
 
 <script type="text/javascript">
+
+    var $tabs;
+    
     function watchQueryBox() {
         if ($('#query').data('lastValue') != $('#query').val()) {
             $.ajax({ 
@@ -79,7 +82,9 @@
         $( "#price_range" ).val( "Rs." + $( "#price_slider" ).slider( "values", 0 ) +
                 " - Rs." + $( "#price_slider" ).slider( "values", 1 ) );
 
-        
+        $tabs = $('#tabs').tabs();
+        $tabs.tabs('select', <?php echo $this->showtab;?>);
+
     });
     
     function doSort(sortbox) 
@@ -89,6 +94,11 @@
     function setPage(page)
     {
         $("#page").val(page);
+    }
+    function setTab()
+    {
+        var selected = $tabs.tabs('option', 'selected');
+        $("#showtab").val(selected);
     }
     function init() 
     {

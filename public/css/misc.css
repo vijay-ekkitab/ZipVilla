@@ -8,4 +8,12 @@
     float:right;
     cursor:pointer;
 }
+.ok {
+    background:url(../images/btn_ok.png) top left no-repeat;
+    width:80px;
+    height:40px;
+    clear:right;
+    float:right;
+    cursor:pointer;
+}
 

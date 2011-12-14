@@ -70,7 +70,8 @@ class ListController extends Zend_Controller_Action
     {
         $logger = Zend_Registry::get('zvlogger');
 
-        $id = $this->_getParam('id', null);
+        $id = $this->_getParam(ListController::PROPERTY_ID, null);
+        $showtab = $this->_getParam(SearchController::SHOWTAB, 0);
 
         if ($id != null) {
             $this->view->property = $this->_helper->listingsManager->queryById($id);
@@ -85,6 +86,7 @@ class ListController extends Zend_Controller_Action
                 $this->saveSession(array(ListController::PROPERTY_ID => $this->view->property->id,
                                   ListController::USER_RATING => 0));
             }
+            $this->saveSession(array(SearchController::SHOWTAB => $showtab));
         }
         else {
             $this->_helper->redirector('index', 'index');

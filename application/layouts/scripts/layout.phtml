@@ -46,22 +46,14 @@
             <?php echo $this->render('search_top.phtml');?>
             <div class="l_search_results v_search_results"><!--Search result sections starts here-->
             
-            	<div id="tabs"><!--tabs-->
+            	<div id="tabs" class="ui-tabs"><!--tabs-->
                 	<ul>
                     	<li><a href="#tabs-1">List</a></li>
                         <li><a href="#tabs-2">Photo</a></li>
                         <li><a href="#tabs-3">Map</a></li>
                     </ul>
                     <?php echo $this->render('sort_box.phtml');?>
-                    <div id="tabs-1"><!--First tab content-->
-                        <?php echo $this->render('tab_list.phtml');?>
-                   	</div><!--tab1 content ends here-->
-                    <div id="tabs-2">
-                    	<div class="tab_content">This is the place for Search Results by Photo</div>
-                    </div><!--tab2 content ends here-->
-                    <div id="tabs-3">
-                    	  <div class="tab_content">This is the place for Search Results by Map</div>
-                    </div><!--tab3 content ends here-->
+                    <?php echo $this->layout()->content; ?>
                 </div>
                 
          	</div><!--search result ends here-->

@@ -10,6 +10,7 @@ class SearchController extends Zend_Controller_Action
     const SORT     = 'sort';
     const PRICE_RANGE = 'price_range';
     const KEYWORDS = 'keywords';
+    const SHOWTAB  = 'showtab';
     
     protected $facets = array('amenities', 'onsite_services', 'suitability', 'address__location', 'shared');
     
@@ -49,6 +50,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->sortorder      = $this->read_value($values, SearchController::SORT);
         $this->view->price_range    = $this->read_value($values, SearchController::PRICE_RANGE);
         $this->view->keywords       = $this->read_value($values, SearchController::KEYWORDS);
+        $this->view->showtab        = $this->read_value($values, SearchController::SHOWTAB, 0);
         $this->view->results        = $results['docs'];
         $this->view->total_hits     = $results['count'];
         if (isset($results['facets'])) {

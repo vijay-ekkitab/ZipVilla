@@ -60,4 +60,9 @@ const  HOMEPAGE_MOST_RATED_DATA   = "hmrd";
 
 const  SESSION_NAME = "guest_data";
 
+const  TAB_LIST = 0;
+const  TAB_PHOTO = 1;
+const  TAB_MAP = 2;
+
+
 ?>

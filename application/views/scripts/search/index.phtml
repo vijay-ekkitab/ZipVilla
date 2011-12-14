@@ -1,66 +1,84 @@
 <?php
 $this->title = "Search Results";
 $this->headTitle($this->title);
-$mapHelper = $this->map();
 ?>
+<?php 
+    if ((!isset($this->pagesz)) || ($this->pagesz ==0)) {
+        $this->pagesz = 10;
+    }
+    $numpages = ($this->total_hits % $this->pagesz) > 0 ? 1 + (int)($this->total_hits/$this->pagesz) : (int)($this->total_hits/$this->pagesz);
+    $backpages = $this->page - 1;
+    $pagesahead = $numpages - $this->page;
+    $next_page_btn = FALSE;
+    $prev_page_btn = FALSE;
+    if ($backpages <= 0) {
+        $pg1 = $this->page;
+        $pg2 = ($this->page + 1) > $numpages ? null : $this->page + 1;
+        $pg3 = ($this->page + 2) > $numpages ? null : $this->page + 2;
+        if ($pg2 != null) { $next_page_btn = TRUE; $next_page = $pg2; }
+    }
+    elseif ($pagesahead <= 0) {
+        $pg3 = $this->page;
+        $pg2 = ($this->page - 1) < 1  ? null : $this->page - 1;
+        $pg1 = ($this->page - 2) < 1  ? null : $this->page - 2;
+        if ($pg2 != null) { $prev_page_btn = TRUE; $prev_page = $pg2; }
+    }
+    else {
+        $next_page_btn = TRUE;
+        $prev_page_btn = TRUE;
+        $pg2 = $this->page;
+        $pg1 = $this->page - 1; $prev_page = $pg1;
+        $pg3 = $this->page + 1; $next_page = $pg3;
+    }
+    $pagenumbers = array($pg1, $pg2, $pg3);
+    $start = 1 + ($this->page - 1)*$this->pagesz; $end = ($start -1) + count($this->results);
+    $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search');
+?>
+<div id="tabs-1">
+    <div class="tab_content">
+        <?php echo $this->render('tab_list.phtml');?>
+    </div>
+</div>
+<div id="tabs-2">
+    <div class="tab_content">
+        <?php echo $this->render('tab_photo.phtml');?>
+    </div>
+</div>
+<div id="tabs-3">
+    <div class="tab_content">
+        <?php echo $this->render('tab_map.phtml');?>
+    </div>
+</div>
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+        <?php if ($this->total_hits > 0) {?>
+            <div class="display_no">
+                <p>Displaying <span><?php echo $start;?></span> — <span><?php echo $end ?></span> of <span><?php echo $this->total_hits; ?></span> listings</p>
+            </div>
+            <div class="pagination"><!--pagination-->
+            <ul>
+                <?php foreach ($pagenumbers as $pg):?>
+                   <?php if ($pg != null) {?>
+                    <?php if ($pg == $this->page) {?>
+                        <li class="current"><?php echo $pg;?></li>
+                    <?php } else {?>
+                        <li><a href="#" onclick="setPage(<?php echo $pg;?>); setTab(); validate();document.search_form.submit();"><?php echo $pg;?></a></li>
+                    <?php }?>
+                   <?php }?>
+                <?php endforeach;?>
+            </ul>
+            </div>
+            <div class="l_page_buttons"><!--Previous Next Page buttons-->
+                <?php if ($prev_page_btn) { ?>
+                    <a href="#" onclick="setPage(<?php echo $prev_page;?>); setTab(); validate();document.search_form.submit();"><div class="btn_prev_page"><img src="<?php echo $this->baseUrl();?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a>
+                <?php }?>
+                <?php if ($next_page_btn) { ?>
+                    <a href="#" onclick="setPage(<?php echo $next_page;?>); setTab(); validate();document.search_form.submit();"><div class="btn_next_page"><img src="<?php echo $this->baseUrl();?>/images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
+                <?php }?>
+            </div><!--Previous Next Page buttons ends-->
+        <?php }?>
+</div>
+<script type="text/javascript">
+        <?php echo $this->map()->setMapFromSearchResults($this->results, 'map');?>
+</script>
 
-<?php if (isset($this->error)) { ?>
-    <p>An error was encountered in search.</p>
- <?php } elseif ($this->results != null) {?>
 
-<?php
-// temp use of villaCtr - replace this later with number returned by search method
-//$villaCtr = ($this->page - 1) * $this->pagesz;
-$villaCtr = 0;
-//$mapStartNo = $villaCtr;
-foreach($this->results as $result) : ?>
-  <div class="search_result">
-  <div class="search_no"> <?php echo ++$villaCtr ?></div>
-  <!--search result number-->
-  <?php
-    $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $result);
-    $link = $this->baseUrl('/list?id='.$result['id']);
-  ?>
-  <div class="villa_image">  <a href="<?echo $link;?>"> <img src="<?php echo $imagepath;?>" alt="resort name" /></a>  </div>
-  <!--picture-->
-  <div class="favorite">  <img src="<?php echo $this->baseUrl();?>/images/icon_favorite.jpg" alt="Favorite" />  </div>
-  <div class="resort_details">
-  <h2><a href="<?php echo $link;?>"><?php echo $this->escape($result['title']);?></a></h2>
-  <p>
-  <?php echo $this->escape($result['address__street_name']);?>,
-  <?php echo $this->escape($result['address__city']);?>,
-  <?php echo $this->escape($result['address__state']);?>
-  <span><?php echo 'Guests: &nbsp'.$this->escape($result['guests']);?></span></p>
-  <div class="reviews">  <p><?php echo $this->escape(0+$result['reviews']);?></p>  <span>Reviews</span>  </div>
-  <div class="ratings">
-  <!--golden and silver stars-->
-  <ul>
-  <?php for($rc=0; $rc < 5; $rc++) {
-  if ((0+$result['rating']) > $rc) 
-    echo '<li><img src="'.$this->baseUrl().'/images/icon_ratings_gold.jpg"/></li>';
-  else
-    echo '<li><img src="'.$this->baseUrl().'/images/icon_ratings_silver.jpg"/></li>';
-  } ?>
-  </ul>
-  <!-- <span><?php echo $this->escape(0+$result['rating']);?> Ratings</span> -->
-  </div>
-  </div>
-  <div class="price">
-  <p>
-  <img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Rupee" /><?php echo $this->escape(0+$result['average_rate']);?>
-  </p>
-  <span>per night</span>
-  <span>
-    <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$result['id']));?>"> <img src="<?php echo $this->baseUrl();?>/images/icon_edit_pencil.jpg" alt="Edit" height="20" width="20"> </a> 
-    <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'delete', 'id'=>$result['id']));?>"> <img src="<?php echo $this->baseUrl();?>/images/icon_delete_x.jpg" alt="Delete" height="20" width="20"> </a>
-    </span> 
-    </div><!--search_result1 ends here-->
-  </div>
-<?php endforeach; ?>
- <script type="text/javascript">
-    <?php echo $mapHelper->setMapFromSearchResults($this->results, 'map');?>
- </script>
-
- <?php } else {?>
-    <p>No results were returned from search.</p>
- <?php } ?>
