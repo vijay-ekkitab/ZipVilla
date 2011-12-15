@@ -6,7 +6,7 @@
     echo $this->doctype();
     $baseUrl = $this->baseUrl();
 ?>
-<html>
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
@@ -27,6 +27,7 @@
                                       ->appendFile($this->baseUrl().'/js/jquery-ui.min.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
                                       ->appendFile($this->baseUrl().'/js/slideshow.js')
+                                      ->appendFile($this->baseUrl().'/js/facebook.js')
                                        ;?>
         
         <script type="text/javascript">
@@ -89,20 +90,27 @@
             <?php } ?>
         });
 
-        function validate(names) 
+        function validate(id, names) 
         {
-            var isvalid = false;
-            $(".defaultText").each(function(i) {
-            	if (jQuery.inArray($(this).attr('name'),names) > -1) {
-            	    if ($(this).val() == $(this)[0].title) 
-            	        $(this).val(''); 
-            	    else 
-            	        isvalid=true;
-            	}
-            }
-            );
-            if (!isvalid) 
-            	$(".defaultText").blur();
+            var isvalid = true;
+            $(names).each(function(i) {
+                var input = $(id+" :input[name=\""+names[i]+"\"]");
+                if (input != null) {
+                    var classname = input.attr('class');
+                    if (classname.match(/defaultText/)) {
+                        if (input.val() == input[0].title) {  
+                            input.val('');
+                        }
+                    }
+                    if (input.val() == '') { 
+                       isvalid=false;
+                       
+                    }
+                }
+                else {
+                    isvalid= false;
+                }
+            });
             return isvalid;
         }
 
@@ -128,6 +136,7 @@
 </head>
 
 <body class="blue">
+    <div id="fb-root"></div>
 	<div class="wrapper"><!--outer wrapper to fix the width-->
         <?php echo $this->render('header.phtml');?>
         <div class="content">

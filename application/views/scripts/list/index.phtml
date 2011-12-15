@@ -67,8 +67,9 @@ function checkLogin() {
         data:{},
         complete:function(json) {
                 var loggedin = json.responseText.substring(2);
-                if (loggedin == 'yes')
-                    userloggedin = true;
+                if (loggedin != '') {
+                    userloggedin = loggedin;
+                }
             }
         }
     );
@@ -107,8 +108,8 @@ function login(iduser,idpsw, idmsg) {
         data:{username:user, password:psw},
         complete:function(json) {
                 var loggedin = json.responseText.substring(2);
-                if (loggedin == 'yes') {
-                    userloggedin = true;
+                if (loggedin != '') {
+                    userloggedin = loggedin;
                     closelightbox('#lb_login', '#mask_zv');
                     if (lastdecline != null) {
                         eval(lastdecline);
@@ -140,7 +141,7 @@ function writeReview(id) {
     $(window).scrollTop($(id).offset().top);
 }
 
-function submitForm(id, names) {
+function submitForm(id, names, lbdiv) {
     checkLogin();
     if (!userloggedin) {
         var str='[';
@@ -153,12 +154,16 @@ function submitForm(id, names) {
         requestLogin();
         return false;
     }
-    if (validate(names)) {
+    if (validate(id, names)) {
     	var inputs = $(id+' :input');
         var values = {};
         inputs.each(function() {
             values[this.name] = $(this).val();
         });
+        clearForm(id);
+        if (lbdiv != null) {
+            closelightbox(lbdiv, '#mask_zv');
+        }
         $.ajax({ 
             type: "POST",
             dataType: "json",
@@ -171,21 +176,46 @@ function submitForm(id, names) {
                 }
             }
         );
-        clearForm(names);
+        //clearForm(id);
         return true;
     }
     else {
+    	$(".defaultText").blur();
         return false;
     }
 }
 
-function clearForm(inputs) {
-	for (i in inputs) {
-		$("[name="+inputs[i]+"]").each(function(){
-			$(this).val('');
-		});
-	}
+function clearForm(id) {
+	$(id+" :input").each(function() {
+	    $(this).val('');
+    });
 	$(".defaultText").blur();
+}
+
+function showSendForm(fromid, toid) {
+	checkLogin();
+    if (!userloggedin) {
+        var str='[';
+        lastdecline = "showSendForm('"+fromid+"','"+toid+"')";
+        requestLogin();
+        return false;
+    }
+	var inputs = $(fromid+' :input');
+    var values = {};
+    inputs.each(function() {
+        values[this.name] = $(this).val();
+    });
+    inputs = $(toid+' :input');
+    inputs.each(function() {
+        if (values.hasOwnProperty($(this).attr('name'))) {
+            $(this).val(values[$(this).attr('name')]);
+        }
+    });
+    userparams = userloggedin.split(',');
+    $(toid+" :input[name=\"email\"]").val(userparams[0]);
+    $(toid+" :input[name=\"firstname\"]").val(userparams[1]);
+    $(toid+" :input[name=\"lastname\"]").val(userparams[2]);
+    showlightbox('#lb_send_details', '#mask_zv');
 }
 
 </script>
@@ -318,7 +348,7 @@ function clearForm(inputs) {
                                 <textarea name="content" title="Share your experience..." style="width:100%;" cols="100" name="message" rows="3" class="FrmtxtArea defaultText"></textarea><br>
                                 <input type="hidden" name="id" value="<?php echo $property->id;?>" />
                                 <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
-                                <div align="center"><INPUT type="submit" value="Submit review" onclick="if (submitForm('#review_form', ['title', 'content'])) {$('#div_review_form').hide();return false;} return false;"> </div>
+                                <div align="center"><INPUT type="submit" value="Submit review" onclick="submitForm('#review_form', ['title', 'content'], '#div_review_form'); return false;"> </div>
                             </FORM>
                         </div>
                     </div><!--tab_content ends here-->
@@ -354,7 +384,7 @@ function clearForm(inputs) {
                         </form>
                     </div>
                     <div class="form_online">
-                        <form action="" method="get">
+                        <form id="pre_send_details" action="" method="get">
                             <div class="floatleft"><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg" type="text" size="5" id="checkin" name="check_in" value="<?php echo $this->checkin;?>"/></label></div>
                             <div class="floatleft"><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg" type="text" id="checkout" size="5" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
                             <div class="floatleft">
@@ -368,7 +398,7 @@ function clearForm(inputs) {
                         <p>Subtotal</p>
                         <h2 id="calc_rate">Rs,45,000</h2>
                         <span>(excludes ZipVilla fee Rs.3,000)</span>
-                        <div class="btn_send_details"><a href="#"><img src="<?php echo $this->baseUrl('/images/btn_send_details.jpg');?>" /></a></div>
+                        <div class="btn_send_details"><a href="#" onclick="showSendForm('#pre_send_details', '#send_details');return false;"><img src="<?php echo $this->baseUrl('/images/btn_send_details.jpg');?>" /></a></div>
                     </div>
                 </div>
                 <div class="l_refine_results v_refine_results">
@@ -420,10 +450,10 @@ function clearForm(inputs) {
                             <div class="form_write_review">
                                 <FORM id="send_message" action="#" method="post">
                                     <textarea cols="22" style="width:100%;" name="message" title="Got a question for this host?" rows="5" class="FrmtxtArea defaultText"></textarea><br>
-                                    <INPUT class="input" type="submit" onclick="submitForm('#send_message', ['message']);return false;" value="Send it now">
                                     <input type="hidden" name="id" value="<?php echo $property->id;?>" />
                                     <input type="hidden" name="rating" value="<?php echo $this->user_rating;?>" />
                                 </FORM>
+                                <INPUT class="input" type="submit" onclick="submitForm('#send_message', ['message'], null);return false;" value="Send it now">
                             </div><!--form_write_review-->
                     </div>
                     <div class="l_price">
@@ -443,6 +473,7 @@ function clearForm(inputs) {
                                 <input class="login" type="submit" onclick="login('#username', '#password', '.error_msg');return false;" id="login" name="login" value=""/> 
                                 <input class="cancel close" type="submit" onclick="return false;" value=""/>
                                 <!-- <a href="#" class="close">Cancel</a> -->
+                                <div class="fb-login-button"></div>
                             <!-- </form> -->
                         </div>
                     </div>
@@ -453,7 +484,29 @@ function clearForm(inputs) {
                 </div>
             </div>
             <div id="boxes">
-                <div id="lb_thankyou" style="height: 200px; width: 400px; background:none;display:none;" class="lb_window_zv">
+              <div id="lb_send_details" class="lb_window_zv" style="height: 100px; width: 300px; background:none;">
+                <div id="lb_show_form" class="register">
+                <div class="form_write_review">
+                <form id="send_details" action="#"> 
+                    <label for="send_firstname">First Name:<br /><input class="username" type="text" id="firstname" size="37" name="firstname" value=""/></label>
+                    <label for="send_lastname">Last Name:<br /><input class="username" type="text" id="lastname" size="37" name="lastname" value=""/></label>
+                    <label for="send_email">Email Address:<br /><input class="username" type="text" id="email" size="37" name="email" value=""/></label>
+                    <label for="send_phone">Home Phone:<br /><input class="username" type="text" id="phone" size="37" name="phone" value=""/></label>
+                    <label for="send_checkin">Arrival Date:<br /><input class="username" type="text" size="37" name="check_in" value=""/></label>
+                    <label for="send_checkout">Departure Date:<br /><input class="username" type="text" size="37" name="check_out" value=""/></label>
+                    <label for="send_guests">Guests:<br /><input class="username" type="text" id="guests" size="37" name="guests" value=""/></label>
+                    <textarea name="comments" title="Please write your questions here" style="width:100%;" cols="100" rows="5" class="FrmtxtArea defaultText"></textarea><br>
+                    <input type="hidden" name="id" value="<?php echo $property->id;?>" />
+                </form> 
+                <input class="send" type="submit" onclick="submitForm('#send_details', ['check_in', 'check_out', 'guests'], '#lb_send_details'); return false;" value="Send"/>
+                <input class="cancel close" type="submit" value="Cancel"/>
+                </div>
+                </div>
+                <div class="close cboxClose"></div>
+              </div>
+            </div> 
+            <div id="boxes">
+                <div id="lb_thankyou" style="height: 200px; width: 400px; background:none;" class="lb_window_zv">
                     <div id="lb_show_msg" class="register">
                         <input class="ok close" type="submit" onclick="return false;" value=""/>
                     </div>

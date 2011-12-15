@@ -10,6 +10,7 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
             $pos = strpos($username,AUTH_FIELD_SEPARATOR);
             if ($pos)  {
                 $username = substr($username,$pos+strlen(AUTH_FIELD_SEPARATOR));
+                $username = str_replace(AUTH_FIELD_SEPARATOR, ' ', $username);
             }
             $logoutUrl = $this->view->url(array('controller'=>'login',
             									'action'=>'logout'), 

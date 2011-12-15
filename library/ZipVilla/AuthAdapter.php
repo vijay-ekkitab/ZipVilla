@@ -25,7 +25,7 @@ class ZipVilla_AuthAdapter implements Zend_Auth_Adapter_Interface
             if ($user->isValidPsw($this->_password)) {
                 $result =  new Zend_Auth_Result(
                     Zend_Auth_Result::SUCCESS,
-                    $user->emailid.AUTH_FIELD_SEPARATOR.$user->firstname);
+                    $user->emailid.AUTH_FIELD_SEPARATOR.$user->firstname.AUTH_FIELD_SEPARATOR.$user->lastname);
             }
             else {
                 $result =  new Zend_Auth_Result(

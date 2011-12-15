@@ -13,7 +13,7 @@ class LoginController extends Zend_Controller_Action
             if ($result->isValid()) {
                 $user = $result->getIdentity();
                 $auth->getStorage()->write($user);
-                return true;
+                return $user;
             }
         }
         return false;
@@ -50,11 +50,12 @@ class LoginController extends Zend_Controller_Action
     public function ajaxloginAction() 
     {
         $values = $this->getRequest()->getPost();
-        if($this->_process($values))
-            $response = 'yes';
-        else
-            $response = 'no'; 
-        echo $response;
+        $username = $this->_process($values);
+        if (!$username) 
+            $username = '';
+        else 
+            $username = str_replace(AUTH_FIELD_SEPARATOR, ',', $username);
+        echo $username;
     }
 
     public function indexAction()

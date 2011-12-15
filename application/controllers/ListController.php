@@ -12,6 +12,7 @@ class ListController extends Zend_Controller_Action
     const TITLE        = 'title';
     const CONTENT      = 'content';
     const RATING       = 'rating';
+    const COMMENTS     = 'comments';
     
     //protected $requireslogin = array('rate', 'submitreview');
     
@@ -352,12 +353,14 @@ class ListController extends Zend_Controller_Action
     {
         $this->_helper->viewRenderer->setNoRender();
         $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity())
-            $response = "yes";
+        if ($auth->hasIdentity()) {
+           $username = $auth->getIdentity();
+           $username = str_replace(AUTH_FIELD_SEPARATOR, ',', $username);
+        }
         else
-            $response = "no";
+            $username = "";
             
-        echo $response;
+        echo $username;
     }
     
     public function getcalendarAction()
@@ -448,23 +451,27 @@ class ListController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
         $request = $this->getRequest();
         $response = '';
+        
         if ($request->isPost()) {
             $values = $request->getPost();
-            $id = $this->read_value($values, ListController::PROPERTY_ID, 0);
-            $title = $this->read_value($values, ListController::TITLE);
-            $content = $this->read_value($values, ListController::CONTENT);
-            $message = $this->read_value($values, ListController::MESSAGE);
             $rating = $this->read_value($values, ListController::RATING, 0);
-            if ($message != null) {//send message
+            
+            if (isset($values[ListController::MESSAGE])) {//send message
                 #TODO: send message to ZipVilla.
                 $response = 'Thank you. Your message has been forwarded to the owner.';
             }
-            elseif (($title != null) || ($content != null)) {//submit review
+            elseif (isset($values[ListController::TITLE])) {//submit review
+                $id = $this->read_value($values, ListController::PROPERTY_ID, 0);
+                $title = $this->read_value($values, ListController::TITLE);
+                $content = $this->read_value($values, ListController::CONTENT);
                 $this->submitReview($id, $title, $content, $rating);
                 $response = 'Thank you for your feedback. We appreciate your inputs.';
             }
+            elseif (isset($values[ListController::COMMENTS])) {
+                #TODO: send message to ZipVilla.
+                $response = 'Thank you. Your request has been forwarded to the owner.';
+            }
             $this->saveSession(array(ListController::USER_RATING => $rating));
-            
         }
         echo $response;
     }
