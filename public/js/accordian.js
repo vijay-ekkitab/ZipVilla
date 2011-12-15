@@ -4,7 +4,7 @@
 				$("#accordion").accordion({ header: "h4" });
 	
 				// Tabs
-				$('#tabs').tabs();
+				//$('#tabs').tabs();
 	
 
 				// Dialog			
