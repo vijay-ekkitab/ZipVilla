@@ -283,7 +283,9 @@ class ListController extends Zend_Controller_Action
                 else {
                     $num = ($pg-1)*REVIEWS_PER_PAGE;
                     $user_reviews_pages .= '<li><a href="#" onclick="getReviews(' .
-                                           $num .
+                                           "'" . $property->id . "'," .
+                                           $num . ',' .
+                                            "'" . $baseurl . "'" .
                                            '); return false;">' .
                                            $pg .
                                            '</a></li>';
@@ -294,19 +296,23 @@ class ListController extends Zend_Controller_Action
              if ($prevpage) {
                 $num = ($thispage-2)*REVIEWS_PER_PAGE;
                 $user_reviews_pages .= '<a href="#" onclick="getReviews(' .
-                                       $num .
+                                       "'" . $property->id . "'," . 
+                                       $num . ',' .
+                                       "'" . $baseurl . "'" .
                                        '); return false;">' .
                                        '<div class="btn_prev_page"><img src="' .
-                                       $baseurl . '/images/btn_prev_page.jpg"'.
+                                       $baseurl . '/images/btn_prev_page.jpg" '.
                                        'alt="Previous page"/></div></a>' ;
              }
              if ($nextpage) {
                  $num = ($thispage)*REVIEWS_PER_PAGE;
                  $user_reviews_pages .= '<a href="#" onclick="getReviews(' .
-                                       $num .
+                                        "'" . $property->id . "'," . 
+                                       $num . ',' .
+                                       "'" . $baseurl . "'" .
                                        '); return false;">' .
                                        '<div class="btn_next_page"><img src="' .
-                                       $baseurl . '/images/btn_next.jpg"' .
+                                       $baseurl . '/images/btn_next.jpg" ' .
                                        'alt="Next page" /></div></a>' ;
              }
              $user_reviews_pages .= '</div>'; 

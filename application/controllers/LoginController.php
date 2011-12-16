@@ -84,6 +84,12 @@ class LoginController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        //check if already logged in via FB
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $this->_helper->lastDecline();
+            return;
+        }
         $form = new Application_Form_Login();
         $request = $this->getRequest();
         if ($request->isPost()) {

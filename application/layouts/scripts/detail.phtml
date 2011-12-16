@@ -64,7 +64,7 @@
                      $(".calendar1").prepend(data.responseText);
                 }
             });
-            calculate_rate();
+            
             $(".defaultText").focus(function(srcc) {
                if ($(this).val() == $(this)[0].title) {
                    $(this).removeClass("defaultTextActive");
@@ -82,7 +82,8 @@
             $(".defaultText").blur();
 
             <?php if ($this->property != null) {?>
-            getReviews(0);
+            getReviews("<?php echo $this->property->id;?>",0,"<?php echo $this->baseUrl();?>");
+            calculate_rate("<?php echo $this->property->id;?>");
             <?php }?>
 
             <?php if ($this->showPopupMsg) {?>
@@ -93,49 +94,6 @@
             FB.getLoginStatus(fbIsLoggedIn);
             
         });
-
-        function validate(id, names) 
-        {
-            var isvalid = true;
-            $(names).each(function(i) {
-                var input = $(id+" :input[name=\""+names[i]+"\"]");
-                if (input != null) {
-                    var classname = input.attr('class');
-                    if (classname.match(/defaultText/)) {
-                        if (input.val() == input[0].title) {  
-                            input.val('');
-                        }
-                    }
-                    if (input.val() == '') { 
-                       isvalid=false;
-                       
-                    }
-                }
-                else {
-                    isvalid= false;
-                }
-            });
-            return isvalid;
-        }
-
-        function getReviews(_start) {
-            var _baseurl = '<?php echo $this->baseUrl();?>'; 
-            var _id = '<?php echo $this->property->id;?>';
-            $.ajax({ 
-                type: "POST",
-                dataType: "json",
-                url:"/default/list/getreviews/format/json",
-                data:{id:_id, start:_start, baseurl:_baseurl},
-                complete:function(json) { 
-                	var resp = jQuery.parseJSON(json.responseText.substring(2)); 
-                	$("#user_reviews").html(resp.user_reviews);
-                	$("#user_reviews_notice").html(resp.user_reviews_notice);
-                	$("#user_reviews_pages").html(resp.user_reviews_pages);
-                }
-            });
-        }
-        
-      	
       	</script>
 </head>
 
