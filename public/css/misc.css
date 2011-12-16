@@ -1,5 +1,6 @@
 .defaultText { width: 300px; }
 .defaultTextActive { color: #a1a1a1; font-style: italic; }
+
 .register .form-section .cancel {
     background:url(../images/btn_cancel.jpg) top left no-repeat;
     width:120px;
@@ -16,4 +17,30 @@
     float:right;
     cursor:pointer;
 }
+.send {
+    background:url(../images/btn_send.png) top left no-repeat;
+    width:100px;
+    height:40px;
+    clear:both;
+    float:left;
+    cursor:pointer;
+}
+.cancel {
+    background:url(../images/btn_cancel.jpg) top left no-repeat;
+    width:100px;
+    height:40px;
+    clear:right;
+    float:right;
+    cursor:pointer;
+}
+.btn_login_fb img {
+    float:left;
+    max-width:223px;
+    max-height:40px;
+    min-width:223px;
+    min-height:40px;
+}
+
+
+
 

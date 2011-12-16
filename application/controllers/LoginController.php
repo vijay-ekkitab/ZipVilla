@@ -18,12 +18,28 @@ class LoginController extends Zend_Controller_Action
         }
         return false;
     }
+    
+    protected function _fbprocess($values)
+    {
+        if ($values != null) {
+            $adapter = new ZipVilla_AuthAdapter('', '', $values);
+            $auth = Zend_Auth::getInstance();
+            $result = $auth->authenticate($adapter);
+            if ($result->isValid()) {
+                $user = $result->getIdentity();
+                $auth->getStorage()->write($user);
+                return $user;
+            }
+        }
+        return false;
+    }
 
     public function init()
     {
         /* Initialize action controller here */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('ajaxlogin', 'json')
+                    ->addActionContext('fblogin', 'json')
                     ->initContext();
     }
 
@@ -56,6 +72,14 @@ class LoginController extends Zend_Controller_Action
         else 
             $username = str_replace(AUTH_FIELD_SEPARATOR, ',', $username);
         echo $username;
+    }
+    
+    public function fbloginAction()
+    {
+        $values = $this->getRequest()->getPost();
+        if (!isset($values['email']))
+            return;
+        $this->_fbprocess($values);
     }
 
     public function indexAction()

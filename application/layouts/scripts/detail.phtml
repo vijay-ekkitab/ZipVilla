@@ -27,7 +27,7 @@
                                       ->appendFile($this->baseUrl().'/js/jquery-ui.min.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
                                       ->appendFile($this->baseUrl().'/js/slideshow.js')
-                                      ->appendFile($this->baseUrl().'/js/facebook.js')
+                                      ->appendFile('http://connect.facebook.net/en_US/all.js')
                                        ;?>
         
         <script type="text/javascript">
@@ -88,6 +88,10 @@
             <?php if ($this->showPopupMsg) {?>
             showlightbox('#lb_thankyou', '#maskzv', '<?php echo $this->showPopupMsg;?>');
             <?php } ?>
+
+            FB.init({ apiKey: '234678403269599' });
+            FB.getLoginStatus(fbIsLoggedIn);
+            
         });
 
         function validate(id, names) 
