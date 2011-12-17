@@ -388,3 +388,18 @@ function getReviews(_id, _start, _baseurl) {
     });
 }
 
+function validate_default() 
+{
+  	$(".defaultText").each(function(i) {if ($(this).val() == $(this)[0].title) $(this).val('');});
+}
+
+function watchQueryBox() {
+    if ($('#query').data('lastValue') != $('#query').val()) {
+        $.ajax({ 
+            type: "POST",
+            url:"/default/search/lookahead/format/html",
+            data:"query="+$('#query').val(),
+            complete:function(data) { console.log(data.responseText);}});
+        $('#query').data('lastValue', $('#query').val());
+    }
+}
