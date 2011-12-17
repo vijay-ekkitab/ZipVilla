@@ -58,6 +58,10 @@ $(document).ready(function()
 	$('#tabs').tabs();
 	$('#tabs1').tabs();
 	
+	$("#logout").click(function(e) {
+		FB.getLoginStatus(fbLogout);
+	});
+	
 });
 
 function showlightbox(id, mask, msg) 
@@ -174,7 +178,11 @@ function fbLogin(response) {
         $(fb_login_in_progress).append('<p>Facebook login failed. User cancelled login or did not fully authorize.</p>');
 	}
 }
-
+function fbLogout(response) {
+	if (response.status === 'connected') {
+		FB.logout(function(response) {});
+	}
+}
 function fbCompleteLogin(response) {
     if (!userloggedin) {
     	$.ajax({ 
@@ -189,6 +197,7 @@ function fbCompleteLogin(response) {
         });
     }
     userloggedin = response.email+','+response.first_name+','+response.last_name;
+    updateIdentityOnPage();
     if (fb_login_in_progress) {
     	if (typeof is_login_page === 'undefined') {
     		closelightbox('#lb_login', '#mask_zv');
@@ -203,6 +212,14 @@ function fbCompleteLogin(response) {
         fb_login_in_progress = false;
     }
 };
+
+function updateIdentityOnPage()
+{
+	var userparams = userloggedin.split(',');
+	var message = 'Welcome '+userparams[1]+' '+userparams[2]+'. <a id="logout" href="/login/logout">Logout</a>';
+	$('#logged_in_as').empty();
+	$('#logged_in_as').html(message);
+}
 
 function login(iduser,idpsw, idmsg) {
 	if ((iduser == '') && (idpsw == '')) { //FB Login
@@ -224,6 +241,7 @@ function login(iduser,idpsw, idmsg) {
                 var loggedin = json.responseText.substring(2);
                 if (loggedin != '') {
                     userloggedin = loggedin;
+                    updateIdentityOnPage();
                     closelightbox('#lb_login', '#mask_zv');
                     if (lastdecline != null) {
                         eval(lastdecline);

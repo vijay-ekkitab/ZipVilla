@@ -4,7 +4,7 @@
     	<ul>
     	    <li><a href="<?php echo $this->url(array('controller' => 'search', 'action' => 'reindex'));?>">Index</a></li>
         	<li><a href="#">How Zipvilla Works</a></li>
-            <li><?php echo $this->loggedInAs(); ?></li>
+            <li id="logged_in_as"><?php echo $this->loggedInAs(); ?></li>
             <li class="last"><?php echo $this->registerLink(); ?></li>
         </ul>
     </div><!--top_nav ends-->
