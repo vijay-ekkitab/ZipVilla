@@ -76,23 +76,24 @@
 
     });
     
-    function doSort(sortbox) 
-    {
-    	location.href=sortbox.options[sortbox.selectedIndex].value;
-    }
+    //function doSort(sortbox) 
+    //{
+    //	location.href=sortbox.options[sortbox.selectedIndex].value;
+    //}
     function setPage(page)
     {
         $("#page").val(page);
+        setTab();
     }
     function setTab()
     {
         var selected = $tabs.tabs('option', 'selected');
         $("#showtab").val(selected);
     }
-    function init() 
-    {
-        document.getElementById('select_'+'<?php echo $this->sortorder;?>').selected = true;
-    }
+    //function init() 
+    //{
+    //    document.getElementById('select_'+'<?php echo $this->sortorder;?>').selected = true;
+    //}
     $(function() {
     	$( "#checkin" ).datepicker();
     });
