@@ -18,15 +18,11 @@
         </script>
         <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js') 
                                       ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
-                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                       ->appendFile('http://connect.facebook.net/en_US/all.js')
-                                      ->appendFile($this->baseUrl().'/js/accordian.js');?>
+                                      ->appendFile($this->baseUrl().'/js/accordian.js')
+                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
+                                      ;?>
                                       
-       <script type="text/javascript">
-           FB.init({ apiKey: '234678403269599' });
-           FB.getLoginStatus(fbIsLoggedIn);
-       </script>
-
 </head>
 <body class="blue">
  <div id="fb-root"></div>

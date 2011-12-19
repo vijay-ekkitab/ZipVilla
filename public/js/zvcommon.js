@@ -1,5 +1,8 @@
 $(document).ready(function() 
 {	
+	FB.init({ apiKey: '234678403269599' });
+    FB.getLoginStatus(fbIsLoggedIn);
+    
 	//select all the a tag with name equal to modal
 	$('a[name=lightbox_zv]').click(function(e) 
 	{
@@ -55,14 +58,12 @@ $(document).ready(function()
 		$('.lb_window_zv').hide();
 	});
 	
-	$('#tabs').tabs();
-	$('#tabs1').tabs();
-	
 	$("#logout").click(function(e) {
 		FB.getLoginStatus(fbLogout);
 	});
 	
 });
+
 
 function showlightbox(id, mask, msg) 
 {
@@ -219,6 +220,9 @@ function updateIdentityOnPage()
 	var message = 'Welcome '+userparams[1]+' '+userparams[2]+'. <a id="logout" href="/login/logout">Logout</a>';
 	$('#logged_in_as').empty();
 	$('#logged_in_as').html(message);
+	$('#logout').click(function(e) {
+		FB.getLoginStatus(fbLogout);
+	});
 }
 
 function login(iduser,idpsw, idmsg) {

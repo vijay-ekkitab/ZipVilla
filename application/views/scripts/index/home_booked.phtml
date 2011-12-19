@@ -1,24 +1,44 @@
 <p>
-	<ul id="mostBookedCarousel" class="first-and-second-carousel jcarousel-skin-tango">
-		<?php if (isset($this->error)) { ?>
-			<p>An error was encountered in search.</p>
-				<?php } elseif ($this->mostBookedListings != null) { ?>
-					<?php foreach($this->mostBookedListings as $mostBookedData) : ?>
-					<?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $mostBookedData);?>	
-						<li><img src="<?php echo $image;?>" height="70" width="110">
-							<p>
-							<?php 
-								if( strlen($this->escape($mostBookedData->title)) > VILLA_NAME_SMALL_SIZE )
-									echo substr($this->escape($mostBookedData->title),0,(VILLA_NAME_SMALL_SIZE-3)).'...';
-								else
-									echo $this->escape($mostBookedData->title);
-							?>
-							</p>
-							<span><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Indian Rupee" /><?php echo $this->escape(0+$mostBookedData->rate['daily']);?></span>
-						</li>
- 					<?php endforeach; ?>
- 				<?php } else {?>
-			<p>No results were returned from search.</p>
-		<?php } ?> 
-	</ul>
+<ul id="mostBookedCarousel" class="first-and-second-carousel jcarousel-skin-tango">
+<?php if (isset($this->error)) { ?>
+    <p>An error was encountered in search.</p>
+<?php } 
+elseif ($this->mostBookedListings != null) { 
+    foreach($this->mostBookedListings as $mostBookedData) {
+        $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $mostBookedData);
+        $title = $this->escape($mostBookedData->title);
+        if( strlen($title) > VILLA_NAME_SMALL_SIZE )
+             $title = substr($title,0,(VILLA_NAME_SMALL_SIZE-3)).'...';
+        $item = '<li><img src="' .
+                $image .
+                '" height="70" width="110"/>'.
+                '<p>'.
+                $title .
+                '</p>'.
+                '<span><img src="'.
+                $this->baseUrl('/images/symbl_rupee.jpg') .
+                '" alt="Indian Rupee" />' .
+                $mostBookedData->rate['daily'].
+                '</span>' .
+                '</li>';
+        $items[] = $item;
+    }
+}
+else { ?>
+    <p>No results were returned from search.</p>
+<?php } ?> 
+</ul>
 </p>
+<script type="text/javascript">
+    mostBookedData = [
+    <?php for ($i=0; $i<count($items); $i++) {?>
+        <?php if ($i> 0) {?>
+            ,'<?php echo $items[$i];?>'
+        <?php }else {?>
+            '<?php echo $items[$i];?>'
+        <?php }?>
+    <?php }?>
+    ];
+</script>
+
+ 

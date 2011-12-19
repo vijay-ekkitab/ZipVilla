@@ -26,6 +26,7 @@
                                     ; ?>
 
         <?php echo $this->headScript()
+                                      ->appendFile('http://connect.facebook.net/en_US/all.js')
                                       ->appendFile($this->baseUrl().'/js/jquery-1.6.2.min.js')
                                       ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
@@ -38,6 +39,7 @@
         
 </head>
   <body class="blue">
+  <div id="fb-root"></div>
 	<div class="wrapper"><!--outer wrapper to fix the width-->
         <?php echo $this->render('header.phtml');?>
         <div class="content">

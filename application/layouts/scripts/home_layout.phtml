@@ -35,41 +35,62 @@
                                       ->appendFile($this->baseUrl().'/js/jquery-1.6.2.min.js')
                                       ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js')
-                                      //->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
+                                      ->appendFile('http://connect.facebook.net/en_US/all.js')
                                       ->appendFile($this->baseUrl().'/js/mapMarker.js')
-                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.galleriffic.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.opacityrollover.js')
                                       ->appendFile($this->baseUrl().'/js/galleriffic.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.jcarousel.min.js')
                                       ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
                                       ->appendFile($this->baseUrl().'/js/slideshow.js')
+                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
         
                                        ;?>
 <script type="text/javascript">
-document.write('<style>.noscript { display: none; }</style>');
-</script> 
-                                      
-<script type="text/javascript">
 
-function watchQueryBox() {
-    if ($('#query').data('lastValue') != $('#query').val()) {
-        $.ajax({ 
-            type: "POST",
-            url:"/default/search/lookahead/format/html",
-            data:"query="+$('#query').val(),
-            complete:function(data) { console.log(data.responseText);}});
-        $('#query').data('lastValue', $('#query').val());
-    }
+var mostViewedCarousel = null;
+var mostBookedCarousel = null;
+var mostRatedCarousel = null;
+var mostBookedData = [];
+var mostRatedData = [];
+var mostViewedData = [];
+
+function loadMostViewed() {
+	if (mostViewedCarousel == null) {
+		   $('#mostViewedCarousel').jcarousel({wrap:"both", size:mostViewedData.length, visible:4});
+		   var carousel = $('#mostViewedCarousel').data('jcarousel');
+		   for (var i=0; i<mostViewedData.length; i++) {
+			   carousel.add(i,mostViewedData[i]);
+		   }
+		   mostViewedCarousel = carousel;
+	}
+}
+function loadMostRated() {
+	if (mostRatedCarousel == null) {
+		   $('#mostRatedCarousel').jcarousel({wrap:"both", size:mostRatedData.length, visible:4});
+		   var carousel = $('#mostRatedCarousel').data('jcarousel');
+		   for (var i=0; i<mostRatedData.length; i++) {
+			   carousel.add(i, mostRatedData[i]);
+		   }
+		   mostRatedCarousel = carousel;
+	}
+}
+function loadMostBooked() {
+	if (mostBookedCarousel == null) {
+		   $('#mostBookedCarousel').jcarousel({wrap:"both", size:mostBookedData.length, visible:4});
+		   var carousel = $('#mostBookedCarousel').data('jcarousel');
+		   for (var i=0; i<mostBookedData.length; i++) {
+			    carousel.add(i, mostBookedData[i]);
+		   }
+		   mostBookedCarousel = carousel;
+	}
 }
 
 $(document).ready(function() {
-    // Initialise the first and second carousel by class selector.
-    // Note that they use both the same configuration options (none in this case).
-    $('.first-and-second-carousel').jcarousel({wrap:"circular"});
+	var $tabs = $('#tabs').tabs();
+	
     
     $("#guests").val('1');
-
     $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
     $('#query').bind('keypress', null, watchQueryBox);
 
@@ -88,6 +109,24 @@ $(document).ready(function() {
      });
         
     $(".defaultText").blur(); 
+
+    $('#tabs').bind('tabsshow', function(event, ui) {
+        switch(ui.index) {
+        case 0:	loadMostViewed();
+            break;
+        case 1: loadMostBooked();
+            break;
+        case 2: loadMostRated();
+            break;
+        default:
+            break;
+        } 
+        return true;
+    });
+
+    $tabs.tabs('select', 0);
+    loadMostViewed();
+
 });
 
 $(function() {
@@ -99,11 +138,10 @@ $(function() {
 
     
 </script>
-                                       
-        <?php //echo $this->render('search_page_js.phtml'); ?>
 
 </head>
 <body class="blue">
+    <div id="fb-root"></div>
 	<div class="wrapper"><!--outer wrapper to fix the width-->
 		<?php echo $this->render('header.phtml');?>
 		<div class="content">
