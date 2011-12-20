@@ -55,9 +55,14 @@ var mostBookedData = [];
 var mostRatedData = [];
 var mostViewedData = [];
 
+function getVisibleCount(datasize) {
+	var count = 6;
+	return datasize > 6 ? 6: datasize;
+}
+
 function loadMostViewed() {
 	if (mostViewedCarousel == null) {
-		   $('#mostViewedCarousel').jcarousel({wrap:"both", size:mostViewedData.length, visible:4});
+		   $('#mostViewedCarousel').jcarousel({wrap:"circular", size:mostViewedData.length, visible:getVisibleCount(mostViewedData.length)});
 		   var carousel = $('#mostViewedCarousel').data('jcarousel');
 		   for (var i=0; i<mostViewedData.length; i++) {
 			   carousel.add(i,mostViewedData[i]);
@@ -67,7 +72,7 @@ function loadMostViewed() {
 }
 function loadMostRated() {
 	if (mostRatedCarousel == null) {
-		   $('#mostRatedCarousel').jcarousel({wrap:"both", size:mostRatedData.length, visible:4});
+		   $('#mostRatedCarousel').jcarousel({wrap:"circular", size:mostRatedData.length, visible:getVisibleCount(mostRatedData.length)});
 		   var carousel = $('#mostRatedCarousel').data('jcarousel');
 		   for (var i=0; i<mostRatedData.length; i++) {
 			   carousel.add(i, mostRatedData[i]);
@@ -77,7 +82,7 @@ function loadMostRated() {
 }
 function loadMostBooked() {
 	if (mostBookedCarousel == null) {
-		   $('#mostBookedCarousel').jcarousel({wrap:"both", size:mostBookedData.length, visible:4});
+		   $('#mostBookedCarousel').jcarousel({wrap:"circular", size:mostBookedData.length, visible:getVisibleCount(mostBookedData.length)});
 		   var carousel = $('#mostBookedCarousel').data('jcarousel');
 		   for (var i=0; i<mostBookedData.length; i++) {
 			    carousel.add(i, mostBookedData[i]);
