@@ -1,0 +1,15 @@
+
+<?php if (isset($this->error)) { ?>
+	<p>An error was encountered in search.</p>
+		<?php } elseif ($this->property != null) {?>
+			<script type="text/javascript">
+        <?php echo $this->map()->setMapFromDbListings(array($this->property), 'tab_photo_map_div');?>
+			</script>
+			<div class="tab_photo_map" id="tab_photo_map_div">
+			</div>
+		
+		<?php } else {?>
+	<p>No results were returned from search.</p>
+<?php } ?>
+
+		

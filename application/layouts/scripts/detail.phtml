@@ -33,7 +33,7 @@
         <script type="text/javascript">
         	        
         $(document).ready(function(){
-            mapMarker('map', 1);
+            //mapMarker('map', 1);
             $("#show_rate_options").change(function() {
                 var option = $("#show_rate_options").val();
                 $("#show_rate").text("Rs. "+option);
@@ -91,6 +91,11 @@
             <?php } ?>
 
             $tabs = $('#tabs').tabs();
+     				$('#tabs').bind('tabsshow', function(event, ui) {
+     			    if (ui.panel.id == "tabs-3") {
+      	 				mapMarker('tab_photo_map_div', 1,15,2);
+      	 			}
+    	 			});
 
         });
       	</script>

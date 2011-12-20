@@ -121,6 +121,15 @@ body {
 	float:left;
 	width:97%;
 }
+ .v_search_results .tab_content .tab_photo_map {
+	background-color:#fff;
+	padding:10px;
+	border-radius:4px;
+	float:left;
+	width:600px;
+	height:500px;
+	margin-bottom:30px;
+}
 .v_search_results .display_no p {
 	font-size:14px;
 }
@@ -239,11 +248,6 @@ body {
 }
 .wrpr_photo .details .favorite {
 	float:right;
-}
-#tabs3 .map{
-	float:left;
-	width:650px;
-	height:690px;
 }
 
 /*************Registration Page***************/

@@ -1,0 +1,11 @@
+
+<?php if (isset($this->error)) { ?>
+	<p>An error was encountered in search.</p>
+		<?php } elseif ($this->results != null) {?>
+
+			<div class="tab_search_map" id="tab_search_map_div">
+			</div>
+		
+		<?php } else {?>
+	<p>No results were returned from search.</p>
+<?php } ?>

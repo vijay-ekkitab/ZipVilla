@@ -25,6 +25,8 @@
     	   
         //mapMarker('map', <?php echo $ctr;?>);
         mapMarker('map', 1);
+
+
         
     	$('#price_slider').slider({
             values: [<?php echo $low;?>, <?php echo $high;?>],
@@ -73,6 +75,10 @@
 
         $tabs = $('#tabs').tabs();
         $tabs.tabs('select', <?php echo $this->showtab;?>);
+ 				$('#tabs').bind('tabsshow', function(event, ui) {
+ 			    if (ui.panel.id == "tabs-3") {
+  	 				mapMarker('tab_search_map_div', 1,15,1);  	 			    }
+	 			});
 
     });
     

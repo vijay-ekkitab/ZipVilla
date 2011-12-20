@@ -215,6 +215,17 @@
 	color:#cc3366;
 	float:right;
 }
+
+.tab_search_map {
+	background-color:#fff;
+	padding:10px;
+	border-radius:4px;
+	float:left;
+	width:600px;
+	height:500px;
+	margin-bottom:30px;
+}
+
 .l_right_side_panel {
 	float:left;
 	width:245px;
@@ -312,6 +323,7 @@
 .l_right_side_panel .l_cta a {
 	color:#09c;
 }
+
 /*************Registration Page***************/
 .l_rgstr_frm {
 	float:left;
