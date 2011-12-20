@@ -295,7 +295,7 @@ function submitForm(id, names, lbdiv) {
         inputs.each(function() {
             values[this.name] = $(this).val();
         });
-        clearForm(id);
+        clearForm(id, names);
         if (lbdiv != null) {
             closelightbox(lbdiv, '#mask_zv');
         }
@@ -311,7 +311,6 @@ function submitForm(id, names, lbdiv) {
                 }
             }
         );
-        //clearForm(id);
         return true;
     }
     else {
@@ -320,9 +319,12 @@ function submitForm(id, names, lbdiv) {
     }
 }
 
-function clearForm(id) {
-	$(id+" :input").each(function() {
-	    $(this).val('');
+function clearForm(id, names) {
+	$(names).each(function(i) {
+        var input = $(id+" :input[name=\""+names[i]+"\"]");
+        if (input != null) {
+			input.val('');
+		}
     });
 	$(".defaultText").blur();
 }

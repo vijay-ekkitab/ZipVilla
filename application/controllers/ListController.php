@@ -13,6 +13,9 @@ class ListController extends Zend_Controller_Action
     const CONTENT      = 'content';
     const RATING       = 'rating';
     const COMMENTS     = 'comments';
+    const USERNAME     = 'username';
+    const USER_EMAIL   = 'email';
+    const SUBJECT      = 'subject';
     
     //protected $requireslogin = array('rate', 'submitreview');
     
@@ -113,19 +116,27 @@ class ListController extends Zend_Controller_Action
             $this->_helper->redirector('index', 'index');
         }
     }
-
-    protected function submitReview($id, $title, $content, $rating)
+    
+    protected function getLoggedInUser()
     {
         $auth = Zend_Auth::getInstance();
         if (!$auth->hasIdentity()) {
-            return;
+            return null;
         }
         $username = $auth->getIdentity();
-        $pos = strpos($username,AUTH_FIELD_SEPARATOR);
-        if ($pos)  {
-            $username = substr($username,0,$pos);
-        }
+        $userParams = explode(AUTH_FIELD_SEPARATOR, $username);
+        return $userParams;
+    }
+
+    protected function submitReview($values)
+    {
+        $userEmail = $this->read_value($values, ListController::USER_EMAIL);
         $date = date('d-m-Y');
+        $id = $this->read_value($values, ListController::PROPERTY_ID, 0);
+        $title = $this->read_value($values, ListController::TITLE);
+        $content = $this->read_value($values, ListController::CONTENT);
+        $rating = $this->read_value($values, ListController::RATING, 0);
+        
         $review = array('title' => $title,
                         'content' => $content,
                         'rating' => $rating,
@@ -133,7 +144,7 @@ class ListController extends Zend_Controller_Action
             
         $dbr = new Application_Model_Reviews($review);
         $property = Application_Model_Listings::findOne(array("_id"=>new MongoId($id)));
-        $user = Application_Model_Users::findOne(array("emailid"=>$username));
+        $user = Application_Model_Users::findOne(array("emailid"=>$userEmail));
         if ($property && $user) {
             $dbr->save();
             $dbr->setListing($property);
@@ -451,6 +462,47 @@ class ListController extends Zend_Controller_Action
         $this->view->html = $html;
     }
     
+    protected function prepareAndSendMsg($data)
+    {
+        $response = 'OK';
+        $body = '';
+        
+        $subject = $data[ListController::SUBJECT];
+        unset($data[ListController::SUBJECT]);
+        
+        foreach($data as $k => $v) {
+            $topic = strtoupper($k);
+            $body .= "$topic: " . $data[$k] ."\n";
+        }
+        
+        $zvconfig = Zend_Registry::get('config');
+        $logger = Zend_Registry::get('zvlogger');
+        
+        if (isset($zvconfig->zipvilla->support->email)) {
+            $config = array('auth' => 'login', 
+                            'port' => 25, 
+                            'username' => $zvconfig->zipvilla->support->user, 
+                            'password' => $zvconfig->zipvilla->support->password);
+        
+            $transport = new Zend_Mail_Transport_Smtp($zvconfig->zipvilla->support->mailserver, $config);
+        
+            $mail = new Zend_Mail();
+            $mail->setBodyText($body);
+        
+            $mail->setFrom($zvconfig->zipvilla->support->email, "Zipvilla")
+                 ->addTo($zvconfig->zipvilla->support->email, "Zipvilla Support")
+                 ->setSubject($subject);
+                 
+            try {
+                 $mail->send($transport);
+            }
+            catch(Exception $e) {
+                $response = $e->getMessage();
+            }
+            return $response;
+        }
+    }
+    
     public function formAction()
     {
         $logger = Zend_Registry::get('zvlogger');
@@ -460,24 +512,39 @@ class ListController extends Zend_Controller_Action
         
         if ($request->isPost()) {
             $values = $request->getPost();
-            $rating = $this->read_value($values, ListController::RATING, 0);
+            $userParams = $this->getLoggedInUser();
+            if ($userParams == null) {
+                $response = 'You must be logged in to do this operation.';
+                echo $response;
+                return;
+            }
+            
+            $values[ListController::USER_EMAIL] = $userParams[0];
             
             if (isset($values[ListController::MESSAGE])) {//send message
-                #TODO: send message to ZipVilla.
+                $values[ListController::SUBJECT] = "Inquiry";
+                $values[ListController::USERNAME] = $userParams[1].' '.$userParams[2];
                 $response = 'Thank you. Your message has been forwarded to the owner.';
+                $status = $this->prepareAndSendMsg($values);
+                if ($status != 'OK') {
+                   $response = $status;
+                }
+               
             }
             elseif (isset($values[ListController::TITLE])) {//submit review
-                $id = $this->read_value($values, ListController::PROPERTY_ID, 0);
-                $title = $this->read_value($values, ListController::TITLE);
-                $content = $this->read_value($values, ListController::CONTENT);
-                $this->submitReview($id, $title, $content, $rating);
+                $this->submitReview($values);
                 $response = 'Thank you for your feedback. We appreciate your inputs.';
             }
+            
             elseif (isset($values[ListController::COMMENTS])) {
-                #TODO: send message to ZipVilla.
+                $values[ListController::SUBJECT] = "Reservation Request";
                 $response = 'Thank you. Your request has been forwarded to the owner.';
+                $status = $this->prepareAndSendMsg($values);
+                if ($status != 'OK') {
+                   $response = $status;
+                }
             }
-            $this->saveSession(array(ListController::USER_RATING => $rating));
+            $this->saveSession(array(ListController::USER_RATING => $this->read_value($values, ListController::RATING, 0))) ;
         }
         echo $response;
     }
