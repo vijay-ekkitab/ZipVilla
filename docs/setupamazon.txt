@@ -1,0 +1,89 @@
+   11  sudo apt-get install apache2
+   24  dpkg --get-selected | grep apache
+   30  sudo apt-get update
+   31  sudo apt-get install libapache2-mod-php5
+   38  sudo apt-get install php5
+   40  sudo apt-get install php5-gd
+   42  sudo apt-get install tomcat6
+   43  sudo apt-get install solr-tomcat
+   44  sudo apt-get install mongodb
+   45  sudo apt-get install git
+   48  cd /var/www
+   54  sudo mkdir z
+   56  sudo chown -R ubuntu:ubuntu z
+   59  git clone git@github.com:vijay-ekkitab/ZipVilla.git z
+   82  cd /etc/apache2/sites-enabled/
+   84  sudo vi 000-default 
+   85  sudo service apache2 restart
+   90  cd /var/log
+   91  sudo mkdir ZipVilla
+   92  cd /etc/apache2/
+   94  vi envvars 
+   95  sudo vi envvars 
+   96  sudo service apache2 restart
+  103  cd /var/www/z/solr
+  104  sudo cp schema.xml /usr/share/solr/conf/schema.xml 
+  107  mongorestore ./dump
+  108  cd /var/www/z/public/images/
+  110  cd listings/
+  117  cd application/
+  120  cd configs/
+  122  vi application.ini 
+  127  sudo service tomcat6 restart
+  143  cd /var/log/
+  144  sudo mkdir ZipVilla
+  146  cd ZipVilla/
+  151  sudo chown -R ubuntu:ubuntu ZipVilla/
+  152  cd ZipVilla/
+  153  touch app.log
+  161  pear version
+  162  sudo apt-get install php-pear
+  163  pecl version
+  164  pecl search mongo
+  165  sudo pecl install mongo
+  166  sudo apt-get install gcc
+  167  sudo pecl install mongo
+  168  make
+  169  sudo apt-get install make
+  170  sudo pecl install mongo
+  171  locate php.ini
+  172  ls -l /etc/php5/apache2/php.ini
+  173  sudo vi /etc/php5/apache2/php.ini
+  174  sudo vi /etc/php5/cli/php.ini
+  175  sudo service apache2 restart
+  176  sudo apt-get install php5-curl
+  177  sudo apt-get install libcurl4-gnutls-dev
+  178  sudo apt-get install libxml2
+  179  sudo apt-get install libxml2-dev
+  182  wget -O solr-1.0.2.tgz http://pecl.php.net/get/solr-1.0.2.tgz
+  184  tar -xvf solr-1.0.2.tgz 
+  185  cd solr-1.0.2/
+  186  ls
+  187  phpize
+  188  ./configure
+  189  make
+  190  make test
+  191  sudo make install
+  192  cd /etc/php5/apache2/
+  193  sudo vi php.ini 
+  194  cd ../cli
+  195  sudo vi php.ini 
+  196  sudo service apache2 restart
+  197  pwd
+  198  cd /var/www/z
+  199  cd public
+  200  ls -al
+  201  vi .htaccess 
+  202  cd /etc/apache2/
+  203  ls
+  204  cd sites-enabled/
+  205  sudo vi 000-default 
+  206  sudo service apache2 restart
+  207  sudo vi 000-default 
+  208  cd /var/log/apache2/
+  209  vi error.log 
+  210  cd /etc/apache2/mods-enabled/
+  211  ls -lrt
+  212  sudo ln -s ../mods-available/rewrite.load rewrite.load
+  213  ls -lrt
+  214  sudo service apache2 restart
