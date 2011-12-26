@@ -94,6 +94,8 @@ function loadMostBooked() {
 $(document).ready(function() {
 	var $tabs = $('#tabs').tabs();
 	
+    //$('#checkin').attr("readOnly", true);
+    //$('#checkout').attr("readOnly", true);
     
     $("#guests").val('1');
     $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
@@ -111,7 +113,16 @@ $(document).ready(function() {
             $(this).addClass("defaultTextActive");
             $(this).val($(this)[0].title);
         }
+        else {
+        	$(this).removeClass("defaultTextActive");
+        }
      });
+
+    $(".defaultText").change(function() {
+        if ($(this).val() != $(this)[0].title) {
+        	$(this).removeClass("defaultTextActive");
+        }
+    });
         
     $(".defaultText").blur(); 
 
@@ -134,14 +145,7 @@ $(document).ready(function() {
 
 });
 
-$(function() {
-    $( "#checkin" ).datepicker();
-});
-$(function() {
-    $( "#checkout" ).datepicker();
-});
 
-    
 </script>
 
 </head>

@@ -56,6 +56,9 @@
                 $(this).addClass("defaultTextActive");
                 $(this).val($(this)[0].title);
             }
+            else {
+            	$(this).removeClass("defaultTextActive");
+            }
          });
     		    
         $(".defaultText").blur();
@@ -100,11 +103,5 @@
     //{
     //    document.getElementById('select_'+'<?php echo $this->sortorder;?>').selected = true;
     //}
-    $(function() {
-    	$( "#checkin" ).datepicker();
-    });
-    $(function() {
-    	$( "#checkout" ).datepicker();
-    });
 
 </script>

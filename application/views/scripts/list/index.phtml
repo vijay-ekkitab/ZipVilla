@@ -311,8 +311,8 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                     <label for="send_lastname">Last Name:<br /><input class="username" type="text" id="lastname" size="37" name="lastname" value=""/></label>
                     <label for="send_email">Email Address:<br /><input class="username" type="text" id="email" size="37" name="email" value=""/></label>
                     <label for="send_phone">Home Phone:<br /><input class="username" type="text" id="phone" size="37" name="phone" value=""/></label>
-                    <label for="send_checkin">Arrival Date:<br /><input class="username" type="text" size="37" name="check_in" value=""/></label>
-                    <label for="send_checkout">Departure Date:<br /><input class="username" type="text" size="37" name="check_out" value=""/></label>
+                    <label for="send_checkin">Arrival Date:<br /><input class="username" id="checkin" type="text" size="37" name="check_in" value=""/></label>
+                    <label for="send_checkout">Departure Date:<br /><input class="username" id="checkout" type="text" size="37" name="check_out" value=""/></label>
                     <label for="send_guests">Guests:<br /><input class="username" type="text" id="guests" size="37" name="guests" value=""/></label>
                     <textarea name="comments" title="Please write your questions here" style="width:100%;" cols="100" rows="5" class="FrmtxtArea defaultText"></textarea><br>
                     <input type="hidden" name="id" value="<?php echo $property->id;?>" />

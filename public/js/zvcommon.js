@@ -40,7 +40,7 @@ $(document).ready(function()
 		$(window).scrollTop($("#lb_search_zv").offset().top);
 		
 		$('#tabs1').tabs();
-	
+		
 	});
 	
 	//if close button is clicked
@@ -64,6 +64,16 @@ $(document).ready(function()
 		FB.getLoginStatus(fbLogout);
 	});
 	
+	$( "#checkin" ).datepicker({dateFormat:dateformat});
+	$( "#checkout" ).datepicker({dateFormat:dateformat, 
+                                 beforeShowDay: enableCheckOutFor});
+	
+	$('#checkin').change(function() {
+        var checkIn = getCheckInDate();
+        if (checkIn != null) {
+            setCheckOutDateAuto(checkIn);
+        }
+     });
 });
 
 
@@ -110,6 +120,8 @@ var userloggedin = false;
 var fb_uid = null;
 var fb_accessToken = null;
 var fb_login_in_progress = false;
+var dateformat = 'dd-mm-yy';
+
 
 function calculate_rate(_id) {
 	var _checkin=$("#checkin").val();
@@ -411,3 +423,36 @@ function watchQueryBox() {
         $('#query').data('lastValue', $('#query').val());
     }
 }
+
+function getCheckInDate() 
+{
+	var dstr = $("#checkin").val();
+	var date = null;
+	try {
+		date = $.datepicker.parseDate(dateformat, dstr);
+	}
+	catch(err) {
+		date = null;
+	}
+	return date;
+}
+function enableCheckOutFor(date) {
+    var checkIn = getCheckInDate();
+    var res = [];
+    var select = false;
+    if ((checkIn == null) || (date > checkIn)) {
+        select = true;
+    }
+    res[0] = select;
+    res[1] = '';
+    return res;
+}
+
+function setCheckOutDateAuto(date)
+{ 
+	var nextday = date.getDate()+1;
+	date.setDate(nextday);
+	$('#checkout').val($.datepicker.formatDate(dateformat, date));
+	$('#checkout').blur();
+}
+
