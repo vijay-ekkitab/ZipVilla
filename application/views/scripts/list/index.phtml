@@ -204,8 +204,8 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                     </div>
                     <div class="form_online">
                         <form id="pre_send_details" action="" method="get">
-                            <div class="floatleft"><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg defaultText checkin" title="dd-mm-yyyy" type="text" size="5" name="check_in" value="<?php echo $this->checkin;?>"/></label></div>
-                            <div class="floatleft"><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg defaultText checkout" title="dd-mm-yyyy" type="text" size="5" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
+                            <div class="floatleft"><label for="checkin">Check in<br /><input class="l_input_bg v_input_bg defaultText checkin" title="<?php echo DATE_FORMAT;?>" type="text" size="5" name="check_in" value="<?php echo $this->checkin;?>"/></label></div>
+                            <div class="floatleft"><label for="checkout">Check out<br /><input class="l_input_bg v_input_bg defaultText checkout" title="<?php echo DATE_FORMAT;?>" type="text" size="5" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
                             <div class="floatleft">
                                 <label for="guests">Guests<br /><input type="text" class="v_dropdwon_bg l_dropdwon_bg" id="guests" name="guests" value="<?php echo $this->guests;?>"/>
                                 </label>
@@ -311,8 +311,8 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                     <label for="send_lastname">Last Name:<br /><input class="username" type="text" id="lastname" size="37" name="lastname" value=""/></label>
                     <label for="send_email">Email Address:<br /><input class="username" type="text" id="email" size="37" name="email" value=""/></label>
                     <label for="send_phone">Home Phone:<br /><input class="username" type="text" id="phone" size="37" name="phone" value=""/></label>
-                    <label for="send_checkin">Arrival Date:<br /><input class="defaultText checkin" title="dd-mm-yyyy" type="text" size="37" name="check_in" value=""/></label>
-                    <label for="send_checkout">Departure Date:<br /><input class="defaultText checkout" title="dd-mm-yyyy" type="text" size="37" name="check_out" value=""/></label>
+                    <label for="send_checkin">Arrival Date:<br /><input class="defaultText checkin" title="<?php echo DATE_FORMAT;?>" type="text" size="37" name="check_in" value=""/></label>
+                    <label for="send_checkout">Departure Date:<br /><input class="defaultText checkout" title="<?php echo DATE_FORMAT;?>" type="text" size="37" name="check_out" value=""/></label>
                     <label for="send_guests">Guests:<br /><input class="username" type="text" id="guests" size="37" name="guests" value=""/></label>
                     <textarea name="comments" title="Please write your questions here" style="width:100%;" cols="100" rows="5" class="FrmtxtArea defaultText"></textarea><br>
                     <input type="hidden" name="id" value="<?php echo $property->id;?>" />

@@ -1,12 +1,13 @@
+<?php include_once('ZipVilla/TypeConstants.php');?>
 <div class="v_search_form">
 	<div class="v_search l_search">
     	    <input type="hidden" id="page" name="page" value="1" />
     	    <input type="hidden" id="showtab" name="showtab" value="0" />
         	<input class="l_search_input v_search_input defaultText" type="text" title="Where do you want to go?" name="query" id="query" autocomplete="off" size="73" value="" />
             <div><label for="checkin">Check in<br />
-            <input class="l_input_bg v_input_bg defaultText checkin" title="dd-mm-yyyy" type="text" size="10" name="check_in"  value="<?php echo $this->checkin;?>"/></label></div>
+            <input class="l_input_bg v_input_bg defaultText checkin" title="<?php echo DATE_FORMAT;?>" type="text" size="10" name="check_in"  value="<?php echo $this->checkin;?>"/></label></div>
             <div><label for="checkout">Check out<br />
-            <input class="l_input_bg v_input_bg defaultText checkout" title="dd-mm-yyyy" type="text" size="10" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
+            <input class="l_input_bg v_input_bg defaultText checkout" title="<?php echo DATE_FORMAT;?>" type="text" size="10" name="check_out" value="<?php echo $this->checkout;?>"/></label></div>
 
             <div>
             	<label for="guests">Guests<br/>
