@@ -64,8 +64,8 @@ $(document).ready(function()
 		FB.getLoginStatus(fbLogout);
 	});
 	
-	$( ".checkin" ).datepicker({dateFormat:dateformat});
-	$( ".checkout" ).datepicker({dateFormat:dateformat, 
+	$( ".checkin" ).datepicker({dateFormat:dateformat, minDate:0});
+	$( ".checkout" ).datepicker({dateFormat:dateformat, minDate:0,
                                  beforeShowDay: enableCheckOutFor});
 	
 	$('.checkin').change(function() {
