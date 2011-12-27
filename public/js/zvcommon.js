@@ -64,16 +64,43 @@ $(document).ready(function()
 		FB.getLoginStatus(fbLogout);
 	});
 	
-	$( "#checkin" ).datepicker({dateFormat:dateformat});
-	$( "#checkout" ).datepicker({dateFormat:dateformat, 
+	$( ".checkin" ).datepicker({dateFormat:dateformat});
+	$( ".checkout" ).datepicker({dateFormat:dateformat, 
                                  beforeShowDay: enableCheckOutFor});
 	
-	$('#checkin').change(function() {
-        var checkIn = getCheckInDate();
+	$('.checkin').change(function() {
+		var val = $(this).val();
+		$('.checkin').val(val);
+        var checkIn = getCheckInDate(this);
         if (checkIn != null) {
             setCheckOutDateAuto(checkIn);
         }
      });
+	
+	$(".defaultText").focus(function(srcc) {
+        if ($(this).val() == $(this)[0].title) {
+            $(this).removeClass("defaultTextActive");
+            $(this).val("");
+        }
+     });
+        
+    $(".defaultText").blur(function() {
+        if ($(this).val() == "") {
+            $(this).addClass("defaultTextActive");
+            $(this).val($(this)[0].title);
+        }
+        else {
+        	$(this).removeClass("defaultTextActive");
+        }
+     });
+
+    $(".defaultText").change(function() {
+        if ($(this).val() != $(this)[0].title) {
+        	$(this).removeClass("defaultTextActive");
+        }
+    });
+        
+    $(".defaultText").blur(); 
 });
 
 
@@ -424,9 +451,9 @@ function watchQueryBox() {
     }
 }
 
-function getCheckInDate() 
+function getCheckInDate(id) 
 {
-	var dstr = $("#checkin").val();
+	var dstr = $(id).val();
 	var date = null;
 	try {
 		date = $.datepicker.parseDate(dateformat, dstr);
@@ -437,7 +464,7 @@ function getCheckInDate()
 	return date;
 }
 function enableCheckOutFor(date) {
-    var checkIn = getCheckInDate();
+    var checkIn = getCheckInDate('.checkin');
     var res = [];
     var select = false;
     if ((checkIn == null) || (date > checkIn)) {
@@ -452,7 +479,7 @@ function setCheckOutDateAuto(date)
 { 
 	var nextday = date.getDate()+1;
 	date.setDate(nextday);
-	$('#checkout').val($.datepicker.formatDate(dateformat, date));
-	$('#checkout').blur();
+	$('.checkout').val($.datepicker.formatDate(dateformat, date));
+	$('.checkout').blur();
 }
 

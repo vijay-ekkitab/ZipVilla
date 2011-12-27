@@ -2,10 +2,10 @@
 	<input class="search_home defaultText" type="text" name="query" id="query" size="73" title="Where do you want to go?" autocomplete="off" value=""/> 
 	<input class="submit_search" type="submit" value="" onclick="validate_default();return true;" />
 		<div class="floatleft"><label for="checkin"><br/>Check in<br/>
-			<input class="input_home defaultText" title="dd-mm-yyyy" type="text" size="10" id="checkin"  name="check_in"  value="<?php echo $this->checkin;?>"/></label>
+			<input class="input_home defaultText checkin" title="dd-mm-yyyy" type="text" size="10" name="check_in"  value="<?php echo $this->checkin;?>"/></label>
 		</div>
 		<div class="floatleft"><label for="checkout"><br/>Check out<br/>
-			<input class="input_home defaultText" title="dd-mm-yyyy" type="text" size="10" id="checkout" name="check_out" value="<?php echo $this->checkout;?>"/></label>
+			<input class="input_home defaultText checkout" title="dd-mm-yyyy" type="text" size="10" name="check_out" value="<?php echo $this->checkout;?>"/></label>
 		</div>
 		<div class="floatleft">
 			<label for="guests"><br/>Guests<br/>

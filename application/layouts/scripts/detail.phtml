@@ -65,22 +65,6 @@
                 }
             });
             
-            $(".defaultText").focus(function(srcc) {
-               if ($(this).val() == $(this)[0].title) {
-                   $(this).removeClass("defaultTextActive");
-                   $(this).val("");
-               }
-            });
-                   
-            $(".defaultText").blur(function() {
-               if ($(this).val() == "") {
-                   $(this).addClass("defaultTextActive");
-                   $(this).val($(this)[0].title);
-               }
-            });
-                   
-            $(".defaultText").blur();
-
             <?php if ($this->property != null) {?>
             getReviews("<?php echo $this->property->id;?>",0,"<?php echo $this->baseUrl();?>");
             calculate_rate("<?php echo $this->property->id;?>");

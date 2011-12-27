@@ -101,31 +101,6 @@ $(document).ready(function() {
     $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
     $('#query').bind('keypress', null, watchQueryBox);
 
-    $(".defaultText").focus(function(srcc) {
-        if ($(this).val() == $(this)[0].title) {
-            $(this).removeClass("defaultTextActive");
-            $(this).val("");
-        }
-     });
-        
-    $(".defaultText").blur(function() {
-        if ($(this).val() == "") {
-            $(this).addClass("defaultTextActive");
-            $(this).val($(this)[0].title);
-        }
-        else {
-        	$(this).removeClass("defaultTextActive");
-        }
-     });
-
-    $(".defaultText").change(function() {
-        if ($(this).val() != $(this)[0].title) {
-        	$(this).removeClass("defaultTextActive");
-        }
-    });
-        
-    $(".defaultText").blur(); 
-
     $('#tabs').bind('tabsshow', function(event, ui) {
         switch(ui.index) {
         case 0:	loadMostViewed();
