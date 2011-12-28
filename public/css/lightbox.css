@@ -134,13 +134,13 @@ caption,th,td {
 	color:#333!important;
 }
 .lightbox_filters {
-	height:315px;
+	height:300px;
 }
 .lightbox_filter_action_area{
 	text-align:right;
 	height:100px;
 	float:right;
-	margin:10px 10px 0 0;
+	margin:7px 10px 0 0;
 }
 .lightbox_filter_action_area a{
 	color:#1d95cb;
@@ -149,7 +149,7 @@ caption,th,td {
 	text-decoration:underline;
 }
 .lightbox_filter_container {
-	height:282px;
+	height:260px;
 	padding:15px;
 	box-sizing:border-box;
 }
@@ -179,7 +179,7 @@ caption,th,td {
 }
 .cboxClose {
 	top:-11px;
-	left:-10px;
+	left:11px;
 	background:url(../images/btn_closea.png);
 	width:22px;
 	height:22px;
@@ -188,11 +188,12 @@ caption,th,td {
 	cursor:pointer;
 }
 .cboxClose {
-	position:absolute;
-	top:23px;
-	left:26px;
-	width:22px;
-	height:22px;
+	position:relative;
+	/*top:32px;
+	left:659px;*/
+	float:right;
+	width:25px;
+	height:28px;
 	text-indent:-9999px;
 }
 #mask_zv { 

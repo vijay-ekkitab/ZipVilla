@@ -70,10 +70,6 @@
             calculate_rate("<?php echo $this->property->id;?>");
             <?php }?>
 
-            <?php if ($this->showPopupMsg) {?>
-            showlightbox('#lb_thankyou', '#maskzv', '<?php echo $this->showPopupMsg;?>');
-            <?php } ?>
-
             $tabs = $('#tabs').tabs();
      		$('#tabs').bind('tabsshow', function(event, ui) {
      			  if (ui.panel.id == "tabs-3") {

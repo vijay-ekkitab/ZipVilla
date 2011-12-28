@@ -100,13 +100,13 @@ ul.thumbs{
 	padding: 0;
 	width:100%;
 	position:relative;
-	top:300px;
+	top:330px;
 	left:150px;
 }
 ul.thumbs li {
 	float: left;
 	padding: 0;
-	margin: 5px 10px 5px 0;
+	margin: 5px 5px 5px 0;
 	list-style: none;
 }
 a.thumb {
@@ -128,9 +128,11 @@ div.pagination {
 div.navigation div.top {
 	margin-bottom: 12px;
 	height: 11px;
+	display:none;
 }
 div.navigation div.bottom {
 	margin-top: 12px;
+	display:none;
 }
 div.pagination a, div.pagination span.current, div.pagination span.ellipsis {
 	display: block;
