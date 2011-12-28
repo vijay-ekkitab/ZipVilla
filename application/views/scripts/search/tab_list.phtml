@@ -5,6 +5,16 @@
 <?php
     $villaCtr = ($this->page - 1) * $this->pagesz;
     foreach($this->results as $result) : ?>
+        <?php 
+            $street_name = isset($result['address__street_name']) ? $result['address__street_name'] : '';
+            $city = isset($result['address__city']) ? $result['address__city'] : '';
+            $state = isset($result['address__state']) ? $result['address__state'] : '';
+            $title = isset($result['title']) ? $result['title'] : '';
+            $guests = isset($result['guests']) ? $result['guests'] : 1;
+            $reviews = isset($result['reviews']) ? $result['reviews'] : 0;
+            $rating = isset($result['rating']) ? $result['rating'] : 1;
+            $rate = isset($result['average_rate']) ? $result['average_rate'] : 0;
+        ?>
         <div class="search_result">
             <div class="search_no"> <?php echo ++$villaCtr ?></div>
             <!--search result number-->
@@ -18,20 +28,20 @@
             <div class="favorite">  <img src="<?php echo $this->baseUrl();?>/images/icon_favorite.jpg" alt="Favorite" />  
             </div>
             <div class="resort_details">
-                <h2><a href="<?php echo $link;?>"><?php echo $this->escape($result['title']);?></a></h2>
+                <h2><a href="<?php echo $link;?>"><?php echo $this->escape($title);?></a></h2>
                 <p>
-                    <?php echo $this->escape($result['address__street_name']);?>,
-                    <?php echo $this->escape($result['address__city']);?>,
-                    <?php echo $this->escape($result['address__state']);?>
-                    <span><?php echo 'Guests: &nbsp;'.$this->escape($result['guests']);?></span>
+                    <?php echo $this->escape($street_name);?>,
+                    <?php echo $this->escape($city);?>,
+                    <?php echo $this->escape($state);?>
+                    <span><?php echo 'Guests: &nbsp;'.$this->escape($guests);?></span>
                 </p>
-                <div class="reviews">  <p><?php echo $this->escape(0+$result['reviews']);?></p>  <span>Reviews</span>  
+                <div class="reviews">  <p><?php echo $this->escape(0+$reviews);?></p>  <span>Reviews</span>  
                 </div>
                 <div class="ratings">
                     <!--golden and silver stars-->
                     <ul>
                     <?php for($rc=0; $rc < 5; $rc++) {
-                        if ((0+$result['rating']) > $rc) 
+                        if ((0+$rating) > $rc) 
                             echo '<li><img src="'.$this->baseUrl().'/images/icon_ratings_gold.jpg"/></li>';
                         else
                             echo '<li><img src="'.$this->baseUrl().'/images/icon_ratings_silver.jpg"/></li>';
@@ -41,12 +51,10 @@
             </div>
             <div class="price">
                 <p>
-                    <img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Rupee" /><?php echo $this->escape(0+$result['average_rate']);?>
+                    <img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Rupee" /><?php echo $this->escape(0+$rate);?>
                 </p>
                 <span>per night</span>
                 <span>
-                    <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'edit', 'id'=>$result['id']));?>"> <img src="<?php echo $this->baseUrl();?>/images/icon_edit_pencil.jpg" alt="Edit" height="20" width="20"> </a> 
-                    <a href="<?php echo $this->url(array('controller'=>'index', 'action'=>'delete', 'id'=>$result['id']));?>"> <img src="<?php echo $this->baseUrl();?>/images/icon_delete_x.jpg" alt="Delete" height="20" width="20"> </a>
                 </span> 
             </div>
         </div>

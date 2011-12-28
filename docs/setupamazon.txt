@@ -87,3 +87,11 @@
   212  sudo ln -s ../mods-available/rewrite.load rewrite.load
   213  ls -lrt
   214  sudo service apache2 restart
+  251  cd /etc/apache2/mods-enabled/
+  252  ls -lrt
+  253  sudo ln -s ../mods-available/expires.load ./expires.load
+  254  ls -lrt
+  255  cd ../sites-enabled/
+  256  sudo vi 000-default 
+  257  sudo service apache2 restart
+
