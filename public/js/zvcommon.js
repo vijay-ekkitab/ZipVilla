@@ -147,7 +147,7 @@ var userloggedin = false;
 var fb_uid = null;
 var fb_accessToken = null;
 var fb_login_in_progress = false;
-var dateformat = 'dd-mm-yy';
+var dateformat = 'dd-M-yy';
 
 
 function calculate_rate(_id) {

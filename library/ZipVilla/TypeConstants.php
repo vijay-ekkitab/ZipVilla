@@ -64,7 +64,7 @@ const  TAB_LIST = 0;
 const  TAB_PHOTO = 1;
 const  TAB_MAP = 2;
 
-const  DATE_FORMAT = 'dd-mm-yyyy';
+const  DATE_FORMAT = '01-Jan-2012';
 
 
 ?>
