@@ -16,9 +16,10 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
 <?php if ($property == null) {?>
     <p>There has been an internal error. The property is not found in the system.</p>
 <?php } else {?> <!-- Property detail available -->
-<?php $address = $property->address['street_number'] . ',' . $property->address['street_name'] . ',' .
-                 $property->address['city'] . ','. $property->address['state'] .','.
-                 $property->address['country'];
+<?php $country = isset($property->address['country']) ? $property->address['country'] : 'India';
+      $address = $property->{'address.street_number'} . ',' . $property->{'address.street_name'} . ',' .
+                 $property->{'address.city'} . ','. $property->{'address.state'} .','.
+                 $country;
       $property_type = $property->shared == 'yes' ? 'Shared house/villa' : 'Entire house/villa';
       $daily_rate = isset($property->rate['daily']) ? $property->rate['daily'] : 0;
       $weekly_rate = isset($property->rate['weekly']) ? $property->rate['weekly'] : 0;
@@ -27,7 +28,6 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
       if ($monthly_rate == 0) $monthly_rate = 30 * $daily_rate;
       $room_type = "Entire home/villa";
       if ($property->shared == 'yes') $room_type = "Shared home/villa";
-      $country = isset($property->address['country']) ? $property->address['country'] : 'India';
       $owner = $property->getOwner();
       $owner_name = '';
       $owner_image = 'default_user_image.jpg';
