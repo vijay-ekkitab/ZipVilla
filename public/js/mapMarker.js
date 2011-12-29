@@ -8,13 +8,30 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 	var startIndex = pStartIndex;
 	var myMapIndex = 0;
 
+	/*
 	if ((typeof zv_map_center_latitude === 'undefined') || 
 			(typeof zv_map_center_longitude === 'undefined') ||
 			(typeof zv_villa_locations === 'undefined') ||
 		  (! zv_villa_locations instanceof Array)
 		  ) {
-				$(document.getElementById(pMapCanvas)).append('<h4>Information unavailable to render Map</h4>');
-			return;
+			//$(document.getElementById(pMapCanvas)).append('<h4>Information unavailable to render Map</h4>');
+	}
+  */
+	
+	if ((typeof zv_map_center_latitude === 'undefined') || 
+			(typeof zv_map_center_longitude === 'undefined')
+		  ) {
+			//$(document.getElementById(pMapCanvas)).append('<h4>Information unavailable to render Map</h4>');
+	  
+		zv_map_center_latitude = 22.0000;
+	  zv_map_center_longitude = 77.0000;
+	  
+		if( pZoom === undefined ) {
+		  pZoom = 3;
+		} else {
+		  pZoom = 5;
+		}
+
 	}
 
 	if (typeof pMapIndex === 'undefined') {
@@ -26,11 +43,12 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 		}
 	}
 	
+	/*
 	if (typeof pZoom === 'undefined'){
 		pZoom = 10;
 	}
-
-
+  */
+	
 	var latlng = new google.maps.LatLng(zv_map_center_latitude, zv_map_center_longitude);
 
 	var zv_options = {
@@ -45,10 +63,11 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 	
 
 	for( i = 0; i < zv_villa_locations.length; i++, startIndex++) {
+    /*
 		$(document.getElementById(pMapCanvas)).append( 
 				'<div class="villas">'+'<h4>{'+zv_villa_locations[i][0]
 				+'}-{'+zv_villa_locations[i][1]+'}-{'+zv_villa_locations[i][2]+'}</h4></div>');
-	
+	  */
 		if( zv_villa_locations[i][1] > 0 ) {   
 //alert("inside  map render");
 
