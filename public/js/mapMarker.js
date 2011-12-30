@@ -3,11 +3,14 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 {
 	var myMap = new Array(6);
 	var myInfowindow = new Array(6);
-	var marker=0;
+  var myLatCenter = new Array(6);
+  var myLngCenter = new Array(6);
+  var marker=0;
 	var i;
 	var startIndex = pStartIndex;
 	var myMapIndex = 0;
 
+	//alert("in mm mC: "+pMapCanvas+" sI: "+pStartIndex+" pZ: "+pZoom+" mI: "+pMapIndex );
 	/*
 	if ((typeof zv_map_center_latitude === 'undefined') || 
 			(typeof zv_map_center_longitude === 'undefined') ||
@@ -17,25 +20,8 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 			//$(document.getElementById(pMapCanvas)).append('<h4>Information unavailable to render Map</h4>');
 	}
   */
-	
-	if ((typeof zv_map_center_latitude === 'undefined') || 
-			(typeof zv_map_center_longitude === 'undefined')
-		  ) {
-			$(document.getElementById(pMapCanvas)).append('<h4>Lat/Lng information unavailable</h4>');
-
-		zv_map_center_latitude = 22.0000;
-	  zv_map_center_longitude = 77.0000;
-	  
-		if( typeof pZoom === 'undefined' ) {
-		  pZoom = 3;
-		} else {
-		  pZoom = 5;
-		}
-
-	}
-
 	if (typeof pMapIndex === 'undefined') {
-			myMapIndex = 0;
+		myMapIndex = 0;
 	} else {
 		myMapIndex = pMapIndex;
 		if( myMapIndex>5 ){
@@ -43,11 +29,31 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 		}
 	}
 	
+	if ((typeof zv_map_center_latitude === 'undefined') || 
+			(typeof zv_map_center_longitude === 'undefined')
+		  ) {
+			// $(document.getElementById(pMapCanvas)).append('<h4>Lat/Lng information unavailable</h4>');
+
+		myLatCenter[myMapIndex] = 22.0000;
+		myLngCenter[myMapIndex] = 77.0000;
+
+		if( typeof pZoom === 'undefined' ) {
+		  pZoom = 3;
+		} else {
+		  pZoom = 5;
+		}
+	}	else if ((zv_map_center_latitude > 0 ) && 
+			(zv_map_center_longitude > 0))
+    {
+		myLatCenter[myMapIndex] = zv_map_center_latitude;
+		myLngCenter[myMapIndex] = zv_map_center_longitude;		
+	}
+	
 	if (typeof pZoom === 'undefined'){
 		pZoom = 10;
 	}
 	
-	var latlng = new google.maps.LatLng(zv_map_center_latitude, zv_map_center_longitude);
+	var latlng = new google.maps.LatLng(myLatCenter[myMapIndex], myLngCenter[myMapIndex]);
 
 	var zv_options = {
 					 	zoom: pZoom,
