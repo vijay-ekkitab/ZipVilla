@@ -2,6 +2,7 @@
 include_once "ZipVilla/TypeConstants.php";
 $property = $this->property;
 $logger = Zend_Registry::get('zvlogger');
+$firstOfMonth = strtotime(date('Y-m',time()));
 ?>
 <div class="slide" style="border-bottom-width:0px;">
     <div class="slct_mnth"><!--form select-->
@@ -10,7 +11,7 @@ $logger = Zend_Registry::get('zvlogger');
                 <p><strong>Select Month</strong></p>
                 <select class="dropdown_sm" name="per night">
                     <?php for ($i=0; $i<=12;$i++) { 
-                        $d = date('M  Y', strtotime('+'.$i.' months')); ?>
+                        $d = date('M  Y', strtotime('+'.$i.' months', $firstOfMonth)); ?>
                         <option value="<?php echo $d;?>"><?php echo $d; ?></option>
                     <?php }?>
                 </select>
