@@ -23,14 +23,26 @@ include_once("ZipVilla/Helper/IndexManager.php");
 $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
 Zend_Registry::set('config', $config);
 
-$imp = new ListingsImporter();
+$options = getopt('ni:');
+$infile = '';
+$import = true;
 
-if ($argc < 2) {
-     echo "No input file provided. \n";
-     echo "Usage: " . $argv[0] . " <listing csv file>\n";
-     exit(1);
+if (!isset($options['i'])) {
+    echo "Input file not specified.\n";
+    echo "Usage: " . $argv[0] . " [-n] -i <listing csv file> \n";
+    exit(1);
+}
+else {
+    $infile = $options['i'];
 }
 
-$imp->importFile($argv[1]);
+if (isset($options['n'])) {
+    echo "Test mode requested. Listings will NOT be imported.\n";
+    $import = false;
+}
+
+$imp = new ListingsImporter($import);
+
+$imp->importFile($infile);
 
 ?>
