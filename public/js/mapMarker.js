@@ -21,12 +21,12 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 	if ((typeof zv_map_center_latitude === 'undefined') || 
 			(typeof zv_map_center_longitude === 'undefined')
 		  ) {
-			$(document.getElementById(pMapCanvas)).append('<h4>Information unavailable to render Map</h4>');
-	  
+			$(document.getElementById(pMapCanvas)).append('<h4>Lat/Lng information unavailable</h4>');
+
 		zv_map_center_latitude = 22.0000;
 	  zv_map_center_longitude = 77.0000;
 	  
-		if( pZoom === undefined ) {
+		if( typeof pZoom === 'undefined' ) {
 		  pZoom = 3;
 		} else {
 		  pZoom = 5;
@@ -43,11 +43,9 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 		}
 	}
 	
-	/*
 	if (typeof pZoom === 'undefined'){
 		pZoom = 10;
 	}
-  */
 	
 	var latlng = new google.maps.LatLng(zv_map_center_latitude, zv_map_center_longitude);
 
@@ -94,7 +92,7 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 														myInfowindow[myMapIndex].open(myMap[myMapIndex], this);
 														myInfowindow[myMapIndex].setMaxWidth(50);
 													});
-					google.maps.event.trigger(myMap[myMapIndex], 'resize');
+					// google.maps.event.trigger(myMap[myMapIndex], 'resize');
 		}
 	}
 
