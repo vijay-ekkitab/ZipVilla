@@ -6,6 +6,12 @@ include_once("ZipVilla/Utils.php");
 
 
 class ListingsImporter {
+    
+    private $import;
+    
+    public function __construct($import = true) {
+        $this->import = $import;
+    }
 
     public function importFile($csvFile,$separator=',',$txtDelimiter='"') {
         if (!file_exists($csvFile)) {
@@ -92,7 +98,9 @@ class ListingsImporter {
             }
             if ($i == count($headernames)) {
                 try {
-                    $res = $lm->insert($obj['type'],$obj);
+                    if ($this->import) {
+                        $res = $lm->insert($obj['type'],$obj);
+                    }
                 }
                 catch(Exception $e) {
                     echo "[Line $lineno][Error] Failed to insert listing. ".$e->getMessage()."\n";
@@ -100,6 +108,7 @@ class ListingsImporter {
             }
         }
         fclose($handle);
+        echo "[Info] $lineno lines of input processed.\n";
         return TRUE;
     }
 }

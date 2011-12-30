@@ -30,17 +30,23 @@ class ZipVilla_View_Helper_ZvImage
             $city = isset($listing['address__city']) ? $listing['address__city'] : '';
             $image = isset($listing['images'][0]) ? $listing['images'][0] : '';
         }
-        if (($city != '') && ($image != ''))
-            return $baseUrl.'/images/listings/'.strtolower($city).'/'.$image;
+        if (($city != '') && ($image != '')) {
+            $city = strtolower(str_replace(' ', '', $city));
+            return $baseUrl.'/images/listings/'.$city.'/'.$image;
+        }
             
         return $baseUrl.'/images/listings/default_img.jpg';
     }
     
     public function getImagePathPrefix($baseUrl, $listing) {
         if ($listing instanceof Application_Model_Listings) {
-            return $baseUrl.'/images/listings/'.strtolower($listing->address['city']);
+            $city = $listing->address['city'];
         }
-        return $baseUrl.'/images/listings/'.strtolower($listing['address__city']);
+        else {
+            $city = $listing['address__city'];
+        }
+        $city = strtolower(str_replace(' ', '', $city));
+        return $baseUrl.'/images/listings/'.$city;
     }
     
     public function createThumb($src, $dest) {
