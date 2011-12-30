@@ -10,7 +10,7 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 	var startIndex = pStartIndex;
 	var myMapIndex = 0;
 
-	alert("in mm mC: "+pMapCanvas+" sI: "+pStartIndex+" pZ: "+pZoom+" mI: "+pMapIndex );
+	//alert("in mm mC: "+pMapCanvas+" sI: "+pStartIndex+" pZ: "+pZoom+" mI: "+pMapIndex );
 	/*
 	if ((typeof zv_map_center_latitude === 'undefined') || 
 			(typeof zv_map_center_longitude === 'undefined') ||
