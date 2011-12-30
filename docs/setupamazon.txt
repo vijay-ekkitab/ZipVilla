@@ -94,4 +94,5 @@
   255  cd ../sites-enabled/
   256  sudo vi 000-default 
   257  sudo service apache2 restart
+  273  sudo apt-get install unzip
 

@@ -411,7 +411,8 @@ class ListController extends Zend_Controller_Action
             foreach($booked_dates as $b) {
                 $f = intval(date('j', $b['from']->sec));
                 $t = intval(date('j', $b['to']->sec));
-                for ($i=$f;$i<=$t; $i++)
+                $days = $b['days'];
+                for ($i=$f;$i<=$f+$days; $i++)
                     $booked[] = $i;
             }
             $to = new MongoDate($from->sec  + (86400 * ($numdays-1)));
