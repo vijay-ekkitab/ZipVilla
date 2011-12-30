@@ -151,8 +151,14 @@ var dateformat = 'dd-M-yy';
 
 
 function calculate_rate(_id) {
-	var _checkin=$("#checkin").val();
-	var _checkout=$("#checkout").val();
+	var _checkin=$(".checkin").val();
+	if (_checkin == $(".checkin").attr('title')) {
+		_checkin = '';
+	}
+	var _checkout=$(".checkout").val();
+	if (_checkout == $(".checkout").attr('title')) {
+		_checkout = '';
+	}
 	var _guests=$("#guests").val();
     $.ajax({ 
         type: "POST",

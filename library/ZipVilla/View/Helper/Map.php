@@ -28,8 +28,8 @@ class ZipVilla_View_Helper_Map
                         '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__latitude']) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__longitude']) . '\',' .
-                        '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . ',' .
-                        '\''.$this->view->escape($villa['street__name']) . ',' .
+                        '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . '\',' .
+                        '\''.$this->view->escape($villa['address__street_name']) . '\',' .
                         '\''.$this->view->escape($villa['address__city']) . '\''. 
                        '],';
             if ($pos == null) {

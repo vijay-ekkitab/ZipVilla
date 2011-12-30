@@ -65,7 +65,8 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 	myMap[myMapIndex] 		= new google.maps.Map(document.getElementById(pMapCanvas), zv_options);
 	myInfowindow[myMapIndex] 	= new google.maps.InfoWindow();
 	
-
+    if (typeof zv_villa_locations !== 'undefined') {
+	
 	for( i = 0; i < zv_villa_locations.length; i++, startIndex++) {
     /*
 		$(document.getElementById(pMapCanvas)).append( 
@@ -101,7 +102,7 @@ function mapMarker(pMapCanvas, pStartIndex, pZoom, pMapIndex)
 					// google.maps.event.trigger(myMap[myMapIndex], 'resize');
 		}
 	}
-
+    }
 	google.maps.event.trigger(myMap[myMapIndex], 'resize');
 	myMap[myMapIndex].setZoom( myMap[myMapIndex].getZoom() );
 
