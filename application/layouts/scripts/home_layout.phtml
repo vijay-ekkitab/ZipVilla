@@ -101,6 +101,14 @@ $(document).ready(function() {
     $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
     $('#query').bind('keypress', null, watchQueryBox);
 
+    $('#search_form_home').submit(function() {
+        if ($('#query').val() == "") {
+            $('#set_location').show();
+            $(".defaultText").blur();
+            return false;
+        }
+    });
+
     $('#tabs').bind('tabsshow', function(event, ui) {
         switch(ui.index) {
         case 0:	loadMostViewed();
@@ -129,7 +137,7 @@ $(document).ready(function() {
 	<div class="wrapper"><!--outer wrapper to fix the width-->
 		<?php echo $this->render('header.phtml');?>
 		<div class="content">
-			<div class="srch_bx_home"><!--srch_bx_home-->
+			<div class="srch_bx_home" style="height:320px;"><!--srch_bx_home-->
 				<h1>Discover amazing places to stay.</h1>
 				<p>1000s of exclusive properties in over a 100 cities awaiting your arrival.</p>
 

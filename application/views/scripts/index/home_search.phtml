@@ -1,8 +1,9 @@
 <?php include_once("ZipVilla/TypeConstants.php");?>
 
 <div class="search_homebx">
-	<input class="search_home defaultText" type="text" name="query" id="query" size="73" title="Where do you want to go?" autocomplete="off" value=""/> 
+    <input class="search_home defaultText" type="text" name="query" id="query" size="73" title="Where do you want to go?" autocomplete="off" value=""/>
 	<input class="submit_search" type="submit" value="" onclick="validate_default();return true;" />
+	<div style="clear:both;"><p id="set_location" style="display:none;margin-top:10px;text-align:center;color:#CC3366;">Please enter a town or city.</p></div>
 		<div class="floatleft"><label for="checkin"><br/>Check in<br/>
 			<input class="input_home defaultText checkin" title="<?php echo DATE_FORMAT;?>" type="text" size="10" name="check_in"  value="<?php echo $this->checkin;?>"/></label>
 		</div>
