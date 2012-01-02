@@ -47,7 +47,7 @@
             <?php $this->addScriptPath(APPLICATION_PATH.'/views/scripts/search'); ?>
             <?php echo $this->render('search_top.phtml');?>
             <div class="l_search_results v_search_results"><!--Search result sections starts here-->
-            
+                <div id="loadergif"></div>
             	<div id="tabs" class="ui-tabs"><!--tabs-->
                 	<ul>
                     	<li><a href="#tabs-1">List</a></li>
@@ -57,7 +57,6 @@
                     <?php echo $this->render('sort_box.phtml');?>
                     <?php echo $this->layout()->content; ?>
                 </div>
-                
          	</div><!--search result ends here-->
             <div class="l_right_side_panel v_right_side_panel">
             	<div>
