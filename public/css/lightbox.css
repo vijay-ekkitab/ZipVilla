@@ -177,24 +177,26 @@ caption,th,td {
 	height:282px;
 	float:left;
 }
-.cboxClose {
-	top:-11px;
-	left:11px;
+.cboxClose1, .cboxClose2, .cboxClose3 {
 	background:url(../images/btn_closea.png);
-	width:22px;
-	height:22px;
-}
-.cboxClose {
-	cursor:pointer;
-}
-.cboxClose {
-	position:relative;
-	/*top:32px;
-	left:659px;*/
-	float:right;
 	width:25px;
 	height:28px;
+	float:right;
 	text-indent:-9999px;
+	cursor:pointer;
+	position:relative;
+}
+.cboxClose1 {
+	top:19px;
+	left:8px;
+}
+.cboxClose2 {
+	top:42px;
+	left:204px;
+}
+.cboxClose3 {
+	top:15px;
+	left:-153px;
 }
 #mask_zv { 
 	position:absolute;
