@@ -489,3 +489,36 @@ function setCheckOutDateAuto(date)
 	$('.checkout').blur();
 }
 
+function refineSearch(facet, value, selected)
+{
+	$.ajax({ 
+        type: "POST",
+        dataType: "html",
+        url:"/default/search/refine/format/html",
+        data:{facet:facet,value:value,selected:selected},
+        complete:function(html){
+            var response = html.responseText.split("<zipvilla>");
+        	$('#tabs-1').children('div').remove();
+        	$('#tabs-1').prepend(response[0]);
+        	$('#tabs-2').children('div').remove();
+            $('#tabs-2').prepend(response[1]);
+        	$('#total_hits').text(totalhits+" Results");
+        	$('#refine_search').empty();
+        	$('#refine_search').prepend(response[2]);
+        	
+          }
+      });
+}
+
+function setPage(page)
+{
+    $("#page").val(page);
+    setTab();
+}
+function setTab()
+{
+    var selected = $tabs.tabs('option', 'selected');
+    $("#showtab").val(selected);
+}
+
+

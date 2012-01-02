@@ -19,6 +19,7 @@ class SearchController extends Zend_Controller_Action
         /* Initialize action controller here */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('lookahead', 'html')
+                    ->addActionContext('refine', 'html')
                     ->initContext();
     }
     
@@ -59,27 +60,8 @@ class SearchController extends Zend_Controller_Action
         unset($q['city_state']);
         $this->view->facets_selected = $q;
     }
-
-    public function reindexAction() 
-    {
-        $im = $this->_helper->indexManager;
-        $im->delete();
-        $im->indexAll();
-        $this->_helper->redirector('index', 'index');
-    }
     
-    public function indexAction()
-    {
-        $logger = Zend_Registry::get('zvlogger');
-        
-        $values = $this->getRequest()->getParams();
-        
-        if (!isset($values[SearchController::QUERY])) {
-            $values = $this->get_session_data();
-            if ($values == null) {
-                $this->_helper->redirector('index', 'index');
-            }
-        }
+    protected function doSearch(&$values, &$q) {
         
         $sm = $this->_helper->searchManager;
             
@@ -138,7 +120,36 @@ class SearchController extends Zend_Controller_Action
                                       $this->read_value($values, SearchController::PRICE_RANGE),
                                       $this->read_value($values, SearchController::PAGE,1),
                                       PAGE_SZ);
+                                      
+        return $search_results;
             
+    }
+
+    public function reindexAction() 
+    {
+        $im = $this->_helper->indexManager;
+        $im->delete();
+        $im->indexAll();
+        $this->_helper->redirector('index', 'index');
+    }
+    
+    public function indexAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        
+        $values = $this->getRequest()->getParams();
+        
+        if (!isset($values[SearchController::QUERY])) {
+            $values = $this->get_session_data();
+            if ($values == null) {
+                $this->_helper->redirector('index', 'index');
+            }
+        }
+        
+        $q = array();
+        
+        $search_results = $this->doSearch($values, $q);
+        
         if ($search_results) {
             $this->set_view_params($values, $search_results, $q);
         }
@@ -146,6 +157,47 @@ class SearchController extends Zend_Controller_Action
             $this->view->error = 'encountered error in search.';
         }
         $this->save_session_data($values);
+    }
+    
+    public function refineAction() {
+        $logger = Zend_Registry::get('zvlogger');
+        $values = $this->get_session_data();
+        $request = $this->getRequest();
+        $search_results = null;
+        $q = array();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            if (in_array($post['facet'], $this->facets)) {
+                if (!isset($values[$post['facet']])) {
+                    $values[$post['facet']] = array();
+                }
+                if ($post['selected'] == 'true') {
+                    if (!in_array($post['value'], $values[$post['facet']])) {
+                        $values[$post['facet']][] = $post['value'];
+                    }
+                }
+                else {
+                    foreach($values[$post['facet']] as $key => $val) {
+                        if ($val == $post['value']) {
+                            unset($values[$post['facet']][$key]);
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                $values[$post['facet']] = $post['value'];
+            }
+            $values[SearchController::PAGE] = 1;
+            $search_results = $this->doSearch($values, $q);
+        }
+        if ($search_results) {
+            $this->set_view_params($values, $search_results, $q);
+            $this->save_session_data($values);
+        }
+        else {
+            $this->view->error = 'encountered error in search.';
+        }
     }
 
     

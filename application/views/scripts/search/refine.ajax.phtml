@@ -1,0 +1,140 @@
+<?php include_once("ZipVilla/TypeConstants.php");?>
+<script>
+var totalhits=<?php echo $this->total_hits;?>;
+</script>
+<div class="tab_content">
+<?php if (isset($this->error)) { ?>
+    <p>An error was encountered in search.</p>
+<?php } elseif ($this->results != null) {?>
+<?php
+    $villaCtr = ($this->page - 1) * $this->pagesz;
+    foreach($this->results as $result) : ?>
+        <?php 
+            $street_name = isset($result['address__street_name']) ? $result['address__street_name'] : '';
+            $city = isset($result['address__city']) ? $result['address__city'] : '';
+            $state = isset($result['address__state']) ? $result['address__state'] : '';
+            $title = isset($result['title']) ? $result['title'] : '';
+            $guests = isset($result['guests']) ? $result['guests'] : 1;
+            $reviews = isset($result['reviews']) ? $result['reviews'] : 0;
+            $rating = isset($result['rating']) ? $result['rating'] : 1;
+            $rate = isset($result['average_rate']) ? $result['average_rate'] : 0;
+        ?>
+        <div class="search_result">
+            <div class="search_no"> <?php echo ++$villaCtr ?></div>
+            <!--search result number-->
+            <?php
+                $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $result);
+                $link = $this->baseUrl('/list?id='.$result['id'].'&showtab='.TAB_LIST);
+            ?>
+            <div class="villa_image">  <a href="<?echo $link;?>"> <img src="<?php echo $imagepath;?>" alt="resort name" /></a>  
+            </div>
+            <!--picture-->
+            <div class="favorite">  <img src="<?php echo $this->baseUrl();?>/images/icon_favorite.jpg" alt="Favorite" />  
+            </div>
+            <div class="resort_details">
+                <h2><a href="<?php echo $link;?>"><?php echo $this->escape($title);?></a></h2>
+                <p>
+                    <?php echo $this->escape($street_name);?>,
+                    <?php echo $this->escape($city);?>,
+                    <?php echo $this->escape($state);?>
+                    <span><?php echo 'Guests: &nbsp;'.$this->escape($guests);?></span>
+                </p>
+                <div class="reviews">  <p><?php echo $this->escape(0+$reviews);?></p>  <span>Reviews</span>  
+                </div>
+                <div class="ratings">
+                    <!--golden and silver stars-->
+                    <ul>
+                    <?php for($rc=0; $rc < 5; $rc++) {
+                        if ((0+$rating) > $rc) 
+                            echo '<li><img src="'.$this->baseUrl().'/images/icon_ratings_gold.jpg"/></li>';
+                        else
+                            echo '<li><img src="'.$this->baseUrl().'/images/icon_ratings_silver.jpg"/></li>';
+                        } ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="price">
+                <p>
+                    <img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="Rupee" /><?php echo $this->escape(0+$rate);?>
+                </p>
+                <span>per night</span>
+                <span>
+                </span> 
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php } else {?>
+    <p>No results were returned from search.</p>
+<?php } ?>
+</div>
+<zipvilla>
+<div class="tab_content">
+<?php if (isset($this->error)) { ?>
+    <p>An error was encountered in search.</p>
+<?php } elseif ($this->results != null) {?>
+<?php 
+    $villaCtr = ($this->page - 1) * $this->pagesz;
+    foreach($this->results as $result) : ?>
+    <div class="wrpr_photo">
+        <div class="search_no"><?php echo ++$villaCtr;?></div><!--search result number-->
+        <?php
+                $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $result);
+                $link = $this->baseUrl('/list?id='.$result['id'].'&showtab='.TAB_PHOTO);
+        ?>
+        <div class="photo_img"><a href="<?echo $link;?>"><img src="<?php echo $imagepath;?>"></a></div>
+        <div class="details">
+            <h4><a href="<?php echo $link;?>"><?php echo $this->escape($result['title']);?></a></h4>
+            <p><?php echo $this->escape($result['address__city']).",".$this->escape($result['address__state']);?></p>
+            <span>Rs. <?php echo $result['average_rate'];?></span>
+            <div class="favorite"><a href="#"><img src="images/icon_favorite.jpg" alt="Favorite" /></a></div>
+        </div>
+    </div>
+    <?php endforeach;?>
+<?php } else {?>
+    <p>No results were returned from search.</p>
+<?php } ?>
+</div>
+<zipvilla>
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+<?php 
+    if ((!isset($this->pagesz)) || ($this->pagesz ==0)) {
+        $this->pagesz = 10;
+    }
+    $numpages = ($this->total_hits % $this->pagesz) > 0 ? 1 + (int)($this->total_hits/$this->pagesz) : (int)($this->total_hits/$this->pagesz);
+    $next_page_btn = FALSE;
+    $prev_page_btn = FALSE;
+    $pg1 = 1;
+    $pg2 = 2 > $numpages ? null : 2;
+    $pg3 = 3 > $numpages ? null : 3;
+    if ($pg2 != null) { $next_page_btn = TRUE; $next_page = $pg2; }
+    $pagenumbers = array($pg1, $pg2, $pg3);
+    $start = 1;
+    $end = ($start -1) + count($this->results);
+?>
+        <?php if ($this->total_hits > 0) {?>
+            <div class="display_no">
+                <p>Displaying <span><?php echo $start;?></span> — <span><?php echo $end ?></span> of <span><?php echo $this->total_hits; ?></span> listings</p>
+            </div>
+            <div class="pagination"><!--pagination-->
+            <ul>
+                <?php foreach ($pagenumbers as $pg):?>
+                   <?php if ($pg != null) {?>
+                    <?php if ($pg == $this->page) {?>
+                        <li class="current"><?php echo $pg;?></li>
+                    <?php } else {?>
+                        <li><a href="#" onclick="setPage(<?php echo $pg;?>); validate_default();document.search_form.submit();"><?php echo $pg;?></a></li>
+                    <?php }?>
+                   <?php }?>
+                <?php endforeach;?>
+            </ul>
+            </div>
+            <div class="l_page_buttons"><!--Previous Next Page buttons-->
+                <?php if ($prev_page_btn) { ?>
+                    <a href="#" onclick="setPage(<?php echo $prev_page;?>); validate_default();document.search_form.submit();"><div class="btn_prev_page"><img src="<?php echo $this->baseUrl();?>/images/btn_prev_page.jpg" alt="Previous page" /></div></a>
+                <?php }?>
+                <?php if ($next_page_btn) { ?>
+                    <a href="#" onclick="setPage(<?php echo $next_page;?>); validate_default();document.search_form.submit();"><div class="btn_next_page"><img src="<?php echo $this->baseUrl();?>/images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
+                <?php }?>
+            </div><!--Previous Next Page buttons ends-->
+        <?php }?>
+</div>
