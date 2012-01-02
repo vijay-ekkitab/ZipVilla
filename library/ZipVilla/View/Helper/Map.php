@@ -53,21 +53,24 @@ class ZipVilla_View_Helper_Map
         }
         $script .= 'var zv_villa_locations = [';
         foreach($villas as $villa) {
-        	if( ($villa->address['coordinates']['latitude'] > 0) && 
-						  ($villa->address['coordinates']['longitude'] > 0)) {
-            $script .= '[' .
-                        '\''.$this->view->escape($villa->title) . '\',' .
-                        '\''.$this->view->escape($villa->address['coordinates']['latitude']) . '\',' .
-                        '\''.$this->view->escape($villa->address['coordinates']['longitude']) . '\',' .
-                        '\''.$this->view->escape($villa->title) . ',' 
-                            .$this->view->escape($villa->address['street_name']) . ',' 
-                            .$this->view->escape($villa->address['city']) . '.\''. 
-                       '],';
-            if( $pos == null ) {
-                $pos = 'var zv_map_center_latitude = \''.$this->view->escape($villa->address['coordinates']['latitude']).'\'; ' .
-                       'var zv_map_center_longitude = \''.$this->view->escape($villa->address['coordinates']['longitude']).'\';';
+            if (isset($villa->address['coordinates']['latitude']) &&
+                isset($villa->address['coordinates']['latitude'])) {
+            	if( ($villa->address['coordinates']['latitude'] > 0) && 
+    						  ($villa->address['coordinates']['longitude'] > 0)) {
+                    $script .= '[' .
+                                '\''.$this->view->escape($villa->title) . '\',' .
+                                '\''.$this->view->escape($villa->address['coordinates']['latitude']) . '\',' .
+                                '\''.$this->view->escape($villa->address['coordinates']['longitude']) . '\',' .
+                                '\''.$this->view->escape($villa->title) . ',' 
+                                    .$this->view->escape($villa->address['street_name']) . ',' 
+                                    .$this->view->escape($villa->address['city']) . '.\''. 
+                               '],';
+                    if( $pos == null ) {
+                        $pos = 'var zv_map_center_latitude = \''.$this->view->escape($villa->address['coordinates']['latitude']).'\'; ' .
+                               'var zv_map_center_longitude = \''.$this->view->escape($villa->address['coordinates']['longitude']).'\';';
+                    }
+            	}
             }
-        	}
         }
         $script .= '];';
         // $invoke = '$(document).ready(function(){mapMarker(\''. $zvMapInfo. '\')});';
