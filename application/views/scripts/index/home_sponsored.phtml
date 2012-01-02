@@ -15,18 +15,20 @@
 			<?php foreach($this->sponsoredListings as $sponsoredData) : ?>	
 				<?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $sponsoredData);?>
 				<li>
-					<a class="thumb" name="<?php echo $this->baseUrl('/list?id='.$sponsoredData->id);?>" href="<?php echo $image;?> "title="<?php echo $sponsoredData->title;?>"> <img src="<?php echo $this->baseUrl('/images/control.jpg');?>" alt="villaImage" /></a>
+					<a class="thumb" name="leaf" href="<?php echo $image;?> "title="<?php echo $sponsoredData->title;?>"> <img src="<?php echo $this->baseUrl('/images/control.jpg');?>" alt="villaImage" /></a>
 						<div class="caption">
 							<div class="image-title">
 								<div class="slide_text">
 									<div class="floatleft">
 										<h3>
-											<?php 
-												if( strlen($this->escape($sponsoredData->title)) > VILLA_NAME_LARGE_SIZE )
-													echo substr($this->escape($sponsoredData->title),0,(VILLA_NAME_LARGE_SIZE-3)).'...';
-												else
-													echo $this->escape($sponsoredData->title);
-											?>
+										  <a href="<?php echo $this->baseUrl('/list?id='.$sponsoredData->id);?>"/>
+												<?php 
+													if( strlen($this->escape($sponsoredData->title)) > VILLA_NAME_LARGE_SIZE )
+														echo substr($this->escape($sponsoredData->title),0,(VILLA_NAME_LARGE_SIZE-3)).'...';
+													else
+														echo $this->escape($sponsoredData->title);
+												?>
+											</a>
 										<span><PH></span></h3>
 										<h2><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="rupeeImage" />
 										<?php echo $this->escape(0+$sponsoredData->rate['daily']);?><span>&nbsp;Per night</span></h2>
