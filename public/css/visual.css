@@ -137,9 +137,9 @@ body {
 	padding:10px;
 	border-radius:4px;
 	float:left;
-	width:633px;
+	width:600px;
 	height:500px;
-	/*margin-bottom:30px;*/
+	margin-bottom:30px;
 }
 .v_search_results .display_no p {
 	font-size:14px;
@@ -724,6 +724,13 @@ body {
 	color:#333;
 	text-transform:inherit;
 	margin:10px 0;
+}
+.btn_login_fb img {
+	text-align:center;
+	max-width:103px;
+	max-height:20px;
+	min-width:103px;
+	min-height:20px;
 }
 .btn_login_fb {
 	clear: both;
