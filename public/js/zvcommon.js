@@ -75,7 +75,12 @@ $(document).ready(function()
         if (checkIn != null) {
             setCheckOutDateAuto(checkIn);
         }
+        calculate_rate();
      });
+	
+	$('.checkout').change(function() {
+		calculate_rate();
+	});
 	
 	$(".defaultText").focus(function(srcc) {
         if ($(this).val() == $(this)[0].title) {
@@ -151,6 +156,9 @@ var dateformat = 'dd-M-yy';
 
 
 function calculate_rate(_id) {
+	if (typeof _id == 'undefined') {
+		_id = property_id;
+	}
 	var _checkin=$(".checkin").val();
 	if (_checkin == $(".checkin").attr('title')) {
 		_checkin = '';
