@@ -28,9 +28,12 @@ class ZipVilla_View_Helper_Map
                         '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__latitude']) . '\',' .
                         '\''.$this->view->escape($villa['address__coordinates__longitude']) . '\',' .
-                        '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . '\',' .
-                        '\''.$this->view->escape($villa['address__street_name']) . '\',' .
-                        '\''.$this->view->escape($villa['address__city']) . '\''. 
+
+                        '\'/list?id=' .
+					  						    $this->view->escape($villa['id']) . '\'' .
+                        // '\''.$this->view->escape(preg_replace("/\'/","\\\'",$villa['title'])) . '\',' .
+                        // '\''.$this->view->escape($villa['address__street_name']) . '\',' .
+                        // '\''.$this->view->escape($villa['address__city']) . '\''.
                        '],';
             if ($pos == null) {
                 $pos = 'var zv_map_center_latitude = \''.$this->view->escape($villa['address__coordinates__latitude']).'\'; ' .
@@ -61,9 +64,13 @@ class ZipVilla_View_Helper_Map
                                 '\''.$this->view->escape($villa->title) . '\',' .
                                 '\''.$this->view->escape($villa->address['coordinates']['latitude']) . '\',' .
                                 '\''.$this->view->escape($villa->address['coordinates']['longitude']) . '\',' .
-                                '\''.$this->view->escape($villa->title) . ',' 
-                                    .$this->view->escape($villa->address['street_name']) . ',' 
-                                    .$this->view->escape($villa->address['city']) . '.\''. 
+                    
+                                '\'/list?id=' .
+                                    $this->view->escape($villa->id) . '\'' .
+                    
+                                // '\''.$this->view->escape($villa->title) . ',' 
+                                //    .$this->view->escape($villa->address['street_name']) . ',' 
+                                //    .$this->view->escape($villa->address['city']) . '.\''. 
                                '],';
                     if( $pos == null ) {
                         $pos = 'var zv_map_center_latitude = \''.$this->view->escape($villa->address['coordinates']['latitude']).'\'; ' .
