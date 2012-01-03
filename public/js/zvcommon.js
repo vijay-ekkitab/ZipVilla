@@ -153,6 +153,8 @@ var fb_uid = null;
 var fb_accessToken = null;
 var fb_login_in_progress = false;
 var dateformat = 'dd-M-yy';
+var minPrice = 100;
+var maxPrice = 20000;
 
 
 function calculate_rate(_id) {
@@ -530,4 +532,14 @@ function setTab()
     $("#showtab").val(selected);
 }
 
+function resetCriteria()
+{
+	$('input[name="amenities[]"]').removeAttr('checked');
+	$('input[name="shared[]"]').removeAttr('checked');
+	$('input[name="onsite_services[]"]').removeAttr('checked');
+	$('input[name="suitability[]"]').removeAttr('checked');
+	$('input[name="address__location[]"]').removeAttr('checked');
+	$('input[name="keywords"]').val(''); 
+	$('input[name="price_range"]').val('Rs.' + minPrice + ' - Rs.' + maxPrice);
+}
 
