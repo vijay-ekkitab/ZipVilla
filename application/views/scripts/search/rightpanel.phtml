@@ -59,15 +59,18 @@ function addCheckBox(feature, name, label, value, checked) {
                 }
             }
         ?>
-        <input type="checkbox" name="<?php echo $feature.'[]';?>" value="no" class="l_styled" <?php echo $no_checked;?> /><p>Entire home/villa</p>
-        <?php if (isset($this->facets[$feature])) {?>
-            <div class="l_room_nos"><?php echo $this->facets[$feature]['no'];?></div>
-        <?php }?>
-        
-        <input type="checkbox" name="<?php echo $feature.'[]';?>" value="yes" class="l_styled" <?php echo $yes_checked;?>/><p>Shared</p>
-        <?php if (isset($this->facets[$feature])) {?>
-            <div class="l_room_nos"><?php echo $this->facets[$feature]['yes'];?></div>
-        <?php }?>
+        <?php if (isset($this->facets[$feature]['no'])) { ?>
+            <input type="checkbox" name="<?php echo $feature.'[]';?>" value="no" class="l_styled" <?php echo $no_checked;?> /><p>Entire home/villa</p>
+            <?php if (isset($this->facets[$feature])) {?>
+                <div class="l_room_nos"><?php echo $this->facets[$feature]['no'];?></div>
+            <?php }?>
+        <?php } ?>
+        <?php if (isset($this->facets[$feature]['yes'])) { ?>
+            <input type="checkbox" name="<?php echo $feature.'[]';?>" value="yes" class="l_styled" <?php echo $yes_checked;?>/><p>Shared</p>
+            <?php if (isset($this->facets[$feature])) {?>
+                <div class="l_room_nos"><?php echo $this->facets[$feature]['yes'];?></div>
+            <?php }?>
+        <?php } ?>
     </div>
     
     <h4><a href="#">Amenities</a></h4>
