@@ -159,6 +159,8 @@ var maxPrice = 20000;
 
 function calculate_rate(_id) {
 	if (typeof _id == 'undefined') {
+		if (typeof property_id == 'undefined')
+			return;
 		_id = property_id;
 	}
 	var _checkin=$(".checkin").val();

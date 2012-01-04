@@ -7,11 +7,12 @@ if ($this->userdata) {
 }
 $errormsg = $this->form->getDescription();
 ?>
-<div class="error_msg">
 <?php if ($errormsg != '') { ?>
+<div class="error_msg">
     <p><?php echo "$errormsg Please try again."; ?></p>
-<?php } ?>
 </div>
+<?php } ?>
+
 
 <div class="register"><!--left side content-->
    <div class="form-section">
