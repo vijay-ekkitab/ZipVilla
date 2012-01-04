@@ -13,7 +13,11 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
     public function __construct($facet_fields = null, $std_fields = null) {
         $this->init();
         if ($facet_fields == null) {
-            $this->facet_fields = array('amenities', 'onsite_services', 'suitability', 'shared', 'address__location');
+            $this->facet_fields = array('amenities' => 'AND', 
+                                        'onsite_services' => 'AND', 
+                                        'suitability' => 'AND', 
+                                        'shared' => 'OR', 
+                                        'address__location' => 'OR');
         }
         else {
             $this->facet_fields = $facet_fields;
@@ -77,12 +81,22 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         if($q != null) {
             foreach ($q as $fd => $val) {
                 if (is_array($val)) {
-                    foreach($val as $v) {
-                        $qstr = $qstr. " AND " . $fd . ":" . $v ;
+                    $op = 'AND';
+                    if (isset($this->facet_fields[$fd])) {
+                        $op = $this->facet_fields[$fd];
                     }
+                    $substr = '';
+                    foreach($val as $v) {
+                        if ($substr == '') 
+                            $substr .= $fd . ':' . $v;
+                        else 
+                            $substr .= ' '.$op.' '.$fd . ':' . $v ;
+                    }
+                    if ($substr != '')
+                        $qstr .= ' AND ' .'( '.$substr.' )';
                 }
                 else {
-                    $qstr = $qstr. " AND " . $fd . ":" . $val ;
+                    $qstr .= ' AND ' . $fd . ':' . $val ;
                 }
             }
         }
@@ -162,7 +176,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             $logger->debug("Requesting $pagesize rows starting at $start.");
         }
         
-        $facets = $this->facet_fields;
+        $facets = array_keys($this->facet_fields);
             //$query_fields = array_keys($q);
             //foreach ($facets as $i => $facet) {
                 //if (in_array($facet, $query_fields)) {
@@ -252,7 +266,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             
     }
     
-    public function search_old($q, $include_facets=TRUE, $start=0, $count=50) {
+    /*public function search_old($q, $include_facets=TRUE, $start=0, $count=50) {
         $client = new SolrClient(self::$options);
         $query = new SolrQuery();
         
@@ -301,7 +315,7 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         $docs = $resp->response->docs;
         $facets = isset($resp->facet_counts->facet_fields) ? $resp->facet_counts->facet_fields : array();
         return array('docs'=> $docs , 'facets' => $facets); 
-    }
+    }*/
     
 }
 ?>
