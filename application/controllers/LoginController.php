@@ -101,10 +101,22 @@ class LoginController extends Zend_Controller_Action
                     //$this->_helper->redirector('index', 'index');
                 }
             	else {
-            		$form->setDescription('Username or password is not correct.');
+            		$form->setDescription('Username or password is not correct');
             	}
             }
-            $this->view->userdata = $request->getPost();
+            else {
+                $errors = $form->getMessages();
+                $errorMsg = '';
+                foreach($errors as $field => $error) {
+                    foreach($error as $v) {
+                        $errorMsg .= str_replace('Value', $field, $v); 
+                    }
+                    break;// show only first error.
+                }
+                if ($errorMsg != '') 
+                    $form->setDescription($errorMsg);
+                $this->view->userdata = $request->getPost();
+            }
         }
         $this->view->form = $form;
     }

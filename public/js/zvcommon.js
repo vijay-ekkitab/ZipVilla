@@ -312,7 +312,7 @@ function login(iduser,idpsw, idmsg) {
                     }
                 }
                 else {
-                    $(idmsg).append('<p>username or password is incorrect.</p>');
+                    $(idmsg).empty().append('<p>username or password is incorrect.</p>');
                 }
             }
         }
