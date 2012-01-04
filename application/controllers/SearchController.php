@@ -109,7 +109,7 @@ class SearchController extends Zend_Controller_Action
             for($i=0; $i<count($keyword_array); $i++) {
                 $keyword_array[$i] = '"'.$keyword_array[$i].'"';
             }
-            $q['description'] = $keyword_array;
+            $q['search_keyword'] = $keyword_array;
         }
         
         $search_results = $sm->search($q, 

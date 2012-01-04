@@ -465,6 +465,7 @@
    <field name="address" type="string" indexed="true" stored="false" multiValued="true"/>
    <field name="city_state" type="text" indexed="true" stored="false" multiValued="true"/>
    <field name="average_rate" type="int" indexed="true" stored="true"/>
+   <field name="search_keyword" type="text" indexed="true" stored="false" multiValued="true"/>
 
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
@@ -527,8 +528,12 @@
 
    <copyField source="address__city" dest="city_state"/>
    <copyField source="address__state" dest="city_state"/>
+   
    <copyField source="rate__daily" dest="average_rate"/>
-
+   
+   <copyField source="address__*" dest="search_keyword"/>
+   <copyField source="description" dest="search_keyword"/>
+   <copyField source="title" dest="search_keyword"/>
 
    <!-- Above, multiple source fields are copied to the [text] field. 
 	  Another way to map multiple source fields to the same 
