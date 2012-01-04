@@ -497,8 +497,11 @@ function setCheckOutDateAuto(date)
 { 
 	var nextday = date.getDate()+1;
 	date.setDate(nextday);
-	$('.checkout').val($.datepicker.formatDate(dateformat, date));
-	$('.checkout').blur();
+	var checkOut = getCheckInDate('.checkout');
+	if ((checkOut == null) || (date > checkOut)) {
+		$('.checkout').val($.datepicker.formatDate(dateformat, date));
+		$('.checkout').blur();
+	}
 }
 
 function refineSearch(facet, value, selected)
