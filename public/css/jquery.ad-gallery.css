@@ -142,9 +142,12 @@
       width: 92%;
 	  margin-left:35px;
     }
+	    .ad-gallery .ad-nav .ad-thumbs  ul{
+		width:100%;
+}
       .ad-gallery .ad-thumbs .ad-thumb-list {
         float: left;
-        width: 9000px;
+        width: 9000px!important;
         list-style: none;
       }
         .ad-gallery .ad-thumbs li {
@@ -154,7 +157,7 @@
             display: block;
           }
             .ad-gallery .ad-thumbs li a img {
-              border: 2px solid #CCC;
+              border: 3px solid #CCC;
               display: block;
 		  margin-right:5px;
 		  width:40px;
