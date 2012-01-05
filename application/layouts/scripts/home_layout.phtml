@@ -99,7 +99,8 @@ $(document).ready(function() {
     
     $("#guests").val('1');
     $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
-    $('#query').bind('keypress', null, watchQueryBox);
+    //$('#query').bind('keypress', null, watchQueryBox);
+    $('#query').autocomplete({source:'/default/search/autocomplete/format/json'});
 
     $('#search_form_home').submit(function() {
         if ($('#query').val() == "") {
