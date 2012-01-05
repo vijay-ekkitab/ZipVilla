@@ -376,9 +376,12 @@ body {
 .v_listing_header {
 	background:url(../images/bg_list_header.jpg) top center no-repeat;
 	width:930px;
-	height:70px;
+	/*height:90px;*/
 	float:left;
 	padding:10px 15px;
+}
+.v_listing_header h2{
+	width:600px;
 }
 .h2 {
 	float:left;
