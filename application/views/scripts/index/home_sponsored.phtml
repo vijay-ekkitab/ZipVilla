@@ -15,12 +15,13 @@
 			<?php foreach($this->sponsoredListings as $sponsoredData) : ?>	
 				<?php $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $sponsoredData);?>
 				<li>
-					<a class="thumb" name="leaf" href="<?php echo $image;?> "title="<?php echo $sponsoredData->title;?>"> <img src="<?php echo $this->baseUrl('/images/control.jpg');?>" alt="villaImage" /></a>
+					<a class="thumb" name="<?php echo $sponsoredData->title;?>" href="<?php echo $image;?> "title="<?php echo $sponsoredData->title;?>"> <img src="<?php echo $this->baseUrl('/images/control.jpg');?>" alt="villaImage" />
+					<span id="url-path" style="display:none;"><?php echo $this->baseUrl('/list?id='.$sponsoredData->id);?></span></a>
 						<div class="caption">
-							<div class="image-title">
-								<div class="slide_text">
-									<div class="floatleft">
-									  <a href="<?php echo $this->baseUrl('/list?id='.$sponsoredData->id);?>"/>
+							<a href="<?php echo $this->baseUrl('/list?id='.$sponsoredData->id);?>"/>
+								<div class="image-title">
+									<div class="slide_text">
+										<div class="floatleft">
 											<h3>
 												<?php 
 													if( strlen($this->escape($sponsoredData->title)) > VILLA_NAME_LARGE_SIZE )
@@ -28,27 +29,28 @@
 													else
 														echo $this->escape($sponsoredData->title);
 												?>
-											</h3></a>
-										<span><PH></span>
-										<h2><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="rupeeImage" />
-										<?php echo $this->escape(0+$sponsoredData->rate['daily']);?><span>&nbsp;Per night</span></h2>
-									</div>
-									<div class="v_ratings">
-										<div class="ratings_div"><!--golden and silver stars-->
-											<?php for($rc=0; $rc < 5; $rc++) {
-												if ((0+$sponsoredData->rating) > $rc) 
-													echo '<div><img src="'.$this->baseUrl().'/images/icon_ratings_gold.jpg"/></div>';
-												else
-													echo '<div><img src="'.$this->baseUrl().'/images/icon_ratings_silver.jpg"/></div>';
-												} ?>                                            
-												<span><?php echo $this->escape(0+$sponsoredData->rating);?>&nbsp;Ratings</span>
+											</h3>
+											<span><PH></span>
+											<h2><img src="<?php echo $this->baseUrl();?>/images/symbl_rupee.jpg" alt="rupeeImage" />
+											<?php echo $this->escape(0+$sponsoredData->rate['daily']);?><span>&nbsp;Per night</span></h2>
 										</div>
-									<div class="reviews">
-										<p><?php echo $this->escape(0+$sponsoredData->reviews);?></p><span>&nbsp;Reviews</span>
+										<div class="v_ratings">
+											<div class="ratings_div"><!--golden and silver stars-->
+												<?php for($rc=0; $rc < 5; $rc++) {
+													if ((0+$sponsoredData->rating) > $rc) 
+														echo '<div><img src="'.$this->baseUrl().'/images/icon_ratings_gold.jpg"/></div>';
+													else
+														echo '<div><img src="'.$this->baseUrl().'/images/icon_ratings_silver.jpg"/></div>';
+													} ?>                                            
+												<span><?php echo $this->escape(0+$sponsoredData->rating);?>&nbsp;Ratings</span>
+											</div>
+										<div class="reviews">
+											<p><?php echo $this->escape(0+$sponsoredData->reviews);?></p><span>&nbsp;Reviews</span>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						</a>
 					</div>
 				</li>
 			<?php endforeach; ?>

@@ -83,7 +83,7 @@
 		nextPageLinkText:          'Next &rsaquo;',
 		prevPageLinkText:          '&lsaquo; Prev',
 		enableHistory:             false,
-		enableKeyboardNavigation:  false,
+		enableKeyboardNavigation:  true,
 		autoStart:                 false,
 		syncTransitions:           false,
 		defaultTransitionDuration: 1000,
@@ -133,7 +133,7 @@
 				this.addImage(listItem, false, true, position);
 				return this;
 			},
-/*
+
 			// Adds an image to the gallery and optionally inserts/appends it to the DOM (thumbExists)
 			// @param listItem Either a jQuery object or a string of html of the list item that is to be added to the gallery.
 			// @param {Boolean} thumbExists Specifies whether the thumbnail already exists in the DOM or if it needs to be added.
@@ -209,98 +209,7 @@
 
 				return this;
 			},
-*/
 
-// SYLVESTER THOMAS - modified 05/Jan/2012			
-			// Adds an image to the gallery and optionally inserts/appends it to the DOM (thumbExists)
-			// @param listItem Either a jQuery object or a string of html of the list item that is to be added to the gallery.
-			// @param {Boolean} thumbExists Specifies whether the thumbnail already exists in the DOM or if it needs to be added.
-			// @param {Boolean} insert Specifies whether the the image is appended to the end or inserted into the gallery.
-			// @param {Integer} position The index within the gallery where the item shouold be added.
-			addImage: function(listItem, thumbExists, insert, position) {
-				var $li = ( typeof listItem === "string" ) ? $(listItem) : listItem;                
-        var $aThumb = $li.find('a.thumb');
-        var $path = $li.find('#url-path');
-        var urlPath = $path.text();
-        var slideUrl = $aThumb.attr('href');
-        var title = $aThumb.attr('title');
-        var $caption = $li.find('.caption').remove();
-        var hash = $aThumb.attr('name');
-				
-				// Increment the image counter
-				imageCounter++;
-
-				// Autogenerate a hash value if none is present or if it is a duplicate
-				if (!hash || allImages[''+hash]) {
-					hash = imageCounter;
-				}
-
-				// Set position to end when not specified
-				if (!insert)
-					position = this.data.length;
-
-				var imageData = {
-                    urlPath:urlPath,
-                    title:title,
-                    slideUrl:slideUrl,
-                    caption:$caption,
-                    hash:hash,
-                    gallery:this,
-                    index:position
-                };
-        
-				// Add the imageData to this gallery's array of images
-				if (insert) {
-					this.data.splice(position, 0, imageData);
-
-					// Reset index value on all imageData objects
-					this.updateIndices(position);
-				}
-				else {
-					this.data.push(imageData);
-				}
-
-				var gallery = this;
-
-				// Add the element to the DOM
-				if (!thumbExists) {
-					// Update thumbs passing in addition post transition out handler
-					this.updateThumbs(function() {
-						var $thumbsUl = gallery.find('ul.thumbs');
-						if (insert)
-							$thumbsUl.children(':eq('+position+')').before($li);
-						else
-							$thumbsUl.append($li);
-						
-						if (gallery.onImageAdded)
-							gallery.onImageAdded(imageData, $li);
-					});
-				}
-
-				// Register the image globally
-				allImages[''+hash] = imageData;
-
-				// Construct new hidden span for the image
-
-				// Setup attributes and click handler
-				$aThumb.attr('rel', 'history')
-					.attr('href', '#'+hash)
-					.removeAttr('name');
-					
-        var newSlide = this.$imageContainer
-            .append('<span class="image-wrapper current"><a class="advance-link" rel="history" href="/project/'+imageData.urlPath+'" title="'+imageData.title+'">&nbsp;</a></span>')
-            .find('span.current').css('opacity', '0');
-        newSlide.find('a')
-        .append(imageData.image);
-
-        //.click(function(e) {
-				//		gallery.clickHandler(e, this);
-				//	});
-
-				return this;
-			},
-
-			
 			// Removes an image from the gallery based on its index.
 			// Returns false when the index is out of range.
 			removeImageByIndex: function(index) {

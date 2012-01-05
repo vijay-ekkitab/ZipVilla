@@ -9,7 +9,7 @@
 				$('#thumbs ul.thumbs li').opacityrollover({
 					mouseOutOpacity:   onMouseOutOpacity,
 					mouseOverOpacity:  1.0,
-					fadeSpeed:         'fast',
+					fadeSpeed:         'slow',
 					exemptionSelector: '.selected'
 				});
 				
