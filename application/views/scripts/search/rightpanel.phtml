@@ -10,21 +10,23 @@ function getHtml($feature, $facets, $selected, $maxVisible = MAX) {
         $checked = '';
         $type = $facetNames[$i];
         $type = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $type);
-        if ($selected != null) {
-            foreach($selected as $sel) {
-                if (preg_match("/\"?$type\"?/", $sel)) {
-                    $checked = 'checked="yes"';
-                    break;
+        if ($facets[$type] > 0) {
+            if ($selected != null) {
+                foreach($selected as $sel) {
+                    if (preg_match("/\"?$type\"?/", $sel)) {
+                        $checked = 'checked="yes"';
+                        break;
+                    }
                 }
             }
-        }
-        $tmp = '<input name="'.$feature.'[]'.'" value="'.$type.'" type="checkbox" class="l_styled"'.$checked. '/><p>'.$type.'</p>'."\n";
-        $tmp .= '<div class="l_room_nos">'.$facets[$type].'</div>'."\n";
-        if ($i < $maxVisible) {
-            $visible .= $tmp;
-        }
-        else {
-            $notVisible .= $tmp;
+            $tmp = '<input name="'.$feature.'[]'.'" value="'.$type.'" type="checkbox" class="l_styled"'.$checked. '/><p>'.$type.'</p>'."\n";
+            $tmp .= '<div class="l_room_nos">'.$facets[$type].'</div>'."\n";
+            if ($i < $maxVisible) {
+                $visible .= $tmp;
+            }
+            else {
+                $notVisible .= $tmp;
+            }
         }
     }
     if ($notVisible != '') {
@@ -71,7 +73,7 @@ function addCheckBox(feature, name, label, value, checked) {
     <div class="acc_section">
         <div id="price_slider"></div>
         <p>
-            <label style="margin-top:35px" for="price_range">Price range:</label>
+            <label style="margin-top:20px" for="price_range">Price range:</label>
             <input style="color:#0099CC;float:left;margin-top:-15px;background-color:#F5F5F5;border:none;" type="text" id="price_range" name="price_range" value="" style="border:0; color:#f6931f; font-weight:bold;" />
         </p>
     </div>
