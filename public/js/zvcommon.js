@@ -548,3 +548,34 @@ function resetCriteria()
 	$('input[name="price_range"]').val('Rs.' + minPrice + ' - Rs.' + maxPrice);
 }
 
+function mycarousel_initCallback(carousel) {
+	/*
+  jQuery('.jcarousel-control a').bind('click', function () {
+  	alert("jC:C");
+    carousel.scroll(jQuery.jcarousel.intval(jQuery(this).text()));
+    return false;
+  });
+
+  //jQuery('#mycarousel-next').bind('click', function () {
+  jQuery('#mostViewedCarousel-next').bind('click', function () {
+  	alert("jC:N");
+  	carousel.next();
+    return false;
+	});
+
+  jQuery('#mostViewedCarousel-prev').bind('click', function () {
+  	alert("jC:P");
+  	carousel.prev();
+    return false;
+	});	
+*/
+	
+  // Pause autoscrolling if the user moves with the cursor over the clip.
+  carousel.clip.hover(function() {
+    carousel.stopAuto();
+  }, function() {
+    carousel.startAuto();
+  });
+};
+
+// End Of File

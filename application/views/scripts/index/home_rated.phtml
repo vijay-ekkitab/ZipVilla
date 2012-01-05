@@ -7,9 +7,12 @@ elseif ($this->bestRatedListings != null) {
    foreach($this->bestRatedListings as $mostRatedData) {	
         $image = $this->zvImage()->getFirstListingImage($this->baseUrl(), $mostRatedData);
         $title = $this->escape($mostRatedData->title);
+        $url = $this->baseUrl().$this->escape($mostRatedData->id);
         if( strlen($title) > VILLA_NAME_SMALL_SIZE )
             $title = substr($title,0,(VILLA_NAME_SMALL_SIZE-3)).'...';
-        $item = '<li><img src="' .
+        $item = 
+                '<li>' .
+                '<img src="' .
                 $image .
                 '" height="70" width="110"/>'.
                 '<p>'.
@@ -20,8 +23,10 @@ elseif ($this->bestRatedListings != null) {
                 '" alt="Indian Rupee" />' .
                 $mostRatedData->rate['daily'].
                 '</span>' .
-                '</li>';
+                '</li>'
+                ;
         $items[] = $item; 
+        $urls[] = $url;
    }
 }
 else { ?>
@@ -30,13 +35,12 @@ else { ?>
 </ul>
 </p>
 <script type="text/javascript">
-    mostRatedData = [
-    <?php for ($i=0; $i<count($items); $i++) {?>
-        <?php if ($i> 0) {?>
-            ,'<?php echo $items[$i];?>'
-        <?php }else {?>
-            '<?php echo $items[$i];?>'
-        <?php }?>
-    <?php }?>
-    ];
+	mostRatedData = [
+ 		<?php for ($i=0; $i<count($items); $i++) {?> 
+			<?php if ($i> 0) {?>
+				, <?php //do not remove the ',' (comma) ?>
+			<?php }?>
+			'<?php echo '<a href="/list?id='.$urls[$i].'"/a>'. $items[$i] . '</a>';?>'
+		<?php }?>
+	];
 </script>

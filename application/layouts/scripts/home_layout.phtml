@@ -62,33 +62,71 @@ function getVisibleCount(datasize) {
 
 function loadMostViewed() {
 	if (mostViewedCarousel == null) {
-		   $('#mostViewedCarousel').jcarousel({wrap:"circular", size:mostViewedData.length, visible:getVisibleCount(mostViewedData.length)});
-		   var carousel = $('#mostViewedCarousel').data('jcarousel');
-		   for (var i=0; i<mostViewedData.length; i++) {
-			   carousel.add(i,mostViewedData[i]);
-		   }
-		   mostViewedCarousel = carousel;
+		$('#mostViewedCarousel').jcarousel({
+		wrap:"circular", size:mostViewedData.length, 
+		visible:getVisibleCount(mostViewedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+					i = (i - 1) % $('#mostViewedCarousel li').size();
+					$('.jcarousel-control a').removeClass('active').addClass('inactive');
+					$('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}			   
+		});
+		var carousel = $('#mostViewedCarousel').data('jcarousel');
+
+		for (var i=0; i<mostViewedData.length; i++) {
+			carousel.add(i,mostViewedData[i]);
+		}
+		mostViewedCarousel = carousel;
 	}
 }
+
 function loadMostRated() {
 	if (mostRatedCarousel == null) {
-		   $('#mostRatedCarousel').jcarousel({wrap:"circular", size:mostRatedData.length, visible:getVisibleCount(mostRatedData.length)});
-		   var carousel = $('#mostRatedCarousel').data('jcarousel');
-		   for (var i=0; i<mostRatedData.length; i++) {
-			   carousel.add(i, mostRatedData[i]);
-		   }
-		   mostRatedCarousel = carousel;
+		$('#mostRatedCarousel').jcarousel({
+		wrap:"circular", size:mostRatedData.length, 
+		visible:getVisibleCount(mostRatedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+					i = (i - 1) % $('#mostRatedCarousel li').size();
+					jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+					jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}			   
+		});
+		var carousel = $('#mostRatedCarousel').data('jcarousel');
+		for (var i=0; i<mostRatedData.length; i++) {
+			carousel.add(i,mostRatedData[i]);
+		}
+		mostRatedCarousel = carousel;
 	}
 }
+
 function loadMostBooked() {
+	
 	if (mostBookedCarousel == null) {
-		   $('#mostBookedCarousel').jcarousel({wrap:"circular", size:mostBookedData.length, visible:getVisibleCount(mostBookedData.length)});
-		   var carousel = $('#mostBookedCarousel').data('jcarousel');
-		   for (var i=0; i<mostBookedData.length; i++) {
-			    carousel.add(i, mostBookedData[i]);
-		   }
-		   mostBookedCarousel = carousel;
+		$('#mostBookedCarousel').jcarousel({
+		wrap:"circular", size:mostBookedData.length, 
+		visible:getVisibleCount(mostBookedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+					i = (i - 1) % $('#mostBookedCarousel li').size();
+					jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+					jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}
+		});
+		var carousel = $('#mostBookedCarousel').data('jcarousel');
+		for (var i=0; i<mostBookedData.length; i++) {
+			carousel.add(i,mostBookedData[i]);
+		}
+		mostBookedCarousel = carousel;
 	}
+
 }
 
 $(document).ready(function() {
