@@ -237,8 +237,12 @@ class SearchController extends Zend_Controller_Action
                 $sm = $this->_helper->searchManager;
                 $q = array('city_state' => strtolower($term)."*");
                 $results = $sm->search_ajax($q);
+                foreach($results as $result) {
+                    $logger->debug('>> "'.$result.'"');
+                }
            }
            $json = Zend_Json::encode($results);
+           $logger->debug('>> JSON '.$json);
         }
         $this->getResponse()->setHeader('Content-Type', 'text/json')
                             ->setBody($json)
