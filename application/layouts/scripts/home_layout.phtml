@@ -22,7 +22,6 @@
                                     ->prependStylesheet($this->baseUrl().'/skins/tango/skin.css')
                                     ->prependStylesheet($this->baseUrl().'/css/galleriffic-2.css')
                                     ->prependStylesheet($this->baseUrl().'/css/jquery.ad-gallery.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/jquery.autocomplete.css')
                                     ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
                                     //->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
@@ -138,7 +137,6 @@ $(document).ready(function() {
     
     $("#guests").val('1');
     $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
-    //$('#query').bind('keypress', null, watchQueryBox);
     $('#query').autocomplete({source:'/default/search/autocomplete/format/json'});
 
     $('#search_form_home').submit(function() {
