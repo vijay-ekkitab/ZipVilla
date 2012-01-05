@@ -83,7 +83,7 @@
 		nextPageLinkText:          'Next &rsaquo;',
 		prevPageLinkText:          '&lsaquo; Prev',
 		enableHistory:             false,
-		enableKeyboardNavigation:  true,
+		enableKeyboardNavigation:  false,
 		autoStart:                 true,
 		syncTransitions:           false,
 		defaultTransitionDuration: 1000,
