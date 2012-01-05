@@ -36,7 +36,7 @@
     	
     	$("#sort").prop('selectedIndex', <?php echo $sort;?>);
     	$('#query').data('lastValue', '<?php echo $this->search_query;?>');
-    	$('#query').bind('keypress', null, watchQueryBox);
+    	$('#query').autocomplete({source:'/default/search/autocomplete/format/json'});
     
         $('#price_slider').slider({
             range: true,
