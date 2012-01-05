@@ -20,6 +20,7 @@ class SearchController extends Zend_Controller_Action
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('lookahead', 'html')
                     ->addActionContext('refine', 'html')
+                    ->addActionContext('autocomplete', 'json')
                     ->initContext();
     }
     
@@ -89,7 +90,13 @@ class SearchController extends Zend_Controller_Action
             $q = array('city_state' => $values[SearchController::QUERY]);
         }
         else {
-            $q = array('city_state' => '"'.$values[SearchController::QUERY].'"');
+            $tmp = preg_replace("/[^a-zA-Z0-9]/", " ", $values[SearchController::QUERY]);
+            $terms = explode(' ', $tmp);
+            $qterms = array();
+            foreach($terms as $term) {
+                $qterms[] = '"' . $term . '"';
+            }
+            $q = array('city_state' => $qterms);
         }
         
         foreach ($this->facets as $facet) {
@@ -218,6 +225,25 @@ class SearchController extends Zend_Controller_Action
            }
         }
         $this->view->lookahead = $results;
+    }
+    
+    public function autocompleteAction() {
+        $logger = Zend_Registry::get('zvlogger');
+        $json = '';
+        $request = $this->getRequest();
+        if ($request->isGet()) {
+           $term = $request->getParam('term');
+           if (($term != null) && ($term != '')) {
+                $sm = $this->_helper->searchManager;
+                $q = array('city_state' => strtolower($term)."*");
+                $results = $sm->search_ajax($q);
+           }
+           $json = Zend_Json::encode(array_values($results));
+        }
+        $this->getResponse()->setHeader('Content-Type', 'text/json')
+                            ->setBody($json)
+                            ->sendResponse();
+        exit;
     }
     
 
