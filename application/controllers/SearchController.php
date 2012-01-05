@@ -105,11 +105,13 @@ class SearchController extends Zend_Controller_Action
         }
         
         if (isset($values[SearchController::KEYWORDS])) {
-            $keyword_array = explode(' ', $values[SearchController::KEYWORDS]);
-            for($i=0; $i<count($keyword_array); $i++) {
-                $keyword_array[$i] = '"'.$keyword_array[$i].'"';
+            if ($values[SearchController::KEYWORDS] != '') {
+                $keyword_array = explode(' ', $values[SearchController::KEYWORDS]);
+                for($i=0; $i<count($keyword_array); $i++) {
+                    $keyword_array[$i] = '"'.$keyword_array[$i].'"';
+                }
+                $q['search_keyword'] = $keyword_array;
             }
-            $q['search_keyword'] = $keyword_array;
         }
         
         $search_results = $sm->search($q, 

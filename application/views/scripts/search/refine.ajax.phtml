@@ -1,4 +1,6 @@
-<?php include_once("ZipVilla/TypeConstants.php");?>
+<?php include_once("ZipVilla/TypeConstants.php");
+$logger = Zend_Registry::get('zvlogger');
+?>
 <script>
 var totalhits=<?php echo $this->total_hits;?>;
 </script>
@@ -7,6 +9,7 @@ var totalhits=<?php echo $this->total_hits;?>;
     <p>An error was encountered in search.</p>
 <?php } elseif ($this->results != null) {?>
 <?php
+    try {
     $villaCtr = ($this->page - 1) * $this->pagesz;
     foreach($this->results as $result) : ?>
         <?php 
@@ -63,6 +66,7 @@ var totalhits=<?php echo $this->total_hits;?>;
             </div>
         </div>
     <?php endforeach; ?>
+    <?php } catch (Exception $e) {$logger->debug($e->getMessage());}?>
 <?php } else {?>
     <p>No results were returned from search.</p>
 <?php } ?>
@@ -73,6 +77,7 @@ var totalhits=<?php echo $this->total_hits;?>;
     <p>An error was encountered in search.</p>
 <?php } elseif ($this->results != null) {?>
 <?php 
+    try {
     $villaCtr = ($this->page - 1) * $this->pagesz;
     foreach($this->results as $result) : ?>
     <div class="wrpr_photo">
@@ -90,6 +95,7 @@ var totalhits=<?php echo $this->total_hits;?>;
         </div>
     </div>
     <?php endforeach;?>
+    <?php } catch (Exception $e) {$logger->debug($e->getMessage());}?>
 <?php } else {?>
     <p>No results were returned from search.</p>
 <?php } ?>
@@ -97,6 +103,7 @@ var totalhits=<?php echo $this->total_hits;?>;
 <zipvilla>
 <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 <?php 
+    try {
     if ((!isset($this->pagesz)) || ($this->pagesz ==0)) {
         $this->pagesz = 10;
     }
@@ -137,4 +144,5 @@ var totalhits=<?php echo $this->total_hits;?>;
                 <?php }?>
             </div><!--Previous Next Page buttons ends-->
         <?php }?>
+        <?php } catch (Exception $e) {$logger->debug($e->getMessage());}?>
 </div>
