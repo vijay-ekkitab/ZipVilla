@@ -433,7 +433,7 @@ class ListController extends Zend_Controller_Action
         if ($tmp2[0] == $tmp1[0]) { //same month
             $today = $tmp2[1];
         }
-        $html = '<table><tbody><tr><th>SUN</th><th>MON</th><th>TUE</th><th>WEN</th><th>THU</th><th>FRI</th><th>SAT</th></tr>';
+        $html = '<table><tbody><tr><th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th></tr>';
         $i=0;
         
         $html .= '<tr>';

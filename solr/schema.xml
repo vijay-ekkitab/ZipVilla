@@ -460,6 +460,8 @@
    
    <field name="images" type="string" indexed="false" stored="true" multiValued="true"/>
    <field name="video" type="string" indexed="false" stored="true" multiValued="true"/>
+   
+   <field name="citystate" type="string" indexed="true" stored="true"/>
 
    <!-- copyFields -->
    <field name="address" type="string" indexed="true" stored="false" multiValued="true"/>
@@ -526,9 +528,7 @@
 
    <copyField source="address__*" dest="address"/>
 
-   <copyField source="address__city" dest="city_state"/>
-   <copyField source="address__state" dest="city_state"/>
-   
+   <copyField source="citystate" dest="city_state"/>
    <copyField source="rate__daily" dest="average_rate"/>
    
    <copyField source="address__*" dest="search_keyword"/>
