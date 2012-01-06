@@ -172,6 +172,7 @@ function calculate_rate(_id) {
 		_checkout = '';
 	}
 	var _guests=$("#guests").val();
+	$("#calc_rate").text("Calculating...");
     $.ajax({ 
         type: "POST",
         dataType: "json",
