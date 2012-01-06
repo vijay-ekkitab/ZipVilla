@@ -115,19 +115,20 @@ class PriceModel {
 
     public function get_average_rate($start, $end, $quiet_mode = TRUE) {
 
+        $logger = Zend_Registry::get('zvlogger');
         $slabs = $this->get_rate_structure($start, $end);
         $total_price = 0;
         $total_days = 0;
         foreach($slabs as $slab) {
         	   if (!$quiet_mode) {
-               		echo "From: ".
+               		$logger->debug("From: ".
                     	($slab['from'] == null ? '<null>' : date('d-M-Y',$slab['from']->sec)).
                     	"  To: ".
                     	($slab['to'] == null ? '<null>' : date('d-M-Y',$slab['to']->sec)).
                     	"  [days ".
                     	$slab['days'].
                     	"]  Rate: ".
-                    	$slab['rate']['daily'].",".$slab['rate']['weekly'].",".$slab['rate']['monthly']."\n";
+                    	$slab['rate']['daily'].",".$slab['rate']['weekly'].",".$slab['rate']['monthly']."\n");
         	   }
                $rate = $slab['rate'];
                $days = $slab['days'];
