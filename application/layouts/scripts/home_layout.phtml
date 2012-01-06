@@ -64,8 +64,9 @@ function getVisibleCount(datasize) {
 function loadMostViewed_itemLoadCallback(carousel, state)
 {
 	for (var i = carousel.first; i <= carousel.last; i++) {
+		if( i == 0 ) i = 1;
 		if (carousel.has(i))	continue;
-		if ((i == 0) || (i > mostViewedData.length))	break;
+		if (i > mostViewedData.length)	break;
 		if( carousel.last <= mostViewedData.length )
 			carousel.add(i, mostViewedData[i-1]);
 		//alert("i: "+i+" cF: "+ carousel.first + " cL: "+carousel.last + " cS: "+carousel.length);
@@ -75,8 +76,9 @@ function loadMostViewed_itemLoadCallback(carousel, state)
 function loadMostBooked_itemLoadCallback(carousel, state)
 {
 	for (var i = carousel.first; i <= carousel.last; i++) {
+		if( i == 0 )  i = 1;
 		if (carousel.has(i))  continue;
-		if ((i == 0) || (i > mostBookedData.length))  break;
+		if (i > mostBookedData.length)  break;
 		if( carousel.last <= mostBookedData.length )
 			carousel.add(i, mostBookedData[i-1]);
 	}
@@ -85,8 +87,9 @@ function loadMostBooked_itemLoadCallback(carousel, state)
 function loadMostRated_itemLoadCallback(carousel, state)
 {
 	for (var i = carousel.first; i <= carousel.last; i++) {
+		if( i == 0 ) i = mostRatedData.length;
 		if (carousel.has(i)) continue;
-		if ((i == 0) || (i > mostRatedData.length))  break;
+		if (i > mostRatedData.length)  break;
 		if( carousel.last <= mostRatedData.length )		
 			carousel.add(i, mostRatedData[i-1]);
 	}
