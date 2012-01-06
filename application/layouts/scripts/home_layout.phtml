@@ -61,6 +61,7 @@ function getVisibleCount(datasize) {
 }
 
 function loadMostViewed() {
+	
 	if (mostViewedCarousel == null) {
 		$('#mostViewedCarousel').jcarousel({
 		wrap:"circular", size:mostViewedData.length, 
@@ -68,9 +69,9 @@ function loadMostViewed() {
 		initCallback: mycarousel_initCallback,
 			itemVisibleInCallback: {
 				onAfterAnimation: function (c, o, i, s) {
-					i = (i - 1) % $('#mostViewedCarousel li').size();
-					$('.jcarousel-control a').removeClass('active').addClass('inactive');
-					$('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				//	i = (i - 1) % $('#mostViewedCarousel li').size();
+				//	$('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	$('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
 				}
 			}			   
 		});
@@ -84,6 +85,7 @@ function loadMostViewed() {
 }
 
 function loadMostRated() {
+	
 	if (mostRatedCarousel == null) {
 		$('#mostRatedCarousel').jcarousel({
 		wrap:"circular", size:mostRatedData.length, 
@@ -91,9 +93,9 @@ function loadMostRated() {
 		initCallback: mycarousel_initCallback,
 			itemVisibleInCallback: {
 				onAfterAnimation: function (c, o, i, s) {
-					i = (i - 1) % $('#mostRatedCarousel li').size();
-					jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
-					jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				//	i = (i - 1) % $('#mostRatedCarousel li').size();
+				//	jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
 				}
 			}			   
 		});
@@ -114,9 +116,9 @@ function loadMostBooked() {
 		initCallback: mycarousel_initCallback,
 			itemVisibleInCallback: {
 				onAfterAnimation: function (c, o, i, s) {
-					i = (i - 1) % $('#mostBookedCarousel li').size();
-					jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
-					jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				//	i = (i - 1) % $('#mostBookedCarousel li').size();
+				//	jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
 				}
 			}
 		});
