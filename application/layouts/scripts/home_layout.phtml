@@ -66,7 +66,7 @@ function loadMostViewed_itemLoadCallback(carousel, state)
 	for (var i = carousel.first; i <= carousel.last; i++) {
 		if (carousel.has(i))	continue;
 		if ((i == 0) || (i > mostViewedData.length))	break;
-		//if( carousel.last <= mostViewedData.length )
+		if( carousel.last <= mostViewedData.length )
 			carousel.add(i, mostViewedData[i-1]);
 		//alert("i: "+i+" cF: "+ carousel.first + " cL: "+carousel.last + " cS: "+carousel.length);
 	}
@@ -77,7 +77,7 @@ function loadMostBooked_itemLoadCallback(carousel, state)
 	for (var i = carousel.first; i <= carousel.last; i++) {
 		if (carousel.has(i))  continue;
 		if ((i == 0) || (i > mostBookedData.length))  break;
-		//if( carousel.last <= mostBookedData.length )
+		if( carousel.last <= mostBookedData.length )
 			carousel.add(i, mostBookedData[i-1]);
 	}
 };
@@ -87,7 +87,7 @@ function loadMostRated_itemLoadCallback(carousel, state)
 	for (var i = carousel.first; i <= carousel.last; i++) {
 		if (carousel.has(i)) continue;
 		if ((i == 0) || (i > mostRatedData.length))  break;
-		//if( carousel.last <= mostRatedData.length )		
+		if( carousel.last <= mostRatedData.length )		
 			carousel.add(i, mostRatedData[i-1]);
 	}
 };
@@ -115,21 +115,21 @@ $(document).ready(function() {
 			switch(ui.index) {
 			case 0:	
 				$('#mostViewedCarousel').jcarousel({
-					size: mostViewedData.length, wrap:"both", visible:getVisibleCount(mostViewedData.length),
+					size: mostViewedData.length, wrap:"circular", visible:getVisibleCount(mostViewedData.length),
 					itemLoadCallback: {onBeforeAnimation: loadMostViewed_itemLoadCallback}
 				});
 				break;
 
 			case 1: 
 				$('#mostBookedCarousel').jcarousel({
-					size: mostBookedData.length, wrap:"both", visible:getVisibleCount(mostBookedData.length),
+					size: mostBookedData.length, wrap:"circular", visible:getVisibleCount(mostBookedData.length),
 					itemLoadCallback: {onBeforeAnimation: loadMostBooked_itemLoadCallback}
 				})
 				break;
 
 			case 2: 
 				$('#mostRatedCarousel').jcarousel({
-					size: mostRatedData.length, wrap:"both", visible:getVisibleCount(mostRatedData.length),
+					size: mostRatedData.length, wrap:"circular", visible:getVisibleCount(mostRatedData.length),
 					itemLoadCallback: {onBeforeAnimation: loadMostRated_itemLoadCallback}
 				})
 				break;
