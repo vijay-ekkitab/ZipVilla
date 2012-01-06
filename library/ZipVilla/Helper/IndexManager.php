@@ -37,6 +37,9 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 		return $doc; 
 	}
 	private function _indexDocument($obj) {
+	    if ((isset($obj['address__state'])) && (isset($obj['address__city']))) {
+	        $obj['citystate'] = $obj['address__city'] . ', '.$obj['address__state']; 
+	    }
 		$doc = $this->buildSolrInputDocument($obj);
 		$client = new SolrClient(self::$options);
 		$updateResponse = $client->addDocument($doc);

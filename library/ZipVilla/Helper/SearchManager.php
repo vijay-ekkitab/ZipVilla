@@ -228,7 +228,6 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
     public function search_ajax($q) {
         $client = new SolrClient(self::$options);
         $query = new SolrQuery();
-        $logger = Zend_Registry::get('zvlogger');
         
         $results = array(); 
         
@@ -239,9 +238,9 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         $qstr = $this->buildQuery($q, 0, null);
         
         $query->setQuery($qstr);
-        
-        $query->addField('address__city');
-        $query->addField('address__state');
+        $query->setStart(0);
+        $query->setFacet(true);
+        $query->addFacetField('citystate');
         
         $qr = $client->query($query);
         
@@ -253,15 +252,15 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         
         if ($docs == null) 
             return $results;
-       
-        foreach($docs as $doc) {
-            $city = isset($doc['address__city']) ? $doc['address__city'] : '';
-            $state = isset($doc['address__state']) ? $doc['address__state'] : '';
-            $citystate = $city.','.$state;
-            if ($citystate != '')
-                $results[] = $citystate;
+        
+        if (isset($resp->facet_counts->facet_fields['citystate'])) {
+            $names = $resp->facet_counts->facet_fields['citystate']->getPropertyNames();
+            foreach($names as $name) {
+                if ($resp->facet_counts->facet_fields['citystate'][$name] > 0) {
+                    $results[] = $name;
+                }
+            }
         }
-        $results = array_unique($results);
         return $results;
             
     }

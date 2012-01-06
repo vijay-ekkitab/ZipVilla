@@ -7,7 +7,17 @@ class PriceModel {
 
     public function __construct($special_rates, $standard_rate) {
         $this->special_rates = $special_rates; //an array of rate slabs, each for a date range.
+        if ($this->special_rates != null) {
+            for ($i=0; $i<count($this->special_rates); $i++) {
+                $this->special_rates[$i]['period']['from'] = $this->cleanDate($this->special_rates[$i]['period']['from']);
+                $this->special_rates[$i]['period']['to'] = $this->cleanDate($this->special_rates[$i]['period']['to']);
+            }
+        }
         $this->standard_rate = $standard_rate; //a rate slab without dates.
+    }
+    
+    private function cleanDate($date) {
+        return new MongoDate(strtotime(date('d-M-Y', $date->sec)));
     }
 
     private function get_interval($start, $end) {
