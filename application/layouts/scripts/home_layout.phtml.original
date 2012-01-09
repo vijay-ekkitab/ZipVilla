@@ -1,0 +1,206 @@
+<?php /* echo $this->layout()->content; */ ?>
+<?php
+    include_once("ZipVilla/TypeConstants.php");
+    $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
+    $this->headTitle()->setSeparator(' - ');
+    $this->headTitle('Zipvilla ~ Home away from home in India');
+    echo $this->doctype();
+    $baseUrl = $this->baseUrl();
+    $this->addScriptPath(APPLICATION_PATH.'/views/scripts/index'); 
+    $url = $this->url(array('controller'=>'search',
+                            'action' => 'index', 
+                            'query'=> $this->search_query,
+                            'check_in' => $this->checkin,
+                            'check_out' => $this->checkout,
+                            'guests' => $this->guests), null, TRUE);
+?>
+<html>
+<head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/skins/ie7/skin.css')
+                                    ->prependStylesheet($this->baseUrl().'/skins/tango/skin.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/galleriffic-2.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/jquery.ad-gallery.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
+                                    //->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/layout.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/visual.css')
+
+                                    ->prependStylesheet($this->baseUrl().'/css/misc.css')
+                                    ; ?>
+
+        <?php echo $this->headScript()
+                                      ->appendFile($this->baseUrl().'/js/jquery-1.6.2.min.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
+                                      ->appendFile($this->baseUrl().'/js/accordian.js')
+                                      ->appendFile('http://connect.facebook.net/en_US/all.js')
+                                      ->appendFile($this->baseUrl().'/js/mapMarker.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery.galleriffic.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery.opacityrollover.js')
+                                      ->appendFile($this->baseUrl().'/js/galleriffic.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery.jcarousel.min.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
+                                      ->appendFile($this->baseUrl().'/js/slideshow.js')
+                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
+        
+                                       ;?>
+<script type="text/javascript">
+
+var mostViewedCarousel = null;
+var mostBookedCarousel = null;
+var mostRatedCarousel = null;
+var mostBookedData = [];
+var mostRatedData = [];
+var mostViewedData = [];
+
+function getVisibleCount(datasize) {
+	var count = 6;
+	return datasize > 6 ? 6: datasize;
+}
+
+function loadMostViewed() {
+	
+	if (mostViewedCarousel == null) {
+		$('#mostViewedCarousel').jcarousel({
+		wrap:"circular", size:mostViewedData.length, 
+		visible:getVisibleCount(mostViewedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+				//	i = (i - 1) % $('#mostViewedCarousel li').size();
+				//	$('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	$('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}			   
+		});
+		var carousel = $('#mostViewedCarousel').data('jcarousel');
+
+		for (var i=0; i<mostViewedData.length; i++) {
+			carousel.add(i,mostViewedData[i]);
+		}
+		mostViewedCarousel = carousel;
+	}
+}
+
+function loadMostRated() {
+	
+	if (mostRatedCarousel == null) {
+		$('#mostRatedCarousel').jcarousel({
+		wrap:"circular", size:mostRatedData.length, 
+		visible:getVisibleCount(mostRatedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+				//	i = (i - 1) % $('#mostRatedCarousel li').size();
+				//	jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}			   
+		});
+		var carousel = $('#mostRatedCarousel').data('jcarousel');
+		for (var i=0; i<mostRatedData.length; i++) {
+			carousel.add(i,mostRatedData[i]);
+		}
+		mostRatedCarousel = carousel;
+	}
+}
+
+function loadMostBooked() {
+	
+	if (mostBookedCarousel == null) {
+		$('#mostBookedCarousel').jcarousel({
+		wrap:"circular", size:mostBookedData.length, 
+		visible:getVisibleCount(mostBookedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+				//	i = (i - 1) % $('#mostBookedCarousel li').size();
+				//	jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}
+		});
+		var carousel = $('#mostBookedCarousel').data('jcarousel');
+		for (var i=0; i<mostBookedData.length; i++) {
+			carousel.add(i,mostBookedData[i]);
+		}
+		mostBookedCarousel = carousel;
+	}
+
+}
+
+$(document).ready(function() {
+	var $tabs = $('#tabs').tabs();
+	
+    //$('#checkin').attr("readOnly", true);
+    //$('#checkout').attr("readOnly", true);
+    
+    $("#guests").val('1');
+    $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
+    $('#query').autocomplete({source:'/default/search/autocomplete/format/json'});
+
+    $('#search_form_home').submit(function() {
+        if ($('#query').val() == "") {
+            $('#set_location').show();
+            $(".defaultText").blur();
+            return false;
+        }
+    });
+
+    $('#tabs').bind('tabsshow', function(event, ui) {
+        switch(ui.index) {
+        case 0:	loadMostViewed();
+            break;
+        case 1: loadMostBooked();
+            break;
+        case 2: loadMostRated();
+            break;
+        default:
+            break;
+        } 
+        return true;
+    });
+
+    $tabs.tabs('select', 0);
+    loadMostViewed();
+
+});
+
+
+</script>
+
+</head>
+<body class="blue">
+    <div id="fb-root"></div>
+	<div class="wrapper"><!--outer wrapper to fix the width-->
+		<?php echo $this->render('header.phtml');?>
+		<div class="content">
+			<div class="srch_bx_home" style="height:320px;"><!--srch_bx_home-->
+				<h1>Discover amazing places to stay.</h1>
+				<p>1000s of exclusive properties in over a 100 cities awaiting your arrival.</p>
+
+				<div class="home_search"><!--home search-->
+					<form id="search_form_home" name="search_form_home" action="/search" method="post">
+						<?php echo $this->render('home_search.phtml');?>
+					</form>
+				</div><!--home search ends-->
+			</div><!--srch_bx_home ends-->
+			
+			<div class="slide_right"><!--slideshow-right-->
+				<?php echo $this->render('home_sponsored.phtml');?>
+			</div><!--slideshow-right ends-->
+			<div class="bg_slide_btm"></div>
+		</div> <!--content ends here-->
+
+			<div class="slide_bottom">
+				<?php echo $this->render('home_slide_bottom.phtml');?>
+			</div>
+		
+			<?php echo $this->render('footer.phtml');?>
+	</div><!--wrapper ends here-->
+</body>
+
+</html>
+
