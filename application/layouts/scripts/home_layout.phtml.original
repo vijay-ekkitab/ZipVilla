@@ -54,47 +54,82 @@ var mostRatedCarousel = null;
 var mostBookedData = [];
 var mostRatedData = [];
 var mostViewedData = [];
-var tabbed = false;
 
 function getVisibleCount(datasize) {
 	var count = 6;
 	return datasize > 6 ? 6: datasize;
 }
 
-function loadMostViewed_itemLoadCallback(carousel, state)
-{
-	for (var i = carousel.first; i <= carousel.last; i++) {
-		if( i == 0 ) i = 1;
-		if (carousel.has(i))	continue;
-		if (i > mostViewedData.length)	break;
-		if( carousel.last <= mostViewedData.length )
-			carousel.add(i, mostViewedData[i-1]);
-		//alert("i: "+i+" cF: "+ carousel.first + " cL: "+carousel.last + " cS: "+carousel.length);
-	}
-};
+function loadMostViewed() {
+	
+	if (mostViewedCarousel == null) {
+		$('#mostViewedCarousel').jcarousel({
+		wrap:"circular", size:mostViewedData.length, 
+		visible:getVisibleCount(mostViewedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+				//	i = (i - 1) % $('#mostViewedCarousel li').size();
+				//	$('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	$('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}			   
+		});
+		var carousel = $('#mostViewedCarousel').data('jcarousel');
 
-function loadMostBooked_itemLoadCallback(carousel, state)
-{
-	for (var i = carousel.first; i <= carousel.last; i++) {
-		if( i == 0 )  i = 1;
-		if (carousel.has(i))  continue;
-		if (i > mostBookedData.length)  break;
-		if( carousel.last <= mostBookedData.length )
-			carousel.add(i, mostBookedData[i-1]);
+		for (var i=0; i<mostViewedData.length; i++) {
+			carousel.add(i,mostViewedData[i]);
+		}
+		mostViewedCarousel = carousel;
 	}
-};
+}
 
-function loadMostRated_itemLoadCallback(carousel, state)
-{
-	for (var i = carousel.first; i <= carousel.last; i++) {
-		if( i == 0 ) i = mostRatedData.length;
-		if (carousel.has(i)) continue;
-		if (i > mostRatedData.length)  break;
-		if( carousel.last <= mostRatedData.length )		
-			carousel.add(i, mostRatedData[i-1]);
+function loadMostRated() {
+	
+	if (mostRatedCarousel == null) {
+		$('#mostRatedCarousel').jcarousel({
+		wrap:"circular", size:mostRatedData.length, 
+		visible:getVisibleCount(mostRatedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+				//	i = (i - 1) % $('#mostRatedCarousel li').size();
+				//	jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}			   
+		});
+		var carousel = $('#mostRatedCarousel').data('jcarousel');
+		for (var i=0; i<mostRatedData.length; i++) {
+			carousel.add(i,mostRatedData[i]);
+		}
+		mostRatedCarousel = carousel;
 	}
-};
+}
 
+function loadMostBooked() {
+	
+	if (mostBookedCarousel == null) {
+		$('#mostBookedCarousel').jcarousel({
+		wrap:"circular", size:mostBookedData.length, 
+		visible:getVisibleCount(mostBookedData.length),
+		initCallback: mycarousel_initCallback,
+			itemVisibleInCallback: {
+				onAfterAnimation: function (c, o, i, s) {
+				//	i = (i - 1) % $('#mostBookedCarousel li').size();
+				//	jQuery('.jcarousel-control a').removeClass('active').addClass('inactive');
+				//	jQuery('.jcarousel-control a:eq(' + i + ')').removeClass('inactive').addClass('active');
+				}
+			}
+		});
+		var carousel = $('#mostBookedCarousel').data('jcarousel');
+		for (var i=0; i<mostBookedData.length; i++) {
+			carousel.add(i,mostBookedData[i]);
+		}
+		mostBookedCarousel = carousel;
+	}
+
+}
 
 $(document).ready(function() {
 	var $tabs = $('#tabs').tabs();
@@ -102,57 +137,35 @@ $(document).ready(function() {
     //$('#checkin').attr("readOnly", true);
     //$('#checkout').attr("readOnly", true);
     
-		$("#guests").val('1');
-		$('#query').data('lastValue', '<?php //echo $this->search_query;?>');
-		$('#query').autocomplete({source:'/default/search/autocomplete/format/json'});
+    $("#guests").val('1');
+    $('#query').data('lastValue', '<?php //echo $this->search_query;?>');
+    $('#query').autocomplete({source:'/default/search/autocomplete/format/json'});
 
-		$('#search_form_home').submit(function() {
-			if( $('#query').val() == "") {
-					$('#set_location').show();
-					$(".defaultText").blur();
-					return false;
-			}
-		});
+    $('#search_form_home').submit(function() {
+        if ($('#query').val() == "") {
+            $('#set_location').show();
+            $(".defaultText").blur();
+            return false;
+        }
+    });
 
-		$('#tabs').bind('tabsshow', function(event, ui) {
-			switch(ui.index) {
-			case 0:	
-				$('#mostViewedCarousel').jcarousel({
-					size: mostViewedData.length, wrap:"circular", visible:getVisibleCount(mostViewedData.length),
-					itemLoadCallback: {onBeforeAnimation: loadMostViewed_itemLoadCallback}
-				});
-				break;
-
-			case 1: 
-				$('#mostBookedCarousel').jcarousel({
-					size: mostBookedData.length, wrap:"circular", visible:getVisibleCount(mostBookedData.length),
-					itemLoadCallback: {onBeforeAnimation: loadMostBooked_itemLoadCallback}
-				})
-				break;
-
-			case 2: 
-				$('#mostRatedCarousel').jcarousel({
-					size: mostRatedData.length, wrap:"circular", visible:getVisibleCount(mostRatedData.length),
-					itemLoadCallback: {onBeforeAnimation: loadMostRated_itemLoadCallback}
-				})
-				break;
-
-				default:
-					break;
-
-			}
+    $('#tabs').bind('tabsshow', function(event, ui) {
+        switch(ui.index) {
+        case 0:	loadMostViewed();
+            break;
+        case 1: loadMostBooked();
+            break;
+        case 2: loadMostRated();
+            break;
+        default:
+            break;
+        } 
         return true;
     });
 
-		
     $tabs.tabs('select', 0);
-		if( !tabbed ) {
-			$('#mostViewedCarousel').jcarousel({
-				size: mostViewedData.length, wrap:"circular", visible:getVisibleCount(mostViewedData.length),
-				itemLoadCallback: {onBeforeAnimation: loadMostViewed_itemLoadCallback}
-			});
-			tabbed = true;
-		}
+    loadMostViewed();
+
 });
 
 
