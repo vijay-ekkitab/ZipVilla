@@ -1,0 +1,36 @@
+<?php
+    $contentdir = APPLICATION_PATH . '/../content'; 
+    $this->headTitle('Zipvilla Content');
+    
+    $this->layout()->setLayout('simple');
+    
+    if ($this->sourcefile == null) {
+        $this->headline = "Requested page not found.";
+        return;
+    }
+    
+    $source = $contentdir .'/'. $this->sourcefile;
+    $line = false;
+    $fptr = false;
+    
+    if (!(file_exists($source) && is_readable($source))) {
+        $this->headline = "Page not available.";
+        return;
+    } 
+    
+    $fptr = fopen($source, "r");
+      
+    if ($line = fgets($fptr)) {
+        $line = trim($line);
+        $this->headline = $line;
+    }
+
+    while ($line = fgets($fptr)) {
+        if ($line) {
+            $line = str_replace("\n", "</br>\n", $line);
+            echo $line;
+        } ?>
+<?php }
+   
+    fclose($fptr);
+?>

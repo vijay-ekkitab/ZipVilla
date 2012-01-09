@@ -1,12 +1,13 @@
+<?php $basePath = $this->baseUrl('/show?doc=');?>
 <div class="footer">
-    <div class="dsclimr"><p><span>&copy; 2011  ZipVilla.  All rights reserved.</span><a href="#">Privacy Policy</a>|<a href="#">Terms and Conditions</a></p></div>
+    <div class="dsclimr"><p><span>&copy; 2011  ZipVilla.  All rights reserved.</span><a href="<?php echo $basePath . 'privacypolicy';?>">Privacy Policy</a>|<a href="<?php echo $basePath . 'termsandconditions';?>">Terms and Conditions</a></p></div>
     <div class="l_futr_nav v_futr_nav">
         <ul>
-            <li><a href="#">How it works</a></li>
-            <li><a href="#">FAQs</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Jobs</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="<?php echo $basePath . 'howzipvillaworks';?>">How it works</a></li>
+            <li><a href="<?php echo $basePath . 'faqs';?>">FAQs</a></li>
+            <li><a href="<?php echo $basePath . 'aboutzipvilla';?>">About</a></li>
+            <li><a href="<?php echo $basePath . 'jobsatzipvilla';?>">Jobs</a></li>
+            <li><a href="<?php echo $basePath . 'contactzipvilla';?>">Contact</a></li>
         </ul>
     </div>
     <div class="social_ico">
