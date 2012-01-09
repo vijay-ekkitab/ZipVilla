@@ -44,7 +44,7 @@
             max:20000,
             values: [minPrice, maxPrice],
             step:100,
-            slide: function( event, ui ) {
+            change: function( event, ui ) {
                 $( "#price_range" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
                 refineSearch('price_range', ui.values[0]+'-'+ui.values[1], 'false');
             }
