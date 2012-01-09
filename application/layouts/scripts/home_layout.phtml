@@ -64,7 +64,7 @@ function getVisibleCount(datasize) {
 function loadMostViewed_itemLoadCallback(carousel, state)
 {
 	for (var i = carousel.first; i <= carousel.last; i++) {
-		if( i == 0 ) i = 1;
+		if( i == 0 ) i = mostViewedData.length;;
 		if (carousel.has(i))	continue;
 		if (i > mostViewedData.length)	break;
 		if( carousel.last <= mostViewedData.length )
@@ -76,7 +76,7 @@ function loadMostViewed_itemLoadCallback(carousel, state)
 function loadMostBooked_itemLoadCallback(carousel, state)
 {
 	for (var i = carousel.first; i <= carousel.last; i++) {
-		if( i == 0 )  i = 1;
+		if( i == 0 ) i = mostBookedData.length;
 		if (carousel.has(i))  continue;
 		if (i > mostBookedData.length)  break;
 		if( carousel.last <= mostBookedData.length )
