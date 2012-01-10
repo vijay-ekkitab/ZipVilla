@@ -91,6 +91,7 @@ class SearchController extends Zend_Controller_Action
         }
         else {
             $tmp = preg_replace("/[^a-zA-Z0-9]/", " ", $values[SearchController::QUERY]);
+            $tmp = preg_replace("/\s+/", " ", $tmp);
             $terms = explode(' ', $tmp);
             $qterms = array();
             foreach($terms as $term) {
