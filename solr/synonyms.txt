@@ -29,8 +29,9 @@
 # Synonym mappings can be used for spelling correction too
 #pixima => pixma
 
-bengaluru, bangaluru, bangalore, blore
-chennai, madras
-mumbai, bombay
+bengaluru, bangaluru, blore ,bangalore 
+madras, chenai, chennai
+bambay, bombay, mumbai
 kolkotta, calcutta
+
 
