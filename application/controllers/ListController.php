@@ -495,7 +495,7 @@ class ListController extends Zend_Controller_Action
                  ->setSubject($subject);
                  
             try {
-                 $mail->send($transport);
+                 //$mail->send($transport);
             }
             catch(Exception $e) {
                 $response = $e->getMessage();
