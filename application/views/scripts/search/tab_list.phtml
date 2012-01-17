@@ -7,6 +7,7 @@
     foreach($this->results as $result) : ?>
         <?php 
             $street_name = isset($result['address__street_name']) ? $result['address__street_name'] : '';
+            $location = isset($result['address__location']) ? $result['address__location'] : '';
             $city = isset($result['address__city']) ? $result['address__city'] : '';
             $state = isset($result['address__state']) ? $result['address__state'] : '';
             $title = isset($result['title']) ? $result['title'] : '';
@@ -31,6 +32,7 @@
                 <h2><a href="<?php echo $link;?>"><?php echo $this->escape($title);?></a></h2>
                 <p>
                     <?php echo $this->escape($street_name);?>,
+                    <?php echo $this->escape($location);?>,
                     <?php echo $this->escape($city);?>,
                     <?php echo $this->escape($state);?>
                     <span><?php echo 'Guests: &nbsp;'.$this->escape($guests);?></span>
