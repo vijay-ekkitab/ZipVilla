@@ -17,8 +17,8 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
     <p>There has been an internal error. The property is not found in the system.</p>
 <?php } else {?> <!-- Property detail available -->
 <?php $country = isset($property->address['country']) ? $property->address['country'] : 'India';
-      $address = $property->{'address.street_number'} . ',' . $property->{'address.street_name'} . ',' .
-                 $property->{'address.location'} . ','. $property->{'address.city'} . ','. $property->{'address.state'} .','.
+      $address = $property->{'address.street_number'} . ', ' . $property->{'address.street_name'} . ', ' .
+                 $property->{'address.location'} . ', '. $property->{'address.city'} . ', '. $property->{'address.state'} .', '.
                  $country;
       $property_type = $property->shared == 'yes' ? 'Shared house/villa' : 'Entire house/villa';
       $daily_rate = isset($property->rate['daily']) ? $property->rate['daily'] : 0;
