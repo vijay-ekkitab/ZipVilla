@@ -492,6 +492,8 @@
 	background-color:#fff;
 	-moz-border-radius:3px;
 	border:1px solid #ccc;
+	width:80px;
+	font-size:12px;
 }
 .online_resrv .l_dropdwon_bg {
 	width:25px;
