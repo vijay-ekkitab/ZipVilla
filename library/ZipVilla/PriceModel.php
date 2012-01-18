@@ -122,8 +122,15 @@ class PriceModel {
     	return($results);
         
     }
-
+    
     public function get_average_rate($start, $end, $quiet_mode = TRUE) {
+        $result = $this->get_total_rate($start, $end, $quiet_mode);
+        $rate = $result['rate'];
+        $days = $result['days'];
+        return $days > 0 ? round($rate/$days) : 0;
+    }
+
+    public function get_total_rate($start, $end, $quiet_mode = TRUE) {
 
         $logger = Zend_Registry::get('zvlogger');
         $slabs = $this->get_rate_structure($start, $end);
@@ -156,7 +163,7 @@ class PriceModel {
                    break;
                }
         }
-        return $total_days > 0 ? round($total_price/$total_days) : 0;
+        return array('rate' => $total_price, 'days' => $total_days);
     }
 
 }

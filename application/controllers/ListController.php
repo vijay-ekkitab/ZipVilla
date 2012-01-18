@@ -154,7 +154,7 @@ class ListController extends Zend_Controller_Action
 
     public function calculateAction()
     {
-        $this->_helper->viewRenderer->setNoRender();    
+        $this->_helper->viewRenderer->setNoRender();   
         $request = $this->getRequest();
         $rate = 0;
         $days = 1;
@@ -173,7 +173,8 @@ class ListController extends Zend_Controller_Action
                     $property = $lm->queryById($id);
                     if ($property) {
                         $pmodel = new PriceModel($property->special_rate, $property->rate);
-                        $rate = $pmodel->get_average_rate($start, $end);
+                        $total = $pmodel->get_total_rate($start, $end);
+                        $rate = $total['rate'];
                     }
                 }
                 //save session data
@@ -188,7 +189,7 @@ class ListController extends Zend_Controller_Action
         }
         
         //$this->view->rate = round($rate * $days);
-        echo Zend_Json::encode(array('total' => round($rate*$days)));
+        echo Zend_Json::encode(array('total' => round($rate)));
     }
     
     public function getreviewsAction() {
