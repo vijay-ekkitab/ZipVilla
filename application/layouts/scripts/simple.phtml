@@ -17,6 +17,26 @@
         <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js') 
                                       ->appendFile($this->baseUrl().'/js/jquery-ui-1.8.16.custom.min.js')
                                       ->appendFile($this->baseUrl().'/js/accordian.js');?>
+                                      
+        <script>
+        $(document).ready(function(){
+            $('#dropdown').change(function() {
+            	$.ajax({ 
+                    type: "GET",
+                    url:"/default/search/test/format/json",
+                    data:"id="+$(this).val(),
+                    success:function(resp) {
+            		  //var resp = jQuery.parseJSON(json.responseText);
+            		  var html = '<p> ';
+            		  for (var i in resp) {
+                		  html += resp[i] + '<br> ';
+            		  }
+            		  html += ' </p>';
+            		  $('.showlist').empty().append(html);
+                    }});
+            });
+        });
+        </script>
 
 </head>
 <body class="blue">

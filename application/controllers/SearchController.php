@@ -21,6 +21,7 @@ class SearchController extends Zend_Controller_Action
         $ajaxContext->addActionContext('lookahead', 'html')
                     ->addActionContext('refine', 'html')
                     ->addActionContext('autocomplete', 'json')
+                    ->addActionContext('test', 'json')
                     ->initContext();
     }
     
@@ -240,6 +241,33 @@ class SearchController extends Zend_Controller_Action
                 $results = $sm->search_ajax($q);
            }
            $json = Zend_Json::encode(array_values($results));
+        }
+        $this->getResponse()->setHeader('Content-Type', 'text/json')
+                            ->setBody($json)
+                            ->sendResponse();
+        exit;
+    }
+    
+    public function testAction() {
+        $logger = Zend_Registry::get('zvlogger');
+        $json = '';
+        $request = $this->getRequest();
+        if ($request->isGet()) {
+           $id = $request->getParam('id');
+           if (($id != null) && ($id != '')) {
+                $names = array();
+                $user = Application_Model_Users::load($id);
+                if ($user != null) {
+                    $query = array('owner' => $user->getRef());
+                    $listings = Application_Model_Listings::find($query);
+                    if ($listings != null) {
+                        foreach($listings as $listing) {
+                            $names[] = $listing->title;
+                        }
+                    }
+                    $json = Zend_Json::encode(array_values($names));
+                }
+           }
         }
         $this->getResponse()->setHeader('Content-Type', 'text/json')
                             ->setBody($json)
