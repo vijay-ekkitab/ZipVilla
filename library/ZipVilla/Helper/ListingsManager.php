@@ -351,17 +351,16 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         if (($obj == null)  || (isset($obj[0])))
             return $map;
         foreach ($obj as $k => $v) {
-            if (is_array($v)) {
-                $map = array_merge($map, $this->select_and_flatten($v, $include, $prefix.$k.POINTS));
+            
+            $check = $prefix.$k;
+            if ($check == '_id') {
+                $check = 'id';
             }
-            else {
-                $check = $prefix.$k;
-                if ($check == '_id') {
-                    $check = 'id';
-                }
-                if (in_array($check, $include)) {
-                    $map[$check] = $check == 'id' ? $v->__toString() : $v;
-                }
+            if (in_array($check, $include)) {
+                $map[$check] = $check == 'id' ? $v->__toString() : $v;
+            }
+            elseif (is_array($v)) {
+                $map = array_merge($map, $this->select_and_flatten($v, $include, $prefix.$k.POINTS));
             }
         }
         return $map;
