@@ -66,6 +66,6 @@ const  TAB_MAP = 2;
 
 const  DATE_FORMAT = 'dd-mon-yyyy';
 
-const VILLA_NAME_MEDIUM_SIZE = 25;
+const VILLA_NAME_MEDIUM_SIZE = 24;
 
 ?>
