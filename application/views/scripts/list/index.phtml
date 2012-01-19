@@ -245,7 +245,9 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                         </div>
                     </div>
                     <div class="l_price">
-                        <div class="l_accordian_open"><a href="#"><img src="<?php echo $this->baseUrl('/images/btn_acco_open.jpg');?>" /></a></div>
+                    
+<!--                    <div class="l_accordian_open"><a href="#"><img src="<?php echo $this->baseUrl('/images/btn_acco_open.jpg');?>" /></a></div>  -->
+                        <div class="l_accordian_open"><img src="<?php echo $this->baseUrl('/images/btn_acco_open.jpg');?>" /></div>
                         <?php $owner_line = '[Add Owner]'; $owner_link = $this->baseUrl('/list/addOwner?id='.$property->id);
                               if ($owner != null) { $owner_line = 'About your host'; $owner_link = '';}?>
                         <h4><a href="<?php echo $owner_link;?>"><?php echo $owner_line;?></a></h4>
@@ -253,6 +255,7 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                             <p><?php echo $owner_name;?><!-- <br><span>31 October, 2011</span> --></p>
                         </div>
                         <div class="host_ratings">
+                            <!--
                             <div>
                                 <span>Response rate:</span>
                                 <p>100% <div class="what"><img src="<?php echo $this->baseUrl('/images/btn_questin.jpg');?>" /></div></p>
@@ -265,6 +268,7 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                                 <span>Verfied via Facebook</span>
                                 <p>342 Friends</p>
                             </div>
+                            -->
                         </div>
                             <div class="form_write_review">
                                 <FORM id="send_message" action="#" method="post">
