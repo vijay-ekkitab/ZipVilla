@@ -248,9 +248,15 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                     
 <!--                    <div class="l_accordian_open"><a href="#"><img src="<?php echo $this->baseUrl('/images/btn_acco_open.jpg');?>" /></a></div>  -->
                         <div class="l_accordian_open"><img src="<?php echo $this->baseUrl('/images/btn_acco_open.jpg');?>" /></div>
+<!-- 
                         <?php $owner_line = '[Add Owner]'; $owner_link = $this->baseUrl('/list/addOwner?id='.$property->id);
                               if ($owner != null) { $owner_line = 'About your host'; $owner_link = '';}?>
                         <h4><a href="<?php echo $owner_link;?>"><?php echo $owner_line;?></a></h4>
+-->
+
+                         <?php if ($owner != null) { echo '<h4>About your host</h4>'; }
+                               else { echo '<h4><a href='.$this->baseUrl('/list/addOwner?id='.$property->id).'/>[Add Owner]</a></h4>'; } ?>
+                        
                         <div style="margin-top:10px;" class="img_profle"><img src="<?php echo $this->baseUrl('/images/users/'.$owner_image);?>"/>
                             <p><?php echo $owner_name;?><!-- <br><span>31 October, 2011</span> --></p>
                         </div>
