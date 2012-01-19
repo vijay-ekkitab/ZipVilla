@@ -4,16 +4,20 @@
 <?php } elseif ($this->results != null) {?>
 <?php 
     $villaCtr = ($this->page - 1) * $this->pagesz;
+    
     foreach($this->results as $result) : ?>
     <div class="wrpr_photo">
         <div class="search_no"><?php echo ++$villaCtr;?></div><!--search result number-->
         <?php
                 $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $result);
                 $link = $this->baseUrl('/list?id='.$result['id'].'&showtab='.TAB_PHOTO);
+                $title = $this->escape($result['title']);
+                if( strlen($title) > VILLA_NAME_MEDIUM_SIZE )
+                	$title = substr($title,0,(VILLA_NAME_MEDIUM_SIZE-3)).'...';                
         ?>
         <div class="photo_img"><a href="<?echo $link;?>"><img src="<?php echo $imagepath;?>"></a></div>
         <div class="details">
-            <h4><a href="<?php echo $link;?>"><?php echo $this->escape($result['title']);?></a></h4>
+            <h4><a href="<?php echo $link;?>"><?php echo $title;?></a></h4>
             <p><?php echo $this->escape($result['address__city']).",".$this->escape($result['address__state']);?></p>
             <span>Rs. <?php echo $result['average_rate'];?></span>
             <div class="favorite"><a href="#"><img src="images/icon_favorite.jpg" alt="Favorite" /></a></div>
