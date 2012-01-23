@@ -39,7 +39,8 @@ function getHtml($feature, $facets, $selected, $maxVisible = MAX) {
 <script type="text/javascript">
 function getFacetValues()
 {
-	var features = ['shared', 'amenities', 'onsite_services', 'suitability', 'address__location'];
+//	var features = ['shared', 'amenities', 'onsite_services', 'suitability', 'address__location'];
+	var features = ['shared', 'amenities', 'onsite_services', 'suitability'];
 	for (var i in features) {
 		   var feature = features[i];
 		   $(".lbox_"+feature).children().remove();
@@ -49,8 +50,27 @@ function getFacetValues()
 					    addCheckBox(feature, $(this).val(), $(this).next().text(), $(this).next().next().text(), checked);
 				   });
 	};
+
+	var feature = "address__location";
+  $(".lbox_"+feature).children().remove();
+  $(".lbox_"+feature+"_r").children().remove();
+  var rc=false;
+  var tmp=feature;
+  $(".acc_section").find("[name='"+feature+"[]']").each(
+		function() {
+			var checked = $(this).is(':checked');
+				if( rc == true ){
+					tmp = feature+"_r";
+					rc = false;
+				} else {
+					tmp = feature;
+					rc = true;
+				}
+		    addCheckBox(tmp, $(this).val(), $(this).next().text(), $(this).next().next().text(), checked);
+		   });
+};
+
 	
-}
 function addCheckBox(feature, name, label, value, checked) {
 	
 	var container = $(".lbox_"+feature);

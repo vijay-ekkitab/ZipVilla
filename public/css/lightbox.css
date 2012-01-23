@@ -260,3 +260,11 @@ caption,th,td {
 	height:229px;
 	padding:50px 0 20px 25px;
 }
+.lbox_address__location{
+	float:left;
+	width:200px;
+}
+lbox_address__location_r{
+	float:left;
+	width:200px;
+}

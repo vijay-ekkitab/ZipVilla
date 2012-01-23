@@ -12,6 +12,13 @@ function setSelections()
 		});
         setCheckBox(feature, checked);
     }
+
+		feature = "address__location_r";
+		$("[id='lbox_"+feature+"']:checked").each(function()
+		{
+			checked.push($(this).val());
+		});
+		setCheckBox(feature, checked);
 }
 
 function setCheckBox(feature, values) {
@@ -96,22 +103,25 @@ function setCheckBox(feature, values) {
 											</ul><!--ctnt forth tab ends-->
 										</div><!--Service/Suitability-->
 
-										<div><!--Neighbourhood -->
-											<ul id="tab4"  style="background-image:none;">
-												<li class="lightbox_filter_container"><!--ctnt third tab-->
-													<div class="lightbox_filters_left_column">
-														<!-- <h3>Room Type</h3>  -->
-														<ul class="search_filter_content">
-														<div class="lbox_address__location l_chkbox">
-                                                        </div>
-														</ul>
-													</div>
-													<div class="lightbox_filters_right_column">
-													</div>
-												</li>
-											</ul>
-										</div><!--Neighbourhood -->
-							         </div>
+									<div> <!--Neighbourhood -->
+										<ul id="tab4" style="background-image: none;">
+											<li class="lightbox_filter_container"> <!--ctnt third tab-->
+												<div class="lightbox_filters_left_column">
+													<!-- <h3>Neighbourhood</h3>  -->
+													<ul class="search_filter_content">
+														<div class="lbox_address__location l_chkbox"></div>
+													</ul>
+												</div>
+												<div class="lightbox_filters_right_column">
+													<!-- <h3>Neighbourhood</h3>  -->
+													<ul class="search_filter_content">
+														<div class="lbox_address__location_r l_chkbox"></div>
+													</ul>
+												</div>
+											</li>
+										</ul>
+									</div> <!--Neighbourhood -->
+								</div>
 						        </div>
 					        </div>
 						<div class="lightbox_filter_action_area segment buttons">
