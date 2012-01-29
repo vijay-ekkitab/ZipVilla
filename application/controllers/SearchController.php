@@ -144,6 +144,25 @@ class SearchController extends Zend_Controller_Action
         $this->_helper->redirector('index', 'index');
     }
     
+    /*public function setzvidAction() 
+    {
+        $lm = $this->_helper->listingsManager;
+        $cursor = $lm->getCursor();
+        foreach($cursor as $mongodoc) {
+            $doc = new Application_Model_Listings($mongodoc);
+            if ($doc != null) {
+                if (!isset($doc->{ZIPVILLA_ID})) {
+                    $zvId = $doc->getNextSeq();
+                    if ($zvId != null) {
+                        $doc->{ZIPVILLA_ID} = $zvId;
+                        $doc->save();
+                    }
+                }
+            }
+        }
+        $this->_helper->redirector('index', 'index');
+    }*/
+    
     public function indexAction()
     {
         $logger = Zend_Registry::get('zvlogger');
