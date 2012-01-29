@@ -1,4 +1,5 @@
 <?php
+include_once("ZipVilla/TypeConstants.php");
 
 class Mongo_ModelBase {
     
@@ -162,6 +163,9 @@ class Mongo_ModelBase {
      */
     public function save(){
         if($this->id == null){
+            if (($seq = $this->getNextSeq()) != null) {
+                $this->document['ZIPVILLA_ID'] = $seq;
+            }
             static::insert($this->document, true);
             $this->id = $this->document['_id'];
             unset($this->document['_id']);
@@ -179,6 +183,21 @@ class Mongo_ModelBase {
         return static::update(array("_id"=>$this->id), $modifier, $options);
     }
 
+    public function getNextSeq() {
+        $seq = self::$_mongo->command(
+                                array('findandmodify' => SEQUENCE_COLLECTION,
+                                      'query' => array('_id' => static::$_collectionName),
+                                      'update' => array('$inc' => array('seq' => 1)),
+                                      'new' => TRUE)
+                                );
+        if (isset($seq['value'])) {
+            $sequence = $seq['value']['seq'];
+            $series = $seq['value']['series'];
+            return $this->nextInSeq($sequence, $series);
+        }
+        else 
+            return null;
+    }
     /*************************************************************************************
      * Static methods
      *************************************************************************************/

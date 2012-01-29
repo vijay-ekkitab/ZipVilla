@@ -66,6 +66,10 @@ const  TAB_MAP = 2;
 
 const  DATE_FORMAT = 'dd-mon-yyyy';
 
-const VILLA_NAME_MEDIUM_SIZE = 24;
+const  VILLA_NAME_MEDIUM_SIZE = 24;
+
+const  SEQUENCE_COLLECTION = 'seq';
+const  ZIPVILLA_ID         = 'zvid';
+const  MAX_SEQUENCE        = 10000;
 
 ?>

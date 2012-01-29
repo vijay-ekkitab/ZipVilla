@@ -36,6 +36,23 @@ class Application_Model_Listings extends Mongo_ModelBase {
         }
         return null;
     }
+    
+    public function nextInSeq($sequence, $series) {
+        $sequence = $sequence % MAX_SEQUENCE;
+        if ($sequence == 0) {
+            $series = chr(ord($series) + 1);
+            if (ord($series) > ord('Z')) {
+                $series = 'A';
+            }
+            self::$_mongo->command(
+                array('findandmodify' => SEQUENCE_COLLECTION,
+                      'query' => array('_id' => static::$_collectionName),
+                      'update' => array('$set' => array('series' => $series)),
+                      'new' => FALSE)
+            );
+        }
+        return $series.$sequence;
+    }
 
 }
 ?>

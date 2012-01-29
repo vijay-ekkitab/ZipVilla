@@ -283,5 +283,7 @@ for each (t in enums) {
 	db.enumerations.save(t);
 }
 
+print("[6] creating sequence collection...");
+db.seq.insert({'_id':'listings', 'seq': new NumberLong(10001), 'series':'A'});
 
 print("[6] database initialized.");

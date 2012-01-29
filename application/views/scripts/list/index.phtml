@@ -36,6 +36,7 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
           $owner_image = $owner->image;
       }
       $reviews = Application_Model_Reviews::count(array('listing' => $property->getRef()));
+      $zvId = $property->{ZIPVILLA_ID};
       
 ?>
 <div class="v_social_ico l_social_ico">
@@ -46,6 +47,7 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
                 <div class="h2"><h1><?php echo $this->escape($property->title);?></h1><span><a href="#"></a></span>
                     <h2><?php echo $address;?></h2>
                     <div class="entire_villa"><p><?php echo $property_type;?></p></div>
+                    <div class="entire_villa"><p><?php echo $zvId;?></p></div>
                 </div>
                 <div class="v_ratings">
                     <div class="ratings"><!--golden and silver stars-->
