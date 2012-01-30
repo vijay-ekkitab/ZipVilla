@@ -15,7 +15,20 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
             $logoutUrl = $this->view->url(array('controller'=>'login',
             									'action'=>'logout'), 
             							  null, true);
-            return 'Welcome ' . $username .  '. <a id="logout" href="'.$logoutUrl.'">Logout</a>';
+            							  
+            $controller = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+            if ($controller == 'account') {
+                $dashlink = '';
+            } 
+            else {
+                $dashurl  = $this->view->url(array('controller' => 'account',
+                                                   'action' => 'index'));
+                $dashlink = '<a href="'.$dashurl.'">Your Dashboard</a>';
+            }
+            return 'Welcome ' . $username . ',&nbsp;' . 
+                   '<a id="logout" href="'.$logoutUrl.'">Logout</a> &nbsp;&nbsp;' .
+                   $dashlink;
+                   
         } 
 
         $loginUrl = $this->view->url(array('controller'=>'login', 'action'=>'index'));

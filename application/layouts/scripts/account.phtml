@@ -1,0 +1,51 @@
+<?php
+    include_once("ZipVilla/TypeConstants.php");
+    $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
+    $this->headTitle()->setSeparator(' - ');
+    $this->headTitle('Zipvilla ~ Home away from home in India');
+    echo $this->doctype();
+    $baseUrl = $this->baseUrl();
+?>
+<html xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/visual.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/layout.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/misc.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/jquery.ad-gallery.css')
+                                    ; ?>
+
+        <?php echo $this->headScript()->appendFile($this->baseUrl().'/js/jquery-min-164.js')
+                                      ->appendFile('http://maps.googleapis.com/maps/api/js?sensor=false')
+                                      ->appendFile('http://connect.facebook.net/en_US/all.js')
+                                      ->appendFile($this->baseUrl().'/js/mapMarker.js')
+                                      ->appendFile($this->baseUrl().'/js/accordian.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery-ui.min.js')
+                                      ->appendFile($this->baseUrl().'/js/jquery.ad-gallery.js')
+                                      ->appendFile($this->baseUrl().'/js/slideshow.js')
+                                      ->appendFile($this->baseUrl().'/js/zvcommon.js')
+                                       ;?>
+        
+        <script type="text/javascript">
+        $(document).ready(function(){
+        	$tabs = $('#tabs').tabs();
+        });
+      	</script>
+</head>
+
+<body class="blue">
+    <div id="fb-root"></div>
+	<div class="wrapper"><!--outer wrapper to fix the width-->
+        <?php echo $this->render('header.phtml');?>
+        <div class="content">
+            <?php echo $this->layout()->content; ?>
+        </div><!-- content ends here -->
+        <?php echo $this->render('footer.phtml');?>
+    </div><!-- wrapper ends here -->
+</body>
+</html>
+

@@ -1,4 +1,4 @@
-@charset "utf-8";/*embeds Lato font*/
+ @charset "utf-8";/*embeds Lato font*/
 @font-face {
     font-family: "Lato";
     font-style: normal;
@@ -104,10 +104,10 @@ body {
 .v_search .v_input_bg, .online_resrv .v_input_bg{
 	background:url(../images/bg_input1.jpg) top center no-repeat;
 }
-.v_search .v_dropdwon_bg {
+.v_search .v_dropdwon_bg, .drop_show .v_dropdwon_bg {
 	/*background:url(../images/bg_input2.jpg) top center no-repeat;*/
 	color:#09c;
-	height:25px;
+	height:22px;
 }
 .drop_guest{
 	color:#09c;
@@ -163,7 +163,10 @@ body {
 .v_search_results .search_sort {
 	color:#666;
 }
-.v_search_results .tab_content .search_result .villa_image {
+.v_search_results .tab_content .listing{
+	margin-top:10px;
+}
+.v_search_results .tab_content .search_result .villa_image, .listing .villa_image {
 	background-color:#fff;
 	border:1px solid #ccc;
 	width:115px;
@@ -179,9 +182,14 @@ body {
 	top:0;
 	left:0;
 }
-.v_search_results .tab_content .search_result .resort_details .reviews {
+.v_search_results .tab_content .search_result .resort_details .reviews{
 	background:url(../images/bg_circle_review.jpg) top center no-repeat;
 }
+.v_search_results .tab_content .listing .resort_details {
+	clear:right;
+	width:435px!important;
+}
+
 .v_refine_results{}
 .footer {
 	background:url(../images/bg_footer.png) top center no-repeat;
@@ -359,6 +367,20 @@ body {
 	font-size:14px;
 	font-weight:bold;
 }
+.error_msg2 {
+	background:url(../images/bg_errormsg2.jpg) top left no-repeat;
+	width:960px;
+	height:50px;
+	float:left;
+	margin:20px 0;
+	text-align:center;
+	padding-top:10px;
+}
+.error_msg2 p{
+	font-size:14px;
+	font-weight:bold;
+}
+
 
 /****************detailed page********************/
 .v_social_ico {
@@ -742,3 +764,202 @@ body {
 	border:none;
 	padding:0 10px;
 }
+.booking{
+	float:left;
+	width:660px;
+}
+.booking table{
+	width:100%
+}
+.booking table th{
+	background-color:#efefef;
+	height:30px;
+	border-bottom:1px solid #dcdcdc;
+	padding-left:3px;
+}
+.booking table td{
+	background-color:#fff;
+	height:30px;
+	border-bottom:1px solid #dcdcdc;
+	padding-left:3px;
+}
+.booking table .alter_gray td{
+	background-color:#f3f3f3;
+}
+.booking table .alter_blue td{
+	background-color:#daeffa;
+}
+
+.booking table td table .nobtmbrdr{
+	border-bottom:none;
+}
+.centeralign{
+	text-align:center;
+}
+.booked{
+	color:#69ad44;
+}
+.notbooked{
+	color:#666;
+}
+.booked img, .notbooked img{
+	margin-right:5px;
+}
+.blue{
+	color:#09c;
+}
+.db_profile{
+	float:left;
+}
+.profile{
+	float:left;
+	width:220px;
+	height:310px;
+	border:1px solid #dedede;
+	padding:10px;
+}
+.profile h2{
+	color:#333;
+	text-transform:inherit;
+	float:left;
+	width:90%;
+}
+.l_right_side_panel .profile p{
+	clear:both;
+	float:left;
+}
+.edit_prfl{
+	float:left;
+	width:100%;
+	clear:both;
+	margin:10px 0;
+}
+.edit_prfl span{
+	float:left;
+	margin-right:10px;
+}
+.edit_prfl h4 a{color:#09c;}
+.edit_prfl h4 a:hover{color:#333;}
+.right_nav{
+	float:left;
+	width:100%;
+	margin:20px 0;
+}
+.right_nav ul{
+	float:left;
+}
+.right_nav li{
+	list-style-image:url(../images/blt_arrow.jpg);
+	line-height:25px;
+	margin-left:15px;
+}
+.right_nav li a{
+	color:#09c;
+	font-size:13px;
+	font-weight:bold;
+}
+.right_nav li a:hover{
+	color:#333;
+}
+.tabl_title{
+	color:#000;
+	text-transform:inherit;
+	float:left;
+	margin-bottom:10px;
+}
+.sub_nav{
+	background:url(ui-lightness/images/bg_tabs.jpg) top left repeat;
+	height:32px;
+	width:100%;
+	float:left;
+}
+.sub_nav ul{
+	float:left;
+	margin:10px 0 0 15px;
+}
+.sub_nav li{
+	float:left;
+	margin-right:20px;
+}
+.sub_nav li a{
+	float:left;
+	font-size:15px;
+	color:#09c;
+	font-weight:bold;
+}
+.sub_nav li a:hover, .sub_nav li .active{
+	color:#333;
+}
+.drop_show{
+	float:right;
+}
+.drop_show .v_dropdwon_bg {
+	width:150px;
+}
+.drop_show label{
+	font-size:12px;
+	color:#666;
+	height:20px;
+}
+.user{
+	float:left;
+	margin:28px 0 0 40px;
+}
+.user p{
+	float:left;
+	font-size:14px;
+}
+.user span{
+	float:left;
+	margin:5px 0 0 15px;
+}
+.btn_newlist{
+	float:left;
+	clear:right;
+}
+.daily_rate, .active, .bookings{
+	float:left;
+	text-align:left;
+	margin:10px 20px 0 15px;
+}
+.daily_rate h4{
+	color:#c36;
+	font-size:15px;
+}
+.active h4, .bookings h4{
+	color:#666;
+}
+.daily_rate p, .active p, .bookings p{
+	text-transform:uppercase;
+	font-size:10px;
+}
+.edit{
+	float:right;
+	margin-top:30px;
+}
+.edit span, .activate span{
+	float:left;
+	margin-right:10px;
+}
+.calndr{
+	float:left;
+	margin-left:20px;
+}
+.calndr h4, .activate h4 a{
+	text-transform:uppercase;
+	float:left;
+	color:#09c;
+}
+.activate{
+	float:left;
+	width:310px;
+	margin:10px 0 0 15px;
+}
+.activate h5{
+	font-size:16px;
+	color:#c36;
+	font-weight:normal;
+	clear:both;
+	margin-bottom:5px;	
+}
+
