@@ -22,7 +22,7 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
             } 
             else {
                 $dashurl  = $this->view->url(array('controller' => 'account',
-                                                   'action' => 'index'));
+                                                   'action' => 'index'), null, true);
                 $dashlink = '<a href="'.$dashurl.'">Your Dashboard</a>';
             }
             return 'Welcome ' . $username . ',&nbsp;' . 

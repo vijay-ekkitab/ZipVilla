@@ -1,9 +1,12 @@
 <?php $this->headTitle('Account Dashboard'); ?>
 <?php $this->layout()->setLayout('account');?>
+<?php if (isset($this->alert)) {?>
 <div class="error_msg2">
-    <p>Space for alerts, notifications or status messages. Hidden by default</p>
+    <p><?php echo $this->alert;?></p>
 </div>
+<?php }?>
 <div class="l_search_results v_search_results"><!--Search result sections starts here-->
+    <div id="loadergif"></div>
     <div id="tabs" class="ui-tabs"><!--tabs-->
         <ul>
             <li><a href="#tabs-1">Bookings</a></li>
@@ -11,244 +14,8 @@
             <li><a href="#tabs-3">Account</a></li>
         </ul>
         <div id="tabs-1">
-            <div class="tab_content">
-                <div class="drop_show">
-                    <form id="search_form" name="show" action="/search" method="post">
-                        <label for="guests">Show
-                            <select onchange="setPage(1); validate_default(); document.search_form.submit();" class="v_dropdwon_bg" id="sort" name="sort">
-                                <option id=""  value="" >All Booking requests</option>
-
-                                <option id="" value="">Confirmed</option>
-                                <option id="" value="">Bookings</option>
-                            </select>
-                        </label>
-                    </form>
-                </div>
-                <div class="booking">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th>ID</th>
-                                <th>From</th>
-                                <th>Listing</th>
-                                <th>Check-in</th>
-                                <th>Check-out</th>
-                                <th>Guests</th>
-                                <th>Booked?</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td class="blue">2212</td>
-                                <td>Name Name</td>
-                                <td>Coco Beach House</td>
-                                <td>20/01/12</td>
-                                <td>22/01/12</td>
-                                <td class="centeralign">4</td>
-                                <td class="booked"><img src="images/blt_green.jpg" alt="green" /><a href="#">Yes</a></td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr class="alter_gray">
-                                <td class="blue">2323</td>
-                                <td>Joseph John</td>
-                                <td>Cozy apartment</td>
-                                <td>23/01/12</td>
-                                <td>25/01/12</td>
-                                <td class="centeralign">4</td>
-                                <td class="notbooked"><img src="images/blt_gray.jpg" alt="" /><a href="#">No</a></td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                                                    </tr>
-                            <tr>
-                                <td class="blue">2323</td>
-                                <td>Joseph John</td>
-                                <td>Cozy apartment</td>
-                                <td>23/01/12</td>
-                                <td>25/01/12</td>
-                                <td class="centeralign">4</td>
-                                <td class="notbooked"><img src="images/blt_gray.jpg" alt="" /><a href="#">No</a></td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                         </tr>
-                            <tr class="alter_gray">
-                                <td class="blue">2212</td>
-                                <td>Name Name</td>
-                                <td>Coco Beach House</td>
-                                <td>20/01/12</td>
-                                <td>22/01/12</td>
-                                <td class="centeralign">4</td>
-                                <td class="booked"><img src="images/blt_green.jpg" alt="green" /><a href="#">Yes</a></td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="blue">2323</td>
-                                <td>Joseph John</td>
-                                <td>Cozy apartment</td>
-                                <td>23/01/12</td>
-                                <td>25/01/12</td>
-                                <td class="centeralign">4</td>
-                                <td class="notbooked"><img src="images/blt_gray.jpg" alt="" /><a href="#">No</a></td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr class="alter_gray">
-                                <td class="blue">2323</td>
-                                <td>Joseph John</td>
-                                <td>Cozy apartment</td>
-                                <td>23/01/12</td>
-                                <td>25/01/12</td>
-                                <td class="centeralign">4</td>
-                                <td class="notbooked"><img src="images/blt_gray.jpg" alt="" /><a href="#">No</a></td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
-                                            <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
-                                        </tr>
-                                    </table>
-                                </td>
-                         </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
-            <div class="display_no">
-                <p>Displaying <span>1</span> — <span>20</span> of <span>55</span> listings</p>
-            </div>
-            <div class="pagination"><!--pagination-->
-                <ul>
-                    <li class="current">1</li>
-                    <li><a href="#" onclick="setPage(2); validate_default();document.search_form.submit();">2</a></li>
-                    <li><a href="#" onclick="setPage(3); validate_default();document.search_form.submit();">3</a></li>
-                </ul>
-            </div>
-            <div class="l_page_buttons"><!--Previous Next Page buttons-->
-                <a href="#" onclick="setPage(2); validate_default();document.search_form.submit();">
-                <div class="btn_next_page"><img src="images/btn_next.jpg" alt="Next page" /></div></a><!--next page button-->
-            </div><!--Previous Next Page buttons ends-->
-        </div>
         </div>
         <div id="tabs-2">
-            <div class="tab_content">
-                <div class="btn_newlist"><a href="#"><img src="images/btn_creat_new_list.jpg" alt="Create New list" /></a></div>
-                <div class="drop_show">
-                    <form id="search_form" name="show" action="/search" method="post">
-                        <label for="guests">Show
-                            <select onchange="setPage(1); validate_default(); document.search_form.submit();" class="v_dropdwon_bg" id="sort" name="sort">
-                                <option id=""  value="" >All Listings</option>
-
-                                <option id="" value="">Confirmed</option>
-                                <option id="" value="">Bookings</option>
-                            </select>
-                        </label>
-                    </form>
-                </div><!--Form ends-->
-                <div class="listing">
-                    <div class="villa_image"><img src="images/resort_img.jpg" alt="resort" /></div><!--picture-->
-                    <div class="resort_details">
-                        <h2>Le Blanc on the Beach!</h2>
-                        <p>Coco Beach, North Goa</p>
-                    </div>
-                    <div class="daily_rate">
-                        <p>Daily Rate</p>
-                        <h4>Rs.6,000</h4>
-                    </div>
-                    <div class="active">
-                        <p>Active Since</p>
-                        <h4>27/01/12</h4>
-                    </div>
-                    <div class="bookings">
-                        <p>Bookings</p>
-                        <h4>30</h4>
-                    </div>
-                    <div class="edit">
-                        <div class="calndr">
-                            <a href="#"><span><img src="images/ico_calender.jpg" alt="Calendar" /></span><h4>Calendar</h4></a>
-                        </div>
-                        <div class="calndr">
-                        <a href="#"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
-                        </div>
-                    </div>
-                </div><!--listing ends here-->
-                <div class="listing">
-                    <div class="villa_image"><img src="images/resort_img.jpg" alt="resort" /></div><!--picture-->
-                    <div class="resort_details">
-                        <h2>Le Blanc on the Beach!</h2>
-                        <p>Coco Beach, North Goa</p>
-                    </div>
-                    <div class="daily_rate">
-                        <p>Daily Rate</p>
-                        <h4>Rs.6,000</h4>
-                    </div>
-                    <div class="active">
-                        <p>Active Since</p>
-                        <h4>27/01/12</h4>
-                    </div>
-                    <div class="bookings">
-                        <p>Bookings</p>
-                        <h4>30</h4>
-                    </div>
-                    <div class="edit">
-                        <div class="calndr">
-                            <a href="#"><span><img src="images/ico_calender.jpg" alt="Calendar" /></span><h4>Calendar</h4></a>
-                        </div>
-                        <div class="calndr">
-                            <a href="#"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
-                        </div>
-                    </div>
-                </div><!--listing ends here-->
-                <div class="listing">
-                    <div class="villa_image"><img src="images/resort_img.jpg" alt="resort" /></div><!--picture-->
-                    <div class="resort_details">
-                        <h2>Le Blanc on the Beach!</h2>
-                        <p>Coco Beach, North Goa</p>
-                    </div>
-                    <div class="activate">
-                        <h5>This listing is not visible yet</h5>
-                        <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4><a href="#">Activate Now</a></h4></div>
-                    </div>
-                    <div class="edit">
-                        <div class="calndr">
-                            <a href="#"><span><img src="images/ico_calender.jpg" alt="Calendar" /></span><h4>Calendar</h4></a>
-                        </div>
-                        <div class="calndr">
-                            <a href="#"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
-                        </div>
-                    </div>
-                </div><!--listing ends here-->
-            </div>
         </div>
         <div id="tabs-3">
             <div class="tab_content">
@@ -257,18 +24,27 @@
         
     </div>
 </div>
+<?php
+if ($this->user != null) { 
+    $name = $this->user->firstname . ' ' . $this->user->lastname;
+    $image = $this->user->image != null ? $this->user->image : 'default_user_image.jpg';
+    $email = $this->user->emailid;
+}
+?>
 <div class="l_right_side_panel v_right_side_panel">
+<?php if ($this->user != null) { ?>
     <div class="db_profile">
         <div class="profile">
-            <div class="profile_photo"><img src="images/dummyimg4.jpg" alt="image" /></div>
-            <h2>Kajol Mukharjee</h2>
-            <p>email@email.com</p>
+            <div class="profile_photo"><img src="<?php echo $this->baseUrl('/images/users/'.$image);?>" alt="image" /></div>
+            <h2><?php echo $name;?></h2>
+            <p><?php echo $email;?></p>
             <div class="edit_prfl">
                 <span><img src="images/ico_edit.jpg" alt="edit" /></span>
                 <h4><a href="#">EDIT PROFILE</a></h4>
             </div>
         </div>
     </div><!--db_profile ends-->
+<?php } ?>
     <div class="right_nav">
         <ul>
             <li><a href="#">List your property</a></li>

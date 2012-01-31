@@ -1,0 +1,97 @@
+<?php 
+    $leads = $this->results['leads'];
+    $maxleads = $this->results['max'];
+    $filter = $this->filter;
+?>
+<div class="tab_content">
+    <div class="drop_show">
+        <form id="search_form" name="show" action="/search" method="post">
+            <label for="guests">Show
+                <select class="v_dropdwon_bg" onchange="refreshBookings(); return false;" id="filter" name="filter">
+                    <option value="A" <?php if ($filter == 'A') {?> selected="selected" <?php }?>>All Requests</option>
+                    <option value="B" <?php if ($filter == 'B') {?> selected="selected" <?php }?>>Booked Only</option>
+                    <option value="U" <?php if ($filter == 'U') {?> selected="selected" <?php }?>>Not Booked Only</option>
+                </select>
+            </label>
+        </form>
+    </div>
+    <?php 
+    if (($leads == null) || (count($leads) ==0)) { ?>
+    <p> No current or new booking requests were found. </p>
+    <?php } else { ?>
+    <div id="booking" class="booking">
+        <table>
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <th>From</th>
+                    <th>Listing</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Guests</th>
+                    <th>Booked?</th>
+                    <th>Action</th>
+                </tr>
+                <?php
+                $classes = array("blue", "alter_gray"); 
+                $iter_count = 0;
+                foreach ($leads as $lead):
+                $listing = $lead->getListing();
+                if ($listing != null) { 
+                    $useclass = $classes[$iter_count++%2];?>
+                <tr>
+                    <td class="<?php echo $useclass;?>"><?php echo $listing->{ZIPVILLA_ID};?></td>
+                    <td><?php echo $lead->firstname . " ". $lead->lastname;?></td>
+                    <td><?php echo $listing->title;?></td>
+                    <td><?php echo date('d/m/Y', $lead->check_in->sec);?></td>
+                    <td><?php echo date('d/m/Y', $lead->check_out->sec);?></td>
+                    <td class="centeralign"><?php echo $lead->guests;?></td>
+                    <?php if (!strcasecmp('yes', $lead->booked)) { ?>
+                        <td class="booked"><img src="images/blt_green.jpg" alt="green" /><a href="#">Yes</a></td>
+                    <?php } else { ?>
+                        <td class="notbooked"><img src="images/blt_gray.jpg" alt="" /><a href="#">No</a></td>
+                    <?php }?>
+                    <td>
+                        <table>
+                            <tr>
+                                <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
+                                <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <?php }
+                endforeach;?>
+            </tbody>
+        </table>
+    </div>
+    <?php }?>
+</div>
+<?php $pdata = $this->zvUtils()->calcPages($maxleads, ZV_AC_BOOKINGS_PAGE_SZ, $this->start);?>
+<div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <?php 
+    if (($leads != null) && (count($leads) > 0)) { ?>
+    <div class="display_no">
+        <p>Displaying <span><?php $num = ($pdata['this'] - 1)*ZV_AC_BOOKINGS_PAGE_SZ + 1; echo $num;?></span> — <span><?php $num = ($pdata['this'] - 1)*ZV_AC_BOOKINGS_PAGE_SZ + ZV_AC_BOOKINGS_PAGE_SZ; echo $num > $maxleads ? $maxleads : $num;?></span> of <span><?php echo $maxleads;?></span> booking requests.</p>
+    </div>
+    <?php } ?>
+    <div class="pagination">
+        <ul>
+            <?php foreach ($pdata['pages'] as $pg):?>
+                <?php if ($pg == $pdata['this']) {?>
+                    <li class="current"><?php echo $pg;?></li>
+                <?php } else {?>
+                    <li><a href="#" onclick="getAccountData('#tabs-1','bookings', <?php $start = ($pg -1)*ZV_AC_BOOKINGS_PAGE_SZ; echo $start;?>); return false;"><?php echo $pg;?></a></li>
+                <?php }?>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <div class="l_page_buttons">
+        <?php if ($pdata['prev']) {?>
+            <a href="#" onclick="getAccountData('#tabs-1','bookings', <?php $start = ($pdata['this']-2)*ZV_AC_BOOKINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_prev_page"><img src="<?php echo $this->baseUrl('/images/btn_prev_page.jpg');?>" alt="Previous page" /></div></a>
+        <?php }?>
+        <?php if ($pdata['next']) {?>
+            <a href="#" onclick="getAccountData('#tabs-1','bookings', <?php $start = ($pdata['this'])*ZV_AC_BOOKINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_next_page"><img src="<?php echo $this->baseUrl('/images/btn_next.jpg');?>" alt="Next page" /></div></a>
+        <?php }?>
+    </div>
+</div>

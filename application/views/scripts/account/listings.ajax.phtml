@@ -1,0 +1,77 @@
+<?php 
+    $listings = $this->results['listings'];
+    $maxlistings = $this->results['max'];
+    if (($listings == null) || (count($listings) == 0)) { ?>
+    <p> No listings were found. </p>
+<?php } else { ?>
+    <div class="tab_content">
+        <div class="btn_newlist"><a href="#"><img src="images/btn_creat_new_list.jpg" alt="Create New list" /></a></div>
+        <!-- <div class="drop_show">
+            <form id="search_form" name="show" action="/search" method="post">
+                <label for="guests">Show
+                    <select onchange="setPage(1); validate_default(); document.search_form.submit();" class="v_dropdwon_bg" id="sort" name="sort">
+                        <option id=""  value="" >All Listings</option>
+
+                        <option id="" value="">Confirmed</option>
+                        <option id="" value="">Bookings</option>
+                    </select>
+                </label>
+            </form>
+        </div> --><!--Form ends-->
+        <?php foreach ($listings as $listing): 
+            $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $listing);?>
+        <div class="listing">
+            <div class="villa_image"><img src="<?php echo $imagepath;?>" alt="resort" /></div><!--picture-->
+            <div class="resort_details">
+                <h2><?php echo $listing->title;?></h2>
+                <p><?php echo $listing->{'address.location'} . ' ' .$listing->{'address.city'}; ?></p>
+            </div>
+            <div class="daily_rate">
+                <p>Daily Rate</p>
+                <h4><?php echo $listing->rate['daily'];?></h4>
+            </div>
+            <div class="active">
+                <p>Active Since</p>
+                <h4><?php echo $listing->activated;?></h4>
+            </div>
+            <div class="bookings">
+                <p>Bookings</p>
+                <h4><?php echo $listing->bookings;?></h4>
+            </div>
+            <div class="edit">
+                <div class="calndr">
+                    <a href="#"><span><img src="images/ico_calender.jpg" alt="Calendar" /></span><h4>Calendar</h4></a>
+                </div>
+                <div class="calndr">
+                <a href="#"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
+                </div>
+            </div>
+        </div><!--listing ends here-->
+        <?php endforeach;?>
+    </div>
+    <?php $pdata = $this->zvUtils()->calcPages($maxlistings, ZV_AC_LISTINGS_PAGE_SZ, $this->start);?>
+    <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <div class="display_no">
+        <p>Displaying <span><?php $num = ($pdata['this'] - 1)*ZV_AC_LISTINGS_PAGE_SZ + 1; echo $num;?></span> — <span><?php $num = ($pdata['this'] - 1)*ZV_AC_LISTINGS_PAGE_SZ + ZV_AC_LISTINGS_PAGE_SZ; echo $num > $maxlistings ? $maxlistings : $num;?></span> of <span><?php echo $maxlistings;?></span> listings</p>
+    </div>
+    <div class="pagination">
+        <ul>
+            <?php foreach ($pdata['pages'] as $pg):?>
+                <?php if ($pg == $pdata['this']) {?>
+                    <li class="current"><?php echo $pg;?></li>
+                <?php } else {?>
+                    <li><a href="#" onclick="getAccountData('#tabs-2','listings', <?php $start = ($pg -1)*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><?php echo $pg;?></a></li>
+                <?php }?>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <div class="l_page_buttons">
+        <?php if ($pdata['prev']) {?>
+            <a href="#" onclick="getAccountData('#tabs-2','listings', <?php $start = ($pdata['this']-2)*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_prev_page"><img src="<?php echo $this->baseUrl('/images/btn_prev_page.jpg');?>" alt="Previous page" /></div></a>
+        <?php }?>
+        <?php if ($pdata['next']) {?>
+            <a href="#" onclick="getAccountData('#tabs-2','listings', <?php $start = ($pdata['this'])*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_next_page"><img src="<?php echo $this->baseUrl('/images/btn_next.jpg');?>" alt="Next page" /></div></a>
+        <?php }?>
+    </div>
+</div>
+<?php }?>

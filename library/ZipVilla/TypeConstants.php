@@ -73,4 +73,7 @@ const  SEQUENCE_COLLECTION = 'seq';
 const  ZIPVILLA_ID         = 'zvid';
 const  MAX_SEQUENCE        = 10000;
 
+const  ZV_AC_BOOKINGS_PAGE_SZ = 5;
+const  ZV_AC_LISTINGS_PAGE_SZ = 5;
+
 ?>

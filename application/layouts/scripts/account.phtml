@@ -31,9 +31,32 @@
                                        ;?>
         
         <script type="text/javascript">
+        function getAccountData(_id, _type, _start, _filter)
+        { 
+        	//$(_id).empty();
+        	$('#loadergif').empty().html('<img src="/css/loader.gif"/>');
+        	$.ajax({ 
+                type: "POST",
+                url:"/default/account/getaccountdata/format/html",
+                data:{type:_type, start:_start, filter:_filter},
+                complete:function(data) {
+        		             $('#loadergif').empty();
+        		             $(_id).empty().html(data.responseText); 
+        		         }
+	         });
+        }
+        function refreshBookings()
+        {
+        	var filter = $("#filter").val();
+        	getAccountData('#tabs-1','bookings', 0, filter);
+        }
+        
         $(document).ready(function(){
         	$tabs = $('#tabs').tabs();
+        	getAccountData('#tabs-1','bookings', 0, 'A');
+        	getAccountData('#tabs-2','listings', 0, 'A');
         });
+        
       	</script>
 </head>
 
