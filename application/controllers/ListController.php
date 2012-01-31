@@ -16,6 +16,9 @@ class ListController extends Zend_Controller_Action
     const USERNAME     = 'username';
     const USER_EMAIL   = 'email';
     const SUBJECT      = 'subject';
+    const CHECK_IN     = 'check_in';
+    const CHECK_OUT    = 'check_out';
+    const CONVERTED    = 'booked';
     
     //protected $requireslogin = array('rate', 'submitreview');
     
@@ -505,6 +508,30 @@ class ListController extends Zend_Controller_Action
         }
     }
     
+    protected function addNewLead($data)
+    {
+        unset($data[ListController::SUBJECT]);
+        if (!isset($data[ListController::PROPERTY_ID]))
+            return;
+        $property = Application_Model_Listings::load($data[ListController::PROPERTY_ID]);
+        if ($property == null)
+            return;
+        unset($data[ListController::PROPERTY_ID]);
+        if (!(isset($data[ListController::CHECK_IN]) && isset($data[ListController::CHECK_OUT])))
+            return;
+        $checkin = $data[ListController::CHECK_IN];
+        $checkout = $data[ListController::CHECK_OUT];
+        $data[ListController::CHECK_IN]  = new MongoDate(strtotime($checkin));
+        $data[ListController::CHECK_OUT] = new MongoDate(strtotime($checkout));
+        $data[ListController::CONVERTED] = 'no';
+        $lead = new Application_Model_Leads($data);
+        $lead->save();
+        $lead->setListing($property);
+        $owner = $property->getOwner();
+        if ($owner != null) 
+            $lead->setOwner($owner);
+    }
+    
     public function formAction()
     {
         $logger = Zend_Registry::get('zvlogger');
@@ -542,6 +569,7 @@ class ListController extends Zend_Controller_Action
                 $values[ListController::SUBJECT] = "Reservation Request";
                 $response = 'Thank you. Your request has been forwarded to the owner.';
                 $status = $this->prepareAndSendMsg($values);
+                $this->addNewLead($values);
                 if ($status != 'OK') {
                    $response = $status;
                 }
