@@ -716,30 +716,40 @@ body {
 	float:left;
 	margin:10px 0;
 }
-.calendar1 .key{
+.refer1 {
+	margin:10px 0 10px 20px;
+	float:left;
+	width:170px;
+}
+.refer1 .wrpr_keys {
+	width:100%;
+	float:left;
+	margin-bottom:10px;
+}
+.calendar1 .key, .key{
 	float: left;
     margin-right: 5px;
     width: 30px;
 }
-.calendar1 .available {
+.calendar1 .available, .available {
 	background:url(../images/ico_avail.jpg) left top no-repeat;
 	width:20px;
 	height:20px;
 	float:left;
 }
-.calendar1 .unavailable {
+.calendar1 .unavailable, .unavailable{
 	background:url(../images/ico_unavail.jpg) left top no-repeat;
 	width:20px;
 	height:20px;
 	float:left;
 }
-.calendar1 .past {
+.calendar1 .past, .past {
 	background:url(../images/ico_past.jpg) left top no-repeat;
 	width:20px;
 	height:20px;
 	float:left;
 }
-.calendar1 .key-text{
+.calendar1 .key-text, .key-text{
 	float:left;
     margin-right:10px;
 }
@@ -983,6 +993,7 @@ body {
 	border:2px dotted #ccc;
 	float:left;
 	padding:25px;
+	background-color:#fff;
 }
 .detials_form h2{
 	color:#333;
@@ -1049,5 +1060,53 @@ body {
 	font-weight:bold;
 }
 .property_right_nav li a:hover, .property_right_nav li .active1{
+	color:#333;
+}
+.edit_cal{
+	background-color:#fff;
+	margin:auto;
+	width:420px;
+	height:310px;
+	padding:20px;
+	border:1px solid #ccc;
+}
+.edit_cal h2{
+	color:#333;
+	text-transform:inherit;
+	font-weight:normal;
+}
+.box{
+	border:1px solid #e3e1e1;
+	border-radius:4px;
+	width:390px;
+	height:auto;
+	margin:10px 0 20px 0;
+	padding:25px 15px;
+}
+.box .from, .box .to{
+	height:25px;
+	border-radius:2px;
+	border:1px solid #e3e1e1;
+	margin-bottom:10px;
+}
+.edit_cal .box label{
+	width:120px;
+	text-align:right;
+	margin-right:50px;
+	color:#333;
+	font-weight:normal;
+}
+.edit_cal .submit{
+	background:url(../images/btn_submit.jpg) top left no-repeat;
+	width:100px;
+	height:40px;
+	border:none;
+	float:right;
+	cursor:pointer;
+}
+.btn_cancel a{
+	float:left;
+	font-size:16px;
+	font-weight:bold;
 	color:#333;
 }
