@@ -68,6 +68,13 @@
 	width:700px;
 	margin-top:20px;
 }
+.l_property_details{
+	padding:25px;
+	float:left;
+	width:650px;
+	margin-top:20px;
+	border-radius:4px;
+}
 .l_search_results .display_no {
 	float:left;
 	margin-top:5px;
@@ -232,8 +239,13 @@
 
 .l_right_side_panel {
 	float:left;
-	width:245px;
-	margin:33px 0 0 15px;
+	width:240px;
+	margin:33px 0 0 20px;
+}
+.l_property_right {
+	float:left;
+	width:235px;
+	margin:33px 0 0 25px;
 }
 .l_right_side_panel h3 {
 	color:#333;
