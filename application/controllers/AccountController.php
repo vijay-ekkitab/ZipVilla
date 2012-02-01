@@ -101,5 +101,10 @@ class AccountController extends Zend_Controller_Action
             $this->_helper->redirector('index', 'index');
         }
     }
+    
+    public function newAction()
+    {
+        
+    }
 
 }

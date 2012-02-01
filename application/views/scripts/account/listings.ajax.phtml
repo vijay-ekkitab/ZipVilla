@@ -5,7 +5,7 @@
     <p> No listings were found. </p>
 <?php } else { ?>
     <div class="tab_content">
-        <div class="btn_newlist"><a href="#"><img src="images/btn_creat_new_list.jpg" alt="Create New list" /></a></div>
+        <div class="btn_newlist"><a href="<?php echo $this->baseUrl('/account/new');?>"><img src="images/btn_creat_new_list.jpg" alt="Create New list" /></a></div>
         <!-- <div class="drop_show">
             <form id="search_form" name="show" action="/search" method="post">
                 <label for="guests">Show
@@ -18,13 +18,17 @@
                 </label>
             </form>
         </div> --><!--Form ends-->
-        <?php foreach ($listings as $listing): 
+        <?php foreach ($listings as $listing):
+            $title = $listing->title;
+            if (strlen($title) > VILLA_NAME_MEDIUM_SIZE) {
+                $title = substr($title, 0, VILLA_NAME_MEDIUM_SIZE) . '...';
+            }
             $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $listing);?>
         <div class="listing">
             <div class="villa_image"><img src="<?php echo $imagepath;?>" alt="resort" /></div><!--picture-->
             <div class="resort_details">
-                <h2><?php echo $listing->title;?></h2>
-                <p><?php echo $listing->{'address.location'} . ' ' .$listing->{'address.city'}; ?></p>
+                <h2><?php echo $title;?></h2>
+                <p><?php echo $listing->{'address.location'} . ', ' .$listing->{'address.city'}; ?></p>
             </div>
             <div class="daily_rate">
                 <p>Daily Rate</p>
@@ -32,7 +36,7 @@
             </div>
             <div class="active">
                 <p>Active Since</p>
-                <h4><?php echo $listing->activated;?></h4>
+                <h4><?php if ($listing->activated != null) {echo date('d/m/Y', $listing->activated->sec);};?></h4>
             </div>
             <div class="bookings">
                 <p>Bookings</p>
