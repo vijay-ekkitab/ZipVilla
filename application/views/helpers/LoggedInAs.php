@@ -23,11 +23,11 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
             else {
                 $dashurl  = $this->view->url(array('controller' => 'account',
                                                    'action' => 'index'), null, true);
-                $dashlink = '<a href="'.$dashurl.'">Your Dashboard</a>';
+                $dashlink = '<li><a href="'.$dashurl.'">Your Dashboard</a></li>';
             }
-            return 'Welcome ' . $username . ',&nbsp;' . 
-                   '<a id="logout" href="'.$logoutUrl.'">Logout</a> &nbsp;&nbsp;' .
-                   $dashlink;
+            return '<li>Welcome ' . $username . '&nbsp;</li>' . 
+                   '<li><a id="logout" href="'.$logoutUrl.'">Logout</a> &nbsp;&nbsp;' .
+                   $dashlink . '</li>';
                    
         } 
 
