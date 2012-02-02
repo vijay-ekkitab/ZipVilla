@@ -15,9 +15,11 @@ include_once("ZipVilla/Availability.php");
 class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abstract {
 
     private $std_fields;
+    private $modelclass;
     
-    public function __construct($std_fields = null)
+    public function __construct($modelclass = 'Application_Model_Listings', $std_fields = null)
     { 
+        $this->modelclass = $modelclass;
         if ($std_fields == null) {
             $this->std_fields = array('title', 'address__city', 'address__state', 'address__street_name','address__location',
                                 'address__country', 'average_rate', 'address__coordinates__latitude',
@@ -40,7 +42,7 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
      * @param string $typeName the type of the listing such as resort, hotel etc.
      * @param array $rec the array containing the data to be inserted.
      * @param boolean $flat whether data should be flattened before insert.
-     & @return APPLICATION_MODEL_LISTINGS object
+     & @return $modelclass object
      */
 	public function insert($typeName,$rec,$flat=true) {
 		$tm = new TypeManager();
@@ -50,7 +52,7 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
 		} else {
 			$obj = $flat ? $tp->makeObject($rec) : $rec;
 			$obj[INDEXED] = false;
-            $apObj = new Application_Model_Listings($obj);
+            $apObj = new $this->modelclass($obj);
             $apObj->save();
             return $apObj;
 		}
@@ -62,7 +64,8 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
      & @return boolean success or failure. 
      */
 	public function delete($id) {
-        $apObj = Application_Model_Listings::load($id);
+	    $classname = $this->modelclass;
+        $apObj = $classname::load($id);
         if ($apObj) {
             $apObj->delete();
         }
@@ -102,7 +105,8 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
      & @return array of objects that matched the query. 
      */
 	public function query($q=null,$flat=false,$onlyIndexableProp=false) {
-        $apObjArray = Application_Model_Listings::find($q);
+	    $classname = $this->modelclass;
+        $apObjArray = $classname::find($q);
 		$res = array();
 		foreach ($apObjArray as $obj) {
 			array_push($res,($flat ? $this->flatten($obj,$onlyIndexableProp) : $obj));
@@ -134,7 +138,8 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
      & @return cursor for the query. 
      */
     public function getCursor($q=null) {
-        return Application_Model_Listings::getCursor($q);
+        $classname = $this->modelclass;
+        return $classname::getCursor($q);
     }
     
 	/**
@@ -145,7 +150,7 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
      */
 	public function flatten($obj,$onlyIndexableProp=false) {
 		$tm = new TypeManager();
-        if ($obj instanceof Application_Model_Listings) {
+        if ($obj instanceof $this->modelclass) {
             $obj = $obj->getDoc();
         }
 		$type = $obj[TYPE];

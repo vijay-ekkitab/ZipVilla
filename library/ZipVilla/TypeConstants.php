@@ -14,6 +14,7 @@ const  MOST_VIEWED    =  "mostviewed";
 const  MOST_BOOKED    =  "mostbooked";
 const  BEST_RATED     =  "bestrated";
 const  LEADS          =  "leads";
+const  PRELISTINGS    =  "prelistings";
 
 #consts for attribute and type definitions
 const  ID           =  "id" ;

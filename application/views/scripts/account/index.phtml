@@ -11,13 +11,16 @@
         <ul>
             <li><a href="#tabs-1">Bookings</a></li>
             <li><a href="#tabs-2">Listings</a></li>
-            <li><a href="#tabs-3">Account</a></li>
+            <li><a href="#tabs-3">New</a></li>
+            <li><a href="#tabs-4">Account</a></li>
         </ul>
         <div id="tabs-1">
         </div>
         <div id="tabs-2">
         </div>
         <div id="tabs-3">
+        </div>
+        <div id="tabs-4">
             <div class="tab_content">
             </div>
         </div>
@@ -47,8 +50,8 @@ if ($this->user != null) {
 <?php } ?>
     <div class="right_nav">
         <ul>
-            <li><a href="#">List your property</a></li>
-            <li><a href="<?php echo $this->baseUrl('/account/calendar');?>">Manage favorites</a></li>
+            <li><a href="<?php echo $this->baseUrl('/account/new?nextpage=1');?>">List your property</a></li>
+            <li><a href="#">Manage favorites</a></li>
         </ul>
     </div>
 </div>

@@ -1,114 +1,59 @@
 <?php $this->headTitle('Create New Listing'); ?>
 <?php $this->layout()->setLayout('account');?>
-<?php if (isset($this->alert)) {?>
-<div class="error_msg2">
-    <p><?php echo $this->alert;?></p>
-</div>
-<?php }?>
+<?php 
+      $id = '';
+      if ((!isset($this->listing) || ($this->listing == null))) {
+?>
+        <div class="error_msg2">
+        <p>Please fill in basic property information by clicking <a href="/account/new?nextpage=1">here</a> before coming to this page.</p>
+        </div>
+<?php } else { 
+        $id=$this->listing->id;
+?>
 <div class="l_property_details v_property_details"><!--Property details sections starts here-->
     <h1>Tell us more...</h1>
     <div class="sub_title"><p>You are only a few steps away from listing your property at Zipvilla.<br />Tell us more about your place and complete your listing.</p></div>
-    <div class="detials_form"><!--detials_form-->
-        <form>
-            <h2>Availability and pricing</h2>
-            <p>View availability and set special pricing for specific dates.</p>
-            <div class="slct_mnth"><!--form select-->
-                <div class="slct_mnth_dropdwn">
-                    <form action="">
+    <div style="margin-bottom:20px;" class="detials_form"><!--detials_form-->
+        <h2>Availability and pricing</h2>
+        <p>View availability and set special pricing for specific dates.</p>
+        <div class="slct_mnth"><!--form select-->
+            <div class="slct_mnth_dropdwn">
+                <form action="">
                     <p style="width:auto;"><strong>Select Month</strong></p>
                     <select class="dropdown_sm" name="per night">
-                        <option value="opt1">January <span>2012</span></option>
-                        <option value="opt2">February <span>2012</span></option>
-                        <option value="opt3">March <span>2012</span></option>
-                        <option value="opt4">April <span>2012</span></option>
-                        <option value="opt1">May <span>2012</span></option>
-                        <option value="opt2">June <span>2012</span></option>
-                        <option value="opt3">July <span>2012</span></option>
-                        <option value="opt4">August <span>2012</span></option>
-                        <option value="opt1">September <span>2012</span></option>
-                        <option value="opt2">October <span>2012</span></option>
-                        <option value="opt3">November <span>2012</span></option>
-                        <option value="opt4">December <span>2012</span></option>
+                    <?php $firstOfMonth = strtotime(date('Y-m',time()));
+                    for ($i=0; $i<=12;$i++) { 
+                        $d = date('M  Y', strtotime('+'.$i.' months', $firstOfMonth)); ?>
+                        <option value="<?php echo $d;?>"><?php echo $d; ?></option>
+                    <?php }?>
                     </select>
-                    </form>
-                </div>
-            </div><!--form select ends-->
-            <div class="calendar1">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>SUN</th>
-                            <th>MON</th>
-                            <th>TUE</th>
-                            <th>WEN</th>
-                            <th>THU</th>
-                            <th>FRI</th>
-                            <th>SAT</th>
-                        </tr>
-                        <tr>
-                            <td><span>1</span></td>
-                            <td><span>2</span></td>
-                            <td><span>3</span></td>
-                            <td><span>4</span></td>
-                            <td><span>5</span></td>
-                            <td class="avail"><span>6</span></td>
-                            <td class="nobrdr"><span>7</span></td>
-                        </tr>
-                        <tr>
-                            <td class="avail"><span>8</span><br>
-                                <div class="today_price">Rs.4,500</div>
-                            </td>
-                            <td class="avail"><span>9</span></td>
-                            <td class="avail"><span>10</span></td>
-                            <td class="avail"><span>11</span></td>
-                            <td class="avail"><span>12</span></td>
-                            <td><span>13</span></td>
-                            <td class="nobrdr avail"><span>14</span></td>
-                        </tr>
-                        <tr>
-                            <td class="unavail"><span>15</span></td>
-                            <td class="unavail"><span>16</span></td>
-                            <td class="unavail"><span>17</span></td>
-                            <td class="unavail"><span>18</span></td>
-                            <td class="unavail"><span>19</span></td>
-                            <td class="unavail"><span>20</span></td>
-                            <td class="nobrdr unavail"><span>21</span></td>
-                        </tr>
-                        <tr>
-                            <td><span>22</span></td>
-                            <td class="avail"><span>23</span><br />
-                                <div class="today_price">Rs.24,500</div>
-                            </td>
-                            <td><span>24</span></td>
-                            <td><span>25</span></td>
-                            <td><span>26</span></td>
-                            <td><span>27</span></td>
-                            <td class="nobrdr"><span>28</span></td>
-                        </tr>
-                        <tr>
-                            <td class="unavail"><span>29</span></td>
-                            <td class="unavail"><span>30</span></td>
-                            <td class="unavail"><span>31</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                </form>
             </div>
-            <div class="refer1">
-                <div class="wrpr_keys">
-                    <div class="available key">&nbsp;</div>
-                    <div class="key-text">Available</div>
-                </div>
-                <div class="wrpr_keys">
-                    <div class="unavailable key">&nbsp;</div>
-                    <div class="key-text">Unavailable</div>
-                </div>
-                <div class="wrpr_keys">
-                    <div class="past key">&nbsp;</div>
-                    <div class="key-text">Past</div>
-                </div>
+        </div>  <!--form select ends-->
+        <div id="loadergif"></div>
+        <div class="calendar1">
+        </div>
+        <div class="refer1">
+            <div class="wrpr_keys">
+                <div class="available key">&nbsp;</div>
+                <div class="key-text">Available</div>
             </div>
-        </form>
+            <div class="wrpr_keys">
+                <div class="unavailable key">&nbsp;</div>
+                <div class="key-text">Unavailable</div>
+            </div>
+            <div class="wrpr_keys">
+                <div class="past key">&nbsp;</div>
+                <div class="key-text">Past</div>
+            </div>
+        </div>
     </div><!--detials_form ends here-->
+    <div class="wrpr_btn_savencont">
+        <form name="part3" method="get">
+            <INPUT class="btn_savencont" type="submit" value="" />
+            <input type="hidden" name="nextpage" value="4" />
+        </form>
+    </div>
 </div><!--Property details ends here-->
 <div class="l_property_right v_property_right">
     <div>
@@ -118,13 +63,13 @@
     </div>
     <div class="property_right_nav">
         <ul>
-            <li><a href="#">Basic Information</a></li>
-            <li><a href="#">Property Details</a></li>
-            <li><a href="#" class="active1">Calendar</a></li>
-            <li style="border-bottom:none;"><a href="#">Photos and Videos</a></li>
+            <li><a href="/account/new?nextpage=1&id=<?php echo $id;?>">Basic Information</a></li>
+            <li><a href="/account/new?nextpage=2&id=<?php echo $id;?>">Property Details</a></li>
+            <li><a href="#" onclick="return false;" class="active1">Calendar</a></li>
+            <li style="border-bottom:none;"><a href="/account/new?nextpage=4&id=<?php echo $id;?>">Photos and Videos</a></li>
         </ul>
     </div>
 </div>
-
+<?php } ?>
 
                                         

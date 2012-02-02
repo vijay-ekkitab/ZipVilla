@@ -1,0 +1,99 @@
+<?php $this->headTitle('Create New Listing'); ?>
+<?php $this->layout()->setLayout('account');?>
+<?php 
+      $id = '';
+      $house_rules = '';
+      $has_amenities = array();
+      $has_onsite_services = array();
+      $has_suitability = array();
+      if ((!isset($this->listing) || ($this->listing == null))) {
+?>
+        <div class="error_msg2">
+        <p>Please fill in basic property information by clicking <a href="/account/new?nextpage=1">here</a> before coming to this page.</p>
+        </div>
+<?php } else { 
+        $id=$this->listing->id;
+        $house_rules = $this->listing->house_rules;
+        $has_amenities = $this->listing->amenities;
+        $has_onsite_services = $this->listing->onsite_services;
+        $has_suitability = $this->listing->suitability;
+?>
+<div class="l_property_details v_property_details"><!--Property details sections starts here-->
+    <h1>Tell us more...</h1>
+    <div class="sub_title"><p>You are only a few steps away from listing your property at Zipvilla.<br />
+Tell us more about your place and complete your listing.</p></div>
+    <div class="detials_form"><!--detials_form-->
+        <form name="part2" action="/account/new" method="post">
+            <h2>Amenities</h2>
+            <?php if ($this->amenities != null) {
+                $leftcount = ceil(count($this->amenities)/2);
+            ?> 
+            <p>Check all the amenities available at your place</p>
+            <div class="detials_form_l">
+                <?php for ($i=0; $i<$leftcount; $i++) {?>
+                    <?php $name = $this->amenities[$i];?>
+                    <?php $checked = '';
+                      if (in_array($name, $has_amenities)) { $checked = 'checked="yes"'; }; ?>
+                    <input type="checkbox" name="amenities[]" <?php echo $checked;?> value="<?php echo $name;?>" /><?php echo $name;?><br />
+                <?php } ?>
+            </div>
+            <div class="detials_form_r">
+                <?php for ($i=$leftcount; $i<count($this->amenities); $i++) {?>
+                    <?php $name = $this->amenities[$i];?>
+                    <?php $checked = '';
+                      if (in_array($name, $has_amenities)) { $checked = 'checked="yes"'; }; ?>
+                    <input type="checkbox" name="amenities[]" <?php echo $checked;?> value="<?php echo $name;?>" /><?php echo $name;?><br />
+                <?php } ?>
+            </div>
+            <div class="border"></div>
+            <?php } ?>
+            <h2>Onsite services and suitability</h2>
+            <?php if (($this->onsite_services != null) || ($this->suitability != null)) { ?>
+            <p>Check all the services available to your guests at your place</p>
+            <div class="detials_form_l">
+                <?php for ($i=0; $i<count($this->onsite_services); $i++) {?>
+                    <?php $name = $this->onsite_services[$i];?>
+                    <?php $checked = '';
+                      if (in_array($name, $has_onsite_services)) { $checked = 'checked="yes"'; }; ?>
+                    <input type="checkbox" name="onsite_services[]" <?php echo $checked;?> value="<?php echo $name;?>" /><?php echo $name;?><br />
+                <?php } ?>
+            </div>
+            <div class="detials_form_r">
+                <?php for ($i=0; $i<count($this->suitability); $i++) {?>
+                    <?php $name = $this->suitability[$i];?>
+                    <?php $checked = '';
+                      if (in_array($name, $has_suitability)) { $checked = 'checked="yes"'; }; ?>
+                    <input type="checkbox" name="suitability[]" <?php echo $checked;?> value="<?php echo $name;?>" /><?php echo $name;?><br />
+                <?php } ?>
+            </div>
+            <div class="border"></div>
+            <?php } ?>
+            <h2>House rules</h2>
+            <p>Mention the rules that guest must keep in mind during their stay at your place</p>
+            <textarea style="width:100%;" name="house_rules" rows="5" class="FrmtxtArea"><?php echo $house_rules;?></textarea><br>
+            <div style="margin-top:20px;" class="wrpr_btn_savencont">
+                    <INPUT class="btn_savencont" type="submit" value="" />
+            </div>
+            <input type="hidden" name="nextpage" value="3" />
+            <input type="hidden" name="id" value="<?php echo $id;?>" />
+        </form>
+    </div><!--detials_form ends here-->
+</div><!--Property details ends here-->
+<div class="l_property_right v_property_right">
+    <div>
+    <h4 class="l_link_back_page v_link_back_page"><a href="#">Back to Listings</a></h4>
+    <h2>Need help? Call us:</h2>
+    <p>+91-80-4115-0200<br />+91-80-4115-0400</p>
+    </div>
+    <div class="property_right_nav">
+        <ul>
+            <li><a href="/account/new?nextpage=1&id=<?php echo $id;?>">Basic Information</a></li>
+            <li><a href="#" onclick="return false;" class="active1">Property Details</a></li>
+            <li><a href="/account/new?nextpage=3&id=<?php echo $id;?>">Calendar</a></li>
+            <li style="border-bottom:none;"><a href="/account/new?nextpage=4&id=<?php echo $id;?>">Photos and Videos</a></li>
+        </ul>
+    </div>
+</div>
+<?php } ?>
+
+                                        

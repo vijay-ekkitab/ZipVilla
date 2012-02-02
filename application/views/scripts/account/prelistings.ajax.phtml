@@ -2,7 +2,7 @@
     $listings = $this->results['listings'];
     $maxlistings = $this->results['max'];
     if (($listings == null) || (count($listings) == 0)) { ?>
-    <p> No listings were found. </p>
+    <p> No new listings were found. </p>
 <?php } else { ?>
     <div class="tab_content">
         <div class="btn_newlist"><a href="<?php echo $this->baseUrl('/account/new?nextpage=1');?>"><img src="images/btn_creat_new_list.jpg" alt="Create New list" /></a></div>
@@ -20,6 +20,8 @@
         </div> --><!--Form ends-->
         <?php foreach ($listings as $listing):
             $title = $listing->title;
+            if ($title == null) 
+                $title = 'Not Given';
             if (strlen($title) > VILLA_NAME_MEDIUM_SIZE) {
                 $title = substr($title, 0, VILLA_NAME_MEDIUM_SIZE) . '...';
             }
@@ -30,27 +32,16 @@
                 <h2><?php echo $title;?></h2>
                 <p><?php echo $listing->{'address.location'} . ', ' .$listing->{'address.city'}; ?></p>
             </div>
-            <div class="daily_rate">
-                <p>Daily Rate</p>
-                <h4><?php echo $listing->rate['daily'];?></h4>
-            </div>
-            <div class="active">
-                <p>Active Since</p>
-                <h4><?php if ($listing->activated != null) {echo date('d/m/Y', $listing->activated->sec);};?></h4>
-            </div>
-            <div class="bookings">
-                <p>Bookings</p>
-                <h4><?php echo $listing->bookings;?></h4>
+            <div class="activate">
+                <h5>This listing is not visible yet</h5>
+                <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4><a href="#">Activate Now</a></h4></div>
             </div>
             <div class="edit">
                 <div class="calndr">
-                    <a href="#"><span><img src="images/ico_calender.jpg" alt="Calendar" /></span><h4>Calendar</h4></a>
-                </div>
-                <div class="calndr">
-                <a href="#"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
+                    <a href="/account/new?nextpage=1&id=<?php echo $listing->id;?>"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
                 </div>
             </div>
-        </div><!--listing ends here-->
+        </div>
         <?php endforeach;?>
     </div>
     <?php $pdata = $this->zvUtils()->calcPages($maxlistings, ZV_AC_LISTINGS_PAGE_SZ, $this->start);?>

@@ -1,0 +1,203 @@
+<?php $this->headTitle('Create New Listing'); ?>
+<?php $this->layout()->setLayout('account');?>
+<?php
+    $id='';
+    $shared = 'no';
+    $guests = 1;
+    $bedrooms = 1;
+    $baths = 1;
+    $title = '';
+    $description = '';
+    $dailyrate = '';
+    $weeklyrate = '';
+    $monthlyrate = '';
+    $longitude = '';
+    $latitude = '';
+    $address = '';
+    $location = '';
+    $city = '';
+    $state = '';
+    $zipcode = '';
+    if (isset($this->listing) && $this->listing != null) {
+        $id=$this->listing->id;
+        $shared = $this->listing->shared == 'yes' ? true : false;
+        $guests = $this->listing->guests;
+        $bedrooms = $this->listing->bedrooms;
+        $baths = $this->listing->baths;
+        $title = $this->listing->title;
+        $description = $this->listing->description;
+        $dailyrate = $this->listing->{'rate.daily'};
+        $weeklyrate = $this->listing->{'rate.weekly'};
+        $monthlyrate = $this->listing->{'rate.monthly'};
+        $longitude = $this->listing->{'address.coordinates.longitude'};
+        $latitude = $this->listing->{'address.coordinates.latitude'};
+        $address = $this->listing->{'address.street_name'};
+        $location = $this->listing->{'address.location'};
+        $city = $this->listing->{'address.city'};
+        $state = $this->listing->{'address.state'};
+        $zipcode = $this->listing->{'address.zipcode'};
+    } 
+    $allstates = array("Andra Pradesh","Arunachal Pradesh","Assam",
+                       "Bihar","Chhattisgarh","Goa","Gujarat",
+                       "Haryana","Himachal Pradesh","Jammu and Kashmir",
+                       "Jharkhand", "Karnataka","Kerala", "Madya Pradesh",
+                       "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
+                       "Nagaland", "Orissa", "Punjab", "Rajasthan", 
+                       "Sikkim", "Tamil Nadu", "Tripura", "Uttaranchal",
+                       "Uttar Pradesh", "West Bengal", "Andaman and Nicobar Islands",
+                       "Dadar and Nagar Haveli", "Daman and Diu",
+                       "Delhi", "Lakshadeep", "Pondicherry");
+?>
+<?php if (isset($this->alert)) {?>
+<div class="error_msg2">
+    <p><?php echo $this->alert;?></p>
+</div>
+<?php }?>
+<div class="l_property_details v_property_details"><!--Property details sections starts here-->
+    <h1>List your property.</h1>
+    <div class="sub_title"><p>Make more money by renting out your second home at Zipvilla. We deliver results you can depend on. <a href="#"> Learn more.</a></p></div>
+    <div class="detials_form"><!--detials_form-->
+        <form name="part1" action="/account/new" method="post">
+            <h2>About your place</h2>
+            <p>Tell us more about your place and what it promises to offer your guests.</p>
+            <div class="property_form">
+                <div class="height50">
+                    <label for="">Property type<span class="question"></span></label>
+                    <select name="shared">
+                        <option value="no" <?php if ($shared == 'no') {?> selected="selected" <?php }?>>Entire Apartment/Villa</option>
+                        <option value="yes"<?php if ($shared == 'yes'){?> selected="selected" <?php }?>>Shared Apartment/Villa</option>
+                    </select>
+                </div>
+                <div class="height50">
+                    <label for="Accommodates">Accommodates<span class="question"></span></label><select name="guests">
+                        <?php for ($i=1; $i<=10; $i++) {?>
+                            <option value="<?php echo $i;?>" <?php if ($guests == $i) {?> selected="selected" <?php }?>><?php echo $i;?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="height50">
+                    <label for="Bedrooms">Bedrooms<span class="question"></span></label><select name="bedrooms">
+                        <?php for ($i=1; $i<=10; $i++) {?>
+                            <option value="<?php echo $i;?>" <?php if ($bedrooms == $i) {?> selected="selected" <?php }?>><?php echo $i;?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="height50">
+                    <label for="Bathroo,s">Bathrooms<span class="question"></span></label><select name="baths">
+                        <?php for ($i=1; $i<=5; $i++) {?>
+                            <option value="<?php echo $i;?>" <?php if ($baths == $i) {?> selected="selected" <?php }?>><?php echo $i;?></option>
+                        <?php }?>
+                    </select>
+                </div>
+                <div class="height50">
+                    <label for="Title">Title</label><input type="text" size="60" name="title" value="<?php echo $title;?>" />
+                </div>
+                <div style="margin-bottom:25px;">
+                    <label for="Description">Description</label><textarea name="description" rows="5" cols="44"><?php echo $description;?></textarea>
+                </div>
+                <div class="height50">
+                    <label for="price">Price (Rs)<span class="question"></span></label><input type="text" size="15" name="price_day" value="<?php echo $dailyrate; ?>"/><p>per night</p>
+                </div>
+                <div class="height50">
+                    <label for="price"></label><input type="text" size="15" name="price_week" value="<?php echo $weeklyrate; ?>"/><p>per week (optional)</p>
+                </div>
+                <div class="height50">
+                    <label for="price"></label><input type="text" size="15" name="price_month" value="<?php echo $monthlyrate; ?>"/><p>per Month (optional)</p>
+                </div>
+            </div>
+            <div class="border"></div>
+            <h2>Location and contact information</h2>
+            <p>To protect your privacy, the following information will be shown only to those who have confirmed their booking with you.</p>
+            <div class="property_form">
+                <div class="height50">
+                    <label for="email">Email Address</label><input type="text" size="30" name="email" />
+                                                    </div>
+                <div class="height50">
+                    <label for="mobile">Mobile Phone (+91)</label><input type="text" size="30" name="mobile" />
+                </div>
+                <div class="height50">
+                    <label for="landline">Landline (+91)</label><input type="text" size="30" name="landline" />
+                </div>
+                <div class="height50">
+                    <label for="googlemap">Google Maps link <span class="question"></span></label><input type="text" size="50" name="googlelink" /><p>optional</p>
+                </div>
+                <div class="height50">
+                    <label for="longitude">Longitude</label><input type="text" size="30" name="longitude" value="<?php echo $longitude; ?>"/>
+                </div>
+                <div class="height50">
+                    <label for="latitude">Latitude</label><input type="text" size="30" name="latitude" value="<?php echo $latitude; ?>"/>
+                </div>
+                <div style="margin-bottom:25px;">
+                    <label for="Street Address">Street Address</label><textarea name="address" rows="5" cols="37"><?php echo $address; ?></textarea>
+                </div>
+                <div class="height50">
+                    <label for="location">Location</label><input type="text" size="30" name="location" value="<?php echo $location; ?>"/>
+                </div>
+                <div class="height50">
+                    <label for="city">City</label><input type="text" size="30" name="city" value="<?php echo $city; ?>"/>
+                </div>
+                <div class="height50">
+                    <label for="state">State</label>
+                        <select name="state">
+                            <option value="None"> </option>
+                            <?php foreach($allstates as $s):?>
+                                <option value="<?php echo $s;?>" <?php if ($state == $s) {?> selected="selected" <?php }?>><?php echo $s;?></option>
+                            <?php endforeach;?>
+                        </select>
+                </div>
+                <div class="height50">
+                    <label for="pin">PIN code</label><input type="text" size="30" name="zipcode" value="<?php echo $zipcode; ?>"/>
+                </div>
+                <div class="height50">
+                    <label></label><input type="checkbox" name="terms" value="terms" /><div class="trms"><p>I accept the <a href="#">Terms of Service</a></p></div>
+                </div>
+                <div class="wrpr_btn_savencont">
+                    <INPUT class="btn_savencont" type="submit" value="" />
+                </div>
+            </div>
+            <input type="hidden" name="nextpage" value="2" />
+            <input type="hidden" name="id" value="<?php echo $id;?>" />
+        </form>
+    </div><!--detials_form ends here-->
+</div><!--Property details ends here-->
+<div class="l_property_right v_property_right">
+    <div>
+        <h4 class="l_link_back_page v_link_back_page"><a href="#">Back to Listings</a></h4>
+        <h2>Need help? Call us:</h2>
+        <p>+91-80-4115-0200<br />+91-80-4115-0400</p>
+    </div>
+    <div class="property_right_nav">
+        <ul>
+            <li><a href="#" onclick="return false;" class="active1">Basic Information</a></li>
+            <li><a href="/account/new?nextpage=2&id=<?php echo $id;?>">Property Details</a></li>
+            <li><a href="/account/new?nextpage=3&id=<?php echo $id;?>">Calendar</a></li>
+            <li style="border-bottom:none;"><a href="/account/new?nextpage=4&id=<?php echo $id;?>">Photos and Videos</a></li>
+        </ul>
+    </div>
+    <div>
+        <h2>Frequently asked questions</h2>
+        <div class="right_nav">
+            <ul>
+                <li><a href="#">Why rent your vacation home?</a></li>
+                <li><a href="#">How much does it cost to list?</a></li>
+                <li><a href="#">Why list with Zipvilla?</a></li>
+                <li><a href="#">How does ZipVilla ensure safety?</a></li>
+                <li><a href="#">Who will be staying at your home?</a>
+                    <ul>
+                        <li>Vacationers</li>
+                        <li>Business travelers in town for work</li>
+                        <li>Travelers in town for special events</li>
+                        <li>Families looking for a quiet holiday</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2>What they’re saying...</h2>
+        <p>"I just wanted to tell Zipvilla how much I appreciate their service in helping us rent our vacation home. Their service is way superior than the other similar sites we have used to list our property. Now, our vacation home virtually pays for itself. Thank you, Zipvilla!" </p>
+        <h3>Warun Chelliah</h3>
+        <span>Zipvilla Homeowner</span>
+    </div>
+</div>
+                                    

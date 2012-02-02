@@ -1,5 +1,6 @@
 <?php
 include_once 'ZipVilla/TypeConstants.php';
+include_once("Mongo/ModelBase.php");
 
 class ZipVilla_View_Helper_ZvImage
 {
@@ -22,7 +23,7 @@ class ZipVilla_View_Helper_ZvImage
         if ($listing == null) {
             return null;
         }
-        if ($listing instanceof Application_Model_Listings) {
+        if ($listing instanceof Mongo_ModelBase) {
             $city = $listing->address['city'];
             $image = $listing->images[0];
         }
@@ -39,7 +40,7 @@ class ZipVilla_View_Helper_ZvImage
     }
     
     public function getImagePathPrefix($baseUrl, $listing) {
-        if ($listing instanceof Application_Model_Listings) {
+        if ($listing instanceof Mongo_ModelBase) {
             $city = $listing->address['city'];
         }
         else {

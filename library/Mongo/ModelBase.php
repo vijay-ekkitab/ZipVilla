@@ -139,7 +139,8 @@ class Mongo_ModelBase {
      */
     public function getDoc() {
         $doc = $this->document;
-        $doc['_id'] = $this->__get('id');
+        if (isset($this->id))
+            $doc['_id'] = $this->__get('id');
         return $doc;
     } 
 
@@ -184,6 +185,9 @@ class Mongo_ModelBase {
     }
 
     public function getNextSeq() {
+        if (self::$_mongo == null) {
+            static::init();
+        }
         $seq = self::$_mongo->command(
                                 array('findandmodify' => SEQUENCE_COLLECTION,
                                       'query' => array('_id' => static::$_collectionName),
