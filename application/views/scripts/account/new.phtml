@@ -1,4 +1,4 @@
-<?php $this->headTitle('Create New Listing'); ?>
+<?php $this->headTitle('Create New Listing - Property Details'); ?>
 <?php $this->layout()->setLayout('account');?>
 
 <?php if (isset($this->alert)) {?>
@@ -59,8 +59,8 @@ Tell us more about your place and complete your listing.</p></div>
     </div>
     <div class="property_right_nav">
         <ul>
-            <li><a href="#">Basic Information</a></li>
-            <li><a href="#" class="active1">Property Details</a></li>
+            <li><a href="<?php echo $this->baseUrl('/account/basicinfo');?>">Basic Information</a></li>
+            <li><class="active1">Property Details</a></li>
             <li><a href="#">Calendar</a></li>
             <li style="border-bottom:none;"><a href="#">Photos and Videos</a></li>
         </ul>

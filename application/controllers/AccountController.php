@@ -107,6 +107,11 @@ class AccountController extends Zend_Controller_Action
         
     }
     
+    public function basicinfoAction()
+    {
+    
+    }
+    
     public function calendarAction()
     {
         
