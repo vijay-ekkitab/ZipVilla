@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<title>Search Results - Zipvilla-Feel at Home-Away</title>
+<link href="css/misc.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="css/visual.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="css/layout.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="css/ui-lightness/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="css/lightbox.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
+<script type="text/javascript" src="js/accordian.js"></script>
+<script type="text/javascript" src="js/mapMarker.js"></script>
+<script type="text/javascript" src="js/zvcommon.js"></script>                                       
+<script type="text/javascript">
+    var $tabs;
+    $(document).ready(function(){
+    	   
+        //mapMarker('map', 1);
+        mapMarker('map', 1);
+
+
+        
+    	$('#price_slider').slider({
+            values: [100, 20000],
+        });
+        
+    	$( "#price_range" ).val( "Rs." + $( "#price_slider" ).slider( "values", 0) +
+                " - Rs." + $( "#price_slider" ).slider( "values", 1 ));
+    
+    	$("#guests").val("1");
+    	    	
+    	$("#sort").prop('selectedIndex', 0);
+    	$('#query').data('lastValue', '*');
+    	$('#query').bind('keypress', null, watchQueryBox);
+    
+        $(".defaultText").focus(function(srcc) {
+    	    if ($(this).val() == $(this)[0].title) {
+    	        $(this).removeClass("defaultTextActive");
+    	        $(this).val("");
+    	    }
+    	 });
+    		    
+        $(".defaultText").blur(function() {
+            if ($(this).val() == "") {
+                $(this).addClass("defaultTextActive");
+                $(this).val($(this)[0].title);
+            }
+         });
+    		    
+        $(".defaultText").blur();
+
+        $('#price_slider').slider({
+            range: true,
+            min: 100,
+            max:20000,
+            values: [500, 10000],
+            step:100,
+            slide: function( event, ui ) {
+                $( "#price_range" ).val( "Rs." + ui.values[ 0 ] + " - Rs." + ui.values[ 1 ] );
+            }
+        });
+        $( "#price_range" ).val( "Rs." + $( "#price_slider" ).slider( "values", 0 ) +
+                " - Rs." + $( "#price_slider" ).slider( "values", 1 ) );
+
+        $tabs = $('#tabs').tabs();
+        $tabs.tabs('select', 0);
+ 				$('#tabs').bind('tabsshow', function(event, ui) {
+ 			    if (ui.panel.id == "tabs-3") {
+  	 				mapMarker('tab_search_map_div', 1,15,1);  	 			    }
+	 			});
+
+    });
+    
+    //function doSort(sortbox) 
+    //{
+    //	location.href=sortbox.options[sortbox.selectedIndex].value;
+    //}
+    function setPage(page)
+    {
+        $("#page").val(page);
+        setTab();
+    }
+    function setTab()
+    {
+        var selected = $tabs.tabs('option', 'selected');
+        $("#showtab").val(selected);
+    }
+    //function init() 
+    //{
+    //    document.getElementById('select_'+'').selected = true;
+    //}
+    $(function() {
+    	$( "#checkin" ).datepicker();
+    });
+    $(function() {
+    	$( "#checkout" ).datepicker();
+    });
+
+</script>
+</head>
+<body class="blue">
+  <div id="fb-root"></div>
+	<div class="wrapper"><!--outer wrapper to fix the width-->
+
+        <div class="header"><!--header section-->
+            <div class="logo"><a href="/"><img src="images/logo_zipvilla.jpg" alt="Zipvilla" /></a></div>
+            <div class="user"><p style="float:left;margin-right:10px;"><img src="images/ico_user.jpg" alt="" /></p><p>Hello, Kajol Mukharjee</p><span><a href="#"><img src="images/icon_favorite_b.jpg" alt="favour" /></a></span></div>
+            <div class="v_top_nav l_top_nav">
+                <ul>
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Support</a></li>
+                    <li class="last"><a href="#">Log Out</a></li>
+                </ul>
+            </div><!--top_nav ends-->
+        </div><!--header ends here-->
+        <div class="content">
+            <div class="l_property_details v_property_details"><!--Property details sections starts here-->
+				<h1>List your property.</h1>
+				<div class="sub_title"><p>Make more money by renting out your second home at Zipvilla. 
+We deliver results you can depend on. <a href="#">Learn more.</a></p></div>
+				<div class="detials_form"><!--detials_form-->
+                	<form>
+                        <h2>About your place</h2>
+                        <p>Tell us more about your place and what it promises to offer your guests.</p>
+                    	<div class="property_form">
+                            <div class="height50">
+                                <label for="">Property type<span class="question"></span></label><select name="Entire House / Apartment">
+                                    <option value="a">Entire House / Apartment</option>
+                                    <option value="b">Entire House / Apartment2</option>
+                                    <option value="c">Entire House / Apartment3</option>
+                                    <option value="d">Entire House / Apartment4</option>
+                                </select>  
+                            </div>   
+                            <div class="height50">
+                                <label for="Accommodates">Accommodates<span class="question"></span></label><select name="Accommodates">
+                                    <option value="a">1</option>
+                                    <option value="b">2</option>
+                                    <option value="c">3</option>
+                                    <option value="d">4</option>
+                                    <option value="b">5</option>
+                                    <option value="c">6</option>
+                                    <option value="d">7</option>
+                                    <option value="a">8</option>
+                                    <option value="b">9</option>
+                                    <option value="c">10</option>
+                                </select>  
+                            </div>  
+                            <div class="height50">
+                                <label for="Bedrooms">Bedrooms<span class="question"></span></label><select name="Bedrooms">
+                                    <option value="a">1</option>
+                                    <option value="b">2</option>
+                                    <option value="c">3</option>
+                                    <option value="d">4</option>
+                                    <option value="b">5</option>
+                                </select>  
+                            </div>   
+                            <div class="height50">
+                            	<label for="Title">Title</label><input type="text" size="60" name="firstname" />
+                            </div>   
+                            <div style="margin-bottom:25px;">
+                            	<label for="Description">Description</label><textarea rows="5" cols="44"></textarea>
+                            </div>    
+                            <div class="height50">
+                            	<label for="price">Price (Rs)<span class="question"></span></label><input type="text" size="15" name="price" /><p>per night</p>
+                            </div>   
+                            <div class="height50">
+                            	<label for="price"></label><input type="text" size="15" name="price" /><p>per week (optional)</p>
+                            </div>  
+                            <div class="height50">
+                            	<label for="price"></label><input type="text" size="15" name="price" /><p>per Month (optional)</p>
+                            </div>   
+                        </div>
+                        <div class="border"></div>
+                        <h2>Location and contact information</h2>
+                        <p>To protect your privacy, the following information will be shown only to those who have confirmed their booking with you.</p>
+                    	<div class="property_form">
+                            <div class="height50">
+                            	<label for="email">Email Address</label><input type="text" size="30" name="email" />
+                            </div>   
+                            <div class="height50">
+                            	<label for="mobile">Mobile Phone (+91)</label><input type="text" size="30" name="mobile" />
+                            </div>   
+                            <div class="height50">
+                            	<label for="landline">Landline (+91)</label><input type="text" size="30" name="landline" />
+                            </div>  
+                            <div class="height50">
+                            	<label for="googlemap">Google Maps link <span class="question"></span></label><input type="text" size="50" name="googlemap" /><p>optional</p>
+                            </div>   
+                            <div class="height50">
+                            	<label for="longitude">Longitude</label><input type="text" size="30" name="longitude" />
+                            </div>  
+                            <div class="height50">
+                            	<label for="latitude">Latitude</label><input type="text" size="30" name="latitude" />
+                            </div>  
+                            <div style="margin-bottom:25px;">
+                            	<label for="Street Address">Street Address</label><textarea rows="5" cols="37"></textarea>
+                            </div>    
+                            <div class="height50">
+                            	<label for="city">City</label><input type="text" size="30" name="city" />
+                            </div>   
+                            <div class="height50">
+                            	<label for="state">State</label>
+                                	<select name="state">
+                                        <option value="Andra Pradesh">Andra Pradesh</option>
+                                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                        <option value="Assam">Assam</option>
+                                        <option value="Bihar">Bihar</option>
+                                        <option value="Chhattisgarh">Chhattisgarh</option>
+                                        <option value="Goa">Goa</option>
+                                        <option value="Gujarat">Gujarat</option>
+                                        <option value="Haryana">Haryana</option>
+                                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                        <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                                        <option value="Jharkhand">Jharkhand</option>
+                                        <option value="Karnataka">Karnataka</option>
+                                        <option value="Kerala">Kerala</option>
+                                        <option value="Madya Pradesh">Madya Pradesh</option>
+                                        <option value="Maharashtra">Maharashtra</option>
+                                        <option value="Manipur">Manipur</option>
+                                        <option value="Meghalaya">Meghalaya</option>
+                                        <option value="Mizoram">Mizoram</option>
+                                        <option value="Nagaland">Nagaland</option>
+                                        <option value="Orissa">Orissa</option>
+                                        <option value="Punjab">Punjab</option>
+                                        <option value="Rajasthan">Rajasthan</option>
+                                        <option value="Sikkim">Sikkim</option>
+                                        <option value="Tamil Nadu">Tamil Nadu</option>
+                                        <option value="Tripura">Tripura</option>
+                                        <option value="Uttaranchal">Uttaranchal</option>
+                                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                        <option value="West Bengal">West Bengal</option>
+                                        <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                                        <option value="Dadar and Nagar Haveli">Dadar and Nagar Haveli</option>
+                                        <option value="Daman and Diu">Daman and Diu</option>
+                                        <option value="Delhi">Delhi</option>
+                                        <option value="Lakshadeep">Lakshadeep</option>
+                                        <option value="Pondicherry">Pondicherry</option>
+                                    </select>
+                            </div>   
+                            <div class="height50">
+                            	<label for="pin">PIN code</label><input type="text" size="30" name="pin" />
+                            </div>   
+                            <div class="height50">
+                                <label></label><input type="checkbox" name="terms" value="terms" /><div class="trms"><p>I accept the <a href="#">Terms of Service</a></p></div>
+                           	</div>
+                            <div class="wrpr_btn_savencont">
+                                <INPUT class="btn_savencont" type="submit" value="" />
+                            </div>
+                        </div>
+                    </form> 
+                    <div class="autofil-container" style="position: absolute; z-index: 1000; width:297px; left:440px; top:1390px;">
+                        <div class="autofil-item"><b>K</b>erala</div>
+                        <div class="autofil-item"><b>K</b>arnataka</div>
+                        <div class="autofil-item"><b>K</b>asargod</div>
+                        <div class="autofil-item"><b>K</b>oramangala</div>
+                        <div class="autofil-item"><b>K</b>annur</div>
+                    </div>
+                </div><!--detials_form ends here-->
+         	</div><!--Property details ends here-->
+            <div class="l_property_right v_property_right">
+            	<div>
+                    <h4 class="l_link_back_page v_link_back_page"><a href="#">Back to Listings</a></h4>
+                    <h2>Need help? Call us:</h2>
+                    <p>+91-80-4115-0200<br />+91-80-4115-0400</p>
+                </div>
+                <!--<div class="property_right_nav">
+                	<ul>
+                    	<li><a href="#">Basic Information</a></li>
+                        <li><a href="#" class="active1">Property Details</a></li>
+                        <li><a href="#">Calendar</a></li>
+                        <li style="border-bottom:none;"><a href="#">Photos and Videos</a></li>
+                    </ul>
+                </div>-->
+                <div>
+                    <h2>Frequently asked questions</h2>
+                    <div class="right_nav">
+                        <ul>
+                            <li><a href="#">Why rent your vacation home?</a></li>
+                            <li><a href="#">How much does it cost to list?</a></li>
+                            <li><a href="#">Why list with Zipvilla?</a></li>
+                            <li><a href="#">How does ZipVilla ensure safety?</a></li>
+                            <li><a href="#">Who will be staying at your home?</a>
+                            	<ul>
+                                	<li>Vacationers</li>
+                                    <li>Business travelers in town for work</li>
+                                    <li>Travelers in town for special events</li>
+                                    <li>Families looking for a quiet holiday</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                	<h2>What they’re saying...</h2>
+                    <p>"I just wanted to tell Zipvilla how much I appreciate their service in helping us rent our vacation home. Their service is way superior than the other similar sites we have used to list our property. Now, our vacation home virtually pays for itself. Thank you, Zipvilla!" </p>
+                    <h3>Warun Chelliah</h3>
+                    <span>Zipvilla Homeowner</span>
+                </div>
+           	</div>
+        </div><!-- content ends here -->
+        <div class="footer">
+            <div class="dsclimr"><p><span>&copy; 2011  ZipVilla.  All rights reserved.</span><a href="#">Privacy Policy</a>|<a href="#">Terms and Conditions</a></p></div>
+            <div class="l_futr_nav v_futr_nav">
+                <ul>
+                    <li><a href="#">How it works</a></li>
+                    <li><a href="#">FAQs</a></li>
+        
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Jobs</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="social_ico">
+                <ul>
+        
+                    <li><a href="#"><img src="images/icon_fb.jpg" alt="Facebook" /></a></li>
+                    <li><a href="#"><img src="images/icon_twitter.jpg" alt="twitter" /></a></li>
+                </ul>
+            </div>
+        </div><!--footer ends here-->
+	</div><!-- wrapper ends here -->
+</body>
+</html>
+

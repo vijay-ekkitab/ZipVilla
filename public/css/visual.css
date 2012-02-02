@@ -846,6 +846,14 @@ body {
 	text-transform:inherit;
 	margin:15px 0 5px 0;
 	float:left;
+	letter-spacing:0;
+	width:100%;
+}
+.v_property_right h3{
+	color:#69ad44;
+	font-size:16px;
+	margin:15px 0 10px 0;
+	width:100%;
 }
 .edit_prfl{
 	float:left;
@@ -872,6 +880,12 @@ body {
 	line-height:25px;
 	margin-left:15px;
 }
+.right_nav li ul li{
+	list-style-image:url(../images/blt_list_list.jpg);
+	line-height:25px;
+	margin-left:15px;
+}
+
 .right_nav li a{
 	color:#09c;
 	font-size:13px;
@@ -1109,4 +1123,64 @@ body {
 	font-size:16px;
 	font-weight:bold;
 	color:#333;
+}
+.question{
+	background:url(../images/btn_questin.jpg) top left no-repeat;
+	width:15px;
+	height:15px;
+	float:right;
+	margin-left:10px;
+	cursor:pointer;
+}
+.property_form{
+	float:left;
+	width:600px;
+}
+.property_form p{
+	float:left;
+	width:auto;
+	clear:none;
+}
+.property_form label{
+	font-weight:normal;
+	width:175px;
+	float:left;
+	text-align:right;
+	margin-right:10px;
+}
+.property_form input{
+	padding-left:0 5px;
+	float:left;
+	color:#09c;
+}
+.height50{
+	height:50px;
+}
+.trms p{
+	font-size:12px;
+	width:auto;
+	clear:none;
+	margin-top:-5px;
+}
+.trms p a, .sub_title p a{
+	color:#09c;
+}
+.trms p a:hover, .sub_title p a:hover{
+	color:#333;
+}
+.wrpr_btn_savencont{
+	text-align:center;
+	width:100%;
+}
+.wrpr_btn_savencont input{
+	float:inherit;
+}
+.btn_savencont{
+	background:url(../images/btn_savencont.jpg) top left no-repeat;
+	width:189px;
+	height:40px;
+	border:none;
+	text-align:center;
+	float:inherit;
+	cursor:pointer;
 }

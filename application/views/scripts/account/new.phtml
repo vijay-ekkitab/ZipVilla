@@ -1,5 +1,56 @@
 <?php $this->headTitle('Create New Listing'); ?>
 <?php $this->layout()->setLayout('account');?>
+
+<script type="text/javascript">
+function getPropertyFeatures()
+{
+	//	var features = ['shared', 'amenities', 'onsite_services', 'suitability', 'address__location'];
+	var features = ['shared', 'amenities', 'onsite_services', 'suitability'];
+	for (var i in features) {
+		var feature = features[i];
+		$(".lbox_"+feature).children().remove();
+		$(".acc_section").find("[name='"+feature+"[]']").each(
+		function() {
+			var checked = $(this).is(':checked');
+			addCheckBox(feature, $(this).val(), $(this).next().text(), $(this).next().next().text(), checked);
+		});
+	};
+
+	var feature = "address__location";
+	$(".lbox_"+feature).children().remove();
+	$(".lbox_"+feature+"_r").children().remove();
+	var rc=false;
+	var tmp=feature;
+	$(".acc_section").find("[name='"+feature+"[]']").each(
+	function() {
+		var checked = $(this).is(':checked');
+		if( rc == true ){
+			tmp = feature+"_r";
+			rc = false;
+		} else {
+			tmp = feature;
+			rc = true;
+		}
+		addCheckBox(tmp, $(this).val(), $(this).next().text(), $(this).next().next().text(), checked);
+	});
+};
+
+
+function addCheckBox(feature, name, label, value, checked) {
+
+	var container = $(".lbox_"+feature);
+	//alert(feature+','+name+','+label+','+value+','+checked);
+	var checked_flag = '';
+	if (checked) {
+		checked_flag = 'checked="yes"';
+	}
+	var html = '<li class="clearfix"><input type="checkbox" id="lbox_'+feature+'" value="'+name+'" class="l_styled"' + checked_flag +'/>' +
+               '<label>'+label+'</label> <span class="facet_count">'+value+'</span></li>';
+	//alert(html);
+	container.append(html);
+}
+</script>
+
 <?php if (isset($this->alert)) {?>
 <div class="error_msg2">
     <p><?php echo $this->alert;?></p>
