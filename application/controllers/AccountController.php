@@ -319,3 +319,4 @@ class AccountController extends Zend_Controller_Action
     }
 
 }
+
