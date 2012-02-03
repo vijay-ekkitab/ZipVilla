@@ -31,6 +31,8 @@ class AccountController extends Zend_Controller_Action
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext->addActionContext('getaccountdata', 'html')
                     ->addActionContext('getcalendar', 'html')
+                    ->addActionContext('updatecalendar', 'html')
+                    ->addActionContext('deleteprelisting', 'html')
                     ->initContext();
     }
 
@@ -87,6 +89,21 @@ class AccountController extends Zend_Controller_Action
         return array('listings' => $listings, 'max' => $count);
     }
     
+    public function deleteprelistingAction()
+    {
+        $values = $this->getRequest()->getPost();
+        $id = $values['id'];
+        $start = $values['start'];
+        $listing = Application_Model_PreListings::load($values['id']);
+        if ($listing != null) {
+            $listing->delete();
+        }
+        $this->view->start = $start;
+        $user = $this->getUser();
+        $this->view->results = $this->getListings('Application_Model_PreListings',$user, $start);
+        $this->_helper->viewRenderer('prelistings');
+    }
+    
     public function getaccountdataAction()
     {
         $logger = Zend_Registry::get('zvlogger');
@@ -98,8 +115,6 @@ class AccountController extends Zend_Controller_Action
             $start = $values['start'];
             $filter = $values['filter'];
             
-            $this->view->leads = null;
-            $this->view->listings = null;
             $this->view->start = $start;
             
             $pos = strpos($username,AUTH_FIELD_SEPARATOR);
@@ -115,7 +130,7 @@ class AccountController extends Zend_Controller_Action
                     case 'listings': $this->view->results = $this->getListings('Application_Model_Listings',$user, $start);
                                      $this->_helper->viewRenderer('listings');
                                      break;
-                    case 'prelistings': $this->view->results = $this->getListings('Application_Model_PreListings',$user, 0);
+                    case 'prelistings': $this->view->results = $this->getListings('Application_Model_PreListings',$user, $start);
                                         $this->_helper->viewRenderer('prelistings');
                                         break;
                     default:         break;
@@ -236,58 +251,50 @@ class AccountController extends Zend_Controller_Action
         }
     }*/
     
-    public function getcalendarAction()
-    {
-        $logger = Zend_Registry::get('zvlogger');
-        $request = $this->getRequest();
-        $rate = 0;
-        $days = 1;
-        $datestr = '';
-        if ($request->isPost()) {
-            $datestr = $request->getPost('date', date('M  Y'));
-            $id = $request->getPost('id', null);
+    protected function getCalendarHtml($id, $datestr, $modelclass='Application_Model_PreListings')
+    { 
+        $html = '';
+        if (($id == null) || ($id == '') || ($datestr == null) || ($datestr == '')) { 
+            return $html;
         }
-        if ($datestr == '') {
-            $this->_helper->viewRenderer->setNoRender();
-            return;
-        }
-        $startday = date('N',strtotime('01 '.$datestr));
-        $startday = $startday%7;
-        $tmp1 = explode(',', date('m,Y', strtotime($datestr)));
-        $numdays = cal_days_in_month(CAL_GREGORIAN, $tmp1[0], $tmp1[1]);
-        
         $booked = array();
         $specials = array();
         $special_dates = array();
         
-        if ($id) {
-            $lm = new ZipVilla_Helper_ListingsManager('Application_Model_PreListings');
-            $from = new MongoDate(strtotime($datestr));
-            $booked_dates = $lm->getBookingCalendar($id, $from, $numdays);
-            foreach($booked_dates as $b) {
-                $f = intval(date('j', $b['from']->sec));
-                $t = intval(date('j', $b['to']->sec));
-                $days = $b['days'];
-                for ($i=$f;$i<=$f+$days; $i++)
-                    $booked[] = $i;
-            }
-            $to = new MongoDate($from->sec  + (86400 * ($numdays-1)));
-            $special_rates = $lm->getRates($id, $from, $to);
-            foreach($special_rates as $s) {
-                $f = intval(date('j', $s['from']->sec));
-                $t = intval(date('j', $s['to']->sec));
-                for ($i=$f;$i<=$t; $i++) {
-                    $specials[$i] = $s['rate'];
-                }
-            }
-            $special_dates = array_keys($specials);
-        }
-        
+        $tmp1 = explode(',', date('m,Y', strtotime($datestr)));
+        $numdays = cal_days_in_month(CAL_GREGORIAN, $tmp1[0], $tmp1[1]);
         $tmp2 = explode(',', date('m,j'));
         $today = 0;
         if ($tmp2[0] == $tmp1[0]) { //same month
             $today = $tmp2[1];
         }
+        $startday = date('N',strtotime('01 '.$datestr));
+        $startday = $startday%7;
+        
+        $lm = new ZipVilla_Helper_ListingsManager($modelclass);
+        
+        $from = new MongoDate(strtotime($datestr));
+        $booked_dates = $lm->getBookingCalendar($id, $from, $numdays);
+        foreach($booked_dates as $b) {
+            $f = intval(date('j', $b['from']->sec));
+            $t = intval(date('j', $b['to']->sec));
+            $days = $b['days'];
+            for ($i=$f;$i<=$f+$days; $i++)
+                $booked[] = $i;
+        }
+        $to = new MongoDate($from->sec  + (86400 * ($numdays-1)));
+        $special_rates = $lm->getRates($id, $from, $to);
+        foreach($special_rates as $s) {
+            $f = intval(date('j', $s['from']->sec));
+            $t = intval(date('j', $s['to']->sec));
+            for ($i=$f;$i<=$t; $i++) {
+                $specials[$i] = $s['rate'];
+            }
+        }
+        $special_dates = array_keys($specials);
+        
+       
+        
         $html = '<table><tbody><tr><th>SUN</th><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th></tr>';
         $i=0;
         
@@ -315,7 +322,98 @@ class AccountController extends Zend_Controller_Action
             $html .= '<td class="'.$class.'"><span>'.$start.'</span>'.$special_price.'</td>';
         }
         $html .= '</tr></tbody></table>';
+        
+        return $html;
+        
+    }
+    
+    public function getcalendarAction()
+    {
+        $request = $this->getRequest();
+        $rate = 0;
+        $days = 1;
+        $datestr = '';
+        if ($request->isPost()) {
+            $datestr = $request->getPost('date', date('M  Y'));
+            $id = $request->getPost('id', null);
+        }
+        if (($datestr == '') || ($id == '')) {
+            $this->_helper->viewRenderer->setNoRender();
+            return;
+        }
+        
+        $html = $this->getCalendarHtml($id, $datestr);
         $this->view->html = $html;
+    }
+    
+    protected function updateAvailability($id, $from, $to, $available, $price, $modelclass='Application_Model_PreListings')
+    {
+        $lm = new ZipVilla_Helper_ListingsManager($modelclass);
+        $listing = $lm->queryById($id);
+        if ($listing == null) {
+            return;
+        }
+        $dailyrate = $listing->{'rate.daily'};
+        if ($dailyrate == null) {
+            return;
+        }
+        if ($price != $dailyrate) {
+            //update special rates
+            $specials = $listing->special_rate;
+            if ($specials == null) {
+                $specials == array();
+            }
+            $rate = array('daily' => $price);
+            $period = array('from' => new MongoDate(strtotime($from)),
+                            'to'   => new MongoDate(strtotime($to)));
+            $specials[] = array('period' => $period, 'rate' => $rate);
+            $listing->special_rate = $specials;
+            $listing->save();
+        }
+        if ($available == 'no') {
+            //update bookings
+            $booked = $listing->booked;
+            if ($booked == null) {
+                $booked = array();
+            }
+            $period = array('from' => new MongoDate(strtotime($from)),
+                            'to'   => new MongoDate(strtotime($to)));
+            $booked[] = array('period' => $period);
+            $listing->booked = $booked;
+            $listing->save();
+        }
+    }
+    
+    function updatecalendarAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $request = $this->getRequest();
+        $values = array();
+        if ($request->isPost()) {
+            $values = $request->getPost();
+        }
+        if (count($values) != 6) {
+            $this->_helper->viewRenderer->setNoRender();
+            return;
+        }
+        
+        $id         = $values['id'];
+        if ($id == '') {
+            $this->_helper->viewRenderer->setNoRender();
+            return;
+        }
+        $from       = $values['from'];
+        $to         = $values['to'];
+        $available  = $values['available'];
+        $price      = $values['price'];
+        $date       = $values['date'];
+        
+        $this->updateAvailability($id, $from, $to, $available, $price);
+        
+        $html = $this->getCalendarHtml($id, $date, 'Application_Model_PreListings');
+        
+        $this->view->html = $html;
+        $this->_helper->viewRenderer('getcalendar');
     }
 
 }

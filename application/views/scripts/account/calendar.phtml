@@ -31,7 +31,7 @@
             </div>
         </div>  <!--form select ends-->
         <div id="loadergif"></div>
-        <div class="calendar1">
+        <div id="calendar1" class="calendar1" style="cursor: crosshair;">
         </div>
         <div class="refer1">
             <div class="wrpr_keys">
@@ -70,6 +70,33 @@
         </ul>
     </div>
 </div>
+<div id="boxes">
+  <div id="lb_edit_calendar" class="lb_window_zv" style="height: 100px; width: 300px; background:none;">
+    <div class="close cboxClose3"></div>
+    <div id="fb-root"></div>
+    <div class="wrapper"><!--outer wrapper to fix the width-->
+        <div class="edit_cal">
+            <form id="update_calendar" action="" method="get">
+                <h2>Cozy Apartment in Bangalore</h2>
+                <div class="box">
+                    <div id="lb_error"></div>
+                    <div><label for="from">From</label><input class="from checkin" type="text" size="15" id="from" name="from"/></div>
+                    <div><label for="to">To</label><input class="to checkout" type="text" id="to" size="15" name="to"/></div>
+                    <div style="height:35px;">
+                        <label for="available">Available?</label>
+                            <input type="radio" name="available" value="yes" />Yes
+                            <input type="radio" name="available" value="no" checked="yes"/>No
+                    </div>
+                    <div><label for="price">Price</label><input class="to" type="text" id="price" size="15" name="price"/></div>
+                </div>
+                <p class="btn_cancel close"><a href="#">Cancel</a></p>
+                <input class="submit" type="submit" onclick="updateCalendar(); return false;" value="">
+            </form>
+        </div>
+    </div><!-- wrapper ends here -->
+  </div>
+</div> 
+<div id="mask_zv"></div>
 <?php } ?>
 
                                         

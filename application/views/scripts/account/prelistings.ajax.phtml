@@ -41,6 +41,11 @@
                     <a href="/account/new?nextpage=1&id=<?php echo $listing->id;?>"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
                 </div>
             </div>
+            <div class="edit">
+                <div class="calndr">
+                    <a href="#" onclick="deleteListing('#tabs-3', '<?php echo $listing->id;?>', <?php echo $this->start;?>);return false;"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>delete</h4></a>
+                </div>
+            </div>
         </div>
         <?php endforeach;?>
     </div>
@@ -55,17 +60,17 @@
                 <?php if ($pg == $pdata['this']) {?>
                     <li class="current"><?php echo $pg;?></li>
                 <?php } else {?>
-                    <li><a href="#" onclick="getAccountData('#tabs-2','listings', <?php $start = ($pg -1)*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><?php echo $pg;?></a></li>
+                    <li><a href="#" onclick="getAccountData('#tabs-3','prelistings', <?php $start = ($pg -1)*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><?php echo $pg;?></a></li>
                 <?php }?>
             <?php endforeach;?>
         </ul>
     </div>
     <div class="l_page_buttons">
         <?php if ($pdata['prev']) {?>
-            <a href="#" onclick="getAccountData('#tabs-2','listings', <?php $start = ($pdata['this']-2)*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_prev_page"><img src="<?php echo $this->baseUrl('/images/btn_prev_page.jpg');?>" alt="Previous page" /></div></a>
+            <a href="#" onclick="getAccountData('#tabs-3','prelistings', <?php $start = ($pdata['this']-2)*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_prev_page"><img src="<?php echo $this->baseUrl('/images/btn_prev_page.jpg');?>" alt="Previous page" /></div></a>
         <?php }?>
         <?php if ($pdata['next']) {?>
-            <a href="#" onclick="getAccountData('#tabs-2','listings', <?php $start = ($pdata['this'])*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_next_page"><img src="<?php echo $this->baseUrl('/images/btn_next.jpg');?>" alt="Next page" /></div></a>
+            <a href="#" onclick="getAccountData('#tabs-3','prelistings', <?php $start = ($pdata['this'])*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_next_page"><img src="<?php echo $this->baseUrl('/images/btn_next.jpg');?>" alt="Next page" /></div></a>
         <?php }?>
     </div>
 </div>

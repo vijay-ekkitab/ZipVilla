@@ -29,13 +29,15 @@
                                       ->appendFile($this->baseUrl().'/js/slideshow.js')
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                        ;?>
+                                       
+        <?php $id = isset($this->listing) ? $this->listing->id : '';?>
         
         <script type="text/javascript">
             
         function getAccountData(_id, _type, _start, _filter)
         { 
-        	//$(_id).empty();
         	$('#loadergif').empty().html('<img src="/css/loader.gif"/>');
+        	_filter = _filter || '';
         	$.ajax({ 
                 type: "POST",
                 url:"/default/account/getaccountdata/format/html",
@@ -51,13 +53,56 @@
         	var filter = $("#filter").val();
         	getAccountData('#tabs-1','bookings', 0, filter);
         }
+        function deleteListing(_id, _listingId, _start)
+        {
+        	$('#loadergif').empty().html('<img src="/css/loader.gif"/>');
+        	$.ajax({ 
+                type: "POST",
+                url:"/default/account/deleteprelisting/format/html",
+                data:{id:_listingId, start:_start},
+                complete:function(data) {
+                             $('#loadergif').empty();
+                             $(_id).empty().html(data.responseText); 
+                         }
+             });
+        }
+
+        function updateCalendar() 
+        {
+            var _available = $("input[name=available]:checked").val();
+            var _from = $("input[name=from]").val();
+            var _to = $("input[name=to]").val();
+            var _price = $("input[name=price]").val();
+            var _date = $(".dropdown_sm").val();
+            var _id = "<?php echo $id;?>";
+            
+            if ((_from == '') || (_to == '') || (_price == '')) {
+            	$('#lb_error').empty().prepend('<p> Incomplete input. Please complete all fields.</p>');
+                return;
+            }
+            closelightbox('#lb_edit_calendar', '#mask_zv');
+            $('#loadergif').empty().html("<img src=\"<?php echo $this->baseUrl('/css/loader.gif');?>\"/>");
+            $.ajax({ 
+                type: "POST",
+                dataType: "html",
+                url:"/default/account/updatecalendar/format/html",
+                data:{id:_id,from:_from, to:_to, available:_available, price:_price,date:_date},
+                complete:function(data) { 
+                    if (data.responseText.length > 10) { //ignore nil responses.
+                        $('#loadergif').empty();
+                        $('.calendar1').children('table').remove();
+                        $(".calendar1").prepend(data.responseText);
+                    }
+                }
+            });
+        }
         
-        $(document).ready(function(){
+        $(document).ready(function() {
         	if ($('#tabs-1').length > 0) {
         		   $tabs = $('#tabs').tabs();
         		   getAccountData('#tabs-1','bookings', 0, 'A');
-        		   getAccountData('#tabs-2','listings', 0, '');
-        		   getAccountData('#tabs-3','prelistings', 0, '');
+        		   getAccountData('#tabs-2','listings', 0);
+        		   getAccountData('#tabs-3','prelistings', 0);
         	}
         	$('.dropdown_sm').change(function() {
                 var option = $(".dropdown_sm").val();
@@ -66,7 +111,7 @@
                     type: "POST",
                     dataType: "html",
                     url:"/default/account/getcalendar/format/html",
-                    data:"date="+option,
+                    data:"date="+option+"&id="+'<?php echo $id;?>',
                     complete:function(data) {
                          $('#loadergif').empty();
                          $('.calendar1').children('table').remove();
@@ -74,19 +119,22 @@
                     }
                 });
             });
-        	if (('.dropdown_sm').length > 0) {
+        	if ($('.dropdown_sm').length > 0) {
         		   $('.dropdown_sm').prop('selectedIndex', "<?php echo date('M  Y');?>");
         		   $.ajax({ 
         			    type: "POST",
         			    dataType: "html",
         			    url:"/default/account/getcalendar/format/html",
-        			    data:"date="+"<?php echo date('M  Y');?>",
+        			    data:"date="+"<?php echo date('M  Y');?>"+"&id="+'<?php echo $id;?>',
         			    complete:function(data) { 
         			    	//$('.calendar1').children('table').remove();
                             $(".calendar1").prepend(data.responseText);
                         }
         		    });
         	}
+        	$('#calendar1').click(function() {
+        		showlightbox('#lb_edit_calendar', '#mask_zv');
+        	});
         });
         
       	</script>
