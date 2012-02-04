@@ -165,6 +165,81 @@ class PriceModel {
         }
         return array('rate' => $total_price, 'days' => $total_days);
     }
+    
+    public static function addSpecialRate($specials, $from, $to, $rate, $addrate)
+    {
+        $fromsec   = $from->sec;       
+        $tosec     = $to->sec;
+        if ($fromsec > $tosec)
+            return $specials;
+        $newspecials = array();
+        
+        foreach ($specials as $special) {
+            $spfromsec = $special['period']['from']->sec;       
+            $sptosec   = $special['period']['to']->sec;
+            $changes = array();
+            $sprate = $special['rate'];
+            $fragment = true;
+            if ($sprate['daily'] == $rate['daily']) {
+                $fragment = false;
+            }
+            
+            if ($fromsec > $spfromsec) {
+                if ($fromsec <= $sptosec) {
+                    $prevday = $fromsec-86400;
+                    if ($fragment) {
+                        $changes[] = array('from'=> $spfromsec, 'to' => $prevday);
+                    }
+                    else {
+                        $fromsec = $spfromsec;
+                    }
+                    if ($tosec < $sptosec) {
+                        $nextday = $tosec+86400;
+                        if ($fragment) {
+                            $changes[] = array('from'=> $nextday, 'to' => $sptosec);
+                        }
+                        else {
+                            $tosec = $sptosec;
+                        }
+                    }
+                }
+                else {
+                    $changes[] = array('from'=> $spfromsec, 'to' => $sptosec);
+                }
+            }
+            else {
+                if ($tosec >= $spfromsec) {
+                    if ($tosec < $sptosec) {
+                        $nextday = $tosec+86400;
+                        if ($fragment) {
+                            $changes[] = array('from'=> $nextday, 'to' => $sptosec);
+                        }
+                        else {
+                            $tosec = $sptosec;
+                        }
+                    }
+                }
+                else {
+                    $changes[] = array('from'=> $spfromsec, 'to' => $sptosec);
+                }
+            }
+            foreach ($changes as $change) {
+                $newspecial = array('rate' => $special['rate']);
+                $period = array('from' => new MongoDate($change['from']),
+                                'to'   => new MongoDate($change['to']));
+                $newspecial['period'] = $period;
+                $newspecials[] = $newspecial;
+            }
+        }
+        if ($addrate) {
+            $newspecial = array('rate' => $rate);
+            $period = array('from' => new MongoDate($fromsec),
+                            'to'   => new MongoDate($tosec));
+            $newspecial['period'] = $period;
+            $newspecials[] = $newspecial;
+        }
+        return($newspecials);
+    }
 
 }
 

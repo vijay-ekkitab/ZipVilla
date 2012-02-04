@@ -78,7 +78,7 @@
     <div class="wrapper"><!--outer wrapper to fix the width-->
         <div class="edit_cal">
             <form id="update_calendar" action="" method="get">
-                <h2>Cozy Apartment in Bangalore</h2>
+                <h2><?php echo $this->listing->title;?></h2>
                 <div class="box">
                     <div id="lb_error"></div>
                     <div><label for="from">From</label><input class="from checkin" type="text" size="15" id="from" name="from"/></div>
@@ -88,7 +88,7 @@
                             <input type="radio" name="available" value="yes" />Yes
                             <input type="radio" name="available" value="no" checked="yes"/>No
                     </div>
-                    <div><label for="price">Price</label><input class="to" type="text" id="price" size="15" name="price"/></div>
+                    <div><label for="price">Price</label><input class="to" type="text" id="price" size="15" name="price" value="<?php echo $this->listing->rate['daily'];?>"/></div>
                 </div>
                 <p class="btn_cancel close"><a href="#">Cancel</a></p>
                 <input class="submit" type="submit" onclick="updateCalendar(); return false;" value="">

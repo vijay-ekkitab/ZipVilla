@@ -107,6 +107,73 @@ class Availability {
     	}
     	return TRUE;
     }
+    
+    public static function addBooking($bookings, $from, $to, $addbooking)
+    {
+        $fromsec   = $from->sec;
+        $tosec     = $to->sec;
+        if ($fromsec > $tosec)
+            return $bookings;
+            
+        $newbookings = array();
+        
+        foreach ($bookings as $booking) {
+            $bookedfromsec = $booking['period']['from']->sec;
+            $bookedtosec   = $booking['period']['to']->sec;
+            $changes = array();
+            
+            if ($fromsec > $bookedfromsec) {
+                if ($fromsec <= $bookedtosec) {
+                    $prevday = $fromsec-86400;
+                    if(!$addbooking) {
+                        $changes[] = array('from'=> $bookedfromsec, 'to' => $prevday);
+                    }
+                    else {
+                        $fromsec = $bookedfromsec;
+                    }
+                    if ($tosec < $bookedtosec) {
+                        $nextday = $tosec+86400;
+                        if (!$addbooking) {
+                            $changes[] = array('from'=> $nextday, 'to' => $bookedtosec);
+                        }
+                        else {
+                            $tosec = $bookedtosec;
+                        }
+                    }
+                }
+                else {
+                    $changes[] = array('from'=> $bookedfromsec, 'to' => $bookedtosec);
+                }
+            }
+            else {
+                if ($tosec >= $bookedfromsec) {
+                    if ($tosec < $bookedtosec) {
+                        $nextday = $tosec+86400;
+                        if (!$addbooking) {
+                            $changes[] = array('from'=> $nextday, 'to' => $bookedtosec);
+                        }
+                        else {
+                            $tosec = $bookedtosec;
+                        }
+                    }
+                }
+                else {
+                    $changes[] = array('from'=> $bookedfromsec, 'to' => $bookedtosec);
+                }
+            }
+            foreach ($changes as $change) {
+                $period = array('from' => new MongoDate($change['from']),
+                                'to'   => new MongoDate($change['to']));
+                $newbookings[] = array('period' => $period);
+            }
+        }
+        if ($addbooking) {
+            $period = array('from' => new MongoDate($fromsec),
+                            'to'   => new MongoDate($tosec));
+            $newbookings[] = array('period' => $period);
+        }
+        return($newbookings);
+    }
 }
 
 

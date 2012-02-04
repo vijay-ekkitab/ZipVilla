@@ -1,6 +1,8 @@
 <?php
 include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Helper/ListingsManager.php");
+include_once("ZipVilla/PriceModel.php");
+include_once("ZipVilla/Availability.php");
 
 class AccountController extends Zend_Controller_Action
 {
@@ -348,6 +350,7 @@ class AccountController extends Zend_Controller_Action
     
     protected function updateAvailability($id, $from, $to, $available, $price, $modelclass='Application_Model_PreListings')
     {
+        $logger = Zend_Registry::get('zvlogger');
         $lm = new ZipVilla_Helper_ListingsManager($modelclass);
         $listing = $lm->queryById($id);
         if ($listing == null) {
@@ -357,31 +360,33 @@ class AccountController extends Zend_Controller_Action
         if ($dailyrate == null) {
             return;
         }
-        if ($price != $dailyrate) {
-            //update special rates
-            $specials = $listing->special_rate;
-            if ($specials == null) {
-                $specials == array();
-            }
-            $rate = array('daily' => $price);
-            $period = array('from' => new MongoDate(strtotime($from)),
-                            'to'   => new MongoDate(strtotime($to)));
-            $specials[] = array('period' => $period, 'rate' => $rate);
-            $listing->special_rate = $specials;
-            $listing->save();
+        
+        $addrate = ($price == $dailyrate) ? false : true;
+        $specials = $listing->special_rate;
+        if ($specials == null) {
+            $specials = array();
         }
-        if ($available == 'no') {
-            //update bookings
-            $booked = $listing->booked;
-            if ($booked == null) {
-                $booked = array();
-            }
-            $period = array('from' => new MongoDate(strtotime($from)),
-                            'to'   => new MongoDate(strtotime($to)));
-            $booked[] = array('period' => $period);
-            $listing->booked = $booked;
-            $listing->save();
+        $rate = array('daily' => $price);
+        
+        $specials = PriceModel::addSpecialRate($specials, 
+                                               new MongoDate(strtotime($from)),
+                                               new MongoDate(strtotime($to)),
+                                               $rate, $addrate);
+        $listing->special_rate = $specials;
+        
+        $addbooking = ($available == 'yes') ? false : true;
+        $booked = $listing->booked;
+        if ($booked == null) {
+            $booked = array();
         }
+        
+        $booked = Availability::addBooking($booked, 
+                                           new MongoDate(strtotime($from)),
+                                           new MongoDate(strtotime($to)),
+                                           $addbooking);
+        
+        $listing->booked = $booked;
+        $listing->save();
     }
     
     function updatecalendarAction()

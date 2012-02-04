@@ -486,7 +486,7 @@ function enableCheckOutFor(date) {
     var checkIn = getCheckInDate('.checkin');
     var res = [];
     var select = false;
-    if ((checkIn == null) || (date > checkIn)) {
+    if ((checkIn == null) || (date >= checkIn)) {
         select = true;
     }
     res[0] = select;
