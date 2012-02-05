@@ -78,17 +78,31 @@ class AccountController extends Zend_Controller_Action
         return array('leads' => $leads, 'max' => $count);
     }
     
-    protected function getListings($model, $user, $start=0)
+    protected function getListings($user, $start=0)
     {
-        $q = array('owner' => $user->getRef());
-        $cursor = $model::getCursor($q);
-        $matches = $cursor->skip($start)->limit(ZV_AC_LISTINGS_PAGE_SZ);
         $listings = array();
-        foreach($matches as $match) {
-            $listings[] = new $model($match);
+        $q = array('owner' => $user->getRef());
+        $cursor1 = Application_Model_Listings::getCursor($q);
+        $cursor2 = Application_Model_PreListings::getCursor($q);
+        $count1 = $cursor1->count();
+        $count2 = $cursor2->count();
+        if ($start < $count1) {
+            $matches = $cursor1->skip($start)->limit(ZV_AC_LISTINGS_PAGE_SZ);
+            foreach($matches as $match) {
+                $listings[] = new Application_Model_Listings($match);
+            }
         }
-        $count = $cursor->count();
-        return array('listings' => $listings, 'max' => $count);
+        if (count($listings) < ZV_AC_LISTINGS_PAGE_SZ) {
+            $limit = ZV_AC_LISTINGS_PAGE_SZ - count($listings);
+            $start = $start > $count1 ? ($start - $count1) : 0; 
+            $matches = $cursor2->skip($start)->limit($limit);
+            foreach($matches as $match) {
+                $listing = new Application_Model_Listings($match);
+                $listing->prelisting = true;
+                $listings[] = $listing;
+            } 
+        }
+        return array('listings' => $listings, 'max' => $count1+$count2);
     }
     
     public function deleteprelistingAction()
@@ -129,12 +143,12 @@ class AccountController extends Zend_Controller_Action
                                      $this->view->filter = $filter;
                                      $this->_helper->viewRenderer('bookings');
                                      break;
-                    case 'listings': $this->view->results = $this->getListings('Application_Model_Listings',$user, $start);
+                    case 'listings': $this->view->results = $this->getListings($user, $start);
                                      $this->_helper->viewRenderer('listings');
                                      break;
-                    case 'prelistings': $this->view->results = $this->getListings('Application_Model_PreListings',$user, $start);
+                    /*case 'prelistings': $this->view->results = $this->getListings('Application_Model_PreListings',$user, $start);
                                         $this->_helper->viewRenderer('prelistings');
-                                        break;
+                                        break;*/
                     default:         break;
                 }
             }

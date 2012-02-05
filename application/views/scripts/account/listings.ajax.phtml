@@ -30,6 +30,7 @@
                 <h2><?php echo $title;?></h2>
                 <p><?php echo $listing->{'address.location'} . ', ' .$listing->{'address.city'}; ?></p>
             </div>
+            <?php if (!isset($listing->prelisting)) { ?>
             <div class="daily_rate">
                 <p>Daily Rate</p>
                 <h4><?php echo $listing->rate['daily'];?></h4>
@@ -50,6 +51,22 @@
                 <a href="#"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
                 </div>
             </div>
+            <?php } else {?>
+            <div class="activate">
+                <h5>This listing is not visible yet</h5>
+                <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4><a href="#">Activate Now</a></h4></div>
+            </div>
+            <div class="edit">
+                <div class="calndr">
+                    <a href="/account/new?nextpage=1&id=<?php echo $listing->id;?>"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
+                </div>
+            </div>
+            <div class="edit">
+                <div class="calndr">
+                    <a href="#" onclick="deleteListing('#tabs-3', '<?php echo $listing->id;?>', <?php echo $this->start;?>);return false;"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>delete</h4></a>
+                </div>
+            </div>
+            <?php } ?>
         </div><!--listing ends here-->
         <?php endforeach;?>
     </div>
