@@ -28,7 +28,9 @@ tps =
 			            "reviews",
 			            "images",
 			            "video",
-			            "shared"
+			            "shared",
+			            "activated",
+			            "bookings"
 		            ] 
 	},
 
@@ -242,7 +244,20 @@ attrs = [
 		datatype : "boolean",
 		keyword  : "false",
 		facet    : "true"
+	},
+	{
+	    name     : "activated",
+	    datatype : "date",
+	    keyword  : "false",
+        facet    : "false" 
+	},
+	{
+	    name     : "bookings",
+	    datatype : "integer",
+	    keyword  : "false",
+        facet    : "false" 
 	}
+
 ];
 
 enums = [
