@@ -6,7 +6,6 @@
 </div>
 <?php }?>
 <div class="l_search_results v_search_results"><!--Search result sections starts here-->
-    <div id="loadergif"></div>
     <div id="tabs" class="ui-tabs"><!--tabs-->
         <ul>
             <li><a href="#tabs-1">Bookings</a></li>
@@ -23,6 +22,7 @@
         </div>
         
     </div>
+    <div id="loadergif" display="none"><img src="<?php echo $this->baseUrl('/css/loader.gif');?>"/></div>
 </div>
 <?php
 if ($this->user != null) { 
