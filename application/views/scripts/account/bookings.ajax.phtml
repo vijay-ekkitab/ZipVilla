@@ -1,4 +1,5 @@
 <?php 
+include_once "ZipVilla/TypeConstants.php";
     $leads = $this->results['leads'];
     $maxleads = $this->results['max'];
     $filter = $this->filter;
@@ -36,17 +37,18 @@
                 $classes = array("blue", "alter_gray"); 
                 $iter_count = 0;
                 foreach ($leads as $lead):
+                $details = $lead->email.'<br>'.$lead->phone.'<br>'.$lead->message;
                 $listing = $lead->getListing();
                 if ($listing != null) { 
                     $useclass = $classes[$iter_count++%2];?>
                 <tr>
-                    <td class="<?php echo $useclass;?>"><?php echo $listing->{ZIPVILLA_ID};?></td>
+                    <td class="<?php echo $useclass;?> info" title="<?php echo $details;?>"><?php echo $listing->{ZIPVILLA_ID};?></td>
                     <td><?php echo $lead->firstname . " ". $lead->lastname;?></td>
                     <td><?php echo $listing->title;?></td>
-                    <td><?php echo date('d/m/Y', $lead->check_in->sec);?></td>
-                    <td><?php echo date('d/m/Y', $lead->check_out->sec);?></td>
+                    <td><input class="l_input_bg v_input_bg checkin" type="text" size="9" name="check_in"  value="<?php echo date('d-M-Y', $lead->check_in->sec);?>"/></td>
+                    <td><input class="l_input_bg v_input_bg checkout" type="text" size="9" name="check_out"  value="<?php echo date('d-M-Y', $lead->check_out->sec);?>"/></td>
                     <td class="centeralign"><?php echo $lead->guests;?></td>
-                    <?php if (!strcasecmp('yes', $lead->booked)) { ?>
+                    <?php if ($lead->booked == BOOKED_YES) { ?>
                         <td class="booked"><img src="images/blt_green.jpg" alt="green" /><a href="#">Yes</a></td>
                     <?php } else { ?>
                         <td class="notbooked"><img src="images/blt_gray.jpg" alt="" /><a href="#">No</a></td>

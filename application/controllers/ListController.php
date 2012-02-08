@@ -523,7 +523,7 @@ class ListController extends Zend_Controller_Action
         $checkout = $data[ListController::CHECK_OUT];
         $data[ListController::CHECK_IN]  = new MongoDate(strtotime($checkin));
         $data[ListController::CHECK_OUT] = new MongoDate(strtotime($checkout));
-        $data[ListController::CONVERTED] = 'no';
+        $data[ListController::CONVERTED] = BOOKED_NO;
         $lead = new Application_Model_Leads($data);
         $lead->save();
         $lead->setListing($property);

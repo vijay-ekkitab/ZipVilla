@@ -48,5 +48,14 @@
 	display: none; 
 }
 
+.info {
+    cursor: pointer;
+}
 
+.tooltip {
+    display: block;
+    position: absolute;
+    background-color: #FFFF00;
+    padding: 5px;
+}
 

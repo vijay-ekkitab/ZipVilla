@@ -33,6 +33,29 @@
         <?php $id = isset($this->listing) ? $this->listing->id : '';?>
         
         <script type="text/javascript">
+        function setHover()
+        {
+            $('.info').hover(function() {
+                                if ($(this).attr('title')) {
+                                    $(this).data('message', $(this).attr('title'));
+                                    $(this).removeAttr('title');
+                                }
+                                message = $(this).data('message');
+                                $(this).attr('title', '');
+                                $(this).append($("<div id='tooltip' class='tooltip'>"+message+"</div>"));
+                             },
+                             function() {
+                            	$('#tooltip').remove();
+                             });
+        }
+
+        function initPage()
+        {
+            setHover();
+            $( ".checkin" ).datepicker({dateFormat:'dd-M-yy', minDate:0});
+            $( ".checkout" ).datepicker({dateFormat:'dd-M-yy', minDate:0,
+                                         beforeShowDay: enableCheckOutFor});
+        }
             
         function getAccountData(_id, _type, _start, _filter)
         { 
@@ -44,7 +67,8 @@
                 data:{type:_type, start:_start, filter:_filter},
                 complete:function(data) {
         		             $('#loadergif').hide();
-        		             $(_id).empty().html(data.responseText); 
+        		             $(_id).empty().html(data.responseText);
+        		             initPage();
         		         }
 	         });
         }
