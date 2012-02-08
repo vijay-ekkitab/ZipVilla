@@ -28,6 +28,9 @@ class AccountController extends Zend_Controller_Action
     const SUITABILITY = 'suitability';
     const HOUSERULES = 'house_rules';
     
+    const ACCEPT = 'accept';
+    const REJECT = 'reject';
+    
     public function init()
     {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -35,6 +38,7 @@ class AccountController extends Zend_Controller_Action
                     ->addActionContext('getcalendar', 'html')
                     ->addActionContext('updatecalendar', 'html')
                     ->addActionContext('deleteprelisting', 'html')
+                    ->addActionContext('setbooking', 'html')
                     ->initContext();
     }
 
@@ -56,7 +60,7 @@ class AccountController extends Zend_Controller_Action
         $this->view->user = $user;
     }
     
-    protected function getLeads($user, $start=0, $filter='A')
+    protected function getLeads($user, &$start=0, $filter='A')
     {
         $q = array('owner' => $user->getRef(),
                    'check_out' => array('$gte' => new MongoDate(strtotime(date('Y-m-d')))));
@@ -69,12 +73,18 @@ class AccountController extends Zend_Controller_Action
         }
         
         $cursor = Application_Model_Leads::getCursor($q);
+        $count = $cursor->count();
+        if ($start >= $count) {
+            if ($start >= ZV_AC_BOOKINGS_PAGE_SZ) {
+                $start -= ZV_AC_BOOKINGS_PAGE_SZ;
+            }
+        }
         $matches = $cursor->skip($start)->limit(ZV_AC_BOOKINGS_PAGE_SZ);
         $leads = array();
         foreach($matches as $match) {
             $leads[] = new Application_Model_Leads($match);
         }
-        $count = $cursor->count(); 
+        
         return array('leads' => $leads, 'max' => $count);
     }
     
@@ -429,31 +439,33 @@ class AccountController extends Zend_Controller_Action
             return;
         }
         
-        $addrate = ($price == $dailyrate) ? false : true;
-        $specials = $listing->special_rate;
-        if ($specials == null) {
-            $specials = array();
-        }
-        $rate = array('daily' => $price);
+        if ($price != null) {
+            $addrate = ($price == $dailyrate) ? false : true;
+            $specials = $listing->special_rate;
+            if ($specials == null) {
+                $specials = array();
+            }
+            $rate = array('daily' => $price);
         
-        $specials = PriceModel::addSpecialRate($specials, 
+            $specials = PriceModel::addSpecialRate($specials, 
                                                new MongoDate(strtotime($from)),
                                                new MongoDate(strtotime($to)),
                                                $rate, $addrate);
-        $listing->special_rate = $specials;
-        
-        $addbooking = ($available == 'yes') ? false : true;
-        $booked = $listing->booked;
-        if ($booked == null) {
-            $booked = array();
+            $listing->special_rate = $specials;
         }
         
-        $booked = Availability::addBooking($booked, 
+        if ($available != null) {
+            $addbooking = ($available == 'yes') ? false : true;
+            $booked = $listing->booked;
+            if ($booked == null) {
+                $booked = array();
+            }
+            $booked = Availability::addBooking($booked, 
                                            new MongoDate(strtotime($from)),
                                            new MongoDate(strtotime($to)),
                                            $addbooking);
-        
-        $listing->booked = $booked;
+            $listing->booked = $booked;
+        }
         $listing->save();
     }
     
@@ -488,6 +500,54 @@ class AccountController extends Zend_Controller_Action
         $this->view->html = $html;
         $this->_helper->viewRenderer('getcalendar');
     }
-
+    
+    function setbookingAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $request = $this->getRequest();
+        $values = $request->getPost();
+        $id = isset($values['id']) ? $values['id'] : null;
+        $action = isset($values['action']) ? $values['action'] : null;
+        $filter = isset($values['filter']) ? $values['filter'] : 'A';
+        $start = isset($values['start']) ? $values['start'] : 0;
+        
+        $results = null;
+        $lead = null;
+        if (($id != null) && ($action != null)) {
+            $lead = Application_Model_Leads::load($id);
+        }
+        if ($lead != null) {
+            $from = date('d-M-Y', $lead->check_in->sec);
+            $to = date('d-M-Y', $lead->check_out->sec);
+            $id = $lead->getListing()->id;
+            switch($action) {
+                case AccountController::ACCEPT:
+                    $available = 'no';
+                    $this->updateAvailability($id, $from, $to, $available, null, 'Application_Model_Listings');
+                    $lead->booked = BOOKED_YES;
+                    $lead->save();
+                    break;
+                case AccountController::REJECT: 
+                    if ($lead->booked == BOOKED_YES) {
+                        $available = 'yes';
+                        $this->updateAvailability($id, $from, $to, $available, null, 'Application_Model_Listings');
+                        $lead->booked = BOOKED_NO;
+                        $lead->save();
+                    }
+                    else {
+                        $lead->booked = BOOKED_REJECT;
+                        $lead->save();
+                    }
+                    break;
+                default: break;
+            }
+            $user = $this->getUser();
+            $results = $this->getLeads($user, $start, $filter);
+        }
+        $this->view->results = $results;
+        $this->view->filter = $filter;
+        $this->view->start = $start;
+        $this->_helper->viewRenderer('bookings');
+    }
 }
 

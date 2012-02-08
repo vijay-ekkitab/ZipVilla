@@ -1184,3 +1184,17 @@ body {
 	float:inherit;
 	cursor:pointer;
 }
+.booking table .dsable td{
+	background-color:#daeffa;
+	color:#ccc;
+}
+.booking table .dsable td img{
+opacity: .15; /* standard: ff gt 1.5, opera, safari */
+-ms-filter: “alpha(opacity=15)”; /* ie 8 */
+filter: alpha(opacity=15); /* ie lt 7 */
+-khtml-opacity: .15; /* safari 1.x */
+-moz-opacity: .15; /* ff lt 1.5, netscape */
+}
+.booking table .dsable td a{
+	cursor:default;
+}

@@ -90,6 +90,21 @@
                          }
              });
         }
+        function setBooking(_id, _leadId, _action, _start, _filter)
+        {
+        	$('#loadergif').show();
+        	$.ajax({ 
+                type: "POST",
+                url:"/default/account/setbooking/format/html",
+                data:{id:_leadId, action:_action, start:_start, filter:_filter},
+                complete:function(data) {
+                             $('#loadergif').hide();
+                             $(_id).empty().html(data.responseText);
+                             initPage();
+                         }
+             });
+        	
+        }
 
         function updateCalendar() 
         {

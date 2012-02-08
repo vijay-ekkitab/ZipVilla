@@ -34,19 +34,25 @@ include_once "ZipVilla/TypeConstants.php";
                     <th>Action</th>
                 </tr>
                 <?php
-                $classes = array("blue", "alter_gray"); 
                 $iter_count = 0;
                 foreach ($leads as $lead):
                 $details = $lead->email.'<br>'.$lead->phone.'<br>'.$lead->message;
                 $listing = $lead->getListing();
                 if ($listing != null) { 
-                    $useclass = $classes[$iter_count++%2];?>
-                <tr>
+                    $alternate = '';
+                    if (($iter_count++%2) == 1) $alternate = 'class="alter_gray"';
+                    if ($lead->booked == BOOKED_REJECT) $alternate = 'class="dsable"';?>
+                <tr <?php echo $alternate;?>>
                     <td class="<?php echo $useclass;?> info" title="<?php echo $details;?>"><?php echo $listing->{ZIPVILLA_ID};?></td>
                     <td><?php echo $lead->firstname . " ". $lead->lastname;?></td>
                     <td><?php echo $listing->title;?></td>
+                    <?php if ($lead->booked != BOOKED_REJECT) { ?>
                     <td><input class="l_input_bg v_input_bg checkin" type="text" size="9" name="check_in"  value="<?php echo date('d-M-Y', $lead->check_in->sec);?>"/></td>
                     <td><input class="l_input_bg v_input_bg checkout" type="text" size="9" name="check_out"  value="<?php echo date('d-M-Y', $lead->check_out->sec);?>"/></td>
+                    <?php } else {?>
+                    <td><?php echo date('d-M-Y', $lead->check_in->sec);?></td>
+                    <td><?php echo date('d-M-Y', $lead->check_out->sec);?></td>
+                    <?php }?>
                     <td class="centeralign"><?php echo $lead->guests;?></td>
                     <?php if ($lead->booked == BOOKED_YES) { ?>
                         <td class="booked"><img src="images/blt_green.jpg" alt="green" /><a href="#">Yes</a></td>
@@ -56,8 +62,8 @@ include_once "ZipVilla/TypeConstants.php";
                     <td>
                         <table>
                             <tr>
-                                <td class="nobtmbrdr"><a href="#"><img src="images/ico_tick.png" alt="action" /></a></td>
-                                <td class="nobtmbrdr"><a href="#"><img src="images/ico_wrong.png" alt="action" /></a></td>
+                                <td class="nobtmbrdr"><a href="" onclick="setBooking('#tabs-1', '<?php echo $lead->id;?>', 'accept', <?php echo $this->start;?>, '<?php echo $filter;?>');return false;"><img src="images/ico_tick.png" alt="action" /></a></td>
+                                <td class="nobtmbrdr"><a href="" onclick="setBooking('#tabs-1', '<?php echo $lead->id;?>', 'reject', <?php echo $this->start;?>, '<?php echo $filter;?>');return false;"><img src="images/ico_wrong.png" alt="action" /></a></td>
                             </tr>
                         </table>
                     </td>
