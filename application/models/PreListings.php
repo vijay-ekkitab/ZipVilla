@@ -7,6 +7,13 @@
 include_once("ZipVilla/TypeConstants.php");
 include_once("Mongo/ModelBase.php");
 
+/*
+ * Fields:
+ *        (same as for listings, plus the following:)
+ *        status 
+ *        listing_id
+ */
+
 class Application_Model_PreListings extends Mongo_ModelBase {
 
     public static $_collectionName = PRELISTINGS; 

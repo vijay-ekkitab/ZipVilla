@@ -48,7 +48,7 @@
                     <a href="#"><span><img src="images/ico_calender.jpg" alt="Calendar" /></span><h4>Calendar</h4></a>
                 </div>
                 <div class="calndr">
-                <a href="#"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
+                <a href="/account/edit?id=<?php echo $listing->id;?>"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
                 </div>
             </div>
             <?php } else {?>
@@ -63,7 +63,7 @@
             </div>
             <div class="edit">
                 <div class="calndr">
-                    <a href="#" onclick="deleteListing('#tabs-3', '<?php echo $listing->id;?>', <?php echo $this->start;?>);return false;"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>delete</h4></a>
+                    <a href="#" onclick="deleteListing('#tabs-2', '<?php echo $listing->id;?>', <?php echo $this->start;?>);return false;"><span><img src="images/ico_edit.jpg" alt="Delete" /></span><h4>delete</h4></a>
                 </div>
             </div>
             <?php } ?>

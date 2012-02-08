@@ -78,7 +78,7 @@ class AccountController extends Zend_Controller_Action
         return array('leads' => $leads, 'max' => $count);
     }
     
-    protected function getListings($user, $start=0)
+    protected function getListings($user, &$start=0)
     {
         $listings = array();
         $q = array('owner' => $user->getRef());
@@ -86,6 +86,11 @@ class AccountController extends Zend_Controller_Action
         $cursor2 = Application_Model_PreListings::getCursor($q);
         $count1 = $cursor1->count();
         $count2 = $cursor2->count();
+        if ($start >= $count1+$count2) { // can happen with deletes
+            if ($start >= ZV_AC_LISTINGS_PAGE_SZ) {
+                $start -= ZV_AC_LISTINGS_PAGE_SZ;
+            }
+        }
         if ($start < $count1) {
             $matches = $cursor1->skip($start)->limit(ZV_AC_LISTINGS_PAGE_SZ);
             foreach($matches as $match) {
@@ -94,8 +99,8 @@ class AccountController extends Zend_Controller_Action
         }
         if (count($listings) < ZV_AC_LISTINGS_PAGE_SZ) {
             $limit = ZV_AC_LISTINGS_PAGE_SZ - count($listings);
-            $start = $start > $count1 ? ($start - $count1) : 0; 
-            $matches = $cursor2->skip($start)->limit($limit);
+            $newstart = $start > $count1 ? ($start - $count1) : 0; 
+            $matches = $cursor2->skip($newstart)->limit($limit);
             foreach($matches as $match) {
                 $listing = new Application_Model_Listings($match);
                 $listing->prelisting = true;
@@ -114,10 +119,10 @@ class AccountController extends Zend_Controller_Action
         if ($listing != null) {
             $listing->delete();
         }
-        $this->view->start = $start;
         $user = $this->getUser();
-        $this->view->results = $this->getListings('Application_Model_PreListings',$user, $start);
-        $this->_helper->viewRenderer('prelistings');
+        $this->view->results = $this->getListings($user, $start);
+        $this->view->start = $start;
+        $this->_helper->viewRenderer('listings');
     }
     
     public function getaccountdataAction()
@@ -233,13 +238,8 @@ class AccountController extends Zend_Controller_Action
         return $listing;
     }
     
-    public function newAction()
+    protected function setupEdit($listing, $nextpage)
     {
-        $logger = Zend_Registry::get('zvlogger');
-        $request = $this->getRequest();
-        $values = $request->getParams();
-        $nextpage = isset($values['nextpage']) ? $values['nextpage'] : 1;
-        $listing = $this->updateListing($values);
         $this->view->listing = $listing;
         switch($nextpage) {
             case 1:  $this->_helper->viewRenderer('new1');
@@ -257,6 +257,60 @@ class AccountController extends Zend_Controller_Action
             default:  $this->_helper->viewRenderer('new1');
                       break;
         }
+    }
+    
+    public function newAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $request = $this->getRequest();
+        $values = $request->getParams();
+        $nextpage = isset($values['nextpage']) ? $values['nextpage'] : 1;
+        $listing = $this->updateListing($values);
+        $this->setupEdit($listing, $nextpage);
+    }
+    
+    public function editAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $request = $this->getRequest();
+        $values = $request->getParams();
+        
+        $listing = null;
+        $q = array('listing_id' => $values['id']);
+        $listings = Application_Model_PreListings::find($q);
+        if (($listings != null) && (count($listings) > 1)) {
+            $logger->error("Multiple edit versions of same listing found.");
+            foreach($listings as $listing) {
+                $listing->delete();
+            }
+            $listing = null;
+        }
+        else if (($listings != null) && (count($listings) == 1)) {
+            $listing = $listings[0];
+        }
+        if ($listing == null) {
+            $listing = Application_Model_Listings::load($values['id']);
+            if ($listing == null) {
+                $logger->error("Received edit request for non existent listings id.");
+                $this->_helper->redirector('index', 'account');
+                return;
+            }
+            else {
+                $doc = $listing->getDoc();
+                $doc['listing_id'] = $listing->id;
+                unset($doc['_id']);
+                $listing = new Application_Model_PreListings($doc);
+                foreach(array('amenities', 'onsite_services', 'suitability') as $name) {
+                    $values = $listing->$name;
+                    if ($values != null) {
+                        $listing->$name = array_keys($values);
+                        
+                    }
+                }
+                $listing->save();
+            }
+        }
+        $this->setupEdit($listing, 1);
     }
     
     /*public function calendarAction()
