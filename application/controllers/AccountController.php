@@ -39,6 +39,7 @@ class AccountController extends Zend_Controller_Action
                     ->addActionContext('updatecalendar', 'html')
                     ->addActionContext('deleteprelisting', 'html')
                     ->addActionContext('setbooking', 'html')
+                    ->addActionContext('activatelisting', 'html')
                     ->initContext();
     }
 
@@ -104,7 +105,9 @@ class AccountController extends Zend_Controller_Action
         if ($start < $count1) {
             $matches = $cursor1->skip($start)->limit(ZV_AC_LISTINGS_PAGE_SZ);
             foreach($matches as $match) {
-                $listings[] = new Application_Model_Listings($match);
+                $listing = new Application_Model_Listings($match);
+                $listing->status = LISTING_LISTED;
+                $listings[] = $listing;
             }
         }
         if (count($listings) < ZV_AC_LISTINGS_PAGE_SZ) {
@@ -112,8 +115,8 @@ class AccountController extends Zend_Controller_Action
             $newstart = $start > $count1 ? ($start - $count1) : 0; 
             $matches = $cursor2->skip($newstart)->limit($limit);
             foreach($matches as $match) {
-                $listing = new Application_Model_Listings($match);
-                $listing->prelisting = true;
+                $listing = new Application_Model_PreListings($match);
+                //$listing->prelisting = true;
                 $listings[] = $listing;
             } 
         }
@@ -128,6 +131,22 @@ class AccountController extends Zend_Controller_Action
         $listing = Application_Model_PreListings::load($values['id']);
         if ($listing != null) {
             $listing->delete();
+        }
+        $user = $this->getUser();
+        $this->view->results = $this->getListings($user, $start);
+        $this->view->start = $start;
+        $this->_helper->viewRenderer('listings');
+    }
+    
+    public function activatelistingAction()
+    {
+        $values = $this->getRequest()->getPost();
+        $id = $values['id'];
+        $start = $values['start'];
+        $listing = Application_Model_PreListings::load($values['id']);
+        if ($listing != null) {
+            $listing->status = LISTING_PENDING;
+            $listing->save();
         }
         $user = $this->getUser();
         $this->view->results = $this->getListings($user, $start);
@@ -200,6 +219,7 @@ class AccountController extends Zend_Controller_Action
             if ($user != null) {
                 $listing->setOwner($user);
             }
+            $listing->status = LISTING_NEW;
         }
         if (isset($values[AccountController::SHARED]))
             $listing->shared        = $values[AccountController::SHARED];
@@ -317,6 +337,7 @@ class AccountController extends Zend_Controller_Action
                         
                     }
                 }
+                $listing->status = LISTING_UPDATE;
                 $listing->save();
             }
         }

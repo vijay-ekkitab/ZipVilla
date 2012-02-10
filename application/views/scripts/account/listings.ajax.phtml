@@ -1,4 +1,5 @@
 <?php 
+include_once "ZipVilla/TypeConstants.php";
     $listings = $this->results['listings'];
     $maxlistings = $this->results['max'];
     if (($listings == null) || (count($listings) == 0)) { ?>
@@ -30,7 +31,7 @@
                 <h2><?php echo $title;?></h2>
                 <p><?php echo $listing->{'address.location'} . ', ' .$listing->{'address.city'}; ?></p>
             </div>
-            <?php if (!isset($listing->prelisting)) { ?>
+            <?php if ($listing->status == LISTING_LISTED) { ?>
             <div class="daily_rate">
                 <p>Daily Rate</p>
                 <h4><?php echo $listing->rate['daily'];?></h4>
@@ -53,8 +54,16 @@
             </div>
             <?php } else {?>
             <div class="activate">
+                <?php if (($listing->status == null) || ($listing->status == LISTING_NEW)) {?>
                 <h5>This listing is not visible yet</h5>
-                <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4><a href="#">Activate Now</a></h4></div>
+                <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4><a href="" onclick="activateListing('#tabs-2', '<?php echo $listing->id;?>', <?php echo $this->start;?>);return false;">Activate Now</a></h4></div>
+                <?php } elseif ($listing->status == LISTING_UPDATE) {?>
+                <h5>Changes to this listing are not visible yet</h5>
+                <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4><a href="" onclick="activateListing('#tabs-2', '<?php echo $listing->id;?>', <?php echo $this->start;?>);return false;">Submit Changes Now</a></h4></div>
+                <?php } elseif ($listing->status == LISTING_PENDING) {?>
+                <h5>This listing (or changes) are not visible yet.</h5>
+                <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4>PENDING ZIPVILLA APPROVAL</h4></div>
+                <?php } ?>
             </div>
             <div class="edit">
                 <div class="calndr">

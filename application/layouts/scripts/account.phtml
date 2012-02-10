@@ -90,6 +90,19 @@
                          }
              });
         }
+        function activateListing(_id, _listingId, _start)
+        {
+            $('#loadergif').show();
+            $.ajax({ 
+                type: "POST",
+                url:"/default/account/activatelisting/format/html",
+                data:{id:_listingId, start:_start},
+                complete:function(data) {
+                             $('#loadergif').hide();
+                             $(_id).empty().html(data.responseText); 
+                         }
+             });
+        }
         function setBooking(_id, _leadId, _action, _start, _filter)
         {
         	$('#loadergif').show();

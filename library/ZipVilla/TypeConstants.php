@@ -81,4 +81,9 @@ const  BOOKED_NO = 'no';
 const  BOOKED_YES = 'yes';
 const  BOOKED_REJECT = 'reject';
 
+const  LISTING_NEW = 'new';
+const  LISTING_LISTED = 'listed';
+const  LISTING_PENDING = 'pending';
+const  LISTING_UPDATE = 'update';
+
 ?>
