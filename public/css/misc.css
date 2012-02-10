@@ -59,3 +59,18 @@
     padding: 5px;
 }
 
+.zvdialog .ui-widget-header {
+	background-color:#F6A828;
+}
+.zvdialog .ui-dialog-content {
+    background-color:#EEEEEE;
+}
+.zvdialog .ui-dialog-buttonpane {
+	background-color:#EEEEEE;
+	margin-top:0;
+}
+.zvdialog .ui-icon-closethick {
+	background-position: -95px -125px;
+}
+
+

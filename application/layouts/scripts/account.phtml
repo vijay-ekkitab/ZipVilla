@@ -13,9 +13,9 @@
         <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/visual.css')
                                     ->prependStylesheet($this->baseUrl().'/css/layout.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/misc.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui-lightness/jquery-ui-1.8.16.custom.css')
                                     ->prependStylesheet($this->baseUrl().'/css/lightbox.css')
-                                    ->prependStylesheet($this->baseUrl().'/css/misc.css')
                                     ->prependStylesheet($this->baseUrl().'/css/jquery.ad-gallery.css')
                                     ; ?>
 
@@ -33,6 +33,22 @@
         <?php $id = isset($this->listing) ? $this->listing->id : '';?>
         
         <script type="text/javascript">
+
+        function showDialog(showtext, onaccept) 
+        {
+            var dialog = $('<div id="confirm" title="Please Confirm"></div>');
+            dialog.html('<p>'+showtext+'</p>');
+            dialog.dialog({
+            	             autoOpen:false,
+            	             buttons: {"Yes" : function() { $(this).dialog('close'); eval(onaccept);},
+	                                   "No" : function() {$(this).dialog('close')}},
+            	             modal:true,
+            	             position:'center',
+            	             dialogClass:'zvdialog'
+            });
+            dialog.dialog('open');
+        }
+            
         function setHover()
         {
             $('.info').hover(function() {
@@ -77,8 +93,14 @@
         	var filter = $("#filter").val();
         	getAccountData('#tabs-1','bookings', 0, filter);
         }
-        function deleteListing(_id, _listingId, _start)
+        function deleteListing(_id, _listingId, _start, confirm)
         {
+            confirm = confirm || 'yes';
+            if (confirm == 'yes') { 
+                var onaccept = 'deleteListing("'+_id+'","'+_listingId+'",'+_start+',"no")';
+                showDialog('Do you really want to delete this listing?', onaccept);
+                return;
+            }
         	$('#loadergif').show();
         	$.ajax({ 
                 type: "POST",
