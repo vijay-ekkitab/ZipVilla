@@ -49,16 +49,17 @@ class AccountController extends Zend_Controller_Action
     
     public function indexAction()
     {
-        $user = null;
-        $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity()) {
-            $username = $auth->getIdentity();
-            $pos = strpos($username,AUTH_FIELD_SEPARATOR);
-            $email = substr($username, 0, $pos);
-            $q = array('emailid' => $email);
-            $user = Application_Model_Users::findOne($q);
-        }
+        $user = $this->getUser();
         $this->view->user = $user;
+        $showtab = $this->getRequest()->getParam('show','bookings');
+        switch($showtab) {
+            case 'bookings': $this->view->showtab = 0;
+                             break;
+            case 'listings': $this->view->showtab = 1;
+                             break;
+            default:         $this->view->showtab = 0;
+                             break;
+        }
     }
     
     protected function getLeads($user, &$start=0, $filter='A')
@@ -282,8 +283,8 @@ class AccountController extends Zend_Controller_Action
                      break;
             case 3:  $this->_helper->viewRenderer('calendar');
                      break;
-            case 4:  $this->_helper->redirector('index', 'account');
-                     break; 
+            case 4:  $this->_helper->viewRenderer('imageloader');
+                     break;
             default:  $this->_helper->viewRenderer('new1');
                       break;
         }

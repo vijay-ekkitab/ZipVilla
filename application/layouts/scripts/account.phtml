@@ -176,6 +176,7 @@
         		   $tabs = $('#tabs').tabs();
         		   getAccountData('#tabs-1','bookings', 0, 'A');
         		   getAccountData('#tabs-2','listings', 0);
+        		   $tabs.tabs('select', <?php echo $this->showtab;?>);
         	}
         	$('.dropdown_sm').change(function() {
                 var option = $(".dropdown_sm").val();

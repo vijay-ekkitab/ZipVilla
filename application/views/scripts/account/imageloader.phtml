@@ -1,0 +1,14 @@
+<?php $this->headTitle('Create New Listing - Upload Images'); ?>
+<?php $this->layout()->setLayout('account');?>
+<?php 
+      $id = '';
+      if ((!isset($this->listing) || ($this->listing == null))) {
+?>
+        <div class="error_msg2">
+        <p>Please fill in basic property information by clicking <a href="/account/new?nextpage=1">here</a> before coming to this page.</p>
+        </div>
+<?php } else { 
+        $id=$this->listing->id;?>
+<?php } ?>
+
+                                        
