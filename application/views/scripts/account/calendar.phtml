@@ -1,5 +1,8 @@
-<?php $this->headTitle('Create New Listing'); ?>
-<?php $this->layout()->setLayout('account');?>
+<?php 
+include_once("ZipVilla/TypeConstants.php");
+$this->headTitle('Update Calendar'); 
+$this->layout()->setLayout('account');
+?>
 <?php 
       $id = '';
       if ((!isset($this->listing) || ($this->listing == null))) {
@@ -9,10 +12,20 @@
         </div>
 <?php } else { 
         $id=$this->listing->id;
+        if ($this->listing instanceof Application_Model_Listings) {
+            $listingtype = PRODUCTION_LISTING;
+        } else {
+            $listingtype = PRE_LISTING;
+        }
 ?>
 <div class="l_property_details v_property_details"><!--Property details sections starts here-->
+    <?php if ($listingtype == PRE_LISTING) {?>
     <h1>Tell us more...</h1>
     <div class="sub_title"><p>You are only a few steps away from listing your property at Zipvilla.<br />Tell us more about your place and complete your listing.</p></div>
+    <?php } else {?>
+    <h1>Update Calendar...</h1>
+    <div class="sub_title"><p><br/></p></div>
+    <?php } ?>
     <div style="margin-bottom:20px;" class="detials_form"><!--detials_form-->
         <h2>Availability and pricing</h2>
         <p>View availability and set special pricing for specific dates.</p>
@@ -48,20 +61,27 @@
             </div>
         </div>
     </div><!--detials_form ends here-->
-    <div class="wrpr_btn_savencont">
+    <?php if ($listingtype == PRE_LISTING) {?>
+    <div class="wrpr_btn_savencont" style="clear:both;">
         <form name="part3" method="get">
             <INPUT class="btn_savencont" type="submit" value="" />
             <input type="hidden" name="nextpage" value="4" />
             <input type="hidden" name="id" value="<?php echo $id;?>" />
         </form>
     </div>
+    <?php } else {?>
+    <div class="wrpr_btn_savencont" style="clear:both;">
+        <a href="/account?show=listings&start=<?php echo $this->start;?>"><img src="/images/btn_ok.png"></img></a>
+    </div>
+    <?php } ?>
 </div><!--Property details ends here-->
 <div class="l_property_right v_property_right">
     <div>
     <h4 class="l_link_back_page v_link_back_page"><a href="/account?show=listings">Back to Listings</a></h4>
     <h2>Need help? Call us:</h2>
-    <p>+91-80-4115-0200<br />+91-80-4115-0400</p>
+    <p>+91-80-XXXX-XXXX<br />+91-80-XXXX-XXXX</p>
     </div>
+    <?php if ($listingtype == PRE_LISTING) {?>
     <div class="property_right_nav">
         <ul>
             <li><a href="/account/new?nextpage=1&id=<?php echo $id;?>">Basic Information</a></li>
@@ -70,6 +90,7 @@
             <li style="border-bottom:none;"><a href="/account/new?nextpage=4&id=<?php echo $id;?>">Photos and Videos</a></li>
         </ul>
     </div>
+    <?php } ?>
 </div>
 <div id="boxes">
   <div id="lb_edit_calendar" class="lb_window_zv" style="height: 100px; width: 300px; background:none;">
@@ -91,7 +112,7 @@
                     <div><label for="price">Price</label><input class="to" type="text" id="price" size="15" name="price" value="<?php echo $this->listing->rate['daily'];?>"/></div>
                 </div>
                 <p class="btn_cancel close"><a href="#">Cancel</a></p>
-                <input class="submit" type="submit" onclick="updateCalendar(); return false;" value="">
+                <input class="submit" type="submit" onclick="updateCalendar('<?php echo $id;?>','<?php echo $listingtype;?>'); return false;" value="">
             </form>
         </div>
     </div><!-- wrapper ends here -->

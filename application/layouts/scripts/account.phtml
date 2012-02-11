@@ -30,8 +30,16 @@
                                       ->appendFile($this->baseUrl().'/js/zvcommon.js')
                                        ;?>
                                        
-        <?php $id = isset($this->listing) ? $this->listing->id : '';?>
-        
+        <?php 
+        $id = isset($this->listing) ? $this->listing->id : '';
+        $showtab = isset($this->showtab) ? $this->showtab : 0;
+        $start = isset($this->start) ? $this->start : 0;
+        if ($this->listing instanceof Application_Model_Listings) {
+            $listingtype = PRODUCTION_LISTING;
+        } else {
+            $listingtype = PRE_LISTING;
+        }
+        ?>
         <script type="text/javascript">
 
         function showDialog(showtext, onaccept) 
@@ -141,15 +149,14 @@
         	
         }
 
-        function updateCalendar() 
+        function updateCalendar(_id, _type) 
         {
             var _available = $("input[name=available]:checked").val();
             var _from = $("input[name=from]").val();
             var _to = $("input[name=to]").val();
             var _price = $("input[name=price]").val();
             var _date = $(".dropdown_sm").val();
-            var _id = "<?php echo $id;?>";
-            
+
             if ((_from == '') || (_to == '') || (_price == '')) {
             	$('#lb_error').empty().prepend('<p> Incomplete input. Please complete all fields.</p>');
                 return;
@@ -160,7 +167,7 @@
                 type: "POST",
                 dataType: "html",
                 url:"/default/account/updatecalendar/format/html",
-                data:{id:_id,from:_from, to:_to, available:_available, price:_price,date:_date},
+                data:{id:_id,from:_from, to:_to,available:_available, price:_price,date:_date, type:_type},
                 complete:function(data) { 
                     if (data.responseText.length > 10) { //ignore nil responses.
                         $('#loadergif').hide();
@@ -175,8 +182,8 @@
         	if ($('#tabs-1').length > 0) {
         		   $tabs = $('#tabs').tabs();
         		   getAccountData('#tabs-1','bookings', 0, 'A');
-        		   getAccountData('#tabs-2','listings', 0);
-        		   $tabs.tabs('select', <?php echo $this->showtab;?>);
+        		   getAccountData('#tabs-2','listings', <?php echo $start;?>);
+        		   $tabs.tabs('select', <?php echo $showtab;?>);
         	}
         	$('.dropdown_sm').change(function() {
                 var option = $(".dropdown_sm").val();
@@ -185,7 +192,7 @@
                     type: "POST",
                     dataType: "html",
                     url:"/default/account/getcalendar/format/html",
-                    data:"date="+option+"&id="+'<?php echo $id;?>',
+                    data:"date="+option+"&id="+'<?php echo $id;?>'+"&type="+'<?php echo $listingtype;?>',
                     complete:function(data) {
                          $('#loadergif').hide();
                          $('.calendar1').children('table').remove();
@@ -199,7 +206,7 @@
         			    type: "POST",
         			    dataType: "html",
         			    url:"/default/account/getcalendar/format/html",
-        			    data:"date="+"<?php echo date('M  Y');?>"+"&id="+'<?php echo $id;?>',
+        			    data:"date="+"<?php echo date('M  Y');?>"+"&id="+'<?php echo $id;?>'+"&type="+'<?php echo $listingtype;?>',
         			    complete:function(data) { 
                             $(".calendar1").prepend(data.responseText);
                         }

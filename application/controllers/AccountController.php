@@ -60,6 +60,8 @@ class AccountController extends Zend_Controller_Action
             default:         $this->view->showtab = 0;
                              break;
         }
+        $start = $this->getRequest()->getParam('start',0);
+        $this->view->start = $start;
     }
     
     protected function getLeads($user, &$start=0, $filter='A')
@@ -345,13 +347,19 @@ class AccountController extends Zend_Controller_Action
         $this->setupEdit($listing, 1);
     }
     
-    /*public function calendarAction()
+    public function editcalendarAction()
     {
-        $request = $this->getRequest();
-        if ($request->isGet()) {
+        $values = $this->getRequest()->getParams();
+        $listing = Application_Model_Listings::load($values['id']);
+        $start = isset($values['start']) ? $values['start'] : 0;
+        if ($listing == null) {
             $this->_helper->redirector('index', 'account');
+            return;
         }
-    }*/
+        $this->view->start = $start;
+        $this->setupEdit($listing, 3);
+        
+    }
     
     protected function getCalendarHtml($id, $datestr, $modelclass='Application_Model_PreListings')
     { 
@@ -438,13 +446,15 @@ class AccountController extends Zend_Controller_Action
         if ($request->isPost()) {
             $datestr = $request->getPost('date', date('M  Y'));
             $id = $request->getPost('id', null);
+            $type = $request->getPost('type', PRE_LISTING);
+            $type = $type == PRODUCTION_LISTING ? 'Application_Model_Listings' : 'Application_Model_PreListings';
         }
         if (($datestr == '') || ($id == '')) {
             $this->_helper->viewRenderer->setNoRender();
             return;
         }
         
-        $html = $this->getCalendarHtml($id, $datestr);
+        $html = $this->getCalendarHtml($id, $datestr, $type);
         $this->view->html = $html;
     }
     
@@ -499,7 +509,7 @@ class AccountController extends Zend_Controller_Action
         if ($request->isPost()) {
             $values = $request->getPost();
         }
-        if (count($values) != 6) {
+        if (count($values) != 7) {
             $this->_helper->viewRenderer->setNoRender();
             return;
         }
@@ -514,10 +524,11 @@ class AccountController extends Zend_Controller_Action
         $available  = $values['available'];
         $price      = $values['price'];
         $date       = $values['date'];
+        $type       = $values['type'] == PRODUCTION_LISTING ? 'Application_Model_Listings' : 'Application_Model_PreListings';
         
-        $this->updateAvailability($id, $from, $to, $available, $price);
+        $this->updateAvailability($id, $from, $to, $available, $price, $type);
         
-        $html = $this->getCalendarHtml($id, $date, 'Application_Model_PreListings');
+        $html = $this->getCalendarHtml($id, $date, $type);
         
         $this->view->html = $html;
         $this->_helper->viewRenderer('getcalendar');
