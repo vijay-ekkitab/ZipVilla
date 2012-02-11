@@ -17,6 +17,7 @@ $this->layout()->setLayout('account');
         } else {
             $listingtype = PRE_LISTING;
         }
+        $start = isset($this->start) ? $this->start : 0;
 ?>
 <div class="l_property_details v_property_details"><!--Property details sections starts here-->
     <?php if ($listingtype == PRE_LISTING) {?>
@@ -71,13 +72,13 @@ $this->layout()->setLayout('account');
     </div>
     <?php } else {?>
     <div class="wrpr_btn_savencont" style="clear:both;">
-        <a href="/account?show=listings&start=<?php echo $this->start;?>"><img src="/images/btn_ok.png"></img></a>
+        <a href="/account?show=listings&start=<?php echo $start;?>"><img src="/images/btn_ok.png"></img></a>
     </div>
     <?php } ?>
 </div><!--Property details ends here-->
 <div class="l_property_right v_property_right">
     <div>
-    <h4 class="l_link_back_page v_link_back_page"><a href="/account?show=listings">Back to Listings</a></h4>
+    <h4 class="l_link_back_page v_link_back_page"><a href="/account?show=listings&start=<?php echo $start;?>">Back to Listings</a></h4>
     <h2>Need help? Call us:</h2>
     <p>+91-80-XXXX-XXXX<br />+91-80-XXXX-XXXX</p>
     </div>
