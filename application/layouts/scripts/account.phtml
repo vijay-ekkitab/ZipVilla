@@ -1,5 +1,8 @@
 <?php
     include_once("ZipVilla/TypeConstants.php");
+    //include_once("ZipVilla/Helper/php/index.php");
+    //include_once("ZipVilla/Helper/php/upload.class.php");
+    
     $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html;charset=utf-8');
     $this->headTitle()->setSeparator(' - ');
     $this->headTitle('Zipvilla ~ Home away from home in India');
@@ -10,7 +13,12 @@
 <head>
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
-        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/visual.css')
+        <?php echo $this->headLink() 
+                                    ->prependStylesheet('http://blueimp.github.com/cdn/css/bootstrap.min.css')
+                                    ->prependStylesheet('http://blueimp.github.com/cdn/css/bootstrap-responsive.min.css')
+                                    ->prependStylesheet('http://blueimp.github.com/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.min.css')
+                                    ->prependStylesheet($this->baseUrl().'../css/jquery.fileupload-ui.css')
+                                    ->prependStylesheet($this->baseUrl().'/css/visual.css')
                                     ->prependStylesheet($this->baseUrl().'/css/layout.css')
                                     ->prependStylesheet($this->baseUrl().'/css/ui.theme.css')
                                     ->prependStylesheet($this->baseUrl().'/css/misc.css')

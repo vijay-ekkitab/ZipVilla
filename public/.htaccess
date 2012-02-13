@@ -6,3 +6,5 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 RewriteRule ^.*$ index.php [NC,L]
 SetEnv TZ Asia/Calcutta
+php_value upload_max_filesize 99999M
+php_value post_max_size 99999M

@@ -18,7 +18,8 @@
 <head>
         <?php echo $this->headMeta(); ?>
         <?php echo $this->headTitle(); ?>
-        <?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/skins/ie7/skin.css')
+        <?php echo $this->headLink()
+                                    ->prependStylesheet($this->baseUrl().'/skins/ie7/skin.css')
                                     ->prependStylesheet($this->baseUrl().'/skins/tango/skin.css')
                                     ->prependStylesheet($this->baseUrl().'/css/galleriffic-2.css')
                                     ->prependStylesheet($this->baseUrl().'/css/jquery.ad-gallery.css')
