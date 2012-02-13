@@ -86,4 +86,8 @@ const  LISTING_LISTED = 'listed';
 const  LISTING_PENDING = 'pending';
 const  LISTING_UPDATE = 'update';
 
+const  PRODUCTION_LISTING = 'P';
+const  PRE_LISTING = 'NP';
+
+
 ?>
