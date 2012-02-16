@@ -81,12 +81,11 @@
             delete filelist[index];
             $('#villa'+index).hide();
             $('#villa_details'+index).hide();
-            
+            $('#status'+index).remove();
         }
 
         function showStatus(index, resp)
         {
-        	$('#checkbox'+index).remove();
             if (resp['status'] == 'OK') {
                 $('#villa_details'+index).append('<div class="bookings"><p id="status'+index+'">'+'Image uploaded successfully.'+'</p></div>');
             }
