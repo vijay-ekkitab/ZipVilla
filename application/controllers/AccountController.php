@@ -27,6 +27,7 @@ class AccountController extends Zend_Controller_Action
     const SERVICES = 'onsite_services';
     const SUITABILITY = 'suitability';
     const HOUSERULES = 'house_rules';
+    const IMAGEFILE = 'imagefile';
     
     const ACCEPT = 'accept';
     const REJECT = 'reject';
@@ -40,6 +41,7 @@ class AccountController extends Zend_Controller_Action
                     ->addActionContext('deleteprelisting', 'html')
                     ->addActionContext('setbooking', 'html')
                     ->addActionContext('activatelisting', 'html')
+                    ->addActionContext('upload', 'json')
                     ->initContext();
     }
 
@@ -581,6 +583,66 @@ class AccountController extends Zend_Controller_Action
         $this->view->filter = $filter;
         $this->view->start = $start;
         $this->_helper->viewRenderer('bookings');
+    }
+    
+    function uploadAction() 
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $values = $this->getRequest()->getPost();
+        $city = null;
+        $listing = null;
+        $reply = array('status' => 'OK');
+        
+        if ((!isset($values['id'])) || (!isset($values['type']))) {
+            $reply['error'] = 'No id or type for listing';
+            $reply['status'] = 'Failed';
+        }
+        else {
+            $type = $values['type'] == PRODUCTION_LISTING ? 'Application_Model_Listings' : 'Application_Model_PreListings';
+            $id = $values['id'];
+            $lm = new ZipVilla_Helper_ListingsManager($type);
+            $listing = $lm->queryById($id);
+            if ($listing != null) {
+                $city = $listing->{'address.city'};
+            }
+        }
+        if (($listing == null) || ($city == null)) {
+            $reply['error'] = 'Listing is null or did not have city information.';
+            $reply['status'] = 'Failed';
+        }
+        else {
+            if (isset($_FILES[AccountController::IMAGEFILE])) {
+                $uploaded = $_FILES[AccountController::IMAGEFILE];
+                if (is_uploaded_file($uploaded['tmp_name'])) {
+                    $path = $this->view->zvImage()->getImagePathPrefix('', $listing);
+                    $filename = $uploaded['name'];
+                    $docbase = APPLICATION_PATH.'/../public/';
+                    $destination = $docbase . $path.'/'.$filename;
+                    if (file_exists($destination)) {
+                        $title = str_replace(' ', '', $listing->title);
+                        $filename = $title .'/'.$filename;
+                        $destination = $docbase . $path.'/'. $filename;
+                    }
+                    if (!is_dir(dirname($destination))) {
+                        mkdir(dirname($destination), 0755, true);
+                    }
+                    if (move_uploaded_file($uploaded['tmp_name'], $destination)) {
+                        $images = $listing->images;
+                        if ($images == null) {
+                            $images = array();
+                        }
+                        $images[] = $filename;
+                        $listing->images = $images;
+                        $listing->save();
+                    }
+                }
+            }
+        }
+        $json = Zend_Json::encode($reply);
+        $this->getResponse()->setHeader('Content-Type', 'text/json')
+                            ->setBody($json)
+                            ->sendResponse();
+        exit;
     }
 }
 

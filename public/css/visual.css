@@ -166,10 +166,13 @@ body {
 .v_search_results .search_sort {
 	color:#666;
 }
-.v_search_results .tab_content .listing{
+.v_search_results .tab_content .listing, .mang_list_ctnt .listing{
 	margin-top:10px;
 }
-.v_search_results .tab_content .search_result .villa_image, .listing .villa_image {
+.mang_list_ctnt .listing{
+	width:98%;
+}
+.v_search_results .tab_content .search_result .villa_image, .listing .villa_image, .mang_list_ctnt .listing .villa_image{
 	background-color:#fff;
 	border:1px solid #ccc;
 	width:115px;
@@ -188,7 +191,7 @@ body {
 .v_search_results .tab_content .search_result .resort_details .reviews{
 	background:url(../images/bg_circle_review.jpg) top center no-repeat;
 }
-.v_search_results .tab_content .listing .resort_details {
+.v_search_results .tab_content .listing .resort_details, .mang_list_ctnt .listing .resort_details {
 	clear:right;
 	width:435px!important;
 }
@@ -950,16 +953,29 @@ body {
 	float:left;
 	clear:right;
 }
-.daily_rate, .active, .bookings{
+.daily_rate, .active, .bookings, .owner{
 	float:left;
 	text-align:left;
 	margin:10px 20px 0 15px;
+}
+.mang_list_ctnt .listing .daily_rate, .mang_list_ctnt .listing .active, .mang_list_ctnt .listing .bookings{
+	width:65px;
+}
+.mang_list_ctnt .listing .owner{
+	width:110px;
+}
+.mang_list_ctnt .listing .owner span{
+	float:left;
+	margin-right:5px;
+}
+.mang_list_ctnt .listing .daily_rate h4, .mang_list_ctnt .listing .active h4, .mang_list_ctnt .listing .bookings h4, .mang_list_ctnt .listing .owner h4{
+	font-weight:normal;
 }
 .daily_rate h4{
 	color:#c36;
 	font-size:15px;
 }
-.active h4, .bookings h4{
+.active h4, .bookings h4, .owner h4{
 	color:#666;
 }
 .daily_rate p, .active p, .bookings p{
@@ -1197,4 +1213,39 @@ filter: alpha(opacity=15); /* ie lt 7 */
 }
 .booking table .dsable td a{
 	cursor:default;
+}
+.mang_list{
+	background: url("../images/bg_tabs.jpg") repeat scroll left top transparent;
+    border-width: 0;
+    display: block;
+    float: left;
+    padding: 0.8em 0.8em 0;
+    width: 98%;
+	float:left;
+}
+.mng_list_bottom{
+	background:url(../images/bg_mng_list.jpg) center bottom no-repeat;
+	float:left;
+	width:100%;
+	height:20px;
+}
+.mang_list_ctnt{
+	background-color:#fff;
+	border-radius:4px;
+	float:left;
+	padding:20px;
+	width:96%;
+}
+.mang_list_hdr{
+	color:#000;
+	width:100%;
+	margin-bottom:20px;
+}
+.mang_list_ctnt p{
+	float:left;
+	width:600px;
+}
+.mang_list_ctnt .edit_list{
+	float:right;
+	width:auto!important;
 }

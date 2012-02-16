@@ -89,5 +89,7 @@ const  LISTING_UPDATE = 'update';
 const  PRODUCTION_LISTING = 'P';
 const  PRE_LISTING = 'NP';
 
+const  FILE_UPLOAD_MAX = 5;
+
 
 ?>
