@@ -1,0 +1,133 @@
+<?php $this->headTitle('Administrator Dashboard'); ?>
+<?php $this->layout()->setLayout('account');?>
+<div class="error_msg2">
+    <p>Space for alerts, notifications or status messages. Hidden by default</p>
+</div>
+<h3 class="mang_list_hdr">Listings pending approval</h3>
+<div class="mang_list"><!--Search result sections starts here-->
+    <div class="mang_list_ctnt">
+        <p>Note:Click on the listing title to review the changes and decide whether to approve or reject it as required.<br />
+                An email will be sent to the owner if the listing is approved or rejected</p>
+        <div class="drop_show">
+            <form id="search_form" name="show" action="/search" method="post">
+                <label for="guests">Sort by
+                    <select onchange="setPage(1); validate_default(); document.search_form.submit();" class="v_dropdwon_bg" id="sort" name="sort">
+                        <option id=""  value="" >Newest first</option>
+                        <option id="" value="">2</option>
+                        <option id="" value="">3</option>
+                    </select>
+                </label>
+            </form>
+        </div><!--Form ends-->
+        <div class="listing">
+            <div class="villa_image"><img src="/images/resort_img.jpg" alt="resort" /></div><!--picture-->
+            <div class="resort_details">
+                <h2>Le Blanc on the Beach!</h2>
+                <p>Coco Beach, North Goa</p>
+                <p class="edit_list">Changed price, availabality and house rulse</p>
+            </div>
+            <div class="daily_rate">
+                <p>Daily Rate</p>
+                <h4>Rs.6,000</h4>
+            </div>
+            <div class="active">
+                <p>Active Since</p>
+                <h4>27/01/12</h4>
+            </div>
+            <div class="active">
+                <p>Last Updated</p>
+                <h4>27/01/12</h4>
+            </div>
+            <div class="bookings">
+                <p>Active Bookings</p>
+                <h4>NONE</h4>
+            </div>
+            <div class="owner">
+                <p>Owner</p>
+                <span><img alt="" src="/images/ico_user.jpg"></span><h4>Manoj Jayan</h4>
+            </div>
+            <div class="edit">
+                <div class="calndr">
+                    <a href="#"><span><img src="/images/ico_tick.png" alt="Approve" /></span><h4>Approve</h4></a>
+                </div>
+                <div class="calndr">
+                    <a href="#"><span><img src="/images/ico_wrong.png" alt="Reject" /></span><h4>Reject</h4></a>
+                </div>
+            </div>
+        </div><!--listing ends here-->
+        <div class="listing">
+            <div class="villa_image"><img src="/images/resort_img.jpg" alt="resort" /></div><!--picture-->
+            <div class="resort_details">
+                <h2>Le Blanc on the Beach!</h2>
+                <p>Coco Beach, North Goa</p>
+                <p class="edit_list">Changed price, availabality and house rulse</p>
+            </div>
+            <div class="daily_rate">
+                <p>Daily Rate</p>
+                <h4>Rs.6,000</h4>
+            </div>
+            <div class="active">
+                <p>Active Since</p>
+                <h4>27/01/12</h4>
+            </div>
+            <div class="active">
+                <p>Last Updated</p>
+                <h4>27/01/12</h4>
+            </div>
+            <div class="bookings">
+                <p>Active Bookings</p>
+                <h4>NONE</h4>
+            </div>
+            <div class="owner">
+                <p>Owner</p>
+                <span><img alt="" src="/images/ico_user.jpg"></span><h4>Manoj Jayan</h4>
+            </div>
+            <div class="edit">
+                <div class="calndr">
+                    <a href="#"><span><img src="/images/ico_tick.png" alt="Approve" /></span><h4>Approve</h4></a>
+                </div>
+                <div class="calndr">
+                    <a href="#"><span><img src="/images/ico_wrong.png" alt="Reject" /></span><h4>Reject</h4></a>
+                </div>
+            </div>
+        </div><!--listing ends here-->
+        <div class="listing">
+            <div class="villa_image"><img src="/images/resort_img.jpg" alt="resort" /></div><!--picture-->
+            <div class="resort_details">
+                <h2>Le Blanc on the Beach!</h2>
+                <p>Coco Beach, North Goa</p>
+                <p class="edit_list">Changed price, availabality and house rulse</p>
+            </div>
+            <div class="daily_rate">
+                <p>Daily Rate</p>
+                <h4>Rs.6,000</h4>
+            </div>
+            <div class="active">
+                <p>Active Since</p>
+                <h4>27/01/12</h4>
+            </div>
+            <div class="active">
+                <p>Last Updated</p>
+                <h4>27/01/12</h4>
+            </div>
+            <div class="bookings">
+                <p>Active Bookings</p>
+                <h4>NONE</h4>
+            </div>
+            <div class="owner">
+                <p>Owner</p>
+                <span><img alt="" src="/images/ico_user.jpg"></span><h4>Manoj Jayan</h4>
+            </div>
+            <div class="edit">
+                <div class="calndr">
+                    <a href="#"><span><img src="/images/ico_tick.png" alt="Approve" /></span><h4>Approve</h4></a>
+                </div>
+                <div class="calndr">
+                    <a href="#"><span><img src="/images/ico_wrong.png" alt="Reject" /></span><h4>Reject</h4></a>
+                </div>
+            </div>
+        </div><!--listing ends here-->
+    </div>
+</div><!--search result ends here-->
+<div class="mng_list_bottom"></div><!--bottom shade of the background-->
+                        

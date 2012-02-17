@@ -503,7 +503,7 @@ class AccountController extends Zend_Controller_Action
         $listing->save();
     }
     
-    function updatecalendarAction()
+    public function updatecalendarAction()
     {
         $logger = Zend_Registry::get('zvlogger');
         $request = $this->getRequest();
@@ -536,7 +536,7 @@ class AccountController extends Zend_Controller_Action
         $this->_helper->viewRenderer('getcalendar');
     }
     
-    function setbookingAction()
+    public function setbookingAction()
     {
         $logger = Zend_Registry::get('zvlogger');
         $request = $this->getRequest();
@@ -585,7 +585,7 @@ class AccountController extends Zend_Controller_Action
         $this->_helper->viewRenderer('bookings');
     }
     
-    function uploadAction() 
+    public function uploadAction() 
     {
         $logger = Zend_Registry::get('zvlogger');
         $values = $this->getRequest()->getPost();
@@ -643,6 +643,10 @@ class AccountController extends Zend_Controller_Action
                             ->setBody($json)
                             ->sendResponse();
         exit;
+    }
+    
+    public function approveAction()
+    {
     }
 }
 
