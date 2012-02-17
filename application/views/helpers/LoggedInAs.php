@@ -1,4 +1,5 @@
 <?php
+include_once('ZipVilla/TypeConstants.php');
 
 class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract 
 {
@@ -8,7 +9,9 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
         if ($auth->hasIdentity()) {
             $username = $auth->getIdentity();
             $pos = strpos($username,AUTH_FIELD_SEPARATOR);
+            $userId = '';
             if ($pos)  {
+                $userId= substr($username, 0,$pos);
                 $username = substr($username,$pos+strlen(AUTH_FIELD_SEPARATOR));
                 $username = str_replace(AUTH_FIELD_SEPARATOR, ' ', $username);
             }
@@ -21,8 +24,14 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
                 $dashlink = '';
             } 
             else {
-                $dashurl  = $this->view->url(array('controller' => 'account',
-                                                   'action' => 'index'), null, true);
+                if ($userId == ADMINISTRATOR) {
+                    $dashurl  = $this->view->url(array('controller' => 'account',
+                                                       'action' => 'approve'), null, true);
+                }
+                else {
+                    $dashurl  = $this->view->url(array('controller' => 'account',
+                                                       'action' => 'index'), null, true);
+                }
                 $dashlink = '<li><a href="'.$dashurl.'">Your Dashboard</a></li>';
             }
             return '<li>Welcome ' . $username . '&nbsp;</li>' . 
