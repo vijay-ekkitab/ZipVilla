@@ -301,4 +301,7 @@ for each (t in enums) {
 print("[6] creating sequence collection...");
 db.seq.insert({'_id':'listings', 'seq': new NumberLong(10001), 'series':'A'});
 
+print("[7] creating admin user...");
+db.users.insert({'emailid':'admin@zipvilla.com', 'firstname':'System', 'lastname':'Administrator', 'password':'0e572a2646331d28814652b408c1d402c39ca9bd'});
+
 print("[6] database initialized.");
