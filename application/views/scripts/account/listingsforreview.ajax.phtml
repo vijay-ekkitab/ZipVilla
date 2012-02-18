@@ -15,13 +15,20 @@ include_once "ZipVilla/TypeConstants.php";
             $ownername = $owner->firstname . ' ' . $owner->lastname;
             $ownerimage = $owner->image == null ? 'default_user_image.jpg' : $owner->image;
             $link = $this->baseUrl('/list?id='.$listing->id.'&showtab='.TAB_LIST.'&type='.PRE_LISTING.'&start='.$this->start);
+            if ($listing->listing_id != null) {
+                $original = Application_Model_Listings::load($listing->listing_id);
+                $difference = $this->zvUtils()->diffListings($original, $listing);
+            }
+            else {
+                $difference = 'New Listing';
+            }
     ?>
     <div class="listing">
         <div class="villa_image"><img src="<?php echo $imagepath;?>" alt="resort" /></div><!--picture-->
         <div class="resort_details">
             <h2><a href="<?php echo $link;?>"><?php echo $title;?></a></h2>
             <p><?php echo $listing->{'address.location'} . ', ' .$listing->{'address.city'}; ?></p>
-            <p class="edit_list">Changed price, availabality and house rules.</p>
+            <p class="edit_list"><?php echo $difference;?></p>
         </div>
         <div class="daily_rate">
             <p>Daily Rate</p>

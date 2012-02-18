@@ -234,6 +234,20 @@
              });
         	
         }
+        function getListingsForReview(_start, _sort)
+        {
+        	$('#loadergif').show();
+            $.ajax({ 
+                type: "POST",
+                dataType: "html",
+                url:"/default/account/listingsforreview/format/html",
+                data:{start:_start, sort:_sort},
+                complete:function(data) {
+                    $('#loadergif').hide();
+                    $("#listings").empty().prepend(data.responseText);
+                }
+            });
+        }
 
         function updateCalendar(_id, _type) 
         {
@@ -307,13 +321,17 @@
         	    	type: "POST",
         	        dataType: "html",
         	        url:"/default/account/listingsforreview/format/html",
-        	        data:{start:<?php echo $start;?>, sort:'New'},
+        	        data:{start:<?php echo $start;?>, sort:'<?php echo SORT_NEWEST_FIRST;?>'},
         	        complete:function(data) {
         	            $('#loadergif').hide();
         	            $("#listings").prepend(data.responseText);
         	        }
         	    });
         	}
+        	$('#sort').change(function(e) {
+            	e.preventDefault();
+            	getListingsForReview(0, $(this).val());
+        	});
         });
         
         </script>

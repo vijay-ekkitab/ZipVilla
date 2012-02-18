@@ -59,5 +59,71 @@ class ZipVilla_View_Helper_ZvUtils
         }
         return array('pages'=>$pages, 'prev'=> $prevpage, 'next'=>$nextpage, 'this'=>$thispage);
     }
+    
+    public function diffListings($l1, $l2)
+    {
+       $reviewAttributes  = array('owner' => 'owner',
+                                  'address' => 'address',
+                                  'bedrooms' => 'bedrooms',
+                                  'baths' =>  'baths',
+                                  'guests' => 'capacity',
+                                  'onsite_services' => 'amenities',
+                                  'amenities' => 'amenities',
+                                  'activities' => 'amenities',
+                                  'neighbourhood' => 'neighbourhood',
+                                  'suitability' => 'amenities',
+                                  'house_rules' => 'house rules',
+                                  'rate' => 'base rate',
+                                  'title' => 'title',
+                                  'description' => 'description',
+                                  'images' => 'images',
+                                  'shared' => 'rental model');
+        $d1 = $l1->getDoc();
+        $d2 = $l2->getDoc();
+        $diffs = $this->diffDocs($d1, $d2);
+        $tmp = array();
+        foreach($diffs as $diff) {
+            if (isset($reviewAttributes[$diff])) {
+                $name = $reviewAttributes[$diff];
+                if (!isset($tmp[$name])) {
+                    $tmp[] = $name;
+                }
+            }
+        }
+        if (count($tmp) > 0) {
+            return 'Attributes changed: [' . implode(',', $tmp) . ']';
+        }
+        else {
+            return 'No changes.';
+        }
+    }
+    
+    protected function diffDocs($d1, $d2)
+    {
+        $diffs = array();
+        foreach($d1 as $k => $v) {
+            if (is_array($v)) {
+                if (isset($d2[$k])) {
+                    $tmp = $this->diffDocs($v, $d2[$k]);
+                    if (count($tmp) > 0) {
+                        $diffs[] = $k;
+                    }
+                }
+                else {
+                    $diffs[] = $k;
+                }
+            } else {
+               if (isset($d2[$k])) {
+                   if ($d2[$k] != $v) {
+                       $diffs[] = $k;
+                   }
+               }
+               else {
+                    $diffs[] = $k;
+               }
+            }
+        }
+        return $diffs;
+    }
 }
 ?>
