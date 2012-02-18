@@ -13,10 +13,19 @@
         </div>
 <?php } else { 
         $id=$this->listing->id;
-        $house_rules = $this->listing->house_rules; 
+        $house_rules = $this->listing->house_rules;
         $has_amenities = $this->listing->amenities == null ? array() : $this->listing->amenities;
+        if (array_values($has_amenities) !== $has_amenities) {
+            $has_amenities = array_keys($has_amenities);  
+        }
         $has_onsite_services = $this->listing->onsite_services == null ? array() : $this->listing->onsite_services;
+        if (array_values($has_onsite_services) !== $has_onsite_services) {
+            $has_onsite_services = array_keys($has_onsite_services);
+        }
         $has_suitability = $this->listing->suitability == null ? array() : $this->listing->suitability;
+        if (array_values($has_suitability) !== $has_suitability) {
+            $has_suitability = array_keys($has_suitability);
+        }
 ?>
 <div class="l_property_details v_property_details"><!--Property details sections starts here-->
     <h1>Tell us more...</h1>

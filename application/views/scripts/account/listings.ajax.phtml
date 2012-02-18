@@ -63,6 +63,8 @@ include_once "ZipVilla/TypeConstants.php";
                 <?php } elseif ($listing->status == LISTING_PENDING) {?>
                 <h5>This listing (or changes) are not visible yet.</h5>
                 <div><span><img src="images/ico_warning.jpg" alt="Warning" /></span><h4>PENDING ZIPVILLA APPROVAL</h4></div>
+                <?php } elseif ($listing->status == LISTING_REJECTED) {?>
+                <h5>This listing (or changes) have been rejected by the administrator.</h5>
                 <?php } ?>
             </div>
             <div class="edit">
@@ -103,5 +105,5 @@ include_once "ZipVilla/TypeConstants.php";
             <a href="#" onclick="getAccountData('#tabs-2','listings', <?php $start = ($pdata['this'])*ZV_AC_LISTINGS_PAGE_SZ; echo $start;?>); return false;"><div class="btn_next_page"><img src="<?php echo $this->baseUrl('/images/btn_next.jpg');?>" alt="Next page" /></div></a>
         <?php }?>
     </div>
-</div>
+    </div>
 <?php }?>

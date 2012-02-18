@@ -301,6 +301,19 @@
         	$('#calendar1').click(function() {
         		showlightbox('#lb_edit_calendar', '#mask_zv');
         	});
+        	if ($('#listings').length > 0) {
+        	    $('#loadergif').show();
+        	    $.ajax({ 
+        	    	type: "POST",
+        	        dataType: "html",
+        	        url:"/default/account/listingsforreview/format/html",
+        	        data:{start:<?php echo $start;?>, sort:'New'},
+        	        complete:function(data) {
+        	            $('#loadergif').hide();
+        	            $("#listings").prepend(data.responseText);
+        	        }
+        	    });
+        	}
         });
         
         </script>

@@ -1,0 +1,81 @@
+<?php 
+include_once "ZipVilla/TypeConstants.php";
+    $listings = $this->listings;
+    $maxlistings = $this->maxlistings;
+    if (($listings == null) || (count($listings) == 0)) { ?>
+    <p> No listings were found. </p>
+<?php } else { ?>
+    <?php foreach ($listings as $listing):
+            $title = $listing->title;
+            if (strlen($title) > VILLA_NAME_MEDIUM_SIZE) {
+                $title = substr($title, 0, VILLA_NAME_MEDIUM_SIZE) . '...';
+            }
+            $imagepath = $this->zvImage()->getFirstListingImage($this->baseUrl(), $listing);
+            $owner = $listing->getOwner();
+            $ownername = $owner->firstname . ' ' . $owner->lastname;
+            $ownerimage = $owner->image == null ? 'default_user_image.jpg' : $owner->image;
+            $link = $this->baseUrl('/list?id='.$listing->id.'&showtab='.TAB_LIST.'&type='.PRE_LISTING.'&start='.$this->start);
+    ?>
+    <div class="listing">
+        <div class="villa_image"><img src="<?php echo $imagepath;?>" alt="resort" /></div><!--picture-->
+        <div class="resort_details">
+            <h2><a href="<?php echo $link;?>"><?php echo $title;?></a></h2>
+            <p><?php echo $listing->{'address.location'} . ', ' .$listing->{'address.city'}; ?></p>
+            <p class="edit_list">Changed price, availabality and house rules.</p>
+        </div>
+        <div class="daily_rate">
+            <p>Daily Rate</p>
+            <h4><?php echo $listing->rate['daily'];?></h4>
+        </div>
+        <div class="active">
+            <p>Active Since</p>
+            <h4><?php if ($listing->activated != null) {echo date('d/m/Y', $listing->activated->sec);} else { echo "NEW";};?></h4>
+        </div>
+        <div class="active">
+            <p>Last Updated</p>
+            <h4><?php if ($listing->submitted != null) {echo date('d/m/Y', $listing->submitted->sec);} else { echo "No Data";};?></h4>
+        </div>
+        <div class="bookings">
+            <p>Active Bookings</p>
+            <h4>NONE</h4>
+        </div>
+        <div class="owner">
+            <p>Owner</p>
+            <span><img alt="" src="/images/ico_user.jpg"></span><h4><?php echo $ownername;?></h4>
+        </div>
+        <div class="edit">
+            <div class="calndr">
+                <a href="#"><span><img src="/images/ico_tick.png" alt="Approve" /></span><h4>Approve</h4></a>
+            </div>
+            <div class="calndr">
+                <a href="#"><span><img src="/images/ico_wrong.png" alt="Reject" /></span><h4>Reject</h4></a>
+            </div>
+        </div> 
+    </div><!--listing ends here-->
+    <?php $pdata = $this->zvUtils()->calcPages($maxlistings, ZV_AC_REVIEW_PAGE_SZ, $this->start);?>
+    <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+    <div class="display_no">
+        <p>Displaying <span><?php $num = ($pdata['this'] - 1)*ZV_AC_REVIEW_PAGE_SZ + 1; echo $num;?></span> — <span><?php $num = ($pdata['this'] - 1)*ZV_AC_LISTINGS_PAGE_SZ + ZV_AC_LISTINGS_PAGE_SZ; echo $num > $maxlistings ? $maxlistings : $num;?></span> of <span><?php echo $maxlistings;?></span> listings</p>
+    </div>
+    <div class="pagination">
+        <ul>
+            <?php foreach ($pdata['pages'] as $pg):?>
+                <?php if ($pg == $pdata['this']) {?>
+                    <li class="current"><?php echo $pg;?></li>
+                <?php } else {?>
+                    <li><a href="#" onclick="return false;"><?php echo $pg;?></a></li>
+                <?php }?>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <div class="l_page_buttons">
+        <?php if ($pdata['prev']) {?>
+            <a href="#" onclick="return false;"><div class="btn_prev_page"><img src="<?php echo $this->baseUrl('/images/btn_prev_page.jpg');?>" alt="Previous page" /></div></a>
+        <?php }?>
+        <?php if ($pdata['next']) {?>
+            <a href="#" onclick="return false;"><div class="btn_next_page"><img src="<?php echo $this->baseUrl('/images/btn_next.jpg');?>" alt="Next page" /></div></a>
+        <?php }?>
+    </div>
+    </div>
+    <?php endforeach;?>
+<?php }?>

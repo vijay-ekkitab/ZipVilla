@@ -76,6 +76,7 @@ const  MAX_SEQUENCE        = 10000;
 
 const  ZV_AC_BOOKINGS_PAGE_SZ = 5;
 const  ZV_AC_LISTINGS_PAGE_SZ = 5;
+const  ZV_AC_REVIEW_PAGE_SZ = 5;
 
 const  BOOKED_NO = 'no';
 const  BOOKED_YES = 'yes';
@@ -85,11 +86,15 @@ const  LISTING_NEW = 'new';
 const  LISTING_LISTED = 'listed';
 const  LISTING_PENDING = 'pending';
 const  LISTING_UPDATE = 'update';
+const  LISTING_REJECTED = 'rejected';
 
 const  PRODUCTION_LISTING = 'P';
 const  PRE_LISTING = 'NP';
 
 const  FILE_UPLOAD_MAX = 5;
 const  ADMINISTRATOR = "admin@zipvilla.com";
+
+const  SORT_NEWEST_FIRST = 'New';
+const  SORT_OLDEST_FIRST = 'Old';
 
 ?>

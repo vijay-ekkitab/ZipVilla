@@ -12,6 +12,7 @@ include_once("Mongo/ModelBase.php");
  *        (same as for listings, plus the following:)
  *        status 
  *        listing_id
+ *        submitted
  */
 
 class Application_Model_PreListings extends Mongo_ModelBase {

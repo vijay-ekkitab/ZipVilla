@@ -26,7 +26,7 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
             else {
                 if ($userId == ADMINISTRATOR) {
                     $dashurl  = $this->view->url(array('controller' => 'account',
-                                                       'action' => 'approve'), null, true);
+                                                       'action' => 'review'), null, true);
                 }
                 else {
                     $dashurl  = $this->view->url(array('controller' => 'account',

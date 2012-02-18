@@ -42,6 +42,7 @@ class AccountController extends Zend_Controller_Action
                     ->addActionContext('setbooking', 'html')
                     ->addActionContext('activatelisting', 'html')
                     ->addActionContext('upload', 'json')
+                    ->addActionContext('listingsforreview', 'html')
                     ->initContext();
     }
 
@@ -151,6 +152,7 @@ class AccountController extends Zend_Controller_Action
         $listing = Application_Model_PreListings::load($values['id']);
         if ($listing != null) {
             $listing->status = LISTING_PENDING;
+            $listing->submitted = new MongoDate();
             $listing->save();
         }
         $user = $this->getUser();
@@ -260,12 +262,27 @@ class AccountController extends Zend_Controller_Action
         }
         if (isset($values[AccountController::ZIPCODE]))
             $listing->{'address.zipcode'} = $values[AccountController::ZIPCODE];
-        if (isset($values[AccountController::AMENITIES]))
-           $listing->{'amenities'} = $values[AccountController::AMENITIES];
-        if (isset($values[AccountController::SERVICES]))
-           $listing->{'onsite_services'} = $values[AccountController::SERVICES];
-        if (isset($values[AccountController::SUITABILITY]))
-           $listing->{'suitability'} = $values[AccountController::SUITABILITY];
+        if (isset($values[AccountController::AMENITIES])) {
+           $tmp = array();
+           foreach ($values[AccountController::AMENITIES] as $val) {
+               $tmp[$val] = '';
+           }
+           $listing->{'amenities'} = $tmp;
+        }
+        if (isset($values[AccountController::SERVICES])) {
+           $tmp = array();
+           foreach ($values[AccountController::SERVICES] as $val) {
+              $tmp[$val] = '';
+           }
+           $listing->{'onsite_services'} = $tmp;
+        }
+        if (isset($values[AccountController::SUITABILITY])) {
+           $tmp = array();
+           foreach ($values[AccountController::SUITABILITY] as $val) {
+              $tmp[$val] = '';
+           }
+           $listing->{'suitability'} = $tmp;
+        }
         if (isset($values[AccountController::HOUSERULES]))
            $listing->{'house_rules'} = $values[AccountController::HOUSERULES];
         
@@ -335,13 +352,6 @@ class AccountController extends Zend_Controller_Action
                 $doc['listing_id'] = $listing->id;
                 unset($doc['_id']);
                 $listing = new Application_Model_PreListings($doc);
-                foreach(array('amenities', 'onsite_services', 'suitability') as $name) {
-                    $values = $listing->$name;
-                    if ($values != null) {
-                        $listing->$name = array_keys($values);
-                        
-                    }
-                }
                 $listing->status = LISTING_UPDATE;
                 $listing->save();
             }
@@ -645,8 +655,36 @@ class AccountController extends Zend_Controller_Action
         exit;
     }
     
-    public function approveAction()
+    public function listingsforreviewAction()
     {
+        $logger = Zend_Registry::get('zvlogger');
+        $values = $this->getRequest()->getPost();
+        $start = isset($values['start']) ? $values['start'] : 0;
+        $sort  = isset($values['sort']) ? $values['sort'] : SORT_NEWEST_FIRST;
+        
+        $q = array('status' => LISTING_PENDING);
+        $cursor = Application_Model_PreListings::getCursor($q);
+        $count = $cursor->count();
+        if ($start >= $count) {
+            if ($start >= ZV_AC_REVIEW_PAGE_SZ) {
+                $start -= ZV_AC_REVIEW_PAGE_SZ;
+            }
+        }
+        $matches = $cursor->skip($start)->limit(ZV_AC_REVIEW_PAGE_SZ);
+        $listings = array();
+        foreach($matches as $match) {
+            $listings[] = new Application_Model_PreListings($match);
+        }
+        $this->view->start = $start;
+        $this->view->sort = $sort;
+        $this->view->listings = $listings;
+        $this->view->maxlistings = $count;
+    }
+    
+    public function reviewAction()
+    {
+        $start = $this->getRequest()->getPost('start', 0);
+        $this->view->start = $start;
     }
 }
 

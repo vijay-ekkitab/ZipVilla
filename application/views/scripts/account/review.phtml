@@ -1,0 +1,29 @@
+<?php $this->headTitle('Administrator Dashboard'); ?>
+<?php $this->layout()->setLayout('account');?>
+<?php if (isset($this->alert)) {?>
+<div class="error_msg2">
+    <p>Space for alerts, notifications or status messages. Hidden by default</p>
+</div>
+<?php } ?>
+<h3 class="mang_list_hdr">Listings pending approval</h3>
+<div class="mang_list"><!--Search result sections starts here-->
+    <div class="mang_list_ctnt">
+        <p>Note:Click on the listing title to review the changes and decide whether to approve or reject it as required.<br />
+                An email will be sent to the owner if the listing is approved or rejected</p>
+        <div class="drop_show">
+            <form id="search_form" name="show" action="/search" method="post">
+                <label for="guests">Sort by
+                    <select onchange="setPage(1); validate_default(); document.search_form.submit();" class="v_dropdwon_bg" id="sort" name="sort">
+                        <option id=""  value="" >Newest first</option>
+                        <option id="" value="">2</option>
+                        <option id="" value="">3</option>
+                    </select>
+                </label>
+            </form>
+        </div><!--Form ends-->
+        <div id="listings"> </div>
+        <div id="loadergif" display="none"><img src="<?php echo $this->baseUrl('/css/loader.gif');?>"/></div>
+    </div>
+</div><!--search result ends here-->
+<div class="mng_list_bottom"></div><!--bottom shade of the background-->
+                        
