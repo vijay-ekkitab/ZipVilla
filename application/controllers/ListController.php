@@ -21,6 +21,7 @@ class ListController extends Zend_Controller_Action
     const CONVERTED    = 'booked';
     const TYPE         = 'type';
     const START        = 'start';
+    const SORT         = 'sort';
     
     //protected $requireslogin = array('rate', 'submitreview');
     
@@ -84,12 +85,14 @@ class ListController extends Zend_Controller_Action
         $type = $this->_getParam(ListController::TYPE, PRODUCTION_LISTING);
         $type = $type == PRODUCTION_LISTING ? 'Application_Model_Listings' : 'Application_Model_PreListings';
         $start = $this->_getParam(ListController::START, 0);
+        $sort = $this->_getParam(ListController::SORT, SORT_NEWEST_FIRST);
         if ($id != null) {
             //$this->view->property = $this->_helper->listingsManager->queryById($id);
             
             $lm = new ZipVilla_Helper_ListingsManager($type);
             $this->view->property = $lm->queryById($id);
             $this->view->start = $start;
+            $this->view->sort = $sort;
             $session_values = $this->readSession();
             $this->view->{SearchController::CHECKIN}  = $session_values[SearchController::CHECKIN];
             $this->view->{SearchController::CHECKOUT} = $session_values[SearchController::CHECKOUT];

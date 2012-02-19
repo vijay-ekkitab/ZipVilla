@@ -112,4 +112,9 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 		//print_r($updateResponse->getResponse());
 		$client->commit();
 	}
+    public function deleteById($id) {
+        $client = new SolrClient(self::$options);
+        $updateResponse = $client->deleteById($id); /* remove the document */
+        $client->commit();
+    }
 }

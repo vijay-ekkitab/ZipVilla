@@ -32,6 +32,8 @@ class AccountController extends Zend_Controller_Action
     const ACCEPT = 'accept';
     const REJECT = 'reject';
     
+    protected static $prelist_attributes = array('listing_id', 'status', 'submitted');
+    
     public function init()
     {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -43,6 +45,7 @@ class AccountController extends Zend_Controller_Action
                     ->addActionContext('activatelisting', 'html')
                     ->addActionContext('upload', 'json')
                     ->addActionContext('listingsforreview', 'html')
+                    ->addActionContext('dispose', 'html')
                     ->initContext();
     }
 
@@ -321,6 +324,10 @@ class AccountController extends Zend_Controller_Action
         $nextpage = isset($values['nextpage']) ? $values['nextpage'] : 1;
         $createlisting = $nextpage == 1 ? false : true;
         $listing = $this->updateListing($values, $createlisting);
+        if (($listing != null) && ($listing->status == LISTING_REJECTED)) {
+            $listing->status = $listing->listing_id != null ? LISTING_UPDATE : LISTING_NEW;
+            $listing->save();
+        }
         $this->setupEdit($listing, $nextpage);
     }
     
@@ -658,13 +665,8 @@ class AccountController extends Zend_Controller_Action
         exit;
     }
     
-    public function listingsforreviewAction()
+    protected function getListingsForReview(&$start, $sort)
     {
-        $logger = Zend_Registry::get('zvlogger');
-        $values = $this->getRequest()->getPost();
-        $start = isset($values['start']) ? $values['start'] : 0;
-        $sort  = isset($values['sort']) ? $values['sort'] : SORT_NEWEST_FIRST;
-        
         $q = array('status' => LISTING_PENDING);
         $cursor = Application_Model_PreListings::getCursor($q);
         $count = $cursor->count();
@@ -678,16 +680,86 @@ class AccountController extends Zend_Controller_Action
         foreach($matches as $match) {
             $listings[] = new Application_Model_PreListings($match);
         }
+        return(array('listings' => $listings, 'max' => $count));
+    }
+    
+    public function listingsforreviewAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $values = $this->getRequest()->getPost();
+        $start = isset($values['start']) ? $values['start'] : 0;
+        $sort  = isset($values['sort']) ? $values['sort'] : SORT_NEWEST_FIRST;
+        
+        $results = $this->getListingsForReview($start, $sort);
+        
         $this->view->start = $start;
         $this->view->sort = $sort;
-        $this->view->listings = $listings;
-        $this->view->maxlistings = $count;
+        $this->view->listings = $results['listings'];
+        $this->view->maxlistings = $results['max'];
     }
     
     public function reviewAction()
     {
         $start = $this->getRequest()->getPost('start', 0);
+        $sort = $this->getRequest()->getPost('sort', SORT_NEWEST_FIRST);
         $this->view->start = $start;
+        $this->view->sort = $sort;
     }
+    
+    public function disposeAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $values = $this->getRequest()->getPost();
+        $id = isset($values['id']) ? $values['id'] : null;
+        $start = isset($values['start']) ? $values['start'] : 0;
+        $sort = isset($values['sort']) ? $values['sort'] : SORT_NEWEST_FIRST;
+        $disposition = isset($values['disposition']) ? $values['disposition'] : 'none';
+        
+        $listing = null;
+        if ($id != null) {
+            $listing = Application_Model_PreListings::load($id);
+        }
+        if ($listing != null) {
+            switch($disposition) {
+                case 'approve':  $doc = $listing->getDoc();
+                                 foreach(self::$prelist_attributes as $name) {
+                                     unset($doc[$name]);
+                                 }
+                                 if ($listing->listing_id != null) { //update of existing listing
+                                    $originallisting = Application_Model_Listings::load($listing->listing_id);
+                                    if ($originallisting != null) {
+                                        $originallisting->setDoc($doc);
+                                        $originallisting->activated = new MongoDate();
+                                        $originallisting->save();
+                                        $im = $this->_helper->indexManager;
+                                        $im->deleteById($originallisting->id);
+                                        $im->indexById($originallisting->id);
+                                    }
+                                }
+                                else { //new listing
+                                    unset($doc['_id']);
+                                    $newlisting = new Application_Model_Listings($doc);
+                                    $newlisting->save();
+                                    $im = $this->_helper->indexManager;
+                                    $im->indexById($newlisting->id);
+                                }
+                                $listing->delete();
+                                break;
+                case 'reject': $listing->status = LISTING_REJECTED;
+                               $listing->save();
+                               break;
+                default: break;
+            }
+        }
+        
+        $results = $this->getListingsForReview($start, $sort);
+        
+        $this->view->start = $start;
+        $this->view->sort = $sort;
+        $this->view->listings = $results['listings'];
+        $this->view->maxlistings = $results['max'];
+        $this->_helper->viewRenderer('listingsforreview');
+    }
+    
 }
 

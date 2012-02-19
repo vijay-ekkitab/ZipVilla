@@ -39,6 +39,8 @@
         $id = isset($this->listing) ? $this->listing->id : '';
         $showtab = isset($this->showtab) ? $this->showtab : 0;
         $start = isset($this->start) ? $this->start : 0;
+        $sort = isset($this->sort) ? $this->sort : SORT_NEWEST_FIRST;
+        
         if ($this->listing instanceof Application_Model_Listings) {
             $listingtype = PRODUCTION_LISTING;
         } else {
@@ -49,6 +51,20 @@
         var filelist = [];
         var filesUploaded = 0;
         var fileUploadMax = <?php echo FILE_UPLOAD_MAX;?>;
+
+        function adminAction(_id, _disposition, _start, _sort)
+        {
+        	 $('#loadergif').show();
+             $.ajax({ 
+                 type: "POST",
+                 url:"/default/account/dispose/format/html",
+                 data:{id:_id, disposition: _disposition, start:_start, sort:_sort},
+                 complete:function(data) {
+                              $('#loadergif').hide();
+                              $("#listings").empty().prepend(data.responseText);
+                          }
+              });
+        }
 
         function doUpload(index, formData)
         {
@@ -321,7 +337,7 @@
         	    	type: "POST",
         	        dataType: "html",
         	        url:"/default/account/listingsforreview/format/html",
-        	        data:{start:<?php echo $start;?>, sort:'<?php echo SORT_NEWEST_FIRST;?>'},
+        	        data:{start:<?php echo $start;?>, sort:'<?php echo $sort;?>'},
         	        complete:function(data) {
         	            $('#loadergif').hide();
         	            $("#listings").prepend(data.responseText);

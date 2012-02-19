@@ -38,10 +38,11 @@ $this->addScriptPath(APPLICATION_PATH.'/views/scripts/list');
       $reviews = Application_Model_Reviews::count(array('listing' => $property->getRef()));
       $zvId = $property->{ZIPVILLA_ID};
       $start = isset($this->start) ? $this->start : 0;
+      $sort  = isset($this->sort) ? $this->sort : SORT_NEWEST_FIRST;
 ?>
 <div class="v_social_ico l_social_ico">
                 <?php if ($property instanceof Application_Model_PreListings) {?>
-                <h4 class="l_link_back_page v_link_back_page"><a href="/account/review?start=<?php echo $start;?>">Back to dashboard</a></h4>
+                <h4 class="l_link_back_page v_link_back_page"><a href="/account/review?start=<?php echo $start;?>&sort=<?php echo $sort;?>">Back to dashboard</a></h4>
                 <?php } else {?>
                 <h4 class="l_link_back_page v_link_back_page"><a href="/search">Back to search results</a></h4>
                 <?php } ?>

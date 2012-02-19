@@ -14,7 +14,7 @@ include_once "ZipVilla/TypeConstants.php";
             $owner = $listing->getOwner();
             $ownername = $owner->firstname . ' ' . $owner->lastname;
             $ownerimage = $owner->image == null ? 'default_user_image.jpg' : $owner->image;
-            $link = $this->baseUrl('/list?id='.$listing->id.'&showtab='.TAB_LIST.'&type='.PRE_LISTING.'&start='.$this->start);
+            $link = $this->baseUrl('/list?id='.$listing->id.'&showtab='.TAB_LIST.'&type='.PRE_LISTING.'&start='.$this->start.'&sort='.$this->sort);
             if ($listing->listing_id != null) {
                 $original = Application_Model_Listings::load($listing->listing_id);
                 $difference = $this->zvUtils()->diffListings($original, $listing);
@@ -52,10 +52,10 @@ include_once "ZipVilla/TypeConstants.php";
         </div>
         <div class="edit">
             <div class="calndr">
-                <a href="#"><span><img src="/images/ico_tick.png" alt="Approve" /></span><h4>Approve</h4></a>
+                <a href="#" onclick="adminAction('<?php echo $listing->id;?>','approve',<?php echo $this->start;?>, '<?php echo $this->sort;?>'); return false;"><span><img src="/images/ico_tick.png" alt="Approve" /></span><h4>Approve</h4></a>
             </div>
             <div class="calndr">
-                <a href="#"><span><img src="/images/ico_wrong.png" alt="Reject" /></span><h4>Reject</h4></a>
+                <a href="#" onclick="adminAction('<?php echo $listing->id;?>','reject',<?php echo $this->start;?>, '<?php echo $this->sort;?>'); return false;"><span><img src="/images/ico_wrong.png" alt="Reject" /></span><h4>Reject</h4></a>
             </div>
         </div> 
     </div><!--listing ends here-->
