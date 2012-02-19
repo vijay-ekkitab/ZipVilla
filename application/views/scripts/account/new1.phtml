@@ -166,12 +166,13 @@
         <h2>Need help? Call us:</h2>
         <p>+91-80-XXXX-XXXX<br />+91-80-XXXX-XXXX</p>
     </div>
+    <?php $onclick = $id == '' ? 'onclick="return false;"' : '';?>
     <div class="property_right_nav">
         <ul>
             <li><a href="#" onclick="return false;" class="active1">Basic Information</a></li>
-            <li><a href="/account/new?nextpage=2&id=<?php echo $id;?>">Property Details</a></li>
-            <li><a href="/account/new?nextpage=3&id=<?php echo $id;?>">Calendar</a></li>
-            <li style="border-bottom:none;"><a href="/account/new?nextpage=4&id=<?php echo $id;?>">Photos and Videos</a></li>
+            <li><a href="/account/new?nextpage=2&id=<?php echo $id;?>" <?php echo $onclick;?>>Property Details</a></li>
+            <li><a href="/account/new?nextpage=3&id=<?php echo $id;?>" <?php echo $onclick;?>>Calendar</a></li>
+            <li style="border-bottom:none;"><a href="/account/new?nextpage=4&id=<?php echo $id;?>" <?php echo $onclick;?>>Photos and Videos</a></li>
         </ul>
     </div>
     <div>

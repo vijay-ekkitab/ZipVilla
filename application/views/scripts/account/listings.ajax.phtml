@@ -68,9 +68,11 @@ include_once "ZipVilla/TypeConstants.php";
                 <?php } ?>
             </div>
             <div class="edit">
+                <?php if ($listing->status != LISTING_PENDING) {?>
                 <div class="calndr">
                     <a href="/account/new?nextpage=1&id=<?php echo $listing->id;?>"><span><img src="images/ico_edit.jpg" alt="Edit" /></span><h4>edit</h4></a>
                 </div>
+                <?php } ?>
             </div>
             <div class="edit">
                 <div class="calndr">

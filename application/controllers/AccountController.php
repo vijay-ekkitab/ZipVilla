@@ -211,7 +211,7 @@ class AccountController extends Zend_Controller_Action
         }
         return $user;
     }
-    protected function updateListing($values)
+    protected function updateListing($values, $createlisting)
     {
         $listing = null;
         if (isset($values['id']) && ($values['id'] != '')) {
@@ -220,7 +220,7 @@ class AccountController extends Zend_Controller_Action
                 $listing = null;
             }
         }
-        if ($listing == null) {
+        if (($listing == null) && ($createlisting)) {
             $listing = new Application_Model_PreListings();
             $user = $this->getUser();
             if ($user != null) {
@@ -228,65 +228,67 @@ class AccountController extends Zend_Controller_Action
             }
             $listing->status = LISTING_NEW;
         }
-        if (isset($values[AccountController::SHARED]))
-            $listing->shared        = $values[AccountController::SHARED];
-        if (isset($values[AccountController::GUESTS]))
-            $listing->guests        = $values[AccountController::GUESTS];
-        if (isset($values[AccountController::BEDROOMS]))
-            $listing->bedrooms      = $values[AccountController::BEDROOMS];
-        if (isset($values[AccountController::BATHS]))
-            $listing->baths         = $values[AccountController::BATHS];
-        if (isset($values[AccountController::TITLE]))
-            $listing->title         = $values[AccountController::TITLE];
-        if (isset($values[AccountController::DESCRIPTION]))
-            $listing->description   = $values[AccountController::DESCRIPTION];
-        if (isset($values[AccountController::DAILY_RATE]))
-            $listing->{'rate.daily'} = $values[AccountController::DAILY_RATE];
-        if (isset($values[AccountController::WEEKLY_RATE]))
-            $listing->{'rate.weekly'} = $values[AccountController::WEEKLY_RATE];
-        if (isset($values[AccountController::MONTHLY_RATE]))
-            $listing->{'rate.monthly'} = $values[AccountController::MONTHLY_RATE];
-        if (isset($values[AccountController::LONGITUDE]))
-            $listing->{'address.coordinates.longitude'} = $values[AccountController::LONGITUDE];
-        if (isset($values[AccountController::LATITUDE]))
-            $listing->{'address.coordinates.latitude'} = $values[AccountController::LATITUDE];
-        if (isset($values[AccountController::ADDRESS]))
-            $listing->{'address.street_name'} = $values[AccountController::ADDRESS];
-        if (isset($values[AccountController::LOCATION]))
-            $listing->{'address.location'} = $values[AccountController::LOCATION];
-        if (isset($values[AccountController::CITY]))
-            $listing->{'address.city'} = $values[AccountController::CITY];
-        if (isset($values[AccountController::STATE])) {
-            $listing->{'address.state'} = $values[AccountController::STATE];
-            $listing->{'address.country'} = 'India';
+        if ($listing != null) {
+            if (isset($values[AccountController::SHARED]))
+                $listing->shared        = $values[AccountController::SHARED];
+            if (isset($values[AccountController::GUESTS]))
+                $listing->guests        = $values[AccountController::GUESTS];
+            if (isset($values[AccountController::BEDROOMS]))
+                $listing->bedrooms      = $values[AccountController::BEDROOMS];
+            if (isset($values[AccountController::BATHS]))
+                $listing->baths         = $values[AccountController::BATHS];
+            if (isset($values[AccountController::TITLE]))
+                $listing->title         = $values[AccountController::TITLE];
+            if (isset($values[AccountController::DESCRIPTION]))
+                $listing->description   = $values[AccountController::DESCRIPTION];
+            if (isset($values[AccountController::DAILY_RATE]))
+                $listing->{'rate.daily'} = $values[AccountController::DAILY_RATE];
+            if (isset($values[AccountController::WEEKLY_RATE]))
+                $listing->{'rate.weekly'} = $values[AccountController::WEEKLY_RATE];
+            if (isset($values[AccountController::MONTHLY_RATE]))
+                $listing->{'rate.monthly'} = $values[AccountController::MONTHLY_RATE];
+            if (isset($values[AccountController::LONGITUDE]))
+                $listing->{'address.coordinates.longitude'} = $values[AccountController::LONGITUDE];
+            if (isset($values[AccountController::LATITUDE]))
+                $listing->{'address.coordinates.latitude'} = $values[AccountController::LATITUDE];
+            if (isset($values[AccountController::ADDRESS]))
+                $listing->{'address.street_name'} = $values[AccountController::ADDRESS];
+            if (isset($values[AccountController::LOCATION]))
+                $listing->{'address.location'} = $values[AccountController::LOCATION];
+            if (isset($values[AccountController::CITY]))
+                $listing->{'address.city'} = $values[AccountController::CITY];
+            if (isset($values[AccountController::STATE])) {
+                $listing->{'address.state'} = $values[AccountController::STATE];
+                $listing->{'address.country'} = 'India';
+            }
+            if (isset($values[AccountController::ZIPCODE]))
+                $listing->{'address.zipcode'} = $values[AccountController::ZIPCODE];
+            if (isset($values[AccountController::AMENITIES])) {
+               $tmp = array();
+               foreach ($values[AccountController::AMENITIES] as $val) {
+                   $tmp[$val] = '';
+               }
+               $listing->{'amenities'} = $tmp;
+            }
+            if (isset($values[AccountController::SERVICES])) {
+               $tmp = array();
+               foreach ($values[AccountController::SERVICES] as $val) {
+                  $tmp[$val] = '';
+               }
+               $listing->{'onsite_services'} = $tmp;
+            }
+            if (isset($values[AccountController::SUITABILITY])) {
+               $tmp = array();
+               foreach ($values[AccountController::SUITABILITY] as $val) {
+                  $tmp[$val] = '';
+               }
+               $listing->{'suitability'} = $tmp;
+            }
+            if (isset($values[AccountController::HOUSERULES]))
+               $listing->{'house_rules'} = $values[AccountController::HOUSERULES];
+            
+            $listing->save();
         }
-        if (isset($values[AccountController::ZIPCODE]))
-            $listing->{'address.zipcode'} = $values[AccountController::ZIPCODE];
-        if (isset($values[AccountController::AMENITIES])) {
-           $tmp = array();
-           foreach ($values[AccountController::AMENITIES] as $val) {
-               $tmp[$val] = '';
-           }
-           $listing->{'amenities'} = $tmp;
-        }
-        if (isset($values[AccountController::SERVICES])) {
-           $tmp = array();
-           foreach ($values[AccountController::SERVICES] as $val) {
-              $tmp[$val] = '';
-           }
-           $listing->{'onsite_services'} = $tmp;
-        }
-        if (isset($values[AccountController::SUITABILITY])) {
-           $tmp = array();
-           foreach ($values[AccountController::SUITABILITY] as $val) {
-              $tmp[$val] = '';
-           }
-           $listing->{'suitability'} = $tmp;
-        }
-        if (isset($values[AccountController::HOUSERULES]))
-           $listing->{'house_rules'} = $values[AccountController::HOUSERULES];
-        
-        $listing->save();
         return $listing;
     }
     
@@ -317,7 +319,8 @@ class AccountController extends Zend_Controller_Action
         $request = $this->getRequest();
         $values = $request->getParams();
         $nextpage = isset($values['nextpage']) ? $values['nextpage'] : 1;
-        $listing = $this->updateListing($values);
+        $createlisting = $nextpage == 1 ? false : true;
+        $listing = $this->updateListing($values, $createlisting);
         $this->setupEdit($listing, $nextpage);
     }
     
