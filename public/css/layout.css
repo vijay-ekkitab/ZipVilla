@@ -134,17 +134,17 @@
 	top:10px;
 	right:0;
 }
-.l_search_results .tab_content .search_result, .l_search_results .tab_content .listing, .mang_list_ctnt .listing {
+.l_search_results .tab_content .search_result, .l_search_results .tab_content .listing, .mang_list_ctnt .listing, .listing  {
 	position:relative;
 	float:left;
 	padding:8px 0;
 	border-bottom:1px dashed #ccc;
 }
-.l_search_results .tab_content .search_result .villa_image, .l_search_results .tab_content .listing .villa_image, .mang_list_ctnt .listing .villa_image {
+.l_search_results .tab_content .search_result .villa_image, .l_search_results .tab_content .listing .villa_image, .mang_list_ctnt .listing .villa_image, .listing .villa_image {
 	padding:6px;
 	float:left;
 }
-.l_search_results .tab_content .search_result .villa_image img, .l_search_results .tab_content .listing .villa_image img, .mang_list_ctnt .listing .villa_image img {
+.l_search_results .tab_content .search_result .villa_image img, .l_search_results .tab_content .listing .villa_image img, .mang_list_ctnt .listing .villa_image img, .listing .villa_image img {
 	width:114px;
 	height:74px;
 }
@@ -152,7 +152,7 @@
 	float:left;
 	margin:4px 8px 0 8px;
 }
-.l_search_results .tab_content .search_result .resort_details, .l_search_results .tab_content .listing .resort_details {
+.l_search_results .tab_content .search_result .resort_details, .l_search_results .tab_content .listing .resort_details, .listing .resort_details {
 	float:left;
 	width:370px;
 }
@@ -167,7 +167,7 @@
 .listing .resort_details{
 	margin-left:15px;
 }
-.l_search_results .tab_content .search_result .resort_details h2, .l_search_results .tab_content .listing .resort_details h2, .mang_list_ctnt .listing .resort_details h2 {
+.l_search_results .tab_content .search_result .resort_details h2, .l_search_results .tab_content .listing .resort_details h2, .mang_list_ctnt .listing .resort_details h2, .listing .resort_details h2 {
 	color:#09c;
 	text-transform:none;
 	letter-spacing:0;

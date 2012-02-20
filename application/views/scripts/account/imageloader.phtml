@@ -22,45 +22,53 @@
             <p>You are only a few steps away from listing your property at Zipvilla.<br/>
                Select the pictures for your property to complete your listing.</p>
         </div>
+        <div class="detials_form list_img">
+                    <ul>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
+                    </ul>
+        </div>
 		<div class="detials_form"><!--detials_form-->
-            <div class="navbar navbar-fixed-top"> </div>
-            <div class="container">
-    	        <div class="page-header"></div>
-    			<p>Please click on <strong>Select Image Files</strong> to select your property images to upload. Then upload them using the <strong>Upload</strong> button.</p>
     		    <form id="fileupload" action="" method="POST" enctype="multipart/form-data">
                     <div class="row fileupload-buttonbar">
                         <div class="span7">
                             <span class="btn btn-success fileinput-button" style="clear:both;">
-                                <button type="button">Select Image Files</button><input type="file" name="files[]" multiple="true" accept="image/*" onchange="showSelectedFiles(this);return false;">
+                                <div class="btn_newlist"><img src="/images/btn_select_image.jpg" alt="Select Image" /></div><input type="file" name="files[]" multiple="true" accept="image/*" onchange="showSelectedFiles(this);return false;">
                             </span>
                         </div>
+                        <div class="btn_newlist"><a href="#" onclick="uploadImages('<?php echo $id;?>', '<?php echo $listingtype;?>');return false;"><img src="/images/btn_uplaod.jpg" alt="Upload" /></a></div>
                     </div>
                 </form>
-    			<div class="listing">
+                <div class="wrap_list">
     			<?php for ($i = 0; $i < FILE_UPLOAD_MAX; $i++) {?>
-        			<div id="villa<?php echo $i;?>" class="villa_image" style="float:left;clear:left;display:none;"><img id="img<?php echo $i;?>" src="" alt="resort" /></div>
-                    <div id="villa_details<?php echo $i;?>" class="resort_details" style="display:none;">
-                        <div class="daily_rate">
-                            <h4 id="name<?php echo $i;?>" style="vertical-align:bottom;"></h4>
+    			    <div id="show<?php echo $i;?>" class="listing" style="display:none;">
+        			<div id="villa<?php echo $i;?>" class="villa_image"><img id="img<?php echo $i;?>" src="" alt="resort" /></div>
+                        <div class="image_file">
+                            <h4 id="name<?php echo $i;?>"></h4>
                         </div>
-                        <div class="bookings">
+                        <div class="image_size">
                             <h4 id="size<?php echo $i;?>"></h4>
                         </div>
                         <input type="hidden" name="sendfile" value="<?php echo $i;?>"/>
-                        <div class="bookings">
-                            <button type="button" onclick="deleteImage(<?php echo $i;?>);return false;">Remove</button>
+                        <div class="remove">
+                                <a href="#" onclick="deleteImage(<?php echo $i;?>);return false;"><img src="/images/btn_reject.jpg" alt="Remove" /></a>
                         </div>
-                        <!--<div id="checkbox<?php echo $i;?>" class="bookings">
-                            <input id="send<?php echo $i;?>" type="checkbox" name="sendfile" value="" checked="yes"/>Select<br/>
-                        </div>-->
+                        <div id="msg<?php echo $i;?>" class="msg"></div>
                     </div>
     			<?php } ?>
                 </div>
-            </div>
-			<button type="button" onclick="uploadImages('<?php echo $id;?>', '<?php echo $listingtype;?>');return false;">Upload</button>
-			<div id="info"></div> 
+                <div id="info"></div> 
         </div><!--detials_form ends here-->
-        <div id="maxlimit"></div>
 	</div><!--Property details ends here-->
 	<div class="l_property_right v_property_right">
 		<div>

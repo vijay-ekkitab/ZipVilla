@@ -172,7 +172,7 @@ body {
 .mang_list_ctnt .listing{
 	width:98%;
 }
-.v_search_results .tab_content .search_result .villa_image, .listing .villa_image, .mang_list_ctnt .listing .villa_image{
+.v_search_results .tab_content .search_result .villa_image, .listing .villa_image, .mang_list_ctnt .listing .villa_image, .listing .villa_image{
 	background-color:#fff;
 	border:1px solid #ccc;
 	width:115px;
@@ -191,11 +191,34 @@ body {
 .v_search_results .tab_content .search_result .resort_details .reviews{
 	background:url(../images/bg_circle_review.jpg) top center no-repeat;
 }
-.v_search_results .tab_content .listing .resort_details, .mang_list_ctnt .listing .resort_details {
+.v_search_results .tab_content .listing .resort_details{
 	clear:right;
 	width:435px!important;
 }
-
+.wrap_list{
+	clear:both;
+	width:600px;
+	float:left;
+}
+.listing .image_file{
+	float:left;
+	margin:0 10px 0 10px;
+	width:300px;
+}
+.listing  .image_size{
+	float:left;
+	margin:0 10px 0 10px;
+	width:110px;
+}
+.listing .remove {
+	float:left;
+	margin:0 0 0 10px;
+}
+.listing .msg {
+	float:left;
+	margin:0 10px 0 10px;
+	width:300px;
+}
 .v_refine_results{}
 .footer {
 	background:url(../images/bg_footer.png) top center no-repeat;
@@ -1248,4 +1271,34 @@ filter: alpha(opacity=15); /* ie lt 7 */
 .mang_list_ctnt .edit_list{
 	float:right;
 	width:auto!important;
+}
+.list_img{
+	width:600px;
+	overflow:auto;
+	float:left;
+	margin-bottom:20px;
+}
+.list_img ul{
+	width:2000px;
+	float:left;
+	overflow:auto;
+}
+.list_img ul li{
+	float:left;
+	margin-right:10px;
+	display:inline;
+}
+.list_img ul li img{
+	width:115px;
+	height:75px;
+
+}
+.list_img ul li p{
+	float:none!important;
+}
+.list_img ul li p a{
+	clear:both;
+	text-decoration:underline;
+	font-size:12px;
+	color:#333;
 }

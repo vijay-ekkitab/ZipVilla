@@ -95,18 +95,17 @@
         function deleteImage(index)
         {
             delete filelist[index];
-            $('#villa'+index).hide();
-            $('#villa_details'+index).hide();
-            $('#status'+index).remove();
+            $('#show'+index).hide();
+            $('#status'+index).empty();
         }
 
         function showStatus(index, resp)
         {
             if (resp['status'] == 'OK') {
-                $('#villa_details'+index).append('<div class="bookings"><p id="status'+index+'">'+'Image uploaded successfully.'+'</p></div>');
+                $('#msg'+index).empty().append('<p id="status'+index+'">'+'Image uploaded successfully.'+'</p>');
             }
             else {
-            	$('#villa_details'+index).append('<div class="bookings"><p id="status'+index+'">'+'Image upload failed. <br/>'+resp['error']+'</p></div>');
+            	$('#msg'+index).empty().append('<p id="status'+index+'">'+'Image upload failed. <br/>'+resp['error']+'</p>');
             }
         }
 
@@ -129,11 +128,10 @@
                 }
             	if (typeof filelist[i] == 'undefined') {
             		setupSrc('img'+i, files[k]);
-                    $('#villa'+i).show();
                     $('#name'+i).text(files[k].name);
                     var size = files[k].size/1000;
-                    $('#size'+i).text(size +' KB');
-                    $('#villa_details'+i).show();
+                    $('#size'+i).text(size +' kb');
+                    $('#show'+i).show();
                     filelist[i] = files[k];
                     k++;
             	}
