@@ -59,6 +59,7 @@ include_once "ZipVilla/TypeConstants.php";
             </div>
         </div> 
     </div><!--listing ends here-->
+    <?php endforeach;?>
     <?php $pdata = $this->zvUtils()->calcPages($maxlistings, ZV_AC_REVIEW_PAGE_SZ, $this->start);?>
     <div class="ui-tabs-panel ui-widget-content ui-corner-bottom">
     <div class="display_no">
@@ -84,5 +85,4 @@ include_once "ZipVilla/TypeConstants.php";
         <?php }?>
     </div>
     </div>
-    <?php endforeach;?>
 <?php }?>

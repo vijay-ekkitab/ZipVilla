@@ -250,6 +250,12 @@
              });
         	
         }
+        function sortListingsForReview()
+        {
+        	var sort = $("#sort").val();
+        	getListingsForReview(0, sort);
+        }
+        
         function getListingsForReview(_start, _sort)
         {
         	$('#loadergif').show();
@@ -344,6 +350,7 @@
         	        }
         	    });
         	}
+        	$("#sort").val('<?php echo $sort;?>');
         	$('#sort').change(function(e) {
             	e.preventDefault();
             	getListingsForReview(0, $(this).val());

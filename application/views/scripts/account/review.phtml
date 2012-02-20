@@ -14,7 +14,7 @@
         <div class="drop_show">
             <form id="search_form">
                 <label for="guests">Sort by
-                    <select class="v_dropdwon_bg" id="sort" name="sort">
+                    <select class="v_dropdwon_bg" id="sort" name="sort" onchange="sortListingsForReview(); return false;">
                         <option value="<?php echo SORT_NEWEST_FIRST;?>">Newest first</option>
                         <option value="<?php echo SORT_OLDEST_FIRST;?>">Oldest first</option>
                     </select>

@@ -675,7 +675,16 @@ class AccountController extends Zend_Controller_Action
                 $start -= ZV_AC_REVIEW_PAGE_SZ;
             }
         }
-        $matches = $cursor->skip($start)->limit(ZV_AC_REVIEW_PAGE_SZ);
+        $sortorder = array();
+        switch($sort) {
+            case SORT_OLDEST_FIRST: $sortorder['submitted'] = 1;
+                                    break;
+            case SORT_NEWEST_FIRST: $sortorder['submitted'] = -1;
+                                    break;
+            default:                $sortorder['submitted'] = -1;
+                                    break;
+        }
+        $matches = $cursor->sort($sortorder)->skip($start)->limit(ZV_AC_REVIEW_PAGE_SZ);
         $listings = array();
         foreach($matches as $match) {
             $listings[] = new Application_Model_PreListings($match);
@@ -738,6 +747,7 @@ class AccountController extends Zend_Controller_Action
                                 }
                                 else { //new listing
                                     unset($doc['_id']);
+                                    $doc[TYPE] = 'home';
                                     $newlisting = new Application_Model_Listings($doc);
                                     $newlisting->save();
                                     $im = $this->_helper->indexManager;
