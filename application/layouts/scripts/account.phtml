@@ -52,6 +52,21 @@
         var filesUploaded = 0;
         var fileUploadMax = <?php echo FILE_UPLOAD_MAX;?>;
 
+        function dropImage(_id, _type, _image, _idref)
+        {
+        	$.ajax({ 
+                type: "POST",
+                url:"/default/account/deleteimage/format/json",
+                data:{id:_id, type:_type, image:_image},
+                complete:function(json) {
+                             var resp = jQuery.parseJSON(json.responseText);
+                             if (resp['status'] == 'OK') {
+                                 $('#'+_idref).remove();
+                             }
+                         }
+             });
+        }
+
         function adminAction(_id, _disposition, _start, _sort)
         {
         	 $('#loadergif').show();
@@ -66,8 +81,12 @@
               });
         }
 
-        function doUpload(index, formData)
+        function doUpload(index, file, id, type)
         {
+        	var formData = new FormData();
+            formData.append("imagefile", file);
+            formData.append("id", id);
+            formData.append("type", type);
         	$.ajax({
                 type: "POST",
                 url:"/default/account/upload/format/json",
@@ -76,7 +95,7 @@
                 contentType: false,  // tell jQuery not to set contentType  
                 complete:function(json) {
         	      var resp = jQuery.parseJSON(json.responseText);
-                  showStatus(index, resp);
+                  showStatus(index, resp, id, type);
                 }
             });
         }
@@ -84,11 +103,7 @@
         function uploadImages(_id, _type)
         {
             for (var i in filelist) {
-                var formData = new FormData();
-            	formData.append("imagefile", filelist[i]);
-            	formData.append("id", _id);
-            	formData.append("type", _type);
-            	doUpload(i, formData);
+            	doUpload(i, filelist[i], _id, _type);
             }
         }
 
@@ -99,10 +114,18 @@
             $('#status'+index).empty();
         }
 
-        function showStatus(index, resp)
+        function showStatus(index, resp, id, type)
         {
             if (resp['status'] == 'OK') {
-                $('#msg'+index).empty().append('<p id="status'+index+'">'+'Image uploaded successfully.'+'</p>');
+                var dir = resp['imagedir'];
+                var file = resp['imagefile'];
+                var ref = file.replace(/[^a-zA-Z0-9]/g, '');
+                var element = '<li id="'+ref+'">' +
+                              '<img src="'+dir+'/'+file+'" alt="resort" />' +
+                              '<p><a href="#" onclick="dropImage(\'' + id + '\', \'' + type + '\', \'' +file+'\', \''+ref+'\'); return false;">Remove</a></p></li>';
+                $('#gallery').prepend(element);
+                deleteImage(index);             
+                //$('#msg'+index).empty().append('<p id="status'+index+'">'+'Image uploaded successfully.'+'</p>');
             }
             else {
             	$('#msg'+index).empty().append('<p id="status'+index+'">'+'Image upload failed. <br/>'+resp['error']+'</p>');

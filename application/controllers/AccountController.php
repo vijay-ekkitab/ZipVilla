@@ -46,6 +46,7 @@ class AccountController extends Zend_Controller_Action
                     ->addActionContext('upload', 'json')
                     ->addActionContext('listingsforreview', 'html')
                     ->addActionContext('dispose', 'html')
+                    ->addActionContext('deleteimage', 'json')
                     ->initContext();
     }
 
@@ -654,6 +655,8 @@ class AccountController extends Zend_Controller_Action
                         $images[] = $filename;
                         $listing->images = $images;
                         $listing->save();
+                        $reply['imagedir'] = $path; 
+                        $reply['imagefile'] = $filename; 
                     }
                 }
             }
@@ -770,6 +773,55 @@ class AccountController extends Zend_Controller_Action
         $this->view->maxlistings = $results['max'];
         $this->_helper->viewRenderer('listingsforreview');
     }
+    
+    public function deleteimageAction()
+    {
+        $logger = Zend_Registry::get('zvlogger');
+        $status = 'OK';
+        $values = $this->getRequest()->getPost();
+        $id    = isset($values['id']) ? $values['id'] : null;
+        $image = isset($values['image']) ? $values['image'] : null;
+        $type  = isset($values['type']) ? $values['type'] : PRE_LISTING;
+        $type = $type == PRODUCTION_LISTING ? 'Application_Model_Listings' : 'Application_Model_PreListings';
+        
+        if (($id == null) || ($image == null)) {
+            $status = 'Failed';
+        }
+        else {
+            $lm = new ZipVilla_Helper_ListingsManager($type);
+            $listing = $lm->queryById($id);
+            if ($listing == null) {
+                $status == 'Failed';
+            }
+        }
+        
+        if ($status == 'OK') {
+            $images = $listing->images;
+            $newimages = array();
+            if ($images != null) {
+                foreach ($images as $name) {
+                    $name = trim($name);
+                    if ($name != $image) {
+                        $newimages[] = $name;
+                    }
+                }
+            }
+            if (count($images) > count($newimages)) {
+                $listing->images = $newimages;
+                $listing->save();
+            }
+            else {
+                $status = 'Failed';
+            }
+        }
+        
+        $json = Zend_Json::encode(array('status' => $status));
+        $this->getResponse()->setHeader('Content-Type', 'text/json')
+                            ->setBody($json)
+                            ->sendResponse();
+        exit;
+    }
+    
     
 }
 

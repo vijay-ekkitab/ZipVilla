@@ -22,21 +22,20 @@
             <p>You are only a few steps away from listing your property at Zipvilla.<br/>
                Select the pictures for your property to complete your listing.</p>
         </div>
+        <?php 
+            $images = $this->listing->images;
+            $images = $images == null ? array() : $images;
+            $imageprefix = $this->zvImage()->getImagePathPrefix('', $this->listing);
+        ?>
         <div class="detials_form list_img">
-                    <ul>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                        <li><img src="/images/resort_img.jpg" alt="resort" /><p><a href="#">Remove</a></p></li>
-                    </ul>
+            <ul id="gallery">
+                <?php foreach($images as $image) {
+                    $image = trim($image);
+                    $showref = preg_replace('/[^a-zA-Z0-9]/', '', $image);
+                ?>
+                    <li id="<?php echo $showref;?>"><img src="<?php echo $this->baseUrl($imageprefix.'/'.$image);?>" alt="resort" /><p><a href="#" onclick="dropImage('<?php echo $this->listing->id;?>', '<?php echo $listingtype;?>', '<?php echo $image;?>', '<?php echo $showref;?>'); return false;">Remove</a></p></li>
+                <?php } ?>
+            </ul>
         </div>
 		<div class="detials_form"><!--detials_form-->
     		    <form id="fileupload" action="" method="POST" enctype="multipart/form-data">
