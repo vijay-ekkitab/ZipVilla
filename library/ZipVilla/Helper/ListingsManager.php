@@ -153,7 +153,7 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
         if ($obj instanceof $this->modelclass) {
             $obj = $obj->getDoc();
         }
-		$type = $obj[TYPE];
+		$type = isset($obj[TYPE]) ? $obj[TYPE] : 'home';
 		$tp = $tm->getType($type);
 		$fres = $tp->flatten($obj,$onlyIndexableProp);
 		$fres[TYPE] = $type;

@@ -28,11 +28,15 @@ class AccountController extends Zend_Controller_Action
     const SUITABILITY = 'suitability';
     const HOUSERULES = 'house_rules';
     const IMAGEFILE = 'imagefile';
+    const GOOGLELINK = 'googlelink'; 
+    const MOBILE = 'mobile';
+    const LANDLINE = 'landline';
+    const TERMS = 'terms';
     
     const ACCEPT = 'accept';
     const REJECT = 'reject';
     
-    protected static $prelist_attributes = array('listing_id', 'status', 'submitted');
+    protected static $prelist_attributes = array('listing_id', 'status', 'submitted', 'googlelink', 'termsaccepted');
     
     public function init()
     {
@@ -215,7 +219,7 @@ class AccountController extends Zend_Controller_Action
         }
         return $user;
     }
-    protected function updateListing($values, $createlisting)
+    protected function updateListing($values, $createlisting, $isPost)
     {
         $listing = null;
         if (isset($values['id']) && ($values['id'] != '')) {
@@ -232,7 +236,8 @@ class AccountController extends Zend_Controller_Action
             }
             $listing->status = LISTING_NEW;
         }
-        if ($listing != null) {
+        if (($listing != null) && ($isPost)) {
+            $owner = $listing->getOwner();
             if (isset($values[AccountController::SHARED]))
                 $listing->shared        = $values[AccountController::SHARED];
             if (isset($values[AccountController::GUESTS]))
@@ -290,8 +295,19 @@ class AccountController extends Zend_Controller_Action
             }
             if (isset($values[AccountController::HOUSERULES]))
                $listing->{'house_rules'} = $values[AccountController::HOUSERULES];
-            
+            if (isset($values[AccountController::GOOGLELINK]))
+               $listing->{'googlelink'} = $values[AccountController::GOOGLELINK];
+            if (isset($values[AccountController::TERMS]))
+               $listing->{'termsaccepted'} = $values[AccountController::TERMS];
+            else 
+               $listing->{'termsaccepted'} = 'no';
             $listing->save();
+            
+            if (isset($values[AccountController::MOBILE]))
+                $owner->mobile = $values[AccountController::MOBILE];
+            if (isset($values[AccountController::LANDLINE]))
+                $owner->landline = $values[AccountController::LANDLINE];
+            $owner->save();
         }
         return $listing;
     }
@@ -299,6 +315,7 @@ class AccountController extends Zend_Controller_Action
     protected function setupEdit($listing, $nextpage)
     {
         $this->view->listing = $listing;
+        $this->view->owner = $this->getUser();
         switch($nextpage) {
             case 1:  $this->_helper->viewRenderer('new1');
                      break;
@@ -317,14 +334,46 @@ class AccountController extends Zend_Controller_Action
         }
     }
     
+    protected function validateForm($values)
+    {
+        if (!isset($values['nextpage']))
+            return array('nextpage' => array('nextpage' => 'No next page specified.'));
+            
+        $errors = array();
+        
+        switch($values['nextpage']) {
+            case 2: $form = new Application_Form_EditPropertyPage1();
+                    if (!$form->isValid($values)) {
+                        $errors = $form->getMessages();
+                    }
+                    if ($values['state'] == '') {
+                        $errors['state'] = array('state' => 'You must specify a state.');
+                    }
+                    return $errors;
+                    break;
+            default:
+                    break;
+        }
+        
+        return null;
+    }
+    
     public function newAction()
     {
         $logger = Zend_Registry::get('zvlogger');
         $request = $this->getRequest();
         $values = $request->getParams();
         $nextpage = isset($values['nextpage']) ? $values['nextpage'] : 1;
+        if ($request->isPost()) {
+            $errors = $this->validateForm($request->getPost());
+            if ($errors != null) {
+                $this->view->errors = $errors;
+                $this->view->userdata = $request->getPost();
+                $nextpage = $nextpage - 1;
+            }
+        }
         $createlisting = $nextpage == 1 ? false : true;
-        $listing = $this->updateListing($values, $createlisting);
+        $listing = $this->updateListing($values, $createlisting, $request->isPost());
         if (($listing != null) && ($listing->status == LISTING_REJECTED)) {
             $listing->status = $listing->listing_id != null ? LISTING_UPDATE : LISTING_NEW;
             $listing->save();
@@ -734,6 +783,9 @@ class AccountController extends Zend_Controller_Action
         if ($listing != null) {
             switch($disposition) {
                 case 'approve':  $doc = $listing->getDoc();
+                                 if (!isset($doc[TYPE])) {
+                                     $doc[TYPE] = 'home';
+                                 }
                                  foreach(self::$prelist_attributes as $name) {
                                      unset($doc[$name]);
                                  }
@@ -750,7 +802,6 @@ class AccountController extends Zend_Controller_Action
                                 }
                                 else { //new listing
                                     unset($doc['_id']);
-                                    $doc[TYPE] = 'home';
                                     $newlisting = new Application_Model_Listings($doc);
                                     $newlisting->save();
                                     $im = $this->_helper->indexManager;

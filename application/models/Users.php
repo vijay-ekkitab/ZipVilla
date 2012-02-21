@@ -14,6 +14,8 @@ include_once("Mongo/ModelBase.php");
  *        lastname
  *        password
  *        image
+ *        mobile
+ *        landline
  */
 
 class Application_Model_Users extends Mongo_ModelBase {
