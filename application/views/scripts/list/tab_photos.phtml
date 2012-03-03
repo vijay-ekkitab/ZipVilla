@@ -18,6 +18,7 @@ $logger = Zend_Registry::get('zvlogger');
               
               foreach ($property->images as $image):
                     $image = trim($image);
+                    $image = addslashes($image);
                     if (!file_exists("$realimagedir/$image"))
                         continue;
                     if (!file_exists("$realthumbdir/$image")) {

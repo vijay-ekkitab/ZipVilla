@@ -273,10 +273,12 @@ class ZipVilla_Helper_ListingsManager extends Zend_Controller_Action_Helper_Abst
     }
     
     private static function sort_by_rating($a, $b) {
-        if ($a['rating'] < $b['rating']) {
+        $aval = isset($a['rating']) ? $a['rating'] : 0;
+        $bval = isset($b['rating']) ? $b['rating'] : 0;
+        if ($aval < $bval) {
             return 1;
         }
-        elseif ($a['rating'] > $b['rating']) {
+        elseif ($aval > $bval) {
             return -1;
         }
         return 0;
