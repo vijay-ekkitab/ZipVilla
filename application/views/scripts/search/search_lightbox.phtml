@@ -2,7 +2,7 @@
 <script type="text/javascript">
 function setSelections()
 {
-	var features = ['shared', 'amenities', 'onsite_services', 'suitability', 'address__location'];
+	var features = ['shared', 'amenities', 'onsite_services', 'suitability', 'address__location', 'address__location_r'];
     for (var i in features) {
         feature = features[i];
         var checked = new Array();
@@ -13,15 +13,16 @@ function setSelections()
         setCheckBox(feature, checked);
     }
 
-		feature = "address__location_r";
+		/*feature = "address__location_r";
 		$("[id='lbox_"+feature+"']:checked").each(function()
 		{
 			checked.push($(this).val());
 		});
-		setCheckBox(feature, checked);
+		setCheckBox(feature, checked);*/
 }
 
 function setCheckBox(feature, values) {
+	feature = feature.replace(/_r$/, '');
 	$("[name='"+feature+"[]']").removeAttr('checked');
 	$("[name='"+feature+"[]']").val(values);
     //alert(feature+','+values.toString());
