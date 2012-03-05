@@ -144,7 +144,7 @@ class SearchController extends Zend_Controller_Action
         $this->_helper->redirector('index', 'index');
     }
     
-    /*public function setzvidAction() 
+    public function setzvidAction() 
     {
         $lm = $this->_helper->listingsManager;
         $cursor = $lm->getCursor();
@@ -161,7 +161,7 @@ class SearchController extends Zend_Controller_Action
             }
         }
         $this->_helper->redirector('index', 'index');
-    }*/
+    }
     
     public function indexAction()
     {
