@@ -152,8 +152,6 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
         //$end   = $start + $pagesize;
         
         $query->setQuery($qstr);
-        $query->setStart($start);
-        $query->setRows($pagesize);
         
         if (($from != null) && ($to != null)) { //With dates, retrieve data from Mongo not Solr.
             $query->addField('id');
@@ -206,6 +204,10 @@ class ZipVilla_Helper_SearchManager extends Zend_Controller_Action_Helper_Abstra
             return array ('docs' => array(), 'facets' => array(), 'count' => 0);
             
         if (($from != null) && ($to != null)) {
+            $query->setRows($doc_count); //query again to get full data set.
+            $qr = $client->query($query);
+            $resp = $qr->getResponse();
+            $docs = $resp->response->docs;
             $ids = array();
             foreach ($docs as $doc) {
                //echo "SearchManager>> Id: ".$doc['id']."\n";
