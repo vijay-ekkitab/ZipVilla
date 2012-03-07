@@ -64,10 +64,10 @@ class PriceModel {
     	$result['to'] = $end;
     	$result['days'] = $this->get_interval($start, $end);
     	$result['rate'] = $rate;
-        if (!isset($result['rate']['weekly'])) {
+        if ((!isset($result['rate']['weekly'])) || (!is_numeric($result['rate']['weekly']))) {
             $result['rate']['weekly'] = 7*$result['rate']['daily'];
         }
-        if (!isset($result['rate']['monthly'])) {
+        if ((!isset($result['rate']['monthly'])) || (!is_numeric($result['rate']['monthly']))) {
             $result['rate']['monthly'] = 30*$result['rate']['daily'];
         }
     	return $result;
