@@ -302,6 +302,6 @@ print("[6] creating sequence collection...");
 db.seq.insert({'_id':'listings', 'seq': new NumberLong(10001), 'series':'A'});
 
 print("[7] creating admin user...");
-db.users.insert({'emailid':'admin@zipvilla.com', 'firstname':'System', 'lastname':'Administrator', 'password':'0e572a2646331d28814652b408c1d402c39ca9bd'});
+db.users.insert({'emailid':'admin@zipvilla.com', 'firstname':'System', 'lastname':'Administrator', 'password':'bd6b88a2b1b890b660b975e9fb331019e79674fc'});
 
 print("[6] database initialized.");
