@@ -3,6 +3,7 @@ include_once("ZipVilla/TypeConstants.php");
 include_once("ZipVilla/Helper/ListingsManager.php");
 include_once("ZipVilla/PriceModel.php");
 include_once("ZipVilla/Availability.php");
+include_once("ZipVilla/AuthAdapter.php");
 
 class AccountController extends Zend_Controller_Action
 {
@@ -37,6 +38,7 @@ class AccountController extends Zend_Controller_Action
     const REJECT = 'reject';
     
     protected static $prelist_attributes = array('listing_id', 'status', 'submitted', 'googlelink', 'termsaccepted');
+    protected $privilegedActions = array('review');
     
     public function init()
     {
@@ -56,12 +58,23 @@ class AccountController extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        if (!Zend_Auth::getInstance()->hasIdentity()) {
+        $auth = Zend_Auth::getInstance();
+        $login = '';
+        if (!$auth->hasIdentity()) {
             // Save the requested Uri
             $this->_helper->lastDecline->saveRequestUri();
             // Only logged in users have access to the access controlled pages;
             // Direct all other users to the Login Page.
             $this->_helper->redirector('index', 'login');
+        }
+        else {
+            $identity = $auth->getIdentity();
+            $login = ZipVilla_AuthAdapter::getUserLogin($identity);
+        }
+        if (in_array($this->getRequest()->getActionName(), $this->privilegedActions)) {
+            if ($login != ADMINISTRATOR) {
+                $this->_helper->redirector('logout', 'login');
+            }
         }
     }
     

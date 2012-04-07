@@ -55,5 +55,39 @@ class ZipVilla_AuthAdapter implements Zend_Auth_Adapter_Interface
         }
         return $result;
     }
+    
+    public static function getUserLogin($identity)
+    {
+        $pos = strpos($identity,AUTH_FIELD_SEPARATOR);
+        if ($pos > 0) {
+            return substr($identity, 0, $pos);
+        }
+        else {
+            return '';
+        }
+    }
+    
+    public static function getUserFirstName($identity)
+    {
+        $pos1 = strpos($identity, AUTH_FIELD_SEPARATOR);
+        $pos2 = strrpos($identity, AUTH_FIELD_SEPARATOR);
+        if (($pos1 > 0) && ($pos2 > 0)) {
+            return substr($identity, $pos1+strlen(AUTH_FIELD_SEPARATOR), $pos2-$pos1-strlen(AUTH_FIELD_SEPARATOR));
+        }
+        else {
+            return '';
+        }
+    }
+    
+    public static function getUserLastName($identity)
+    {
+        $pos = strrpos($identity, AUTH_FIELD_SEPARATOR);
+        if ($pos > 0) {
+            return substr($identity, $pos+strlen(AUTH_FIELD_SEPARATOR));
+        }
+        else {
+            return '';
+        }
+    }
 }
 ?>
