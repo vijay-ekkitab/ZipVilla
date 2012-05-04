@@ -2,11 +2,11 @@
 
 class ZipVilla_Logger extends Zend_Log {
 
-    const LOGDIR = "/var/log/ZipVilla";
-    const LOGFILE = "app.log";
-    	
     public function __construct() {
-        $logfile = self::LOGDIR . DIRECTORY_SEPARATOR . self::LOGFILE;
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/configs/application.ini', APPLICATION_ENV);
+        $logdir = $config->zipvilla->logdir;
+        $logfile = $config->zipvilla->logfile;
+        $logfile = $logdir . DIRECTORY_SEPARATOR . $logfile;
         $writer = new Zend_Log_Writer_Stream($logfile);
         parent::__construct($writer);
     }
