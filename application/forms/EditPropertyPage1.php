@@ -33,7 +33,7 @@ class Application_Form_EditPropertyPage1 extends Zend_Form
         				  array(
             					'filters' => array('StringTrim'),
             					'validators' => array(
-                									array('Between', false, array(100, 20000)),
+                									array('Between', false, array(1000, 20000)),
             									),
             					'required'   => true,
             					'label'      => 'Price'

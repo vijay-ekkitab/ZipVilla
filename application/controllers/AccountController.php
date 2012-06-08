@@ -39,7 +39,7 @@ class AccountController extends Zend_Controller_Action
     
     protected static $prelist_attributes = array('listing_id', 'status', 'submitted', 'googlelink', 'termsaccepted');
     protected $privilegedActions = array('review');
-    
+        
     public function init()
     {
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
@@ -369,6 +369,15 @@ class AccountController extends Zend_Controller_Action
                     if ($values['state'] == '') {
                         $errors['state'] = array('state' => 'You must specify a state.');
                     }
+                    if ( ($values['price_day'] !='') && ($errors['price_day']=='') ) {
+                    	$price=$values['price_day'];
+                    	$pos=strpos($price,'.');
+                    	if ($pos != false) {
+                    		$errors['price_day'] = array('price_day' => 'Price as a whole number only');
+                    	}
+                    } else {
+                    	$errors['price_day'] = array('price_day' => 'Price to be in the range 1000 to 20000');
+                    }
                     return $errors;
                     break;
             default:
@@ -389,6 +398,8 @@ class AccountController extends Zend_Controller_Action
             if ($errors != null) {
                 $this->view->errors = $errors;
                 $this->view->userdata = $request->getPost();
+                $keys=array_keys($this->view->userdata);
+                if (!in_array("terms", $keys)) { $this->view->userdata['terms'] = 'No';}
                 $nextpage = $nextpage - 1;
             }
         }

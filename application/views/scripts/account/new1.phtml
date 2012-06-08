@@ -36,16 +36,20 @@
                        "Delhi", "Lakshadeep", "Pondicherry");
     
     $showerror = '';
+    $priceError = '';
     if ($this->errors) {
         $errorfields = array_keys($this->errors);
         $showerror = 'style="border-style:solid;border-width:2px;border-color:red;"';
+        if (in_array('price_day', $errorfields)) $priceError=$this->errors['price_day'];
     }
 ?>
+
 <?php if (isset($this->errors)) {?>
 <div class="error_msg2">
-    <p>Errors were found in your input. They are highlighted in red. Please correct and resubmit.<br/>
+    <p>Errors were found in your input. They are highlighted in red. Please correct and resubmit.</p><br/>
 </div>
 <?php }?>
+
 <div class="l_property_details v_property_details"><!--Property details sections starts here-->
     <h1>List your property.</h1>
     <div class="sub_title"><p>Make more money by renting out your second home at Zipvilla. We deliver results you can depend on. <a href="#"> Learn more.</a></p></div>
@@ -89,7 +93,7 @@
                     <label for="Description">Description</label><textarea <?php if (in_array('description', $errorfields)) echo $showerror;?> name="description" rows="5" cols="44"><?php echo $description;?></textarea>
                 </div>
                 <div class="height50">
-                    <label for="price">Price (Rs)<span class="question"></span></label><input <?php if (in_array('price_day', $errorfields)) echo $showerror;?> type="text" size="15" name="price_day" value="<?php echo $dailyrate; ?>"/><p>per night</p>
+                    <label for="price">Price (Rs)<span class="question"></span></label><input title="<?php if (in_array('price_day', $errorfields)) echo $priceError['price_day']?>" <?php if (in_array('price_day', $errorfields)) echo $showerror;?> type="text" size="15" name="price_day" value="<?php echo $dailyrate; ?>"/><p>per night</p>
                 </div>
                 <div class="height50">
                     <label for="price"></label><input type="text" size="15" name="price_week" value="<?php echo $weeklyrate; ?>"/><p>per week (optional)</p>
