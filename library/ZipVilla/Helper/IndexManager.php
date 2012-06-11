@@ -2,6 +2,7 @@
 include_once("ZipVilla/TypeConstants.php");
 include_once("ListingsManager.php");
 include_once("ZipVilla/Utils.php");
+include_once("ZipVilla/Logger.php");
 
 
 class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstract {
@@ -10,6 +11,7 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 		$this->init();
 	}
 	private static $options = null;
+	private $logger = null;
 	
 	public function init()
 	{
@@ -20,6 +22,9 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 				"hostname" => $config->solr->server,
 				"port" => $config->solr->port
 			);
+		}
+		if ($this->logger == null) {
+			$this->logger=new ZipVilla_Logger();
 		}
 	}
 	private function buildSolrInputDocument($map) {
@@ -36,24 +41,28 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 		//print_r($doc->toArray());
 		return $doc; 
 	}
-	private function _indexDocument($obj) {
+	private function _indexDocument($client, $obj) {
 	    if ((isset($obj['address__state'])) && (isset($obj['address__city']))) {
 	        $obj['citystate'] = $obj['address__city'] . ', '.$obj['address__state']; 
 	    }
 		$doc = $this->buildSolrInputDocument($obj);
-		$client = new SolrClient(self::$options);
-		$updateResponse = $client->addDocument($doc);
-		//TODO: log error if not successful
-		//it is always a auto commit
-		$client->commit();
-		return $updateResponse;		
+		try {
+			$updateResponse = $client->addDocument($doc);
+			$client->commit();
+			return $updateResponse;
+		} catch (Exception $e) {
+			$this->logger->log("Error Indexing the Listing with Id : ".$obj['id'],1);
+			$this->logger->log($e->getMessage(),1);
+			return null;
+		}		
 	}
 	public function indexById($mid) {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$res = $lm->queryById($mid,true,true);
+		$client = new SolrClient(self::$options);
 		if($res != null) {
 			//print_r($res);
-			return $this->_indexDocument($res);
+			return $this->_indexDocument($client, $res);
 		} else {
 			return null;
 		}
@@ -62,12 +71,13 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 	    $lm = new ZipVilla_Helper_ListingsManager();
         $cursor = $lm->getCursor();
         $count = 0;
+        $client = new SolrClient(self::$options);
         foreach($cursor as $mongodoc) {
             $doc = new Application_Model_Listings($mongodoc);
             if ($doc != null) {
                 $fdoc = $lm->flatten($doc,true);
-                $result = $this->_indexDocument($fdoc);
-                if ($result->success()) {
+                $result = $this->_indexDocument($client, $fdoc);
+                if ($result !=null && $result->success()) {
                     $doc->indexed = TRUE;
                     $doc->save();
                     $count++;
@@ -82,11 +92,12 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 	    $q = array(INDEXED => FALSE);
         $cursor = $lm->getCursor($q);
         $count = 0;
+        $client = new SolrClient(self::$options);
         foreach($cursor as $mongodoc) {
             $doc = new Application_Model_Listings($mongodoc);
             if ($doc != null) {
                 $fdoc = $lm->flatten($doc,true);
-                $result = $this->_indexDocument($fdoc);
+                $result = $this->_indexDocument($client, $fdoc);
                 if ($result->success()) {
                     $doc->indexed = TRUE;
                     $doc->save();
@@ -100,8 +111,9 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 	public function index($mobj) {
 		$lm = new ZipVilla_Helper_ListingsManager();
 		$flatObj = $lm->flatten($mobj,true);
+		$client = new SolrClient(self::$options);
 		if($flatObj != null) {
-			return $this->_indexDocument($flatObj);
+			return $this->_indexDocument($client, $flatObj);
 		} else {
 			return null;
 		}		
