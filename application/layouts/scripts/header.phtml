@@ -2,7 +2,7 @@
 	<div class="logo"><a href="<?php echo $this->baseUrl('/');?>"><img src="<?php echo $this->baseUrl('/images/logo_zipvilla.jpg');?>" alt="Zipvilla" /></a></div>
     <div class="v_top_nav l_top_nav">
     	<ul>
-    	    <li><a href="<?php echo $this->url(array('controller' => 'search', 'action' => 'reindex'));?>">Index</a></li>
+    	    <li id="index"><?php echo $this->DisplayIndexLink();?></li>
     	    <!-- <li><a href="<?php echo $this->url(array('controller' => 'search', 'action' => 'setzvid'));?>">Set Id</a></li>  -->
         	<li><a href="<?php echo $this->baseUrl('/show?doc=howzipvillaworks');?>">How Zipvilla Works</a></li>
             <li id="logged_in_as"><?php echo $this->loggedInAs(); ?></li>
