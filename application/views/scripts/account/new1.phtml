@@ -36,12 +36,37 @@
                        "Delhi", "Lakshadeep", "Pondicherry");
     
     $showerror = '';
+    $titleError = '';
+    $descError = '';
     $priceError = '';
+    $addressError = '';
+    $locationError = '';
+    $cityError = '';
+    $stateError = '';
+    $zipcodeError = '';
+    $termsError = '';
+    $errorfields = array();
     if ($this->errors) {
-        $errorfields = array_keys($this->errors);
-        $showerror = 'style="border-style:solid;border-width:2px;border-color:red;"';
-        if (in_array('price_day', $errorfields)) $priceError=$this->errors['price_day'];
+    	$showerror = 'style="border-style:solid;border-width:2px;border-color:red;"';
+    	$errorfields = array_keys($this->errors);
+        if (in_array('title', $errorfields)) array_walk($this->errors['title'],"setErrorMessage",&$titleError);
+        if (in_array('description', $errorfields)) array_walk($this->errors['description'],"setErrorMessage",&$descError);
+        if (in_array('price_day', $errorfields)) array_walk($this->errors['price_day'],"setErrorMessage",&$priceError);
+        if (in_array('address', $errorfields)) array_walk($this->errors['address'],"setErrorMessage",&$addressError);
+        if (in_array('location', $errorfields)) array_walk($this->errors['location'],"setErrorMessage",&$locationError);
+        if (in_array('city', $errorfields)) array_walk($this->errors['city'],"setErrorMessage",&$cityError);
+        if (in_array('state', $errorfields)) array_walk($this->errors['state'],"setErrorMessage",&$stateError);
+        if (in_array('zipcode', $errorfields)) array_walk($this->errors['zipcode'],"setErrorMessage",&$zipcodeError);
+        if (in_array('terms', $errorfields)) array_walk($this->errors['terms'],"setErrorMessage",&$termsError);
     }
+    
+    function setErrorMessage($value, $key, $target) {
+    	if ($key == "stringLengthTooLong") {
+    		$target="String too long ";
+    	} else {
+    		$target=$value;
+    	}
+    };
 ?>
 
 <?php if (isset($this->errors)) {?>
@@ -87,13 +112,13 @@
                     </select>
                 </div>
                 <div class="height50">
-                    <label for="Title">Title</label><input <?php if (in_array('title', $errorfields)) echo $showerror;?> type="text" size="60" name="title" value="<?php echo $title;?>" />
+                    <label for="Title">Title</label><input <?php if (in_array('title', $errorfields)) echo $showerror;?> title="<?php if (in_array('title', $errorfields)) echo $titleError?>" type="text" size="60" name="title" value="<?php echo $title;?>" />
                 </div>
                 <div style="margin-bottom:25px;">
-                    <label for="Description">Description</label><textarea <?php if (in_array('description', $errorfields)) echo $showerror;?> name="description" rows="5" cols="44"><?php echo $description;?></textarea>
+                    <label for="Description">Description</label><textarea <?php if (in_array('description', $errorfields)) echo $showerror;?> title="<?php if (in_array('description', $errorfields)) echo $descError?>" name="description" rows="5" cols="44"><?php echo $description;?></textarea>
                 </div>
                 <div class="height50">
-                    <label for="price">Price (Rs)<span class="question"></span></label><input title="<?php if (in_array('price_day', $errorfields)) echo $priceError['price_day']?>" <?php if (in_array('price_day', $errorfields)) echo $showerror;?> type="text" size="15" name="price_day" value="<?php echo $dailyrate; ?>"/><p>per night</p>
+                    <label for="price">Price (Rs)<span class="question"></span></label><input <?php if (in_array('price_day', $errorfields)) echo $showerror;?> title="<?php if (in_array('price_day', $errorfields)) echo $priceError?>" type="text" size="15" name="price_day" value="<?php echo $dailyrate; ?>"/><p>per night</p>
                 </div>
                 <div class="height50">
                     <label for="price"></label><input type="text" size="15" name="price_week" value="<?php echo $weeklyrate; ?>"/><p>per week (optional)</p>
@@ -125,17 +150,17 @@
                     <label for="latitude">Latitude</label><input type="text" size="30" name="latitude" value="<?php echo $latitude; ?>"/>
                 </div>
                 <div style="margin-bottom:25px;">
-                    <label for="Street Address">Street Address</label><textarea <?php if (in_array('address', $errorfields)) echo $showerror;?> name="address" rows="5" cols="37"><?php echo $address; ?></textarea>
+                    <label for="Street Address">Street Address</label><textarea <?php if (in_array('address', $errorfields)) echo $showerror;?> title="<?php if (in_array('address', $errorfields)) echo $addressError?>" name="address" rows="5" cols="37"><?php echo $address; ?></textarea>
                 </div>
                 <div class="height50">
-                    <label for="location">Location</label><input <?php if (in_array('location', $errorfields)) echo $showerror;?> type="text" size="30" name="location" value="<?php echo $location; ?>"/>
+                    <label for="location">Location</label><input <?php if (in_array('location', $errorfields)) echo $showerror;?> title="<?php if (in_array('location', $errorfields)) echo $locationError?>" type="text" size="30" name="location" value="<?php echo $location; ?>"/>
                 </div>
                 <div class="height50">
-                    <label for="city">City</label><input <?php if (in_array('city', $errorfields)) echo $showerror;?> type="text" size="30" name="city" value="<?php echo $city; ?>"/>
+                    <label for="city">City</label><input <?php if (in_array('city', $errorfields)) echo $showerror;?> title="<?php if (in_array('city', $errorfields)) echo $cityError?>" type="text" size="30" name="city" value="<?php echo $city; ?>"/>
                 </div>
                 <div class="height50">
                     <label for="state">State</label>
-                        <select <?php if (in_array('state', $errorfields)) echo $showerror;?> name="state">
+                        <select <?php if (in_array('state', $errorfields)) echo $showerror;?> name="state" title="<?php if (in_array('state', $errorfields)) echo $stateError?>">
                             <option value="">Please Specify</option>
                             <?php foreach($allstates as $s):?>
                                 <option value="<?php echo $s;?>" <?php if ($state == $s) {?> selected="selected" <?php }?>><?php echo $s;?></option>
@@ -143,10 +168,10 @@
                         </select>
                 </div>
                 <div class="height50">
-                    <label for="pin">PIN code</label><input <?php if (in_array('zipcode', $errorfields)) echo $showerror;?> type="text" size="30" name="zipcode" value="<?php echo $zipcode; ?>"/>
+                    <label for="pin">PIN code</label><input <?php if (in_array('zipcode', $errorfields)) echo $showerror;?>  title="<?php if (in_array('zipcode', $errorfields)) echo $zipcodeError?>" type="text" size="30" name="zipcode" value="<?php echo $zipcode; ?>"/>
                 </div>
                 <div class="height50">
-                    <label></label><input  type="checkbox" name="terms" value="yes" <?php if ($terms == 'yes') echo 'checked="checked"';?>/><div class="trms"><p <?php if (in_array('terms', $errorfields)) echo $showerror;?>>I accept the <a href="#">Terms of Service</a></p></div>
+                    <label></label><input  type="checkbox" name="terms" value="yes" <?php if ($terms == 'yes') echo 'checked="checked"';?>/><div class="trms"><p <?php if (in_array('terms', $errorfields)) echo $showerror;?> title="<?php if (in_array('terms', $errorfields)) echo $termsError?>">I accept the <a href="#">Terms of Service</a></p></div>
                 </div>
                 <div class="wrpr_btn_savencont">
                     <INPUT class="btn_savencont" type="submit" value="" />

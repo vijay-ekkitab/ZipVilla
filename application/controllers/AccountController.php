@@ -367,7 +367,7 @@ class AccountController extends Zend_Controller_Action
                         $errors = $form->getMessages();
                     }
                     if ($values['state'] == '') {
-                        $errors['state'] = array('state' => 'You must specify a state.');
+                        $errors['state'] = array('state' => 'Select a state.');
                     }
                     if ( ($values['price_day'] !='') && ($errors['price_day']=='') ) {
                     	$price=$values['price_day'];
@@ -376,7 +376,7 @@ class AccountController extends Zend_Controller_Action
                     		$errors['price_day'] = array('price_day' => 'Price as a whole number only');
                     	}
                     } else {
-                    	$errors['price_day'] = array('price_day' => 'Price to be in the range 1000 to 20000');
+                    	$errors['price_day'] = array('price_day' => 'Price to be in the range 100 to 20000');
                     }
                     return $errors;
                     break;
