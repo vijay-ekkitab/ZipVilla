@@ -102,6 +102,7 @@
         
         function uploadImages(_id, _type)
         {
+    		$('#uploadImagesBtn').hide();
             for (var i in filelist) {
             	doUpload(i, filelist[i], _id, _type);
             }
@@ -139,6 +140,16 @@
                 $('#'+id).attr('src', e.target.result);
             }
             reader.readAsDataURL(file);
+        }
+
+        function handleImageUpload(fileInput) {
+        	if (window.FileReader == null) {
+        		fileInput.name="imagefile";
+        		fileInput.form.submit();
+        	} else {
+        		showSelectedFiles(fileInput);
+        		$('#uploadImagesBtn').show();
+        	}
         }
 
         function showSelectedFiles(fileInput) 
@@ -205,7 +216,7 @@
         }
             
         function getAccountData(_id, _type, _start, _filter)
-        { 
+        {
         	$('#loadergif').show();
         	_filter = _filter || '';
         	$.ajax({ 

@@ -38,14 +38,17 @@
             </ul>
         </div>
 		<div class="detials_form"><!--detials_form-->
-    		    <form id="fileupload" action="" method="POST" enctype="multipart/form-data">
+    		    <form id="fileupload" action="/account/uploadfile" method="POST" enctype="multipart/form-data">
+    		    	<input type="hidden" id="id" name="id" value="<?php echo $id;?>"/>
+    		    	<input type="hidden" id="nextpage" name="nextpage" value="4"/>
+    		    	<input type="hidden" id="type" name="type" value="<?php echo $listingtype;?>"/>
                     <div class="row fileupload-buttonbar">
                         <div class="span7">
                             <span class="btn btn-success fileinput-button" style="clear:both;">
-                                <div class="btn_newlist"><img src="/images/btn_select_image.jpg" alt="Select Image" /></div><input type="file" name="files[]" multiple="true" accept="image/*" onchange="showSelectedFiles(this);return false;">
+                                <div class="btn_newlist"><img src="/images/btn_select_image.jpg" alt="Select Image" /></div><input type="file" name="files[]" multiple accept="image/*" onchange="handleImageUpload(this);return false;">
                             </span>
                         </div>
-                        <div class="btn_newlist"><a href="#" onclick="uploadImages('<?php echo $id;?>', '<?php echo $listingtype;?>');return false;"><img src="/images/btn_uplaod.jpg" alt="Upload" /></a></div>
+                        <div id="uploadImagesBtn" class="btn_newlist" style="display: none;"><a href="#" onclick="uploadImages('<?php echo $id;?>', '<?php echo $listingtype;?>');return false;"><img src="/images/btn_uplaod.jpg" alt="Upload" /></a></div>
                     </div>
                 </form>
                 <div class="wrap_list">

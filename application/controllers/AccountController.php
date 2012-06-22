@@ -686,13 +686,34 @@ class AccountController extends Zend_Controller_Action
         $this->_helper->viewRenderer('bookings');
     }
     
-    public function uploadAction() 
+    public function uploadAction()
+    {
+    	$values = $this->getRequest()->getPost();
+    	$reply = array('status' => 'OK');
+    	$this->fileUploadHelper($values,&$reply);
+    	$json = Zend_Json::encode($reply);
+    	$this->getResponse()->setHeader('Content-Type', 'text/json')
+    						->setBody($json)
+    						->sendResponse();
+    	exit;
+    }
+    
+    public function uploadfileAction() 
+    {
+    	$values = $this->getRequest()->getPost();
+    	$reply = array('status' => 'OK');
+    	$listing=$this->fileUploadHelper($values,&$reply);
+    	$nextpage=$values['nextpage'];
+    	if (isset($nextpage)) {
+    		$this->setupEdit($listing, $nextpage);
+    	}
+    }
+    
+    private function fileUploadHelper($values,$reply)
     {
         $logger = Zend_Registry::get('zvlogger');
-        $values = $this->getRequest()->getPost();
         $city = null;
         $listing = null;
-        $reply = array('status' => 'OK');
         
         if ((!isset($values['id'])) || (!isset($values['type']))) {
             $reply['error'] = 'No id or type for listing';
@@ -741,11 +762,7 @@ class AccountController extends Zend_Controller_Action
                 }
             }
         }
-        $json = Zend_Json::encode($reply);
-        $this->getResponse()->setHeader('Content-Type', 'text/json')
-                            ->setBody($json)
-                            ->sendResponse();
-        exit;
+        return $listing;
     }
     
     protected function getListingsForReview(&$start, $sort)
