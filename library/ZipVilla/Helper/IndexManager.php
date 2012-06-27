@@ -24,7 +24,7 @@ class ZipVilla_Helper_IndexManager extends Zend_Controller_Action_Helper_Abstrac
 			);
 		}
 		if ($this->logger == null) {
-			$this->logger=new ZipVilla_Logger();
+			$this->logger=Zend_Registry::get('zvlogger');
 		}
 	}
 	private function buildSolrInputDocument($map) {
