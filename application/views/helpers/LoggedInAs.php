@@ -32,7 +32,7 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract
                     $dashurl  = $this->view->url(array('controller' => 'account',
                                                        'action' => 'index'), null, true);
                 }
-                $dashlink = '<li><a href="'.$dashurl.'">Your Dashboard</a></li>';
+                $dashlink = '<li><a href="'.$dashurl.'">Dashboard</a></li>';
             }
             return '<li>Welcome ' . $username . '&nbsp;</li>' . 
                    '<li><a id="logout" href="'.$logoutUrl.'">Logout</a> &nbsp;&nbsp;' .
