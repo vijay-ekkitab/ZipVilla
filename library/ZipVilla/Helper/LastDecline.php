@@ -65,7 +65,7 @@ class ZipVilla_Helper_LastDecline extends Zend_Controller_Action_Helper_Abstract
     public function redirect()
     {
         if (null === ($lastRequestUri = $this->getRequestUri())) {
-            $this->_getRedirector()->gotoUrl('/');
+            $this->_getRedirector()->gotoUrl('/account');
         } else {
             $this->_getRedirector()->gotoUrl($lastRequestUri);
         }
