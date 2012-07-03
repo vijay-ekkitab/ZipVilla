@@ -14,6 +14,8 @@ class IndexController extends Zend_Controller_Action
     {
         $logger = Zend_Registry::get('zvlogger');
         
+        $this->handleCookies();
+        
         $sponsoredCollection = Application_Model_SponsoredListings::findAll();
         $sponsoredListings = array();
         foreach($sponsoredCollection as $item) {
@@ -59,13 +61,18 @@ class IndexController extends Zend_Controller_Action
         $this->view->mostBookedListings = $sponsoredListings;
         
     }
-
-
+    
+    private function handleCookies() {
+    	$serverHost=$_SERVER['HTTP_HOST'];
+    	$clientIPAddress=$_SERVER['REMOTE_ADDR'];
+    	$clientIPAddress=($clientIPAddress=='')?$_REQUEST['REMOTE_ADDR']:$clientIPAddress;
+    	$cookieNames=array_keys($_COOKIE);
+    	if ( array_key_exists("zipvilla_c", $cookieNames) ) {
+    		$zipVillaCountCookie=$_COOKIE['zipvilla_c'];
+    		setcookie("zipvilla_c","1",1,"/",$serverHost);//Remove the previous instance of the cookie 
+    		setcookie("zipvilla_c",$zipVillaCountCookie+1,time()+(365*24*60*60),"/",$serverHost);//instill the new instance of the cookie
+    	} else {
+    		setcookie("zipvilla_c","1",time()+(365*24*60*60),"/",$serverHost);
+    	}
+    }
 }
-
-
-
-
-
-
-

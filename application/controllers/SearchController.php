@@ -131,9 +131,10 @@ class SearchController extends Zend_Controller_Action
                                       $this->read_value($values, SearchController::PRICE_RANGE),
                                       $this->read_value($values, SearchController::PAGE,1),
                                       PAGE_SZ);
+        
+        $this->handleCookies($q['city_state'][0]);
                                       
         return $search_results;
-            
     }
 
     public function reindexAction() 
@@ -294,6 +295,16 @@ class SearchController extends Zend_Controller_Action
         exit;
     }
     
+    private function handleCookies($city) {
+    	$city=substr($city,1,strlen($city)-2);
+    	$serverHost=$_SERVER['HTTP_HOST'];
+    	$clientIPAddress=$_SERVER['REMOTE_ADDR'];
+    	$clientIPAddress=($clientIPAddress=='')?$_REQUEST['REMOTE_ADDR']:$clientIPAddress;
+    	$cookieNames=array_keys($_COOKIE);
+    	if ( array_key_exists("zipvilla_city", $cookieNames) ) {
+    		setcookie("zipvilla_city",$city,1,"/",$serverHost);//Remove the previous instance of the cookie
+    	}
+    	setcookie("zipvilla_city",$city,time()+(365*24*60*60),"/",$serverHost);//instill the new instance of the cookie
+    }
 
 }
-
