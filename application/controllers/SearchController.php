@@ -300,8 +300,7 @@ class SearchController extends Zend_Controller_Action
     	$serverHost=$_SERVER['HTTP_HOST'];
     	$clientIPAddress=$_SERVER['REMOTE_ADDR'];
     	$clientIPAddress=($clientIPAddress=='')?$_REQUEST['REMOTE_ADDR']:$clientIPAddress;
-    	$cookieNames=array_keys($_COOKIE);
-    	if ( array_key_exists("zipvilla_city", $cookieNames) ) {
+    	if ( array_key_exists("zipvilla_city", $_COOKIE) ) {
     		setcookie("zipvilla_city",$city,1,"/",$serverHost);//Remove the previous instance of the cookie
     	}
     	setcookie("zipvilla_city",$city,time()+(365*24*60*60),"/",$serverHost);//instill the new instance of the cookie
