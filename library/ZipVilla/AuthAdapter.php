@@ -14,12 +14,24 @@ class ZipVilla_AuthAdapter implements Zend_Auth_Adapter_Interface
         $this->_fbdata = $fbdata;
     }
     
+    private function addFBUserIfNotInUsers($fbdata)
+    {
+        $user = Application_Model_Users::findOne(array('emailid' => $fbdata['email']));
+        if ($user == null) {
+            $fbdata['emailid'] = $fbdata['email'];
+            unset($fbdata['email']);
+            $user = new Application_Model_Users($fbdata);
+            $user->save();
+        }
+    }
+    
     public function authenticate()
     {
         if ($this->_fbdata != null) { //User has logged in via FB
             if ((isset($this->_fbdata['firstname'])) &&
                 (isset($this->_fbdata['lastname'])) &&
                 (isset($this->_fbdata['email']))) {
+                 $this->addFBUserIfNotInUsers($this->_fbdata);
                  $identity = $this->_fbdata['email'] . AUTH_FIELD_SEPARATOR . 
                              $this->_fbdata['firstname'] . AUTH_FIELD_SEPARATOR . 
                              $this->_fbdata['lastname'];
