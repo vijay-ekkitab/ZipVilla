@@ -218,7 +218,7 @@ class Mongo_ModelBase {
         $mongoDns = sprintf('mongodb://%s:%s',
                 $config->mongodb->server, $config->mongodb->port
             );
-        $connection = new Mongo($mongoDns,array("persist" => "x"));
+        $connection = new Mongo($mongoDns,array());
         self::$_mongo = $connection->selectDB($config->mongodb->dbname);
     }
 
